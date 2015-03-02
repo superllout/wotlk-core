@@ -473,7 +473,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
 				pAccount->Banned = duration;
 
 				// update it in the sql (duh)
-				sLogonSQL->Execute("UPDATE accounts SET banned = %u, banreason = '%s' WHERE login = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
+				sLogonSQL->Execute("UPDATE account SET banned = %u, banreason = '%s' WHERE user = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
 
 			}
 			break;
@@ -515,7 +515,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
 				pAccount->Muted = duration;
 
 				// update it in the sql (duh)
-				sLogonSQL->Execute("UPDATE accounts SET muted = %u WHERE login = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
+				sLogonSQL->Execute("UPDATE account SET muted = %u WHERE user = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
 			}
 			break;
 

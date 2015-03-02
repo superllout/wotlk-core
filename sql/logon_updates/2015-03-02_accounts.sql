@@ -1,0 +1,2 @@
+ALTER TABLE `accounts` CHANGE `acct` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique ID', CHANGE `login` `user` VARCHAR(32) CHARSET utf8 COLLATE utf8_unicode_ci NOT NULL COMMENT 'Login username', CHANGE `encrypted_password` `sha_pass_hash` VARCHAR(42) CHARSET utf8 COLLATE utf8_unicode_ci DEFAULT '' NOT NULL; 
+RENAME TABLE `accounts` TO `account`; 
