@@ -473,7 +473,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
 				pAccount->Banned = duration;
 
 				// update it in the sql (duh)
-				sLogonSQL->Execute("UPDATE account SET banned = %u, banreason = '%s' WHERE user = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
+				sLogonSQL->Execute("UPDATE account SET banned = %u, banreason = '%s' WHERE username = \"%s\"", duration, sLogonSQL->EscapeString(banreason).c_str(), sLogonSQL->EscapeString(account).c_str());
 
 			}
 			break;
@@ -494,7 +494,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
 				pAccount->SetGMFlags(account.c_str());
 
 				// update it in the sql (duh)
-				sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE login = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
+				sLogonSQL->Execute("UPDATE accounts SET gm = \"%s\" WHERE username = \"%s\"", sLogonSQL->EscapeString(gm).c_str(), sLogonSQL->EscapeString(account).c_str());
 
 			}
 			break;
@@ -515,7 +515,7 @@ void LogonCommServerSocket::HandleDatabaseModify(WorldPacket & recvData)
 				pAccount->Muted = duration;
 
 				// update it in the sql (duh)
-				sLogonSQL->Execute("UPDATE account SET muted = %u WHERE user = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
+				sLogonSQL->Execute("UPDATE account SET muted = %u WHERE username = \"%s\"", duration, sLogonSQL->EscapeString(account).c_str());
 			}
 			break;
 
