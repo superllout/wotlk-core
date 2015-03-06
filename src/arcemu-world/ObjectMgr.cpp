@@ -262,10 +262,10 @@ ObjectMgr::~ObjectMgr()
 
 Group* ObjectMgr::GetGroupByLeader(Player* pPlayer)
 {
-	GroupMap::iterator itr;
+
 	Group* ret = NULL;
 	m_groupLock.AcquireReadLock();
-	for(itr = m_groups.begin(); itr != m_groups.end(); ++itr)
+	for(GroupMap::iterator itr = m_groups.begin(); itr != m_groups.end(); ++itr)
 	{
 		if(itr->second->GetLeader() == pPlayer->getPlayerInfo())
 		{
@@ -280,10 +280,9 @@ Group* ObjectMgr::GetGroupByLeader(Player* pPlayer)
 
 Group* ObjectMgr::GetGroupById(uint32 id)
 {
-	GroupMap::iterator itr;
 	Group* ret = NULL;
 	m_groupLock.AcquireReadLock();
-	itr = m_groups.find(id);
+	GroupMap::iterator itr = m_groups.find(id);
 	if(itr != m_groups.end())
 		ret = itr->second;
 
@@ -296,22 +295,17 @@ Group* ObjectMgr::GetGroupById(uint32 id)
 //
 void ObjectMgr::DeletePlayerInfo(uint32 guid)
 {
-	PlayerInfo* pl;
-	HM_NAMESPACE::hash_map<uint32, PlayerInfo*>::iterator i;
-	PlayerNameStringIndexMap::iterator i2;
 	playernamelock.AcquireWriteLock();
-	i = m_playersinfo.find(guid);
+	HM_NAMESPACE::hash_map<uint32, PlayerInfo*>::iterator i = m_playersinfo.find(guid);
 	if(i == m_playersinfo.end())
 	{
 		playernamelock.ReleaseWriteLock();
 		return;
 	}
 
-	pl = i->second;
+	PlayerInfo* pl = i->second;
 	if(pl->m_Group)
-	{
 		pl->m_Group->RemovePlayer(pl);
-	}
 
 	if(pl->guild)
 	{
@@ -323,7 +317,8 @@ void ObjectMgr::DeletePlayerInfo(uint32 guid)
 
 	string pnam = string(pl->name);
 	arcemu_TOLOWER(pnam);
-	i2 = m_playersInfoByName.find(pnam);
+
+    PlayerNameStringIndexMap::iterator i2 = m_playersInfoByName.find(pnam);
 	if(i2 != m_playersInfoByName.end() && i2->second == pl)
 		m_playersInfoByName.erase(i2);
 
@@ -336,10 +331,9 @@ void ObjectMgr::DeletePlayerInfo(uint32 guid)
 
 PlayerInfo* ObjectMgr::GetPlayerInfo(uint32 guid)
 {
-	HM_NAMESPACE::hash_map<uint32, PlayerInfo*>::iterator i;
-	PlayerInfo* rv;
+	PlayerInfo* rv = NULL;
 	playernamelock.AcquireReadLock();
-	i = m_playersinfo.find(guid);
+	HM_NAMESPACE::hash_map<uint32, PlayerInfo*>::iterator i = m_playersinfo.find(guid);
 	if(i != m_playersinfo.end())
 		rv = i->second;
 	else
@@ -351,7 +345,7 @@ PlayerInfo* ObjectMgr::GetPlayerInfo(uint32 guid)
 void ObjectMgr::AddPlayerInfo(PlayerInfo* pn)
 {
 	playernamelock.AcquireWriteLock();
-	m_playersinfo[pn->guid] =  pn ;
+	m_playersinfo[pn->guid] = pn ;
 	string pnam = string(pn->name);
 	arcemu_TOLOWER(pnam);
 	m_playersInfoByName[pnam] = pn;
@@ -378,17 +372,12 @@ void ObjectMgr::RenamePlayerInfo(PlayerInfo* pn, const char* oldname, const char
 
 void ObjectMgr::LoadSpellSkills()
 {
-	uint32 i;
-//	int total = sSkillStore.GetNumRows();
-
-	for(i = 0; i < dbcSkillLineSpell.GetNumRows(); i++)
+	for(uint32 i = 0; i < dbcSkillLineSpell.GetNumRows(); i++)
 	{
-		skilllinespell* sp = dbcSkillLineSpell.LookupRowForced(i);
-		if(sp)
-		{
+		if(skilllinespell* sp = dbcSkillLineSpell.LookupRowForced(i))
 			mSpellSkills[sp->spell] = sp;
-		}
 	}
+
 	Log.Success("ObjectMgr", "%u spell skills loaded.", mSpellSkills.size());
 }
 
@@ -415,17 +404,14 @@ SpellEntry* ObjectMgr::GetNextSpellRank(SpellEntry* sp, uint32 level)
 
 void ObjectMgr::LoadPlayersInfo()
 {
-	PlayerInfo* pn;
-	QueryResult* result = CharacterDatabase.Query("SELECT guid,name,race,class,level,gender,zoneid,timestamp,acct FROM characters");
-	uint32 period, c;
-	if(result)
+	if(QueryResult* result = CharacterDatabase.Query("SELECT guid,name,race,class,level,gender,zoneid,timestamp,acct FROM characters"))
 	{
-		period = (result->GetRowCount() / 20) + 1;
-		c = 0;
+		uint32 period = (result->GetRowCount() / 20) + 1;
+		uint32 c = 0;
 		do
 		{
 			Field* fields = result->Fetch();
-			pn = new PlayerInfo;
+			PlayerInfo* pn = new PlayerInfo;
 			pn->guid = fields[0].GetUInt32();
 			pn->name = strdup(fields[1].GetString());
 			pn->race = fields[2].GetUInt8();
@@ -444,8 +430,7 @@ void ObjectMgr::LoadPlayersInfo()
 
 			// Raid & heroic Instance IDs
 			// Must be done before entering world...
-			QueryResult* result2 = CharacterDatabase.Query("SELECT instanceid, mode, mapid FROM instanceids WHERE playerguid = %u", pn->guid);
-			if(result2)
+			if(QueryResult* result2 = CharacterDatabase.Query("SELECT instanceid, mode, mapid FROM instanceids WHERE playerguid = %u", pn->guid))
 			{
 				PlayerInstanceMap::iterator itr;
 				do
@@ -477,9 +462,9 @@ void ObjectMgr::LoadPlayersInfo()
 			}
 
 			if(pn->race == RACE_HUMAN || pn->race == RACE_DWARF || pn->race == RACE_GNOME || pn->race == RACE_NIGHTELF || pn->race == RACE_DRAENEI)
-				pn->team = 0;
+				pn->team = TEAM_ALLIANCE;
 			else
-				pn->team = 1;
+				pn->team = TEAM_HORDE;
 
 			if(GetPlayerInfoByName(pn->name) != NULL)
 			{
