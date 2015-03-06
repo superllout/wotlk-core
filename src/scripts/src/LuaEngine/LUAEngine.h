@@ -823,8 +823,8 @@ class LuaEngine
 					else
 					{
 						char buff[32];
-						sprintf(buff, "%X", GUID);
-						lua_pushfstring(L, "%s", buff);
+						sprintf(buff, "%lu", GUID);
+						lua_pushfstring(L, "%lu", buff);
 					}
 					return 1;
 				}
