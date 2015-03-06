@@ -634,7 +634,7 @@ void ObjectMgr::LoadPlayerCreateInfo()
 		}
 
 		QueryResult* bars_sql = WorldDatabase.Query(
-		                            "SELECT * FROM playercreateinfo_bars WHERE class=%u", pPlayerCreateInfo->class_);
+		                            "SELECT * FROM playercreateinfo_bars WHERE class=%u and race=%u", pPlayerCreateInfo->class_, pPlayerCreateInfo->race);
 
 		if(bars_sql)
 		{
