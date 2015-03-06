@@ -490,7 +490,6 @@ void ObjectMgr::LoadPlayersInfo()
 				Log.Notice("PlayerInfo", "Done %u/%u, %u%% complete.", c, result->GetRowCount(), c * 100 / result->GetRowCount());
 		}
 		while(result->NextRow());
-
 		delete result;
 	}
 	Log.Success("ObjectMgr", "%u players loaded.", m_playersinfo.size());
@@ -501,11 +500,10 @@ PlayerInfo* ObjectMgr::GetPlayerInfoByName(const char* name)
 {
 	string lpn = string(name);
 	arcemu_TOLOWER(lpn);
-	PlayerNameStringIndexMap::iterator i;
 	PlayerInfo* rv = NULL;
 	playernamelock.AcquireReadLock();
 
-	i = m_playersInfoByName.find(lpn);
+	PlayerNameStringIndexMap::iterator i = m_playersInfoByName.find(lpn);
 	if(i != m_playersInfoByName.end())
 		rv = i->second;
 
@@ -515,7 +513,7 @@ PlayerInfo* ObjectMgr::GetPlayerInfoByName(const char* name)
 #ifdef ENABLE_ACHIEVEMENTS
 void ObjectMgr::LoadCompletedAchievements()
 {
-	QueryResult* result = WorldDatabase.Query("SELECT achievement FROM character_achievement GROUP BY achievement");
+	QueryResult* result = CharacterDatabase.Query("SELECT achievement FROM character_achievement GROUP BY achievement");
 
 	if(!result)
 		return;
@@ -529,6 +527,7 @@ void ObjectMgr::LoadCompletedAchievements()
 	delete result;
 }
 #endif
+
 void ObjectMgr::LoadPlayerCreateInfo()
 {
 	QueryResult* result = WorldDatabase.Query("SELECT * FROM playercreateinfo");
@@ -584,9 +583,7 @@ void ObjectMgr::LoadPlayerCreateInfo()
 		int index;
 		vector<string>::iterator iter;
 		for(iter = tokens.begin(), index = 0; (index < 12) && (iter != tokens.end()); ++iter, ++index)
-		{
 			pPlayerCreateInfo->taximask[index] = atol((*iter).c_str());
-		}
 
 		QueryResult* sk_sql = WorldDatabase.Query(
 		                          "SELECT * FROM playercreateinfo_skills WHERE indexid=%u", pPlayerCreateInfo->index);
