@@ -240,7 +240,7 @@ void Item::LoadFromDB(Field* fields, Player* plr, bool light)
 	}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	text = fields[19].GetString();
 
 	ApplyRandomProperties(false);
@@ -1094,12 +1094,12 @@ uint32 Item::GenerateRandomSuffixFactor(ItemPrototype* m_itemProto)
 	return long2int32(value);
 }
 
-string Item::GetItemLink(uint32 language = NULL)
+string Item::GetItemLink(uint32 language = 0)
 {
 	return GetItemLinkByProto(GetProto(), language);
 }
 
-string GetItemLinkByProto(ItemPrototype* iProto, uint32 language = NULL)
+string GetItemLinkByProto(ItemPrototype* iProto, uint32 language = 0)
 {
 	const char* ItemLink;
 	char buffer[256];

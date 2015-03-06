@@ -394,7 +394,7 @@ Item* ItemInterface::SafeRemoveAndRetreiveItemFromSlot(int8 ContainerSlot, int16
 		{
 			/* sounds weird? no. this will trigger a callstack display due to my other debug code. */
 			pItem->DeleteFromDB();
-			return false;
+			return NULL;
 		}
 
 		m_pItems[(int)slot] = NULL;
@@ -4013,7 +4013,7 @@ bool ItemInterface::AddItemById(uint32 itemid, uint32 count, int32 randomprop)
 				// increase stack by new amount
 				free_stack_item->ModStackCount(count);
 				free_stack_item->m_isDirty = true;
-				
+
 				sQuestMgr.OnPlayerItemPickup( m_pOwner, free_stack_item );
 
 				return true;
