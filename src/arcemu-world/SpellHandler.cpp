@@ -238,10 +238,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket & recvPacket)
 	//GetPlayer()->setCurrentSpell(spell);
 	spell->prepare(&targets);
 
-#ifdef ENABLE_ACHIEVEMENTS
 	_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_USE_ITEM, itemProto->ItemId, 0, 0);
-#endif
-
 }
 
 void WorldSession::HandleSpellClick(WorldPacket & recvPacket)
@@ -281,7 +278,7 @@ void WorldSession::HandleSpellClick(WorldPacket & recvPacket)
 		if( sp == NULL ){
 			if( target_unit->IsCreature() ){
 				Creature *c = TO< Creature* >( target_unit );
-				
+
 				sChatHandler.BlueSystemMessage( this, "NPC Id %u ( %s ) has no spellclick spell associated with it.", c->GetProto()->Id, c->GetCreatureInfo()->Name  );
 				LOG_ERROR("Spellclick packet received for creature %u but there is no spell associated with it.", creature_id );
 				return;
@@ -297,7 +294,7 @@ void WorldSession::HandleSpellClick(WorldPacket & recvPacket)
 
 		return;
 	}
-	
+
 	SpellClickSpell *sp = SpellClickSpellStorage.LookupEntry( creature_id );
 	if( sp == NULL ){
 		if( target_unit->IsCreature() ){
@@ -547,7 +544,7 @@ void WorldSession::HandlePetCastSpell(WorldPacket & recvPacket)
 	float missilepitch = 0.0f;
 	float missilespeed = 0;
 	uint32 traveltime  = 0;
-	
+
 	if( castflags & 2 ){
 		recvPacket >> missilepitch;
 		recvPacket >> missilespeed;

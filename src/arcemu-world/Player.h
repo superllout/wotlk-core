@@ -24,9 +24,7 @@
 #include "PlayerCache.h"
 
 struct BGScore;
-#ifdef ENABLE_ACHIEVEMENTS
 class AchievementMgr;
-#endif
 class Channel;
 class Creature;
 class Battleground;
@@ -58,9 +56,7 @@ class SpeedCheatDetector;
 #define PLAYER_ARENA_MIN_LEVEL  70
 
 #define PLAYER_EXPLORED_ZONES_LENGTH 128
-#ifdef ENABLE_ACHIEVEMENTS
 #define ACHIEVEMENT_SEND_DELAY 1000 //we have this delay of sending auras to other players so client will have time to create object first
-#endif
 #define LOGIN_CIENT_SEND_DELAY 1000 //we have this delay of sending auras to other players so client will have time to create object first
 
 enum PlayerTeams{
@@ -623,9 +619,8 @@ struct classScriptOverride
 	uint32 damage;
 	bool percent;
 };
-#ifdef ENABLE_ACHIEVEMENTS
+
 class AchievementMgr;
-#endif
 class Spell;
 class Item;
 class Container;
@@ -762,7 +757,7 @@ public:
 	std::map<uint32, uint8> talents;
 	uint16 glyphs[GLYPHS_COUNT];
 	ActionButton mActions[PLAYER_ACTION_BUTTON_COUNT];
-	
+
 private:
 	uint32 tp;
 };
@@ -1021,7 +1016,7 @@ class SERVER_DECL Player : public Unit
 
 		bool                HasFinishedQuest(uint32 quest_id);
 
-		
+
 		void EventTimedQuestExpire( uint32 questid );
 
 
@@ -1230,11 +1225,15 @@ class SERVER_DECL Player : public Unit
 		}
 		uint32 GetMaxPersonalRating();
 
-		bool HasTitle(RankTitles title)
+		bool HasTitle(int32 title)
 		{
-			return (GetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((title >> 6) << 1)) & (uint64(1) << (title % 64))) != 0;
+            CharTitlesEntry* pTitleData = dbcCharTitlesEntry.LookupEntryForced(title);
+            if (!pTitleData)
+                return false;
+
+			return (GetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((pTitleData->bit_index >> 6) << 1)) & (uint64(1) << (pTitleData->bit_index % 64))) != 0;
 		}
-		void SetKnownTitle(RankTitles title, bool set);
+		void SetKnownTitle(int32 title, bool set_on_player);
 		void SendAvailSpells(SpellShapeshiftForm* ssf, bool active);
 
 		/************************************************************************/
@@ -1740,7 +1739,7 @@ class SERVER_DECL Player : public Unit
 				m_MountSpellId = 0;
 			}
 		}
-		
+
 		bool IsVehicle(){
 			if( mountvehicleid != 0 )
 				return true;
@@ -2436,10 +2435,8 @@ class SERVER_DECL Player : public Unit
 		void ToggleXpGain();
 		bool CanGainXp();
 
-#ifdef ENABLE_ACHIEVEMENTS
 		AchievementMgr & GetAchievementMgr() { return m_achievementMgr; }
 		AchievementMgr m_achievementMgr;
-#endif
 		/************************************************************************/
 		/* Player Achievements - end				                            */
 		/************************************************************************/

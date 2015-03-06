@@ -987,7 +987,7 @@ bool ChatHandler::HandleModifyTPsCommand(const char* args, WorldSession* m_sessi
 	return true;
 }
 
-#ifdef ENABLE_ACHIEVEMENTS
+
 /**
 	Handles .achieve complete
 	.achieve complete id                : completes achievement "id" (can be an achievement link) for the selected player
@@ -1357,10 +1357,6 @@ bool ChatHandler::HandleLookupAchievementCmd(const char* args, WorldSession* m_s
 
 	return true;
 }
-
-
-
-#endif
 
 bool ChatHandler::HandleVehicleEjectPassengerCommand( const char *args, WorldSession *session ){
 	uint32 seat = 0;

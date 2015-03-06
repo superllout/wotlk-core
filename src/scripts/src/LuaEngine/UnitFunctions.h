@@ -42,27 +42,27 @@ class LuaUnit
 
 			return 1;
 		}
-		
+
 		static int GossipCreateMenu(lua_State * L, Unit * ptr)
 		{
 			int text_id = luaL_checkint(L, 1);
 			Player *plr = CHECK_PLAYER(L,2);
 			int autosend = luaL_checkint(L, 3);
-			
+
 			if( plr == NULL )
 				return 0;
-			
+
 			if( Menu != NULL )
 				delete Menu;
-			
+
 			Menu = new Arcemu::Gossip::Menu( ptr->GetGUID(), text_id );
-			
+
 			if( autosend != 0 )
 				Menu->Send( plr );
-			
+
 			return 0;
 		}
-		
+
 		static int GossipMenuAddItem(lua_State * L, Unit * ptr)
 		{
 			int icon = luaL_checkint(L, 1);
@@ -76,12 +76,12 @@ class LuaUnit
 				LOG_ERROR( "There is no menu to add items to!" );
 				return 0;
 			}
-			
+
 			Menu->AddItem( icon, menu_text, IntId, boxmoney, boxmessage, coded );
-			
+
 			return 0;
 		}
-		
+
 		static int GossipSendMenu(lua_State * L, Unit * ptr)
 		{
 			Player* plr = CHECK_PLAYER(L,1);
@@ -93,10 +93,10 @@ class LuaUnit
 
 			if(plr != NULL)
 				Menu->Send( plr );
-			
+
 			return 0;
 		}
-		
+
 		static int GossipSendPOI(lua_State * L, Unit * ptr)
 		{
 			TEST_PLAYER()
@@ -107,7 +107,7 @@ class LuaUnit
 			int flags = luaL_checkint(L, 4);
 			int data = luaL_checkint(L, 5);
 			const char * name = luaL_checkstring(L, 6);
-			
+
 			plr->Gossip_SendPOI(x, y, icon, flags, data, name);
 
 			return 0;
@@ -129,7 +129,7 @@ class LuaUnit
 				return 0;
 
 			Arcemu::Gossip::Menu::SendQuickMenu( ptr->GetGUID(), text_id, player, itemid, itemicon, itemtext, requiredmoney, moneytext, extra );
-			
+
 			return 0;
 		}
 
@@ -148,7 +148,7 @@ class LuaUnit
 			return 0;
 		}
 
-		
+
 		static int GossipComplete(lua_State * L, Unit * ptr)
 		{
 			TEST_PLAYER()
@@ -160,7 +160,7 @@ class LuaUnit
 			}
 
 			Menu->Complete( plr );
-			
+
 			return 0;
 		}
 
@@ -4150,7 +4150,7 @@ class LuaUnit
 			TEST_PLAYER()
 			int title = luaL_checkint(L, 1);
 			Player* plr = TO_PLAYER(ptr);
-			plr->SetKnownTitle(RankTitles(title), true);
+			plr->SetKnownTitle(title, true);
 			plr->SaveToDB(false);
 			return 0;
 		}
@@ -4160,7 +4160,7 @@ class LuaUnit
 			TEST_PLAYER()
 			int title = luaL_checkint(L, 1);
 			Player* plr = TO_PLAYER(ptr);
-			plr->SetKnownTitle(RankTitles(title), false);
+			plr->SetKnownTitle(title, false);
 			plr->SaveToDB(false);
 			return 0;
 		}
@@ -5444,7 +5444,7 @@ class LuaUnit
 			uint32 spec = luaL_checkint(L, 1); //0 or 1
 			uint32 points = luaL_checkint(L, 2);
 			TO_PLAYER(ptr)->m_specs[spec].SetTP( points );
-			
+
 			if( spec == TO_PLAYER(ptr)->m_talentActiveSpec )
 				TO_PLAYER(ptr)->SetUInt32Value( PLAYER_CHARACTER_POINTS1, points );
 
@@ -5518,8 +5518,6 @@ class LuaUnit
 			return 1;
 		}
 
-#ifdef ENABLE_ACHIEVEMENTS
-
 		static int AddAchievement(lua_State* L, Unit* ptr)
 		{
 			TEST_PLAYER()
@@ -5547,8 +5545,6 @@ class LuaUnit
 			lua_pushboolean(L, TO_PLAYER(ptr)->GetAchievementMgr().HasCompleted(achievementID) ? 1 : 0);
 			return 1;
 		}
-
-#endif
 
 		static int GetAreaId(lua_State* L, Unit* ptr)
 		{
@@ -5998,7 +5994,7 @@ class LuaUnit
 			CreatureProto *cp = CreatureProtoStorage.LookupEntry( creature_entry );
 			if( cp == NULL )
 				return 0;
-			
+
 			Player *p = NULL;
 			if( ptr->IsPlayer() )
 				p = static_cast< Player* >( ptr );
@@ -6007,15 +6003,15 @@ class LuaUnit
 				return 0;
 
 			LocationVector v( ptr->GetPosition() );
-			
+
 			Creature *c = ptr->GetMapMgr()->CreateCreature( cp->Id );
 			c->Load( cp, v.x, v.y, v.z, v.o );
 			c->RemoveFlag( UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK );
 			c->PushToWorld( ptr->GetMapMgr() );
-			
+
 			// Need to delay this a bit since first the client needs to see the vehicle
 			ptr->EnterVehicle( c->GetGUID(), delay );
-			
+
 			return 0;
 		}
 
@@ -6034,7 +6030,7 @@ class LuaUnit
 				return 0;
 
 			v->EjectAllPassengers();
-			
+
 			Unit *o = v->GetOwner();
 
 			if( o->IsPlayer() )
@@ -6066,15 +6062,15 @@ class LuaUnit
 				return 0;
 
 			uint32 creature_entry = luaL_checkint( L, 1 );
-			
+
 			CreatureInfo  *ci = CreatureNameStorage.LookupEntry( creature_entry );
 			CreatureProto *cp = CreatureProtoStorage.LookupEntry( creature_entry );
-			
+
 			if( ( ci == NULL ) || ( cp == NULL ) )
 				return 0;
 
 			Unit *u = v->GetOwner();
-			
+
 			Creature *c = u->GetMapMgr()->CreateCreature( creature_entry );
 			c->Load( cp, u->GetPositionX(), u->GetPositionY(), u->GetPositionZ(), u->GetOrientation() );
 			c->PushToWorld( u->GetMapMgr() );

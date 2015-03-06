@@ -458,9 +458,8 @@ bool ChatHandler::HandleExploreCheatCommand(const char* args, WorldSession* m_se
 			chr->RemoveFlag(PLAYER_EXPLORED_ZONES_1 + i, 0xFFFFFFFF);
 		}
 	}
-#ifdef ENABLE_ACHIEVEMENTS
 	chr->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EXPLORE_AREA); // update
-#endif
+
 	return true;
 }
 
@@ -3695,7 +3694,7 @@ bool ChatHandler::HandleGuildJoinCommand(const char* args, WorldSession* m_sessi
 		pGuild->getLock().Acquire();
 		uint32 memberCount = pGuild->GetNumMembers();
 		pGuild->getLock().Release();
-		
+
 		if( memberCount >= MAX_GUILD_MEMBERS ){
 			m_session->SystemMessage( "That guild is full." );
 			return true;
@@ -4196,9 +4195,9 @@ bool ChatHandler::HandleSetTitle(const char* args, WorldSession* m_session)
 		plr->SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES2, 0);
 	}
 	else if(title > 0)
-		plr->SetKnownTitle(static_cast< RankTitles >(title), true);
+		plr->SetKnownTitle(title, true);
 	else
-		plr->SetKnownTitle(static_cast< RankTitles >(-title), false);
+		plr->SetKnownTitle(title, false);
 
 	plr->SetChosenTitle(0);  // better remove chosen one
 	SystemMessage(m_session, "Title has been %s.", title > 0 ? "set" : "reset");

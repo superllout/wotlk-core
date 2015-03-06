@@ -144,11 +144,12 @@ bool MailMessage::AddMessageDataToPacket(WorldPacket & data)
 		case AUCTION:
 		case GAMEOBJECT:
 		case ITEM:
-			data << uint32(Arcemu::Util::GUID_LOPART(sender_guid));
-			break;
 		case CREATURE:
-			data << uint32( Arcemu::Util::GET_CREATURE_ENTRY_FROM_GUID(sender_guid));
+			data << uint32(sender_guid);
 			break;
+        default:
+            data << uint32(0);
+            break;
 	}
 
 	data << uint32(cod);			// cod

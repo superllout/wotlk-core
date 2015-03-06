@@ -571,8 +571,8 @@ AI_Spell* Pet::CreateAISpell(SpellEntry* info)
 		sp->cooldown = PET_SPELL_SPAM_COOLDOWN; //omg, avoid spamming at least
 	sp->cooldowntime = 0;
 
-	if(/* info->Effect[0] == SPELL_EFFECT_APPLY_AURA || */ 
-		info->Effect[0] == SPELL_EFFECT_APPLY_GROUP_AREA_AURA 
+	if(/* info->Effect[0] == SPELL_EFFECT_APPLY_AURA || */
+		info->Effect[0] == SPELL_EFFECT_APPLY_GROUP_AREA_AURA
 		|| info->Effect[0] == SPELL_EFFECT_APPLY_RAID_AREA_AURA
 		|| info->EffectImplicitTargetA[0] == 27 //TARGET_MASTER
 		|| info->EffectImplicitTargetA[0] == 57) //TARGET_SINGLE_FRIEND_2
@@ -1603,7 +1603,7 @@ void Pet::ApplyStatsForLevel()
 		float scale_diff = float(myFamily->maxsize - myFamily->minsize);
 		float factor = scale_diff / level_diff;
 		float scale = factor * pet_level + myFamily->minsize;
-		if(myFamily->ID == 23) // Imps have strange values set into CreatureFamily.dbc, 
+		if(myFamily->ID == 23) // Imps have strange values set into CreatureFamily.dbc,
 			SetScale(1.0f);    // they always will be set to be 0.5f. But that's not right.
 		else
 			SetScale(scale);
@@ -1922,11 +1922,8 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
 
 			if(m_Owner->getLevel() >= (pVictim->getLevel() - 8) && (GetGUID() != pVictim->GetGUID()))
 			{
-
-#ifdef ENABLE_ACHIEVEMENTS
 				m_Owner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL_AT_AREA, m_Owner->GetAreaID(), 1, 0);
 				m_Owner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL, 1, 0, 0);
-#endif
 				HonorHandler::OnPlayerKilled(m_Owner, playerVictim);
 				setAurastateFlag = true;
 
@@ -1948,11 +1945,7 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
 			if(pVictim->IsCreature())
 			{
 				m_Owner->Reputation_OnKilledUnit(pVictim, false);
-
-#ifdef ENABLE_ACHIEVEMENTS
 				m_Owner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILLING_BLOW, GetMapId(), 0, 0);
-#endif
-
 			}
 		}
 
@@ -2043,7 +2036,6 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
 							sQuestMgr.OnPlayerKill(pTagger, TO_CREATURE(pVictim), true);
 
 ///////////////////////////////////////////////// Kill creature/creature type Achievements /////////////////////////////////////////////////////////////////////
-#ifdef ENABLE_ACHIEVEMENTS
 							if(pTagger->InGroup())
 							{
 								Group* pGroup = pTagger->GetGroup();
@@ -2057,7 +2049,6 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
 								pTagger->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, pVictim->GetEntry(), 1, 0);
 								pTagger->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, GetHighGUID(), GetLowGUID(), 0);
 							}
-#endif
 						}
 					}
 				}
@@ -2065,17 +2056,11 @@ void Pet::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 un
 		}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef ENABLE_ACHIEVEMENTS
-
 		if(pVictim->isCritter())
 		{
 			m_Owner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, pVictim->GetEntry(), 1, 0);
 			m_Owner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, GetHighGUID(), GetLowGUID(), 0);
 		}
-
-#endif
-
-
 	}
 	else
 	{

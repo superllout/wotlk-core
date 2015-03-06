@@ -26,7 +26,17 @@ ARCEMU_INLINE bool FindXinYString(std::string & x, std::string & y)
 	return y.find(x) != std::string::npos;
 }
 
-struct WorldState{
+struct AchievementReward
+{
+    uint16 title;       // title id
+    uint32 itemId;      // item id
+    uint32 senderEntry; // creature entry
+    const char* subject; // letter subject
+    const char* text;   // letter text
+};
+
+struct WorldState
+{
 	uint32 field;
 	uint32 value;
 
@@ -344,9 +354,7 @@ typedef std::map<uint32, std::list<SpellEntry*>* >                  OverrideIdMa
 typedef HM_NAMESPACE::hash_map<uint32, Player*>                     PlayerStorageMap;
 typedef std::list<GM_Ticket*>                                       GmTicketList;
 typedef std::map<uint32, InstanceBossInfo*>                         InstanceBossInfoMap;
-#ifdef ENABLE_ACHIEVEMENTS
 typedef std::list<const AchievementCriteriaEntry*>					AchievementCriteriaEntryList;
-#endif
 
 #ifndef WIN32
 #define arcemu_USE_MAP_PLAYER_INDEX
@@ -420,6 +428,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 		typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
 		typedef std::multimap <uint32, uint32>                               BCEntryStorage;
 		typedef std::map< uint32, SpellTargetConstraint* >					SpellTargetConstraintMap;
+		typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
 
 		// object holders
 		GmTicketList         GM_TicketList;
@@ -530,9 +539,9 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 
 
 		// Serialization
-#ifdef ENABLE_ACHIEVEMENTS
 		void LoadCompletedAchievements();
-#endif
+        void LoadAchievementRewards();
+        AchievementReward* GetRewardForAchievementId(uint32 id);
 		void LoadQuests();
 		void LoadPlayersInfo();
 		void LoadPlayerCreateInfo();
@@ -665,63 +674,14 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 			return Entries[n];
 		}
 
-
-#ifdef ENABLE_ACHIEVEMENTS
 		void LoadAchievementCriteriaList();
 		AchievementCriteriaEntryList const & GetAchievementCriteriaByType(AchievementCriteriaTypes type);
 		std::set<uint32> allCompletedAchievements;
-#endif
 
 		void LoadVehicleAccessories();
 		std::vector< VehicleAccessoryEntry* >* GetVehicleAccessories( uint32 creature_entry );
 		void LoadWorldStateTemplates();
 		std::multimap< uint32, WorldState >* GetWorldStatesForMap( uint32 map ) const;
-
-#undef ENABLE_ALWAYS_SERIOUS_MODE_GCC_STL_HACK
-
-// it's for private persons (pps)
-	private:
-
-// we don't want too serious people to see this, they'd freak out!
-#ifndef ENABLE_ALWAYS_SERIOUS_MODE_GCC_STL_HACK
-
-#define GRRR "Group Rest & Relaxation & Recreation"
-
-		/*
-
-		//////////////////////////////////////////////////////////////////////////////
-		// I've been asked if there was an easter egg in the source code
-		// No there isn't really, but now here's this easter octagon instead, enjoy!
-		// ( if you are artistic, female, blue eyed with good imagination, and
-		//   at least some sense of humor, this might even look like an egg. :P )
-		//
-		//                  ---------
-		//                 /         \
-		//                /           \
-		//               /             \
-		//              |               |
-		//              |               |
-		//              |               |
-		//              |               |
-		//              |               |
-		//              |               |
-		//              |               |
-		//              \               /
-		//               \             /
-		//                \           /
-		//                 -----------
-		//
-		//
-		// dfighter March, 2010
-		//////////////////////////////////////////////////////////////////////////////
-
-		*/
-
-#undef GRRR
-
-#endif
-
-#define ENABLE_ALWAYS_SERIOUS_MODE_GCC_STL_HACK
 
 	protected:
 		BCEntryStorage m_BCEntryStorage; // broadcast system.
@@ -794,12 +754,11 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 		PetDefaultSpellMap mDefaultPetSpells;
 		PetSpellCooldownMap mPetSpellCooldowns;
 		SpellTargetConstraintMap m_spelltargetconstraints;
-#ifdef ENABLE_ACHIEVEMENTS
 		AchievementCriteriaEntryList m_AchievementCriteriasByType[ACHIEVEMENT_CRITERIA_TYPE_TOTAL];
-#endif
+
 		std::map< uint32, std::vector< VehicleAccessoryEntry* >* > vehicle_accessories;
 		std::map< uint32, std::multimap< uint32, WorldState >* > worldstate_templates;
-
+		AchievementRewardsMap mAchievementRewards;
 };
 
 

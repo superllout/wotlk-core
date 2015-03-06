@@ -510,7 +510,7 @@ PlayerInfo* ObjectMgr::GetPlayerInfoByName(const char* name)
 	playernamelock.ReleaseReadLock();
 	return rv;
 }
-#ifdef ENABLE_ACHIEVEMENTS
+
 void ObjectMgr::LoadCompletedAchievements()
 {
 	QueryResult* result = CharacterDatabase.Query("SELECT achievement FROM character_achievement GROUP BY achievement");
@@ -526,7 +526,6 @@ void ObjectMgr::LoadCompletedAchievements()
 	while(result->NextRow());
 	delete result;
 }
-#endif
 
 void ObjectMgr::LoadPlayerCreateInfo()
 {
@@ -1651,7 +1650,6 @@ void ObjectMgr::LoadCorpses(MapMgr* mgr)
 	}
 }
 
-#ifdef ENABLE_ACHIEVEMENTS
 AchievementCriteriaEntryList const & ObjectMgr::GetAchievementCriteriaByType(AchievementCriteriaTypes type)
 {
 	return m_AchievementCriteriasByType[type];
@@ -1668,7 +1666,7 @@ void ObjectMgr::LoadAchievementCriteriaList()
 		m_AchievementCriteriasByType[criteria->requiredType].push_back(criteria);
 	}
 }
-#endif
+
 std::list<ItemPrototype*>* ObjectMgr::GetListForItemSet(uint32 setid)
 {
 	return mItemSets[setid];
@@ -3558,7 +3556,6 @@ void ObjectMgr::LoadWorldStateTemplates(){
 		itr->second->insert( std::make_pair( zone, ws ) );
 
 	}while( result->NextRow() );
-
 	delete result;
 }
 
@@ -3570,4 +3567,49 @@ std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map
 		return NULL;
 	else
 		return itr->second;
+}
+
+void ObjectMgr::LoadAchievementRewards()
+{
+    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title`,`item`,`sender`,`subject`,`text` FROM achievement_reward ORDER BY id;"))
+    {
+        do{
+            Field* fields = result->Fetch();
+            uint32 id = fields[0].GetUInt32();
+            if (!dbcAchievementStore.LookupEntryForced(id))
+            {
+                sLog.Error("LoadAchievementRewards", "Achievement (id %u) does not exists!", id);
+                continue;
+            }
+            AchievementReward* reward = new AchievementReward;
+            reward->title = fields[1].GetUInt16();
+            reward->itemId = fields[2].GetUInt32();
+            if (reward->itemId != 0 && !ItemPrototypeStorage.LookupEntry(reward->itemId))
+            {
+                sLog.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing item (entry %u)!", id, reward->itemId);
+                continue;
+            }
+            reward->senderEntry = fields[3].GetUInt32();
+            if (reward->senderEntry != 0 && !CreatureNameStorage.LookupEntry(reward->senderEntry))
+            {
+                sLog.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
+                continue;
+            }
+            reward->subject = fields[4].GetString() ? fields[4].GetString() : "";
+            reward->text = fields[5].GetString() ? fields[5].GetString() : "";
+            if (reward->itemId && reward->senderEntry && !reward->subject && !reward->text)
+            {
+                sLog.Error("LoadAchievementRewards", "no text data for achievement (id %u)", id);
+                continue;
+            }
+            mAchievementRewards.insert(std::pair<uint32, AchievementReward*>(id, reward));
+        }while (result->NextRow());
+        delete result;
+    }
+    sLog.Success("ObjectMgr", "Loaded %u achievement rewards", mAchievementRewards.size());
+}
+
+AchievementReward* ObjectMgr::GetRewardForAchievementId(uint32 id)
+{
+    return mAchievementRewards[id];
 }

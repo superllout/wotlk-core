@@ -553,9 +553,8 @@ class SERVER_DECL ChatHandler : public Singleton<ChatHandler>
 		bool HandleLookupSpellCommand(const char* args, WorldSession* m_session);
 		bool HandleLookupSkillCommand(const char* args, WorldSession* m_session);
 		bool HandleLookupFactionCommand(const char* args, WorldSession* m_session);
-#ifdef ENABLE_ACHIEVEMENTS
 		bool HandleLookupAchievementCmd(const char* args, WorldSession* m_session);
-#endif
+
 		// Deprecated GMScript reload.
 		//bool HandleReloadScriptsCommand(const char * args, WorldSession * m_session);
 		bool HandleNpcPossessCommand(const char* args, WorldSession* m_session);
@@ -610,11 +609,10 @@ class SERVER_DECL ChatHandler : public Singleton<ChatHandler>
 
 		bool HandleFixScaleCommand(const char* args, WorldSession* m_session);
 		bool HandleAddTrainerSpellCommand(const char* args, WorldSession* m_session);
-#ifdef ENABLE_ACHIEVEMENTS
+
 		bool HandleAchievementCompleteCommand(const char* args, WorldSession* m_session);
 		bool HandleAchievementCriteriaCommand(const char* args, WorldSession* m_session);
 		bool HandleAchievementResetCommand(const char* args, WorldSession* m_session);
-#endif
 
 		//////////////////////////////////// Vehicle commands /////////////////////////////////////////////////
 		bool HandleVehicleEjectPassengerCommand( const char *args, WorldSession *session );

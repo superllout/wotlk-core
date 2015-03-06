@@ -341,7 +341,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 	{
 		return;
 	}
-	
+
 	// Player is in control of some entity, so we move that instead of the player
 	Unit *mover = _player->GetMapMgr()->GetUnit( m_MoverWoWGuid.GetOldGuid() );
 	if( mover == NULL )
@@ -602,7 +602,6 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 
 				if( health_loss >= mover->GetHealth() )
 					health_loss = mover->GetHealth();
-#ifdef ENABLE_ACHIEVEMENTS
 				else if( ( falldistance >= 65 ) && ( mover->GetGUID() == _player->GetGUID() ) )
 				{
 					// Rather than Updating achievement progress every time fall damage is taken, all criteria currently have 65 yard requirement...
@@ -610,7 +609,6 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 					// Achievement 1260: Fall 65 yards without dying while completely smashed during the Brewfest Holiday.
 					_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_FALL_WITHOUT_DYING, falldistance, Player::GetDrunkenstateByValue(_player->GetDrunkValue()), 0);
 				}
-#endif
 
 				mover->SendEnvironmentalDamageLog(mover->GetGUID(), DAMAGE_FALL, health_loss);
 				mover->DealDamage(mover, health_loss, 0, 0, 0);
@@ -646,14 +644,14 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 				Transporter *transporter = objmgr.GetTransporter( Arcemu::Util::GUID_LOPART( movement_info.transGuid ) );
 				if( transporter != NULL )
 					transporter->AddPassenger( mover );
-				
+
 				/* set variables */
 				mover->transporter_info.guid = movement_info.transGuid;
 				mover->transporter_info.flags = movement_info.transUnk;
 				mover->transporter_info.x = movement_info.transX;
 				mover->transporter_info.y = movement_info.transY;
 				mover->transporter_info.z = movement_info.transZ;
-			
+
 			}else{
 				/* no changes */
 				mover->transporter_info.flags = movement_info.transUnk;
@@ -663,7 +661,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
 			}
 		}
 	}
-	
+
 	/*float x = movement_info.x - movement_info.transX;
 	float y = movement_info.y - movement_info.transY;
 	float z = movement_info.z - movement_info.transZ;

@@ -335,9 +335,7 @@ AddItemResult ItemInterface::m_AddItem(Item* item, int8 ContainerSlot, int16 slo
 		}
 	}
 
-#ifdef ENABLE_ACHIEVEMENTS
 	m_pOwner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_OWN_ITEM, item->GetEntry(), 1, 0);
-#endif
 ////////////////////////////////////////////////////// existingduration stuff ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	if(item->GetProto()->ExistingDuration != 0)
@@ -4091,9 +4089,8 @@ bool ItemInterface::AddItemById(uint32 itemid, uint32 count, int32 randomprop)
 			SlotResult* lr = LastSearchResult();
 
 			chr->SendItemPushResult(false, true, false, true, lr->ContainerSlot, lr->Slot, toadd , item->GetEntry(), item->GetItemRandomSuffixFactor(), item->GetItemRandomPropertyId(), item->GetStackCount());
-#ifdef ENABLE_ACHIEVEMENTS
 			chr->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM, itemid, 1, 0);
-#endif
+
 			sQuestMgr.OnPlayerItemPickup( m_pOwner, item );
 			count -= toadd;
 		}
@@ -4223,7 +4220,6 @@ bool ItemInterface::SwapItems(int8 DstInvSlot, int8 DstSlot, int8 SrcInvSlot, in
 		}
 	}
 
-#ifdef ENABLE_ACHIEVEMENTS
 	if(SrcItem && DstSlot < INVENTORY_SLOT_BAG_END && DstInvSlot == INVENTORY_SLOT_NOT_SET)   //equip - bags can be soulbound too
 	{
 		if(SrcItem->GetProto()->Bonding == ITEM_BIND_ON_EQUIP)
@@ -4255,7 +4251,6 @@ bool ItemInterface::SwapItems(int8 DstInvSlot, int8 DstSlot, int8 SrcInvSlot, in
 				m_pOwner->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, SrcSlot, DstItem->GetProto()->Quality, 0);
 		}
 	}
-#endif
 
 	if(SrcInvSlot == DstInvSlot)  //in 1 bag
 	{

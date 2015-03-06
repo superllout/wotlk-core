@@ -167,9 +167,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 		{
 			sQuestMgr.OnPlayerItemPickup(GetPlayer(), item);
 			_player->SendItemPushResult(false, true, true, true, slotresult.ContainerSlot, slotresult.Slot, 1, item->GetEntry(), item->GetItemRandomSuffixFactor(), item->GetItemRandomPropertyId(), item->GetStackCount());
-#ifdef ENABLE_ACHIEVEMENTS
 			_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM, item->GetEntry(), 1, 0);
-#endif
 		}
 		else
 			item->DeleteMe();
@@ -181,9 +179,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
 
 		sQuestMgr.OnPlayerItemPickup(GetPlayer(), add);
 		_player->SendItemPushResult(false, false, true, false, (uint8)_player->GetItemInterface()->GetBagSlotByGuid(add->GetGUID()), 0xFFFFFFFF, amt , add->GetEntry(), add->GetItemRandomSuffixFactor(), add->GetItemRandomPropertyId(), add->GetStackCount());
-#ifdef ENABLE_ACHIEVEMENTS
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM, add->GetEntry(), 1, 0);
-#endif
 	}
 
 	//in case of ffa_loot update only the player who receives it.
@@ -308,9 +304,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & recv_data)
 			else
 			{
 				GetPlayer()->ModGold(money);
-#ifdef ENABLE_ACHIEVEMENTS
 				GetPlayer()->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_MONEY, money, 0, 0);
-#endif
 			}
 			sHookInterface.OnLoot(_player, pt, money, 0);
 		}
@@ -358,9 +352,7 @@ void WorldSession::HandleLootMoneyOpcode(WorldPacket & recv_data)
 				{
 					(*itr2)->ModGold(share);
 					(*itr2)->GetSession()->SendPacket(&pkt);
-#ifdef ENABLE_ACHIEVEMENTS
 					(*itr2)->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_MONEY, share, 0, 0);
-#endif
 				}
 			}
 		}
@@ -606,7 +598,7 @@ void WorldSession::HandleLootReleaseOpcode(WorldPacket & recv_data)
 		// delete current loot, so the next one can be filled
 		if(item->loot != NULL)
 		{
-			uint32 itemsNotLooted = 
+			uint32 itemsNotLooted =
 				std::count_if( item->loot->items.begin(), item->loot->items.end(), ItemIsNotLooted() );
 
 			if( ( itemsNotLooted == 0 ) && ( item->loot->gold == 0 ) ){
@@ -1409,10 +1401,8 @@ void WorldSession::HandleBarberShopResult(WorldPacket & recv_data)
 	_player->ModGold(-(int32)cost);
 
 	_player->SetStandState(0);                              // stand up
-#ifdef ENABLE_ACHIEVEMENTS
 	_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_VISIT_BARBER_SHOP, 1, 0, 0);
 	_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_GOLD_SPENT_AT_BARBER, cost, 0, 0);
-#endif
 }
 
 void WorldSession::HandleGameObjectUse(WorldPacket & recv_data)
@@ -2180,9 +2170,7 @@ void WorldSession::HandleLootMasterGiveOpcode(WorldPacket & recv_data)
 	{
 		player->SendItemPushResult(false, true, true, true, slotresult.ContainerSlot, slotresult.Slot, 1 , item->GetEntry(), item->GetItemRandomSuffixFactor(), item->GetItemRandomPropertyId(), item->GetStackCount());
 		sQuestMgr.OnPlayerItemPickup(player, item);
-#ifdef ENABLE_ACHIEVEMENTS
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LOOT_ITEM, item->GetEntry(), 1, 0);
-#endif
 	}
 	else
 		item->DeleteMe();
@@ -2514,9 +2502,7 @@ void WorldSession::HandleGameobjReportUseOpCode(WorldPacket & recv_data)    // C
 	if(gameobj == NULL)
 		return;
 	sQuestMgr.OnGameObjectActivate(_player, gameobj);
-#ifdef ENABLE_ACHIEVEMENTS
 	_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_USE_GAMEOBJECT, gameobj->GetEntry(), 0, 0);
-#endif
 	return;
 }
 

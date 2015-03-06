@@ -387,10 +387,7 @@ void WorldSession::HandleAchievmentQueryOpcode(WorldPacket & recv_data)
 	uint64 guid = recv_data.unpackGUID(); // Get the inspectee's GUID
 	Player* pTarget = objmgr.GetPlayer((uint32)guid);
 	if(!pTarget)
-	{
 		return;
-	}
-#ifdef ENABLE_ACHIEVEMENTS
+
 	pTarget->GetAchievementMgr().SendAllAchievementData(GetPlayer());
-#endif
 }

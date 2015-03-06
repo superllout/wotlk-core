@@ -134,9 +134,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 #include "Unit.h"
 #include "Gossip.h"
 
-#ifdef ENABLE_ACHIEVEMENTS
 #include "AchievementMgr.h"
-#endif
 
 //VMAP
 #include "ModelInstance.h"

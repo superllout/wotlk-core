@@ -24,13 +24,13 @@ bool VerifyBagSlots(int8 ContainerSlot, int8 Slot)
 {
 	if(ContainerSlot < -1 )
 		return false;
-	
+
 	if(ContainerSlot > 0 && (ContainerSlot < INVENTORY_SLOT_BAG_START || ContainerSlot >= INVENTORY_SLOT_BAG_END))
 		return false;
-	
+
 	if(ContainerSlot == -1 && Slot != -1 && (Slot >= INVENTORY_SLOT_ITEM_END  || Slot <= EQUIPMENT_SLOT_END))
 		return false;
-	
+
 	return true;
 }
 
@@ -138,7 +138,7 @@ void WorldSession::HandleSplitOpcode(WorldPacket & recv_data)
 						DstInvSlot = res.ContainerSlot;
 					}
 				}
-				
+
 				if( DstSlot == ITEM_NO_SLOT_AVAILABLE )
 				{
 					_player->GetItemInterface()->BuildInventoryChangeError(i1, i2, INV_ERR_COULDNT_SPLIT_ITEMS);
@@ -305,7 +305,6 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data)
 		return;
 	}
 
-#ifdef ENABLE_ACHIEVEMENTS
 	if(dstitem && srcslot < INVENTORY_SLOT_BAG_END)
 	{
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, dstitem->GetProto()->ItemId, 0, 0);
@@ -320,6 +319,7 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data)
 				_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, srcslot, dstitem->GetProto()->Quality, 0);
 		}
 	}
+
 	if(srcitem && dstslot < INVENTORY_SLOT_BAG_END)
 	{
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, srcitem->GetProto()->ItemId, 0, 0);
@@ -334,7 +334,7 @@ void WorldSession::HandleSwapInvItemOpcode(WorldPacket & recv_data)
 				_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, dstslot, srcitem->GetProto()->Quality, 0);
 		}
 	}
-#endif
+
 	_player->GetItemInterface()->SwapItemSlots(srcslot, dstslot);
 }
 
@@ -363,11 +363,11 @@ void WorldSession::HandleDestroyItemOpcode(WorldPacket & recv_data)
 			}
 		}
 
-		if( it->GetProto()->HasFlag(ITEM_FLAG_INDESTRUCTIBLE) ) 
-		{ 
-			_player->GetItemInterface()->BuildInventoryChangeError(it, NULL, INV_ERR_CANT_DROP_SOULBOUND); 
-			return; 
-		} 
+		if( it->GetProto()->HasFlag(ITEM_FLAG_INDESTRUCTIBLE) )
+		{
+			_player->GetItemInterface()->BuildInventoryChangeError(it, NULL, INV_ERR_CANT_DROP_SOULBOUND);
+			return;
+		}
 
 		if(it->GetProto()->ItemId == ITEM_ENTRY_GUILD_CHARTER)
 		{
@@ -599,7 +599,7 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
 	{
 		if(eitem->GetProto()->Bonding == ITEM_BIND_ON_EQUIP)
 			eitem->SoulBind();
-#ifdef ENABLE_ACHIEVEMENTS
+
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_ITEM, eitem->GetProto()->ItemId, 0, 0);
 		// Achievement ID:556 description Equip an epic item in every slot with a minimum item level of 213.
 		// "213" value not found in achievement or criteria entries, have to hard-code it here? :(
@@ -608,7 +608,6 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
 		if((eitem->GetProto()->Quality == ITEM_QUALITY_RARE_BLUE && eitem->GetProto()->ItemLevel >= 187) ||
 				(eitem->GetProto()->Quality == ITEM_QUALITY_EPIC_PURPLE && eitem->GetProto()->ItemLevel >= 213))
 			_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EQUIP_EPIC_ITEM, Slot, eitem->GetProto()->Quality, 0);
-#endif
 	}
 	//Recalculate Expertise (for Weapon specs)
 	_player->CalcExpertise();
@@ -1448,7 +1447,7 @@ void WorldSession::SendInventoryList(Creature* unit)
 
 				if( curItem->HasFlag2(ITEM_FLAG2_HORDE_ONLY) && !GetPlayer()->IsTeamHorde() && !_player->GetSession()->HasGMPermissions() )
 					continue;
- 
+
 				if( curItem->HasFlag2(ITEM_FLAG2_ALLIANCE_ONLY) && !GetPlayer()->IsTeamAlliance() && !_player->GetSession()->HasGMPermissions() )
 					continue;
 
@@ -1462,7 +1461,7 @@ void WorldSession::SendInventoryList(Creature* unit)
 				data << uint32(curItem->DisplayInfoID);
 				data << uint32(av_am);
 				data << uint32(price);
-				data << uint32(curItem->MaxDurability);                 
+				data << uint32(curItem->MaxDurability);
 				data << uint32(itr->amount);
 
 
@@ -1765,9 +1764,8 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket & recvPacket)
 	{
 		_player->SetUInt32Value(PLAYER_BYTES_2, (bytes & 0xff00ffff) | ((slots + 1) << 16));
 		_player->ModGold(-price);
-#ifdef ENABLE_ACHIEVEMENTS
+
 		_player->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_BUY_BANK_SLOT, 1, 0, 0);
-#endif
 	}
 	else
 	{

@@ -197,9 +197,7 @@ Player::Player(uint32 guid)
 	m_GroupInviter(0),
 	m_SummonedObject(NULL),
 	myCorpseLocation()
-#ifdef ENABLE_ACHIEVEMENTS
-	, m_achievementMgr(this)
-#endif
+	,m_achievementMgr(this)
 {
 	m_cache = new PlayerCache;
 	m_cache->SetUInt32Value(CACHE_PLAYER_LOWGUID, guid);
@@ -678,7 +676,7 @@ bool Player::Create(WorldPacket & data)
 		m_session->Disconnect();
 		return false;
 	}
-	
+
 	// check that the account can create deathknights, if we're making one
 	if( class_ == DEATHKNIGHT && !(m_session->_accountFlags & ACCOUNT_FLAG_XPACK_02) )
 	{
@@ -1440,9 +1438,8 @@ void Player::_EventExploration()
 		uint32 explore_xp = at->level * 10;
 		explore_xp *= float2int32(sWorld.getRate(RATE_EXPLOREXP));
 
-#ifdef ENABLE_ACHIEVEMENTS
+
 		GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EXPLORE_AREA);
-#endif
 		uint32 maxlevel = GetMaxLevel();
 
 		if(getLevel() <  maxlevel && explore_xp > 0)
@@ -1584,9 +1581,7 @@ void Player::GiveXP(uint32 xp, const uint64 & guid, bool allowbonus)
 			}
 		}
 		//Event_Achiement_Received(ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL,0,level);
-#ifdef ENABLE_ACHIEVEMENTS
 		GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL);
-#endif
 
 		//VLack: 3.1.3, as a final step, send the player's talents, this will set the talent points right too...
 		smsg_TalentsInfo(false);
@@ -2092,7 +2087,7 @@ void Player::addSpell(uint32 spell_id)
 		_AddSkillLine(sk->skilline, 1, max);
 		_UpdateMaxSkillCounts();
 	}
-#ifdef ENABLE_ACHIEVEMENTS
+
 	m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SPELL, spell_id, 1, 0);
 	if(spell->MechanicsType == MECHANIC_MOUNTED) // Mounts
 	{
@@ -2108,7 +2103,6 @@ void Player::addSpell(uint32 spell_id)
 			m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_NUMBER_OF_MOUNTS, 778, 0, 0);
 		}
 	}
-#endif
 }
 
 //===================================================================================================================
@@ -2582,9 +2576,7 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
 		_SavePetSpells(buf);
 	}
 	m_nextSave = getMSTime() + sWorld.getIntRate(INTRATE_SAVE);
-#ifdef ENABLE_ACHIEVEMENTS
 	m_achievementMgr.SaveToDB(buf);
-#endif
 
 	if(buf)
 		CharacterDatabase.AddQueryBuffer(buf);
@@ -2808,9 +2800,7 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	}
 
 	// load achievements before anything else otherwise skills would complete achievements already in the DB, leading to duplicate achievements and criterias(like achievement=126).
-#ifdef ENABLE_ACHIEVEMENTS
 	m_achievementMgr.LoadFromDB(results[16].result, results[17].result);
-#endif
 
 	CalculateBaseStats();
 
@@ -3003,14 +2993,14 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	m_FirstLogin = get_next_field.GetBool();
 	rename_pending = get_next_field.GetBool();
 	m_arenaPoints = get_next_field.GetUInt32();
-	if(m_arenaPoints > sWorld.m_limits.arenapoints) 
-	{	
-		char hlogmsg[256];	
+	if(m_arenaPoints > sWorld.m_limits.arenapoints)
+	{
+		char hlogmsg[256];
 		snprintf(hlogmsg, 256, "has over %u arena points (%u)", sWorld.m_limits.arenapoints, m_arenaPoints);
-		sCheatLog.writefromsession(m_session, hlogmsg);	
-	    if(sWorld.m_limits.broadcast) // report to online GMs	
+		sCheatLog.writefromsession(m_session, hlogmsg);
+	    if(sWorld.m_limits.broadcast) // report to online GMs
 	    {
-	      string gm_ann = MSG_COLOR_GREEN;	
+	      string gm_ann = MSG_COLOR_GREEN;
 	      gm_ann += "|Hplayer:";
 	      gm_ann += GetName();
 	      gm_ann += "|h[";
@@ -3018,11 +3008,11 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	      gm_ann += "]|h: ";
 	      gm_ann += MSG_COLOR_YELLOW;
 	      gm_ann += hlogmsg;
-	      sWorld.SendGMWorldText(gm_ann.c_str());	
+	      sWorld.SendGMWorldText(gm_ann.c_str());
 	    }
 	    if(sWorld.m_limits.disconnect)
 	    {
-			m_session->Disconnect();	
+			m_session->Disconnect();
 	    }
 	    m_arenaPoints = sWorld.m_limits.arenapoints;
 	  }
@@ -3171,15 +3161,15 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 	m_honorToday = get_next_field.GetUInt32();
 	m_honorYesterday = get_next_field.GetUInt32();
 	m_honorPoints = get_next_field.GetUInt32();
-	if(m_honorPoints > sWorld.m_limits.honorpoints) 
+	if(m_honorPoints > sWorld.m_limits.honorpoints)
     	{
-    	  char hlogmsg[256];	
-    	  snprintf(hlogmsg, 256, "has over %u honor points (%u)", sWorld.m_limits.honorpoints, m_honorPoints);	
+    	  char hlogmsg[256];
+    	  snprintf(hlogmsg, 256, "has over %u honor points (%u)", sWorld.m_limits.honorpoints, m_honorPoints);
     	  sCheatLog.writefromsession(m_session, hlogmsg);
-    	  if(sWorld.m_limits.broadcast) // report to online GMs	
+    	  if(sWorld.m_limits.broadcast) // report to online GMs
     	  {
-    	    string gm_ann = MSG_COLOR_GREEN;	
-    	    gm_ann += "|Hplayer:";	
+    	    string gm_ann = MSG_COLOR_GREEN;
+    	    gm_ann += "|Hplayer:";
     	    gm_ann += GetName();
     	    gm_ann += "|h[";
     	    gm_ann += GetName();
@@ -3377,9 +3367,7 @@ void Player::LoadFromDBProc(QueryResultVector & results)
 
 	// update achievements before adding player to World, otherwise we'll get a nice race condition.
 	//move CheckAllAchievementCriteria() after FullLogin(this) and i'll cut your b***s.
-#ifdef ENABLE_ACHIEVEMENTS
 	m_achievementMgr.CheckAllAchievementCriteria();
-#endif
 
 	m_session->FullLogin(this);
 	m_session->m_loggingInPlayer = NULL;
@@ -3646,9 +3634,7 @@ void Player::AddToWorld(MapMgr* pMapMgr)
 void Player::OnPrePushToWorld()
 {
 	SendInitialLogonPackets();
-#ifdef ENABLE_ACHIEVEMENTS
 	m_achievementMgr.SendAllAchievementData(this);
-#endif
 }
 
 void Player::OnPushToWorld()
@@ -5074,11 +5060,11 @@ float Player::GetDodgeChance()
 		level = PLAYER_LEVEL_CAP;
 
 	// Base dodge + dodge from agility
-	
+
 	gtFloat *baseCrit = dbcMeleeCritBase.LookupEntry( pClass - 1 );
 	gtFloat *CritPerAgi = dbcMeleeCrit.LookupEntry( level - 1 + ( pClass - 1 ) * 100 );
 	uint32 agi = GetStat( STAT_AGILITY );
-	
+
 	float tmp = 100.0f * ( baseCrit->val + agi * CritPerAgi->val );
 	tmp *= crit_to_dodge[ pClass ];
 	chance += tmp;
@@ -6466,7 +6452,7 @@ void Player::Reset_Talents()
 void Player::Reset_AllTalents(){
 	uint32 originalspec = m_talentActiveSpec;
 	Reset_Talents();
-	
+
 	if( originalspec == SPEC_PRIMARY )
 		ActivateSpec( SPEC_SECONDARY );
 	else
@@ -8287,9 +8273,7 @@ void Player::ApplyLevelInfo(LevelInfo* Info, uint32 Level)
 	//UpdateChances();
 	UpdateGlyphs();
 	m_playerInfo->lastLevel = Level;
-#ifdef ENABLE_ACHIEVEMENTS
 	GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL);
-#endif
 	//VLack: 3.1.3, as a final step, send the player's talents, this will set the talent points right too...
 	smsg_TalentsInfo(false);
 
@@ -10082,10 +10066,8 @@ void Player::_AddSkillLine(uint32 SkillLine, uint32 Curr_sk, uint32 Max_sk)
 
 	// Displaying bug fix
 	_UpdateSkillFields();
-#ifdef ENABLE_ACHIEVEMENTS
 	m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, SkillLine, Max_sk / 75, 0);
 	m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, SkillLine, Curr_sk, 0);
-#endif
 }
 
 void Player::_UpdateSkillFields()
@@ -10105,16 +10087,12 @@ void Player::_UpdateSkillFields()
 		if(itr->second.Skill->type == SKILL_TYPE_PROFESSION)
 		{
 			SetUInt32Value(f++, itr->first | 0x10000);
-#ifdef ENABLE_ACHIEVEMENTS
 			m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, itr->second.Skill->id, itr->second.CurrentValue, 0);
-#endif
 		}
 		else
 		{
 			SetUInt32Value(f++, itr->first);
-#ifdef ENABLE_ACHIEVEMENTS
 			m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, itr->second.Skill->id, itr->second.MaximumValue / 75, 0);
-#endif
 		}
 
 		SetUInt32Value(f++, (itr->second.MaximumValue << 16) | itr->second.CurrentValue);
@@ -10145,10 +10123,8 @@ void Player::_AdvanceSkillLine(uint32 SkillLine, uint32 Count /* = 1 */)
 		_AddSkillLine(SkillLine, Count, getLevel() * 5);
 		_UpdateMaxSkillCounts();
 		sHookInterface.OnAdvanceSkillLine(this, SkillLine, Count);
-#ifdef ENABLE_ACHIEVEMENTS
 		m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, SkillLine, _GetSkillLineMax(SkillLine), 0);
 		m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, SkillLine, Count, 0);
-#endif
 	}
 	else
 	{
@@ -10160,10 +10136,8 @@ void Player::_AdvanceSkillLine(uint32 SkillLine, uint32 Count /* = 1 */)
 			_UpdateSkillFields();
 			sHookInterface.OnAdvanceSkillLine(this, SkillLine, curr_sk);
 		}
-#ifdef ENABLE_ACHIEVEMENTS
 		m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, SkillLine, itr->second.MaximumValue / 75, 0);
 		m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_SKILL_LEVEL, SkillLine, itr->second.CurrentValue, 0);
-#endif
 	}
 	_LearnSkillSpells(SkillLine, curr_sk);
 }
@@ -10471,9 +10445,7 @@ void Player::_ModifySkillMaximum(uint32 SkillLine, uint32 NewMax)
 
 		itr->second.MaximumValue = NewMax;
 		_UpdateSkillFields();
-#ifdef ENABLE_ACHIEVEMENTS
 		m_achievementMgr.UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_LEARN_SKILL_LEVEL, SkillLine, NewMax / 75, 0);
-#endif
 	}
 }
 
@@ -11827,19 +11799,38 @@ void Player::LoadFieldsFromString(const char* string, uint32 firstField, uint32 
 	}
 }
 
-void Player::SetKnownTitle(RankTitles title, bool set)
+void Player::SetKnownTitle(int32 title, bool set_on_player)
 {
-	if(!HasTitle(title) ^ set)
+    CharTitlesEntry* pTitleData = dbcCharTitlesEntry.LookupEntryForced(title);
+    if (!pTitleData)
+        return;
+
+    // getting title bit_index
+    uint32 titleId = pTitleData->bit_index;
+	if(HasTitle(titleId))
 		return;
 
-	uint64 current = GetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((title >> 6) << 1));
-	if(set)
-		SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((title >> 6) << 1), current | uint64(1) << (title % 64));
-	else
-		SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((title >> 6) << 1), current & ~uint64(1) << (title % 64));
+    uint32 fieldIndexOffset = titleId / 32;
+    uint32 flag = 1 << (titleId % 32);
 
-	WorldPacket data(SMSG_TITLE_EARNED, 8);
-	data << uint32(title) << uint32(set ? 1 : 0);
+    if (set_on_player)
+    {
+        if (!HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+            return;
+
+        RemoveFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+    }
+    else
+    {
+        if (HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+            return;
+
+        SetFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+    }
+
+	WorldPacket data(SMSG_TITLE_EARNED, 4 + 4);
+	data << uint32(titleId);
+	data << uint32(set_on_player ? 1 : 0);
 	m_session->SendPacket(&data);
 }
 
@@ -12652,11 +12643,9 @@ void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32
 
 			if(getLevel() >= (pVictim->getLevel() - 8) && (GetGUID() != pVictim->GetGUID()))
 			{
-
-#ifdef ENABLE_ACHIEVEMENTS
 				GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_HONORABLE_KILL_AT_AREA, GetAreaID(), 1, 0);
 				GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_EARN_HONORABLE_KILL, 1, 0, 0);
-#endif
+
 				HonorHandler::OnPlayerKilled(this, playerVictim);
 				setAurastateFlag = true;
 
@@ -12678,10 +12667,7 @@ void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32
 			if(pVictim->IsCreature())
 			{
 				Reputation_OnKilledUnit(pVictim, false);
-
-#ifdef ENABLE_ACHIEVEMENTS
 				GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILLING_BLOW, GetMapId(), 0, 0);
-#endif
 
 				if( pVictim->getLevel() >= (getLevel()-8) && ( GetGUID() != pVictim->GetGUID() ) )
 				{
@@ -12783,7 +12769,6 @@ void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32
 					{
 						sQuestMgr.OnPlayerKill(pTagger, TO_CREATURE(pVictim), true);
 ///////////////////////////////////////////////// Kill creature/creature type Achievements /////////////////////////////////////////////////////////////////////
-#ifdef ENABLE_ACHIEVEMENTS
 						if(pTagger->InGroup())
 						{
 							Group* pGroup = pTagger->GetGroup();
@@ -12797,23 +12782,16 @@ void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32
 							pTagger->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, pVictim->GetEntry(), 1, 0);
 							pTagger->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, GetHighGUID(), GetLowGUID(), 0);
 						}
-#endif
 					}
 				}
 			}
 		}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#ifdef ENABLE_ACHIEVEMENTS
-
 		if(pVictim->isCritter())
 		{
 			GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE, pVictim->GetEntry(), 1, 0);
 			GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILL_CREATURE_TYPE, GetHighGUID(), GetLowGUID(), 0);
 		}
-
-#endif
-
 	}
 	else
 	{
@@ -12902,7 +12880,6 @@ void Player::Die(Unit* pAttacker, uint32 damage, uint32 spellid)
 		GetVehicleComponent()->EjectAllPassengers();
 	}
 
-#ifdef ENABLE_ACHIEVEMENTS
 	// A Player has died
 	if(IsPlayer())
 	{
@@ -12919,7 +12896,7 @@ void Player::Die(Unit* pAttacker, uint32 damage, uint32 spellid)
 			GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_KILLED_BY_CREATURE, 1, 0, 0);
 		}
 	}
-#endif
+
 
 	//general hook for die
 	if(!sHookInterface.OnPreUnitDie(pAttacker, this))
@@ -13345,7 +13322,7 @@ bool Player::LoadReputations( QueryResult *result ){
 		flag = field[ 1 ].GetUInt32();
 		basestanding = field[ 2 ].GetInt32();
 		standing = field[ 3 ].GetInt32();
-		
+
 		faction = dbcFaction.LookupEntryForced( id );
 		if( ( faction == NULL ) || ( faction->RepListId < 0 ) )
 			continue;
@@ -13362,7 +13339,7 @@ bool Player::LoadReputations( QueryResult *result ){
 		reputationByListId[ faction->RepListId ] = reputation;
 
 	}while( result->NextRow() );
-	
+
 	if( m_reputation.size() == 0 )
 		_InitialReputation();
 
@@ -13395,7 +13372,7 @@ bool Player::SaveReputations( bool NewCharacter, QueryBuffer *buf ){
 		ss << uint32( itr->second->flag ) << "','";
 		ss << itr->second->baseStanding << "','";
 		ss << itr->second->standing << "');";
-		
+
 		if( !NewCharacter )
 			buf->AddQueryStr( ss.str() );
 		else
@@ -13699,7 +13676,7 @@ void Player::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){
 		LOG_ERROR( "Tried to add a vehicle component, but there's already one for player %u ( %s )", GetLowGUID(), GetName() );
 		return;
 	}
-	
+
 	vehicle = new Vehicle();
 	vehicle->Load( this, creature_entry, vehicleid );
 }
