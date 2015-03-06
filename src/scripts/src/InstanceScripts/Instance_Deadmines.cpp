@@ -79,10 +79,13 @@ public:
 	{
 		switch(pGameObject->GetEntry())
 		{
-		case GO_FACTORY_DOOR:	mFactoryDoor_GUID = pGameObject->GetGUID(); break;
-		case GO_FACTORY_DOOR_LEVER:	mDoorLever_GUID = pGameObject->GetGUID(); break;
-		case GO_IRONCLAD_DOOR:	mIronCladDoor_GUID = pGameObject->GetGUID(); break;
+            case GO_FACTORY_DOOR:	mFactoryDoor_GUID = pGameObject->GetGUID(); break;
+            case GO_FACTORY_DOOR_LEVER:	mDoorLever_GUID = pGameObject->GetGUID(); break;
+            case GO_IRONCLAD_DOOR:	mIronCladDoor_GUID = pGameObject->GetGUID(); break;
+            default:
+                break;
 		}
+		ParentClass::OnGameObjectPushToWorld(pGameObject);
 	}
 
 	void OnGameObjectActivate(GameObject* pGameObject, Player* pPlayer)
@@ -120,7 +123,10 @@ public:
 				if(pDoor8!=NULL)
 					pDoor8->SetState(pDoor8->GetState() == State_Inactive ? State_Active : State_Inactive);
 			}break;
+        default:
+            break;
 		}
+		ParentClass::OnGameObjectActivate(pGameObject, pPlayer);
 	}
 
 	void OnCreatureDeath(Creature* pCreature, Unit* pUnit)
@@ -148,7 +154,11 @@ public:
 				if(pDoor3!=NULL)
 					pDoor3->SetState(State_Active);
 			}break;
+		default:
+            break;
 		}
+
+        ParentClass::OnCreatureDeath(pCreature, pUnit);
 	}
 
 protected:
