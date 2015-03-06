@@ -243,7 +243,7 @@ ObjectMgr::~ObjectMgr()
 
 		delete v;
 	}
-	
+
 	vehicle_accessories.clear();
 
 
@@ -1880,7 +1880,9 @@ void ObjectMgr::LoadTrainers()
 		result2 = WorldDatabase.Query("SELECT * FROM trainer_spells where entry='%u'", entry);
 		if(!result2)
 		{
-			Log.Error("LoadTrainers", "Trainer with no spells, entry %u.", entry);
+            if (tr->TrainerType != TRAINER_TYPE_PET)
+                Log.Error("LoadTrainers", "Trainer with no spells, entry %u.", entry);
+
 			if(tr->UIMessage != NormalTalkMessage)
 				delete [] tr->UIMessage;
 
@@ -3498,16 +3500,16 @@ void ObjectMgr::LoadVehicleAccessories(){
 	QueryResult *result = WorldDatabase.Query( "SELECT creature_entry, accessory_entry, seat FROM vehicle_accessories;" );
 
 	if( result != NULL ){
-		
+
 		do{
 			Field *row = result->Fetch();
 			VehicleAccessoryEntry *entry = new VehicleAccessoryEntry();
 			uint32 creature_entry = 0;
-			
+
 			creature_entry = row[ 0 ].GetUInt32();
 			entry->accessory_entry = row[ 1 ].GetUInt32();
 			entry->seat = row[ 2 ].GetUInt32();
-			
+
 			std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr
 				= vehicle_accessories.find( creature_entry );
 
@@ -3518,7 +3520,7 @@ void ObjectMgr::LoadVehicleAccessories(){
 				v->push_back( entry );
 				vehicle_accessories.insert( std::make_pair( creature_entry, v ) );
 			}
-		
+
 		}while( result->NextRow() );
 
 		delete result;
@@ -3528,7 +3530,7 @@ void ObjectMgr::LoadVehicleAccessories(){
 std::vector< VehicleAccessoryEntry* >* ObjectMgr::GetVehicleAccessories( uint32 creature_entry ){
 	std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr =
 		vehicle_accessories.find( creature_entry );
-	
+
 	if( itr == vehicle_accessories.end() )
 		return NULL;
 	else
@@ -3544,7 +3546,7 @@ void ObjectMgr::LoadWorldStateTemplates(){
 	do{
 		Field *row = result->Fetch();
 		uint32 mapid = row[ 0 ].GetUInt32();
-		
+
 		worldstate_templates.insert( std::make_pair( mapid, new std::multimap< uint32, WorldState >() ) );
 
 	}while( result->NextRow() );
