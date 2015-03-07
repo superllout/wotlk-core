@@ -3292,49 +3292,49 @@ void ObjectMgr::LoadSpellTargetConstraints()
 {
 	enum { CREATURE_TYPE, GAMEOBJECT_TYPE };
 
-	Log.Notice("ObjectMgr", "Loading spell target constraints...");
-
-	// Let's try to be idiot proof :/
-	QueryResult* result = WorldDatabase.Query("SELECT * FROM spelltargetconstraints WHERE SpellID > 0 ORDER BY SpellID");
-
-	if(result != NULL)
+    Log.Success("ObjectMgr", "Loading spell target constraints...");
+    if(QueryResult* result = WorldDatabase.Query("SELECT * FROM spelltargetconstraints WHERE SpellID > 0 ORDER BY SpellID"))
 	{
-		uint32 oldspellid = 0;
-		SpellTargetConstraint* stc = NULL;
-		Field* fields = NULL;
-
 		do
 		{
-			fields = result->Fetch();
+            Field* fields = result->Fetch();
+            uint32 spellId = fields[0].GetUInt32();
+            if(!dbcSpell.LookupEntryForced(spellId))
+            {
+                sLog.Error("LoadSpellTargetConstraints", "Spell id %u does not exists!", spellId);
+                continue;
+            }
+            SpellTargetConstraint* stc = new SpellTargetConstraint;
 
-			if(fields != NULL)
-			{
-				uint32 spellid = fields[ 0 ].GetUInt32();
 
-				if(oldspellid != spellid)
-				{
-					stc = new SpellTargetConstraint;
+            uint32 type = fields[ 1 ].GetUInt32();
+            uint32 value = fields[ 2 ].GetUInt32();
 
-					m_spelltargetconstraints.insert(std::pair< uint32, SpellTargetConstraint* >(spellid, stc));
-				}
-
-				uint32 type = fields[ 1 ].GetUInt32();
-				uint32 value = fields[ 2 ].GetUInt32();
-
-				if(type == CREATURE_TYPE)
-					stc->AddCreature(value);
-				else
-					stc->AddGameobject(value);
-
-				oldspellid = spellid;
-			}
+            if(type == CREATURE_TYPE)
+            {
+                if (!CreatureNameStorage.LookupEntry(value))
+                {
+                    sLog.Error("LoadSpellTargetConstraints", "Creature entry %u does not exists for spell %u!", value, spellId);
+                    continue;
+                }
+                stc->AddCreature(value);
+            }
+            else
+            {
+                if (!GameObjectNameStorage.LookupEntry(value))
+                {
+                    sLog.Error("LoadSpellTargetConstraints", "Game object entry %u does not exists for spell %u!", value, spellId);
+                    continue;
+                }
+                stc->AddGameobject(value);
+            }
+            m_spelltargetconstraints.insert(std::pair< uint32, SpellTargetConstraint* >(spellId, stc));
 		}
 		while(result->NextRow());
-	}
+        delete result;
+    }
 
-	delete result;
-
-	Log.Notice("ObjectMgr", "Loaded constraints for %u spells...", m_spelltargetconstraints.size());
+    Log.Success("ObjectMgr", "Loaded constraints for %u spells...", m_spelltargetconstraints.size());
 }
 
 SpellTargetConstraint* ObjectMgr::GetSpellTargetConstraintForSpell(uint32 spellid)
