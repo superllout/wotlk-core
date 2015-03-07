@@ -488,13 +488,13 @@ struct BankSlotPrice
 
 struct CharTitlesEntry
 {
-	uint32      ID;                                           // 0, title ids
-	uint32      unk1;                                         // 1 flags?
-	const char* name;                                         // 2-17, unused
-	uint32      name_flag;                                    // 18 string flag, unused
-	const char* name2;                                        // 19-34, unused
-	const char* name2_flag;                                   // 35 string flag, unused
-	uint32      bit_index;                                    // 36 used in PLAYER_CHOSEN_TITLE and 1<<index in PLAYER__FIELD_KNOWN_TITLES
+    uint32 ID;                                              // 0, title ids
+    //uint32 unk1;                                          // 1 flags?
+    char* nameMale[16];                                     // 2-17
+                                                            // 18 string flag, unused
+    char* nameFemale[16];                                   // 19-34
+                                                            // 35 string flag, unused
+    uint32 bit_index;                                       // 36 used in PLAYER_CHOSEN_TITLE and 1<<index in PLAYER__FIELD_KNOWN_TITLES
 };
 
 struct CurrencyTypesEntry

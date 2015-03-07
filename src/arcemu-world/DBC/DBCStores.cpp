@@ -110,15 +110,7 @@ const char* VehicleSeatEntryfmt = "niiffffffffffiiiiiifffffffiiifffiiiiiiiffiiii
 // const char* BattlemasterListEntryFormat = "uiiiiiiiiuuiiiiiiiiiiiiiiiiiuux";
 //const char* BattlemasterListEntryFormat = "uiiiiiiiiuuiiiiiiiiiiiiiiiiiuux";
 
-const char* CharTitlesEntryfmt =
-    "u" // ID
-    "u" // unk1
-    "lxxxxxxxxxxxxxxx" // name
-    "u" // name_flag
-    "lxxxxxxxxxxxxxxx" // name2
-    "u" // name2_flag
-    "u" // bit_index
-    ;
+const char* CharTitlesEntryfmt = "nxssssssssssssssssxssssssssssssssssxi";
 
 const char* CurrencyTypesEntryFormat = "xnxu";
 
@@ -173,7 +165,7 @@ const char* AchievementCriteriaStoreFormat =
 const char* spelldifficultyentryformat = "niiii";
 
 const char* spellentryFormat =
-    "u" // Id
+    "n" // Id
     "u" // Category
     "u" // DispelType
     "u" // MechanicsType

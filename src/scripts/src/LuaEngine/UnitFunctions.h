@@ -4203,7 +4203,7 @@ class LuaUnit
 			TEST_PLAYER()
 			int title = luaL_checkint(L, 1);
 			Player* plr = TO_PLAYER(ptr);
-			if(plr->HasTitle(RankTitles(title)))
+            if(plr->HasTitleIndex(title))
 				lua_pushboolean(L, 1);
 			else
 				lua_pushboolean(L, 0);

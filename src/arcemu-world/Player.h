@@ -1225,15 +1225,15 @@ class SERVER_DECL Player : public Unit
 		}
 		uint32 GetMaxPersonalRating();
 
-		bool HasTitle(int32 title)
+        bool HasTitleIndex(uint32 titleIndex)
 		{
-            CharTitlesEntry* pTitleData = dbcCharTitlesEntry.LookupEntryForced(title);
-            if (!pTitleData)
-                return false;
-
-			return (GetUInt64Value(PLAYER__FIELD_KNOWN_TITLES + ((pTitleData->bit_index >> 6) << 1)) & (uint64(1) << (pTitleData->bit_index % 64))) != 0;
+            uint32 fieldIndexOffset = uint32(titleIndex / 32);
+            uint32 flag = uint32(1 << (titleIndex % 32));
+            if (HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+                return true;
+            return false;
 		}
-		void SetKnownTitle(int32 title, bool set_on_player);
+        void SetKnownTitle(uint32 title, bool lost = false);
 		void SendAvailSpells(SpellShapeshiftForm* ssf, bool active);
 
 		/************************************************************************/

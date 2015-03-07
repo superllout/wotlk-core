@@ -4183,11 +4183,6 @@ bool ChatHandler::HandleSetTitle(const char* args, WorldSession* m_session)
 		return false;
 
 	int32 title = atol(args);
-	if(title > int32(PVPTITLE_END) || title < - int32(PVPTITLE_END))
-	{
-		RedSystemMessage(m_session, "Argument %i is out of range!", title);
-		return false;
-	}
 	if(title == 0)
 	{
 		plr->SetUInt64Value(PLAYER__FIELD_KNOWN_TITLES, 0);

@@ -11799,38 +11799,44 @@ void Player::LoadFieldsFromString(const char* string, uint32 firstField, uint32 
 	}
 }
 
-void Player::SetKnownTitle(int32 title, bool set_on_player)
+void Player::SetKnownTitle(uint32 title, bool lost)
 {
-    CharTitlesEntry* pTitleData = dbcCharTitlesEntry.LookupEntryForced(title);
+    CharTitlesEntry* pTitleData = dbcCharTitlesEntry.LookupEntry(title);
     if (!pTitleData)
+    {
+        sLog.Error("Player", "cannot find title id %u for player %u", title, GetLowGUID());
         return;
+    }
 
     // getting title bit_index
-    uint32 titleId = pTitleData->bit_index;
-	if(HasTitle(titleId))
-		return;
-
-    uint32 fieldIndexOffset = titleId / 32;
-    uint32 flag = 1 << (titleId % 32);
-
-    if (set_on_player)
+    uint32 titleIndex = pTitleData->bit_index;
+    if(HasTitleIndex(titleIndex))
     {
-        if (!HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+        sLog.Error("Player", "player %u already has title %u", GetLowGUID(), title);
+        return;
+    }
+
+    uint32 field = PLAYER__FIELD_KNOWN_TITLES + (titleIndex / 32);
+    uint32 flag = uint32(1 << (titleIndex % 32));
+
+    if (!lost)
+    {
+        if (!HasFlag(field, flag))
             return;
 
-        RemoveFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+        RemoveFlag(field, flag);
     }
     else
     {
-        if (HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
+        if (HasFlag(field, flag))
             return;
 
-        SetFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag);
+        SetFlag(field, flag);
     }
 
-	WorldPacket data(SMSG_TITLE_EARNED, 4 + 4);
-	data << uint32(titleId);
-	data << uint32(set_on_player ? 1 : 0);
+    WorldPacket data(SMSG_TITLE_EARNED, 8);
+    data << uint32(titleIndex);
+	data << uint32(lost ? 1 : 0);
 	m_session->SendPacket(&data);
 }
 

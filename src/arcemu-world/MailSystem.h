@@ -67,7 +67,7 @@ enum MailStationery
 {
     // item:
     MAIL_STATIONERY_TEST1		= 1,	// 8164
-    MAIL_STATIONERY_TEST2		= 41,	// 9311
+    MAIL_STATIONERY_DEFAULT		= 41,	// 9311
     MAIL_STATIONERY_GM			= 61,	// 18154
     MAIL_STATIONERY_AUCTION		= 62,	// 21140
     MAIL_STATIONERY_VAL			= 64,	// 22058, Valentines day
@@ -145,11 +145,11 @@ class SERVER_DECL MailSystem : public Singleton<MailSystem>, public EventableObj
 		void RemoveMessageIfDeleted(uint32 message_id, Player* plr);
 		void SaveMessageToSQL(MailMessage* message);
 		void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
-		                          uint32 cod, vector<uint64> &item_guids, uint32 stationery, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
+                                  uint32 cod, vector<uint64> &item_guids, uint32 stationery = MAIL_STATIONERY_DEFAULT, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
 
 		//overload to keep backward compatibility (passing just 1 item guid instead of a vector)
 		void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
-		                          uint32 cod, uint64 item_guid, uint32 stationery, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
+                                  uint32 cod, uint64 item_guid, uint32 stationery = MAIL_STATIONERY_DEFAULT, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
 
 		ARCEMU_INLINE bool MailOption(uint32 flag)
 		{

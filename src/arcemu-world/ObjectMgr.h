@@ -31,8 +31,8 @@ struct AchievementReward
     uint16 title;       // title id
     uint32 itemId;      // item id
     uint32 senderEntry; // creature entry
-    const char* subject; // letter subject
-    const char* text;   // letter text
+    std::string subject; // letter subject
+    std::string text;   // letter text
 };
 
 struct WorldState
@@ -428,7 +428,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
 		typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
 		typedef std::multimap <uint32, uint32>                               BCEntryStorage;
 		typedef std::map< uint32, SpellTargetConstraint* >					SpellTargetConstraintMap;
-		typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
+        typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
 
 		// object holders
 		GmTicketList         GM_TicketList;

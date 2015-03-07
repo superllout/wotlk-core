@@ -29,7 +29,7 @@ void WorldSession::HandleSetVisibleRankOpcode(WorldPacket & recv_data)
 	recv_data >> ChosenRank;
 	if(ChosenRank == 0xFFFFFFFF)
 		_player->SetChosenTitle(0);
-	else if(_player->HasTitle(static_cast< RankTitles >(ChosenRank)))
+    else if(_player->HasTitleIndex(ChosenRank))
 		_player->SetChosenTitle(ChosenRank);
 }
 

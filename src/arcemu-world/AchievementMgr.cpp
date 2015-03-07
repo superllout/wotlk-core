@@ -109,6 +109,7 @@ bool ShowCompletedAchievement(uint32 achievementID, const Player* plr)
 {
 	switch(achievementID)
 	{
+        case  456: // Realm First! Obsidian Slayer: Participated in the realm first defeat of Sartharion the Onyx Guardian on Heroic Difficulty.
 		case  457: // Realm First! Level 80
 		case  467: // Realm First! Level 80 Shaman
 		case  466: // Realm First! Level 80 Druid
@@ -120,6 +121,8 @@ bool ShowCompletedAchievement(uint32 achievementID, const Player* plr)
 		case  460: // Realm First! Level 80 Mage
 		case  459: // Realm First! Level 80 Warrior
 		case  458: // Realm First! Level 80 Rogue
+        case 1400: // Realm First! Magic Seeker: Participated in the realm first defeat of Malygos on Heroic Difficulty.
+        case 1402: // Realm First! Conqueror of Naxxramas: Participated in the realm first defeat of Kel'Thuzad on Heroic Difficulty in Naxxramas.
 		case 1404: // Realm First! Level 80 Gnome
 		case 1405: // Realm First! Level 80 Blood Elf
 		case 1406: // Realm First! Level 80 Draenei
@@ -165,11 +168,6 @@ bool ShowCompletedAchievement(uint32 achievementID, const Player* plr)
 				}
 			}
 			break;
-// All raid members should receive these last 3 Realm First achievements when they first occur.
-// (not implemented yet)
-//		case 1400: // Realm First! Magic Seeker: Participated in the realm first defeat of Malygos on Heroic Difficulty.
-//		case  456: // Realm First! Obsidian Slayer: Participated in the realm first defeat of Sartharion the Onyx Guardian on Heroic Difficulty.
-//		case 1402: // Realm First! Conqueror of Naxxramas: Participated in the realm first defeat of Kel'Thuzad on Heroic Difficulty in Naxxramas.
 		default:
 			break;
 	}
@@ -1789,16 +1787,27 @@ void AchievementMgr::GiveAchievementReward(AchievementEntry const* entry)
     if (!reward)
         return;
 
-    if (reward->title)
-        GetPlayer()->SetKnownTitle(reward->title, true);
+    uint32 title = reward->title;
+    uint32 senderEntry = reward->senderEntry;
 
-    if (reward->itemId)
+    uint32 itemId = reward->itemId;
+
+    if (title != 0)
+        GetPlayer()->SetKnownTitle(title, true);
+
+    if (senderEntry != 0)
     {
-        if (Item* pItem = objmgr.CreateItem(reward->itemId, GetPlayer()))
+        string subject = reward->subject;
+        string text = reward->text;
+        if (Item* pItem = objmgr.CreateItem(itemId, GetPlayer()))
         {
-            pItem->SaveToDB(INVENTORY_SLOT_NOT_SET, 0, true, NULL);
-            sMailSystem.SendAutomatedMessage(CREATURE, reward->senderEntry, GetPlayer()->GetLowGUID(), reward->subject, reward->text, 0, 0, pItem->GetGUID(), 0);
+            pItem->SaveToDB(INVENTORY_SLOT_NOT_SET, INVENTORY_SLOT_NOT_SET, true, NULL);
+            sMailSystem.SendAutomatedMessage(CREATURE, senderEntry, GetPlayer()->GetLowGUID(), subject.c_str(), text.c_str(), 0, 0, pItem->GetGUID());
+            pItem->DeleteMe();
+            pItem = NULL;
         }
+        else
+            sMailSystem.SendAutomatedMessage(CREATURE, senderEntry, GetPlayer()->GetLowGUID(), subject.c_str(),text.c_str(), 0, 0, 0);
     }
 }
 

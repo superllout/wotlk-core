@@ -3571,7 +3571,7 @@ std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map
 
 void ObjectMgr::LoadAchievementRewards()
 {
-    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title`,`item`,`sender`,`subject`,`text` FROM achievement_reward ORDER BY id;"))
+    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title`,`item`,`sender`,`subject`,`text` FROM `achievement_reward` ORDER BY `id`"))
     {
         do{
             Field* fields = result->Fetch();
@@ -3597,12 +3597,8 @@ void ObjectMgr::LoadAchievementRewards()
             }
             reward->subject = fields[4].GetString() ? fields[4].GetString() : "";
             reward->text = fields[5].GetString() ? fields[5].GetString() : "";
-            if (reward->itemId && reward->senderEntry && !reward->subject && !reward->text)
-            {
-                sLog.Error("LoadAchievementRewards", "no text data for achievement (id %u)", id);
-                continue;
-            }
-            mAchievementRewards.insert(std::pair<uint32, AchievementReward*>(id, reward));
+
+            mAchievementRewards[id] = reward;
         }while (result->NextRow());
         delete result;
     }
