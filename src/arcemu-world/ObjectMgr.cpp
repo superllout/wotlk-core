@@ -254,6 +254,8 @@ ObjectMgr::~ObjectMgr()
 	}
 
 	worldstate_templates.clear();
+
+    mAchievementRewards.clear();
 }
 
 //
