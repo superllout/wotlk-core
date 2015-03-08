@@ -249,5 +249,11 @@ IF( BUILD_TOOLS )
 	add_subdirectory(tools)
 ENDIF( BUILD_TOOLS )
 
-
+# install dependencies
 INSTALL(FILES ${INSTALLED_DEPENDENCIES} DESTINATION .)
+
+# install configs
+install(FILES "${ROOT_PATH}/configs/world.conf.install" DESTINATION ${ARCEMU_CONFIGSFILE_PATH})
+install(FILES "${ROOT_PATH}/configs/optional.conf.install" DESTINATION ${ARCEMU_CONFIGSFILE_PATH})
+install(FILES "${ROOT_PATH}/configs/realms.conf.install" DESTINATION ${ARCEMU_CONFIGSFILE_PATH})
+install(FILES "${ROOT_PATH}/configs/logon.conf.install" DESTINATION ${ARCEMU_CONFIGSFILE_PATH})
