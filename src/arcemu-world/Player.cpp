@@ -1570,7 +1570,7 @@ void Player::GiveXP(uint32 xp, const uint64 & guid, bool allowbonus)
 		SetPower(POWER_TYPE_MANA, GetMaxPower(POWER_TYPE_MANA));
 
 		// if warlock has summoned pet, increase its level too
-		if(info->class_ == WARLOCK)
+		if(getClass() == WARLOCK)
 		{
 			Pet* summon = GetSummon();
 			if((summon != NULL) && (summon->IsInWorld()) && (summon->isAlive()))
@@ -11283,7 +11283,7 @@ void Player::Social_AddIgnore(const char* name)
 	PlayerInfo* info;
 
 	// lookup the player
-	info = objmgr.GetPlayerInfoByName(name);
+	PlayerInfo* info = objmgr.GetPlayerInfoByName(name);
 	if(info == NULL)
 	{
 		data << uint8(FRIEND_IGNORE_NOT_FOUND);
