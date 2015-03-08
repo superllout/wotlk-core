@@ -1,0 +1,55 @@
+DO NOT ADD SPECIFIC QUESTS OR SIMILAR INGAME CONTENT
+
+* Random dungeon finder
+* Random battleground
+* Warden anticheat cheacks (port it from trinitycore)
+* Packet proof checks
+* Transport system
+* Refer a friend
+* Character faction change
+* Character class change (low priority)
+* Char recovery (port it from mangos)
+* Outdoor PvP (add wrapper and outdoor pvp data saving to characters database + reset times).
+* Game event system - event spawn data should be exluded from original spawns)
+* Creature difficulty stats
+* Weekly quests
+* Monthly quests
+* Ingame loterry (its blizzlike thing, for e.x NPC Ian Drake)
+* Force quests data to use dbc reputation values instead of custom (also create additional quest_rewards table for custom value - we should allow customizing it!)
+* Remove worldmap_info tables generally and force to use dbc values.
+* Split characters table
+* Force logon to use sha1 password.
+* Make expansion option in account table more understandible by using expansion numbers (0 - classic, 1 - tbc, 2 - wotlk and etc)
+* Make gm levels option to number instead of string flag (az and similar).
+* Port TrinityCore mmaps system.
+* Script all battlegrounds.
+* Remove additional tables load - for customization there will created external tables with prefix custom_*
+* Force all system ingame messages to use worldstring table data - it will improve multilanguage support
+* Implement achievement_reward_mail table which will hold letters data with additional locales cells.
+* Implement creature_script_texts, creature_gossip_texts data usage.
+* Implement spell_linked_spell table - will used for simple spells (port of trinitycore based implementation.
+* Add condition cells in npc_spellclick_spell table.
+* Implement achievements_criteria_requirements table to handle achievements criteria (port from mangos).
+* Port trinitycore based disable system.
+* Implement spell event scripts (OnCast, OnFail, OnHitTarget and etc) - similar to TrinityCore based.
+* To prevent sql injection - start using prepared sql statement.
+* Rework all player classes and pets spells - it should be done 100% like official.
+* Remove possible hack code, magic numbers.
+* Add debug information to every packet.
+* Add info to database data load functions.
+* Map, dbc, vmap extractors should get external class functions wrappers - its not good in code style to contain single functions for big apps in following row.
+* Crashdumps should create text crashdump about crash (it would make possible to make mingw support).
+* Split world to game_world (game related functions) and worldserver (server runner, game_world library should be linked into this).
+* Add proper mingw support - important.
+* Add proper clang support - since clang is FreeBSD default c/c++ compiler.
+* Move cmake to top folders (that would add great support for lower popularity UNIX IDES like anjuta) - low priority
+* Dependencies should be updated directly by using git submodule from their official repositories + additionally adding custom cmake for them if they don't have) - low priority
+* Add SOAP support
+* Removed compiler options for very outdated compilers.
+* Add proper x64 architecture support.
+* Join script libraries into one but keep it seperate by type - for example: c++ scripts for creature, gossips, quests and similar will aim into one library, other like bgs, worldPvP, 
+Spell scripts will aim as seperated.
+* Move some options from world config to optional.conf config (worldserver should hold options related to its worldserver service like logon service does)
+* Remove unused or unlogical config options
+* Add support for SSE and SSE2 CPUS
+* Move Realms config to logon database and call it realmlist, add option in worldserver for realm id and remove password usage.
