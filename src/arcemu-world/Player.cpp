@@ -1693,9 +1693,10 @@ void Player::smsg_TalentsInfo(bool SendPetTalents)
     WorldPacket data(SMSG_TALENTS_INFO, 1000);
     data << uint8(SendPetTalents ? 1 : 0);
     if(SendPetTalents)
-    est            if(GetSummon())
-            GetSummon()->SendTalentsToOwner();
-        return;
+    {
+        if(GetSummon())
+                GetSummon()->SendTalentsToOwner();
+            return;
     }
     else
     {
@@ -11299,7 +11300,6 @@ void Player::Social_SetNote(uint32 guid, const char* note)
 void Player::Social_AddIgnore(const char* name)
 {
     WorldPacket data(SMSG_FRIEND_STATUS, 10);
-    PlayerInfo* info;
 
     // lookup the player
     PlayerInfo* info = objmgr.GetPlayerInfoByName(name);
