@@ -3580,21 +3580,27 @@ void ObjectMgr::LoadAchievementRewards()
             uint32 id = fields[0].GetUInt32();
             if (!dbcAchievementStore.LookupEntryForced(id))
             {
-                sLog.Error("LoadAchievementRewards", "Achievement (id %u) does not exists!", id);
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) does not exists!", id);
                 continue;
             }
             AchievementReward* reward = new AchievementReward;
             reward->title = fields[1].GetUInt16();
+            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title))
+            {
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title %u", id, reward->title);
+                continue;
+            }
+
             reward->itemId = fields[2].GetUInt32();
             if (reward->itemId != 0 && !ItemPrototypeStorage.LookupEntry(reward->itemId))
             {
-                sLog.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing item (entry %u)!", id, reward->itemId);
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing item (entry %u)!", id, reward->itemId);
                 continue;
             }
             reward->senderEntry = fields[3].GetUInt32();
             if (reward->senderEntry != 0 && !CreatureNameStorage.LookupEntry(reward->senderEntry))
             {
-                sLog.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
                 continue;
             }
             reward->subject = fields[4].GetString() ? fields[4].GetString() : "";
