@@ -28,54 +28,54 @@ local function alias(LHAname, LBname)
 end
 
 function GAMEOBJECT:SetUnclickable()
-	self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
+    self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
 end
 function GAMEOBJECT:SetClickable()
-	self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x0)
+    self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x0)
 end
 function GAMEOBJECT:IsUnclickable()
-	local flags = self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
-	if(bit_and(flags,0x1) ) then
-		return true
-	end
-	return false
+    local flags = self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
+    if(bit_and(flags,0x1) ) then
+        return true
+    end
+    return false
 end
 function GAMEOBJECT:IsClickable()
-	local flags = self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
-	if(bit_and(flags,0x1) == 0 or bit_and(flags, 0x2) ~= 0) then
-		return true
-	end
-	return false
+    local flags = self:SetUInt32Value(LCF.GAMEOBJECT_FLAGS,0x1)
+    if(bit_and(flags,0x1) == 0 or bit_and(flags, 0x2) ~= 0) then
+        return true
+    end
+    return false
 end
 --[[function GAMEOBJECT:Respawn()
-	self:SetPosition(self:GetX(),self:GetY(),self:GetZ(),self:GetO())
+    self:SetPosition(self:GetX(),self:GetY(),self:GetZ(),self:GetO())
 end]]
 function GAMEOBJECT:Close()
-	self:SetByte(LCF.GAMEOBJECT_BYTES_1,0,1)
+    self:SetByte(LCF.GAMEOBJECT_BYTES_1,0,1)
 end
 function GAMEOBJECT:IsOpen()
-	return (self:GetByte(LCF.GAMEOBJECT_BYTES_1,0) == 0)
+    return (self:GetByte(LCF.GAMEOBJECT_BYTES_1,0) == 0)
 end
 function GAMEOBJECT:IsClosed()
-	return (self:GetByte(LCF.GAMEOBJECT_BYTES_1,0) == 1)
+    return (self:GetByte(LCF.GAMEOBJECT_BYTES_1,0) == 1)
 end
 function GAMEOBJECT:Open()
-	self:SetByte(LCF.GAMEOBJECT_BYTES_1,0,0)
+    self:SetByte(LCF.GAMEOBJECT_BYTES_1,0,0)
 end
 function GAMEOBJECT:RegisterAIUpdateEvent( interval)
-	self:GetScript():RegisterAIUpdateEvent(interval)
+    self:GetScript():RegisterAIUpdateEvent(interval)
 end
 function GAMEOBJECT:ModifyAIUpdateEvent( nInterval)
-	self:GetScript():ModifyAIUpdateEvent(nInterval)
+    self:GetScript():ModifyAIUpdateEvent(nInterval)
 end
 function GAMEOBJECT:RemoveAIUpdateEvent()
-	self:GetScript():RemoveAIUpdateEvent()
+    self:GetScript():RemoveAIUpdateEvent()
 end
 function GAMEOBJECT:GetName()
-	return self:GetInfo().Name
+    return self:GetInfo().Name
 end
 function GAMEOBJECT:Type()
-	return self:GetInfo().Type
+    return self:GetInfo().Type
 end
 
 function GAMEOBJECT:Activate()
@@ -107,8 +107,8 @@ alias("IsInBack", "IsBehind")
 
 function GAMEOBJECT:PlaySoundToSet(sound_entry)
    local data = LuaPacket(722, 4);
-	data:WriteUInt32(sound_entry);
-	
+    data:WriteUInt32(sound_entry);
+    
    self:SendMessageToSet(data, true);
 end
 

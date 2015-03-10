@@ -19,32 +19,32 @@ Staff of Moon Project, Feb 2008
 
 function SunbladeWarlock_OnCombat(Unit, Event)
 --He summons the Imp
-	Unit:CastSpell(44517)
+    Unit:CastSpell(44517)
 --Cast Events don't know how long the cooldown is.
-	Unit:RegisterEvent("SunbladeWarlock_Incinerate", 5000, 0)
+    Unit:RegisterEvent("SunbladeWarlock_Incinerate", 5000, 0)
 --46042 Immolate
-	Unit:RegisterEvent("SunbladeWarlock_Immolate", 3500, 0)
+    Unit:RegisterEvent("SunbladeWarlock_Immolate", 3500, 0)
 end
 
 function SunbladeWarlock_Incinerate(Unit, Event)
-	if Unit:GetClosestPlayer() then
-		Unit:FullCastSpellOnTarget(46043, Unit:GetClosestPlayer())
-	end
+    if Unit:GetClosestPlayer() then
+        Unit:FullCastSpellOnTarget(46043, Unit:GetClosestPlayer())
+    end
 end
 
 function SunbladeWarlock_Immolate(Unit, Event)
-	local Flip = math.random(3)
-	if Flip == 1 and Unit:GetMainTank() then
-		Unit:FullCastSpellOnTarget(46042, Unit:GetMainTank())
-	end
+    local Flip = math.random(3)
+    if Flip == 1 and Unit:GetMainTank() then
+        Unit:FullCastSpellOnTarget(46042, Unit:GetMainTank())
+    end
 end
 
 function SunbladeWarlock_LeaveCombat(Unit, Event)
-	Unit:RemoveEvents()
+    Unit:RemoveEvents()
 end
 
 function SunbladeWarlock_Died(Unit, Event)
-	Unit:RemoveEvents()
+    Unit:RemoveEvents()
 end
 
 

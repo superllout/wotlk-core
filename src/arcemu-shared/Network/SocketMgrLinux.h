@@ -26,77 +26,77 @@ class ListenSocketBase;
 
 class SocketMgr : public Singleton<SocketMgr>
 {
-		/// /dev/epoll instance handle
-		int epoll_fd;
+        /// /dev/epoll instance handle
+        int epoll_fd;
 
-		// fd -> pointer binding.
-		Socket* fds[SOCKET_HOLDER_SIZE];
-		ListenSocketBase* listenfds[SOCKET_HOLDER_SIZE];
+        // fd -> pointer binding.
+        Socket* fds[SOCKET_HOLDER_SIZE];
+        ListenSocketBase* listenfds[SOCKET_HOLDER_SIZE];
 
-		/// socket counter
-		Arcemu::Threading::AtomicCounter socket_count;
+        /// socket counter
+        Arcemu::Threading::AtomicCounter socket_count;
 
-		int max_fd;
+        int max_fd;
 
-	public:
+    public:
 
-		/// friend class of the worker thread -> it has to access our private resources
-		friend class SocketWorkerThread;
+        /// friend class of the worker thread -> it has to access our private resources
+        friend class SocketWorkerThread;
 
-		/// constructor > create epoll device handle + initialize event set
-		SocketMgr()
-		{
-			epoll_fd = epoll_create(SOCKET_HOLDER_SIZE);
-			if(epoll_fd == -1)
-			{
-				sLog.outError("Could not create epoll fd (/dev/epoll).");
-				exit(-1);
-			}
+        /// constructor > create epoll device handle + initialize event set
+        SocketMgr()
+        {
+            epoll_fd = epoll_create(SOCKET_HOLDER_SIZE);
+            if(epoll_fd == -1)
+            {
+                sLog.outError("Could not create epoll fd (/dev/epoll).");
+                exit(-1);
+            }
 
-			// null out the pointer array
-			memset(fds, 0, sizeof(void*) * SOCKET_HOLDER_SIZE);
-			memset(listenfds, 0, sizeof(void*) * SOCKET_HOLDER_SIZE);
-			max_fd = 0;
-		}
+            // null out the pointer array
+            memset(fds, 0, sizeof(void*) * SOCKET_HOLDER_SIZE);
+            memset(listenfds, 0, sizeof(void*) * SOCKET_HOLDER_SIZE);
+            max_fd = 0;
+        }
 
-		/// destructor > destroy epoll handle
-		~SocketMgr()
-		{
-			// close epoll handle
-			close(epoll_fd);
-		}
+        /// destructor > destroy epoll handle
+        ~SocketMgr()
+        {
+            // close epoll handle
+            close(epoll_fd);
+        }
 
-		/// add a new socket to the epoll set and to the fd mapping
-		void AddSocket(Socket* s);
-		void AddListenSocket(ListenSocketBase* s);
+        /// add a new socket to the epoll set and to the fd mapping
+        void AddSocket(Socket* s);
+        void AddListenSocket(ListenSocketBase* s);
 
-		/// remove a socket from epoll set/fd mapping
-		void RemoveSocket(Socket* s);
+        /// remove a socket from epoll set/fd mapping
+        void RemoveSocket(Socket* s);
 
-		/// returns epoll fd
-		inline int GetEpollFd() { return epoll_fd; }
+        /// returns epoll fd
+        inline int GetEpollFd() { return epoll_fd; }
 
-		/// closes all sockets
-		void CloseAll();
+        /// closes all sockets
+        void CloseAll();
 
-		/// spawns worker threads
-		void SpawnWorkerThreads();
+        /// spawns worker threads
+        void SpawnWorkerThreads();
 
-		/// show status
-		void ShowStatus();
+        /// show status
+        void ShowStatus();
 };
 
 class SocketWorkerThread : public ThreadBase
 {
-		/// epoll event struct
-		struct epoll_event events[THREAD_EVENT_SIZE];
-		bool running;
-	public:
-		bool run();
-		void OnShutdown()
-		{
-			running = false;
-		}
+        /// epoll event struct
+        struct epoll_event events[THREAD_EVENT_SIZE];
+        bool running;
+    public:
+        bool run();
+        void OnShutdown()
+        {
+            running = false;
+        }
 };
 
 #define sSocketMgr SocketMgr::getSingleton()

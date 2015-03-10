@@ -27,22 +27,22 @@
 
 class CommonScheduleThread : public CThread
 {
-		bool m_running;
-		bool m_busy;
-		std::multimap<uint32, uint32>::iterator itOrderMSGEntry;
+        bool m_running;
+        bool m_busy;
+        std::multimap<uint32, uint32>::iterator itOrderMSGEntry;
 
-		uint32 BCTimerCount;
+        uint32 BCTimerCount;
 
-		Arcemu::Threading::ConditionVariable cond;
+        Arcemu::Threading::ConditionVariable cond;
 
-	public:
-		CommonScheduleThread();
-		~CommonScheduleThread();
+    public:
+        CommonScheduleThread();
+        ~CommonScheduleThread();
 
-		bool run();
-		void terminate();
+        bool run();
+        void terminate();
 
-		void BroadCastExec();
+        void BroadCastExec();
 };
 
 #endif

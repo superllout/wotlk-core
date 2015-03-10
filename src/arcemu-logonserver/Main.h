@@ -39,8 +39,8 @@ extern Mutex _authSocketLock;
 
 struct AllowedIP
 {
-	unsigned int IP;
-	unsigned char Bytes;
+    unsigned int IP;
+    unsigned char Bytes;
 };
 
 bool IsServerAllowed(unsigned int IP);
@@ -49,15 +49,15 @@ bool IsServerAllowedMod(unsigned int IP);
 class LogonServer;
 class LogonServer : public Singleton< LogonServer >
 {
-	public:
-		void CheckForDeadSockets();
-		void Run(int argc, char** argv);
-		void Stop();
-		uint32 max_build;
-		uint32 min_build;
-		uint8 sql_hash[20];
+    public:
+        void CheckForDeadSockets();
+        void Run(int argc, char** argv);
+        void Stop();
+        uint32 max_build;
+        uint32 min_build;
+        uint8 sql_hash[20];
 
-		Arcemu::PerformanceCounter perfcounter;
-	private:
-		bool m_stopEvent;
+        Arcemu::PerformanceCounter perfcounter;
+    private:
+        bool m_stopEvent;
 };

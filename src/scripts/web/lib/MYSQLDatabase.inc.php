@@ -31,66 +31,66 @@ require_once('Database.inc.php');
 //
 /////////////////////////////////////////////////////////////
 class MYSQLDatabase extends Database{
-	
-	private $db_link; // link identifier
-	private $dbtype;
-	private $dbname;
-	private $dbuname;
-	private $dbpass;
-	private $dbhost;
-	private $dbport;
-	
-	
-	public function MYSQLDatabase( $db_username, $db_password, $db_host, $db_port, $db_name ){
-		global $db_type;
-		
-		$this->dbtype  = $db_type;
-		$this->dbname  = $db_name;
-		$this->dbuname = $db_username;
-		$this->dbpass  = $db_password;
-		$this->dbhost  = $db_host;
-		$this->dbport  = $db_port;
-	}
-	
-	
-	public function Connect(){
-		
-		$connstring = $this->dbhost.':'.$this->dbport;
-		
-		$this->db_link = mysql_connect( $connstring, $this->dbuname, $this->dbpass );
-		
-		if( $this->db_link == FALSE )
-			return false;
-		
-		$check = mysql_select_db( $this->dbname, $this->db_link );
-		
-		return $check;
-	}
-	
-	
-	public function Close(){
-		
-		$check = mysql_close( $this->db_link );							  
-		
-		return $check;
-	}
-	
-	
-	public function Query( $query ){
-		
-		$result = mysql_query( $query, $this->db_link ) or die('Invalid query: ' . mysql_error());
-		
-		return $result;
-	}
-	
-	
-	public function Fetch( $result ){
-		
-		$line = mysql_fetch_row( $result );
-		
-		return $line;
-	}
-	
+    
+    private $db_link; // link identifier
+    private $dbtype;
+    private $dbname;
+    private $dbuname;
+    private $dbpass;
+    private $dbhost;
+    private $dbport;
+    
+    
+    public function MYSQLDatabase( $db_username, $db_password, $db_host, $db_port, $db_name ){
+        global $db_type;
+        
+        $this->dbtype  = $db_type;
+        $this->dbname  = $db_name;
+        $this->dbuname = $db_username;
+        $this->dbpass  = $db_password;
+        $this->dbhost  = $db_host;
+        $this->dbport  = $db_port;
+    }
+    
+    
+    public function Connect(){
+        
+        $connstring = $this->dbhost.':'.$this->dbport;
+        
+        $this->db_link = mysql_connect( $connstring, $this->dbuname, $this->dbpass );
+        
+        if( $this->db_link == FALSE )
+            return false;
+        
+        $check = mysql_select_db( $this->dbname, $this->db_link );
+        
+        return $check;
+    }
+    
+    
+    public function Close(){
+        
+        $check = mysql_close( $this->db_link );                              
+        
+        return $check;
+    }
+    
+    
+    public function Query( $query ){
+        
+        $result = mysql_query( $query, $this->db_link ) or die('Invalid query: ' . mysql_error());
+        
+        return $result;
+    }
+    
+    
+    public function Fetch( $result ){
+        
+        $line = mysql_fetch_row( $result );
+        
+        return $line;
+    }
+    
 }
 
 ?>

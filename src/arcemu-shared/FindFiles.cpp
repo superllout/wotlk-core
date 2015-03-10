@@ -32,60 +32,60 @@ namespace Arcemu
 
 #ifdef WIN32
 
-	bool FindFiles(const char* where, const char* filename, FindFilesResult & r)
-	{
-		WIN32_FIND_DATA FindFileData;
-		HANDLE hFind;
+    bool FindFiles(const char* where, const char* filename, FindFilesResult & r)
+    {
+        WIN32_FIND_DATA FindFileData;
+        HANDLE hFind;
 
-		std::string fname(where);
-		fname += "*";
+        std::string fname(where);
+        fname += "*";
 
-		if(filename != NULL)
-		{
-			fname += filename;
-			fname += "*";
-		}
+        if(filename != NULL)
+        {
+            fname += filename;
+            fname += "*";
+        }
 
-		hFind = FindFirstFile(fname.c_str(), &FindFileData);
+        hFind = FindFirstFile(fname.c_str(), &FindFileData);
 
-		if(hFind == INVALID_HANDLE_VALUE)
-			return false;
+        if(hFind == INVALID_HANDLE_VALUE)
+            return false;
 
-		do
-		{
-			r.Add(FindFileData.cFileName);
-		}
-		while(FindNextFile(hFind, &FindFileData));
+        do
+        {
+            r.Add(FindFileData.cFileName);
+        }
+        while(FindNextFile(hFind, &FindFileData));
 
-		FindClose(hFind);
+        FindClose(hFind);
 
-		return true;
-	}
+        return true;
+    }
 
 #else
 
-	bool FindFiles(const char* where, const char* filename, FindFilesResult & r)
-	{
-		int n = 0;
-		dirent** filelist = NULL;
+    bool FindFiles(const char* where, const char* filename, FindFilesResult & r)
+    {
+        int n = 0;
+        dirent** filelist = NULL;
 
-		n = scandir(where, &filelist, NULL, NULL);
+        n = scandir(where, &filelist, NULL, NULL);
 
-		if(n < 0)
-			return false;
-		else
-			while(n-- > 0)
-			{
-				if((filename == NULL) || (strstr(filename, "*") != NULL) || (strstr(filelist[ n ]->d_name, filename) != NULL))
-					r.Add(filelist[ n ]->d_name);
+        if(n < 0)
+            return false;
+        else
+            while(n-- > 0)
+            {
+                if((filename == NULL) || (strstr(filename, "*") != NULL) || (strstr(filelist[ n ]->d_name, filename) != NULL))
+                    r.Add(filelist[ n ]->d_name);
 
-				free(filelist[ n ]);
-			}
+                free(filelist[ n ]);
+            }
 
-		free(filelist);
+        free(filelist);
 
-		return true;
-	}
+        return true;
+    }
 
 #endif
 }

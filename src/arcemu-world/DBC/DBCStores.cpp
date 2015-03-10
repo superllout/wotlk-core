@@ -299,24 +299,24 @@ const char* charraceFormat = "uxxxxxxuxxxxuxlxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 const char* charclassFormat = "uxuxlxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 const char* creaturefamilyFormat = "ufufuuuuuxlxxxxxxxxxxxxxxxxx";
 const char* mapentryFormat =
-    "u"					// 0 id
-    "s"					// 1 name_internal
-    "u"					// 2 map_type
-    "u"					// 3 is_pvp_zone
+    "u"                    // 0 id
+    "s"                    // 1 name_internal
+    "u"                    // 2 map_type
+    "u"                    // 3 is_pvp_zone
     "x"
-    "lxxxxxxxxxxxxxxxx"	// 5-21 real_name
-    "u"					// 22 linked_zone
+    "lxxxxxxxxxxxxxxxx"    // 5-21 real_name
+    "u"                    // 22 linked_zone
     "xxxxxxxxxxxxxxxxx" // 23-39 hordeIntro
     "xxxxxxxxxxxxxxxxx" // 40-56 allianceIntro
-    "u"					// 57 multimap_id
-    "x"					// 58 unk_float (all 1 but arathi 1.25)
-    "u"					// 59 parent_map
-    "u"					// 60 start_x
-    "u"					// 61 start_y
-    "x"					// 62 unk
-    "u"					// 63 addon
-    "x"					// 64 unk
-    "x";				// 65 unk, but as it is always one of the following ones, it could be a max. player count: 0, 5, 10, 20, 25, 40
+    "u"                    // 57 multimap_id
+    "x"                    // 58 unk_float (all 1 but arathi 1.25)
+    "u"                    // 59 parent_map
+    "u"                    // 60 start_x
+    "u"                    // 61 start_y
+    "x"                    // 62 unk
+    "u"                    // 63 addon
+    "x"                    // 64 unk
+    "x";                // 65 unk, but as it is always one of the following ones, it could be a max. player count: 0, 5, 10, 20, 25, 40
 
 const char* itemrandomsuffixformat = "uxxxxxxxxxxxxxxxxxxuuuxxuuuxx";//19, 20, 21, 24, 25, 26
 const char* chatchannelformat = "iixssssssssssssssslxxxxxxxxxxxxxxxxxx";
@@ -340,84 +340,84 @@ const char* LFGDungeonEntryformat = "nxxxxxxxxxxxxxxxxxiiiiiiixixxixixxxxxxxxxxx
 template<class T>
 bool loader_stub(const char* filename, const char* format, bool ind, T & l, bool loadstrs)
 {
-	Log.Notice("DBC", "Loading %s.", filename);
-	return l.Load(filename, format, ind, loadstrs);
+    Log.Notice("DBC", "Loading %s.", filename);
+    return l.Load(filename, format, ind, loadstrs);
 }
 
 #define LOAD_DBC(filename, format, ind, stor, strings) if(!loader_stub(filename, format, ind, stor, strings)) { return false; }
 
 bool LoadDBCs()
 {
-	LOAD_DBC("dbc/WorldMapOverlay.dbc", WorldMapOverlayStoreFormat, true, dbcWorldMapOverlayStore, true);
-	LOAD_DBC("dbc/Achievement_Category.dbc", AchievementCategoryStoreFormat, true, dbcAchievementCategoryStore, true);
-	LOAD_DBC("dbc/Achievement_Criteria.dbc", AchievementCriteriaStoreFormat, true, dbcAchievementCriteriaStore, true);
-	LOAD_DBC("dbc/Achievement.dbc", AchievementStoreFormat, true, dbcAchievementStore, true);
-	//LOAD_DBC("dbc/BattlemasterList.dbc", BattlemasterListEntryFormat, true, dbcBattlemasterListStore, true);
-	LOAD_DBC("dbc/CharTitles.dbc", CharTitlesEntryfmt, true, dbcCharTitlesEntry, true);
-	LOAD_DBC("dbc/CurrencyTypes.dbc", CurrencyTypesEntryFormat, true, dbcCurrencyTypesStore, true);
-	LOAD_DBC("dbc/BarberShopStyle.dbc", BarberShopStyleEntryFormat, true, dbcBarberShopStyleStore, true);
-	LOAD_DBC("dbc/ItemSet.dbc", ItemSetFormat, true, dbcItemSet, true);
-	LOAD_DBC("dbc/Lock.dbc", LockFormat, true, dbcLock, false);
-	LOAD_DBC("dbc/EmotesText.dbc", EmoteEntryFormat, true, dbcEmoteEntry, false);
-	LOAD_DBC("dbc/SkillLineAbility.dbc", skilllinespellFormat, false, dbcSkillLineSpell, false);
-	LOAD_DBC("dbc/SpellItemEnchantment.dbc", EnchantEntrYFormat, true, dbcEnchant, true);
-	LOAD_DBC("dbc/GemProperties.dbc", GemPropertyEntryFormat, true, dbcGemProperty, false);
-	LOAD_DBC("dbc/GlyphProperties.dbc", GlyphPropertyEntryFormat, true, dbcGlyphProperty, false);
-	LOAD_DBC("dbc/GlyphSlot.dbc", GlyphSlotEntryFormat, true, dbcGlyphSlot, false);
-	LOAD_DBC("dbc/SkillLine.dbc", skilllineentrYFormat, true, dbcSkillLine, true);
-	LOAD_DBC("dbc/Spell.dbc", spellentryFormat, true, dbcSpell, true);
-	LOAD_DBC("dbc/ItemExtendedCost.dbc", itemextendedcostFormat, true, dbcItemExtendedCost, false);
-	LOAD_DBC("dbc/Talent.dbc", talententryFormat, true, dbcTalent, false);
-	LOAD_DBC("dbc/TalentTab.dbc", talenttabentryFormat, true, dbcTalentTab, false);
-	LOAD_DBC("dbc/SpellCastTimes.dbc", spellcasttimeFormat, true, dbcSpellCastTime, false);
-	LOAD_DBC("dbc/SpellDifficulty.dbc", spelldifficultyentryformat, true, dbcSpellDifficultyEntry, false);
-	LOAD_DBC("dbc/SpellRadius.dbc", spellradiusFormat, true, dbcSpellRadius, false);
-	LOAD_DBC("dbc/SpellRange.dbc", spellrangeFormat, true, dbcSpellRange, false);
-	LOAD_DBC("dbc/SpellRuneCost.dbc", SpellRuneCostFormat, true, dbcSpellRuneCost, false);
-	LOAD_DBC("dbc/SpellDuration.dbc", spelldurationFormat, true, dbcSpellDuration, false);
-	LOAD_DBC("dbc/SpellShapeshiftForm.dbc", spellshapeshiftformformat, true, dbcSpellShapeshiftForm, false);
-	LOAD_DBC("dbc/ItemRandomProperties.dbc", randompropsFormat, true, dbcRandomProps, false);
-	LOAD_DBC("dbc/AreaGroup.dbc", areagroupFormat, true, dbcAreaGroup, true);
-	LOAD_DBC("dbc/AreaTable.dbc", areatableFormat, true, dbcArea, true);
-	LOAD_DBC("dbc/FactionTemplate.dbc", factiontemplatedbcFormat, true, dbcFactionTemplate, false);
-	LOAD_DBC("dbc/Faction.dbc", factiondbcFormat, true, dbcFaction, true);
-	LOAD_DBC("dbc/TaxiNodes.dbc", dbctaxinodeFormat, false, dbcTaxiNode, false);
-	LOAD_DBC("dbc/TaxiPath.dbc", dbctaxipathFormat, false, dbcTaxiPath, false);
-	LOAD_DBC("dbc/TaxiPathNode.dbc", dbctaxipathnodeFormat, false, dbcTaxiPathNode, false);
-	LOAD_DBC("dbc/CreatureSpellData.dbc", creaturespelldataFormat, true, dbcCreatureSpellData, false);
-	LOAD_DBC("dbc/CreatureFamily.dbc", creaturefamilyFormat, true, dbcCreatureFamily, true);
-	LOAD_DBC("dbc/ChrRaces.dbc", charraceFormat, true, dbcCharRace, true);
-	LOAD_DBC("dbc/ChrClasses.dbc", charclassFormat, true, dbcCharClass, true);
-	LOAD_DBC("dbc/Map.dbc", mapentryFormat, true, dbcMap, true);
-	LOAD_DBC("dbc/AuctionHouse.dbc", auctionhousedbcFormat, true, dbcAuctionHouse, false);
-	LOAD_DBC("dbc/ItemRandomSuffix.dbc", itemrandomsuffixformat, true, dbcItemRandomSuffix, false);
-	LOAD_DBC("dbc/gtCombatRatings.dbc", gtfloatformat, false, dbcCombatRating, false);
-	LOAD_DBC("dbc/ChatChannels.dbc", chatchannelformat, true, dbcChatChannels, true);
-	LOAD_DBC("dbc/DurabilityQuality.dbc", durabilityqualityFormat, true, dbcDurabilityQuality, false);
-	LOAD_DBC("dbc/DurabilityCosts.dbc", durabilitycostsFormat, true, dbcDurabilityCosts, false);
-	LOAD_DBC("dbc/BankBagSlotPrices.dbc", bankslotpriceformat, true, dbcBankSlotPrices, false);
-	LOAD_DBC("dbc/StableSlotPrices.dbc", bankslotpriceformat, true, dbcStableSlotPrices, false);
-	LOAD_DBC("dbc/gtBarberShopCostBase.dbc", gtfloatformat, false, dbcBarberShopPrices, false);
-	LOAD_DBC("dbc/gtChanceToMeleeCrit.dbc", gtfloatformat, false, dbcMeleeCrit, false);
-	LOAD_DBC("dbc/gtChanceToMeleeCritBase.dbc", gtfloatformat, false, dbcMeleeCritBase, false);
-	LOAD_DBC("dbc/gtChanceToSpellCrit.dbc", gtfloatformat, false, dbcSpellCrit, false);
-	LOAD_DBC("dbc/gtChanceToSpellCritBase.dbc", gtfloatformat, false, dbcSpellCritBase, false);
-	LOAD_DBC("dbc/gtRegenMPPerSpt.dbc", gtfloatformat, false, dbcManaRegenBase, false); //it's not a mistake.
-	LOAD_DBC("dbc/gtOCTRegenMP.dbc", gtfloatformat, false, dbcManaRegen, false); //it's not a mistake.
-	LOAD_DBC("dbc/gtRegenHPPerSpt.dbc", gtfloatformat, false, dbcHPRegenBase, false); //it's not a mistake.
-	LOAD_DBC("dbc/gtOCTRegenHP.dbc", gtfloatformat, false, dbcHPRegen, false); //it's not a mistake.
-	LOAD_DBC("dbc/AreaTrigger.dbc", areatriggerformat, true, dbcAreaTrigger, true);
-	LOAD_DBC("dbc/ScalingStatDistribution.dbc", scalingstatdistributionformat, true, dbcScalingStatDistribution, false);
-	LOAD_DBC("dbc/ScalingStatValues.dbc", scalingstatvaluesformat, true, dbcScalingStatValues, false);
-	LOAD_DBC("dbc/ItemLimitCategory.dbc", itemlimitcategoryformat, true, dbcItemLimitCategory, true);
-	LOAD_DBC("dbc/QuestXP.dbc", questxpformat, true, dbcQuestXP, false);
-	LOAD_DBC("dbc/MailTemplate.dbc", mailTemplateEntryFormat, true, dbcMailTemplateEntry, true);
-	LOAD_DBC("dbc/WMOAreaTable.dbc", wmoareaformat, true, dbcWMOAreaTable, false);
-	LOAD_DBC("dbc/SummonProperties.dbc", summonpropertiesformat, true, dbcSummonProperties, false);
-	LOAD_DBC("dbc/NameGen.dbc", namegenentryformat, true, dbcNameGen, true);
-	LOAD_DBC("dbc/LFGDungeons.dbc", LFGDungeonEntryformat, true, dbcLFGDungeon, false);
-	LOAD_DBC("dbc/Vehicle.dbc", VehicleEntryfmt, true, dbcVehicle, true );
-	LOAD_DBC("dbc/VehicleSeat.dbc", VehicleSeatEntryfmt, true, dbcVehicleSeat, false );
+    LOAD_DBC("dbc/WorldMapOverlay.dbc", WorldMapOverlayStoreFormat, true, dbcWorldMapOverlayStore, true);
+    LOAD_DBC("dbc/Achievement_Category.dbc", AchievementCategoryStoreFormat, true, dbcAchievementCategoryStore, true);
+    LOAD_DBC("dbc/Achievement_Criteria.dbc", AchievementCriteriaStoreFormat, true, dbcAchievementCriteriaStore, true);
+    LOAD_DBC("dbc/Achievement.dbc", AchievementStoreFormat, true, dbcAchievementStore, true);
+    //LOAD_DBC("dbc/BattlemasterList.dbc", BattlemasterListEntryFormat, true, dbcBattlemasterListStore, true);
+    LOAD_DBC("dbc/CharTitles.dbc", CharTitlesEntryfmt, true, dbcCharTitlesEntry, true);
+    LOAD_DBC("dbc/CurrencyTypes.dbc", CurrencyTypesEntryFormat, true, dbcCurrencyTypesStore, true);
+    LOAD_DBC("dbc/BarberShopStyle.dbc", BarberShopStyleEntryFormat, true, dbcBarberShopStyleStore, true);
+    LOAD_DBC("dbc/ItemSet.dbc", ItemSetFormat, true, dbcItemSet, true);
+    LOAD_DBC("dbc/Lock.dbc", LockFormat, true, dbcLock, false);
+    LOAD_DBC("dbc/EmotesText.dbc", EmoteEntryFormat, true, dbcEmoteEntry, false);
+    LOAD_DBC("dbc/SkillLineAbility.dbc", skilllinespellFormat, false, dbcSkillLineSpell, false);
+    LOAD_DBC("dbc/SpellItemEnchantment.dbc", EnchantEntrYFormat, true, dbcEnchant, true);
+    LOAD_DBC("dbc/GemProperties.dbc", GemPropertyEntryFormat, true, dbcGemProperty, false);
+    LOAD_DBC("dbc/GlyphProperties.dbc", GlyphPropertyEntryFormat, true, dbcGlyphProperty, false);
+    LOAD_DBC("dbc/GlyphSlot.dbc", GlyphSlotEntryFormat, true, dbcGlyphSlot, false);
+    LOAD_DBC("dbc/SkillLine.dbc", skilllineentrYFormat, true, dbcSkillLine, true);
+    LOAD_DBC("dbc/Spell.dbc", spellentryFormat, true, dbcSpell, true);
+    LOAD_DBC("dbc/ItemExtendedCost.dbc", itemextendedcostFormat, true, dbcItemExtendedCost, false);
+    LOAD_DBC("dbc/Talent.dbc", talententryFormat, true, dbcTalent, false);
+    LOAD_DBC("dbc/TalentTab.dbc", talenttabentryFormat, true, dbcTalentTab, false);
+    LOAD_DBC("dbc/SpellCastTimes.dbc", spellcasttimeFormat, true, dbcSpellCastTime, false);
+    LOAD_DBC("dbc/SpellDifficulty.dbc", spelldifficultyentryformat, true, dbcSpellDifficultyEntry, false);
+    LOAD_DBC("dbc/SpellRadius.dbc", spellradiusFormat, true, dbcSpellRadius, false);
+    LOAD_DBC("dbc/SpellRange.dbc", spellrangeFormat, true, dbcSpellRange, false);
+    LOAD_DBC("dbc/SpellRuneCost.dbc", SpellRuneCostFormat, true, dbcSpellRuneCost, false);
+    LOAD_DBC("dbc/SpellDuration.dbc", spelldurationFormat, true, dbcSpellDuration, false);
+    LOAD_DBC("dbc/SpellShapeshiftForm.dbc", spellshapeshiftformformat, true, dbcSpellShapeshiftForm, false);
+    LOAD_DBC("dbc/ItemRandomProperties.dbc", randompropsFormat, true, dbcRandomProps, false);
+    LOAD_DBC("dbc/AreaGroup.dbc", areagroupFormat, true, dbcAreaGroup, true);
+    LOAD_DBC("dbc/AreaTable.dbc", areatableFormat, true, dbcArea, true);
+    LOAD_DBC("dbc/FactionTemplate.dbc", factiontemplatedbcFormat, true, dbcFactionTemplate, false);
+    LOAD_DBC("dbc/Faction.dbc", factiondbcFormat, true, dbcFaction, true);
+    LOAD_DBC("dbc/TaxiNodes.dbc", dbctaxinodeFormat, false, dbcTaxiNode, false);
+    LOAD_DBC("dbc/TaxiPath.dbc", dbctaxipathFormat, false, dbcTaxiPath, false);
+    LOAD_DBC("dbc/TaxiPathNode.dbc", dbctaxipathnodeFormat, false, dbcTaxiPathNode, false);
+    LOAD_DBC("dbc/CreatureSpellData.dbc", creaturespelldataFormat, true, dbcCreatureSpellData, false);
+    LOAD_DBC("dbc/CreatureFamily.dbc", creaturefamilyFormat, true, dbcCreatureFamily, true);
+    LOAD_DBC("dbc/ChrRaces.dbc", charraceFormat, true, dbcCharRace, true);
+    LOAD_DBC("dbc/ChrClasses.dbc", charclassFormat, true, dbcCharClass, true);
+    LOAD_DBC("dbc/Map.dbc", mapentryFormat, true, dbcMap, true);
+    LOAD_DBC("dbc/AuctionHouse.dbc", auctionhousedbcFormat, true, dbcAuctionHouse, false);
+    LOAD_DBC("dbc/ItemRandomSuffix.dbc", itemrandomsuffixformat, true, dbcItemRandomSuffix, false);
+    LOAD_DBC("dbc/gtCombatRatings.dbc", gtfloatformat, false, dbcCombatRating, false);
+    LOAD_DBC("dbc/ChatChannels.dbc", chatchannelformat, true, dbcChatChannels, true);
+    LOAD_DBC("dbc/DurabilityQuality.dbc", durabilityqualityFormat, true, dbcDurabilityQuality, false);
+    LOAD_DBC("dbc/DurabilityCosts.dbc", durabilitycostsFormat, true, dbcDurabilityCosts, false);
+    LOAD_DBC("dbc/BankBagSlotPrices.dbc", bankslotpriceformat, true, dbcBankSlotPrices, false);
+    LOAD_DBC("dbc/StableSlotPrices.dbc", bankslotpriceformat, true, dbcStableSlotPrices, false);
+    LOAD_DBC("dbc/gtBarberShopCostBase.dbc", gtfloatformat, false, dbcBarberShopPrices, false);
+    LOAD_DBC("dbc/gtChanceToMeleeCrit.dbc", gtfloatformat, false, dbcMeleeCrit, false);
+    LOAD_DBC("dbc/gtChanceToMeleeCritBase.dbc", gtfloatformat, false, dbcMeleeCritBase, false);
+    LOAD_DBC("dbc/gtChanceToSpellCrit.dbc", gtfloatformat, false, dbcSpellCrit, false);
+    LOAD_DBC("dbc/gtChanceToSpellCritBase.dbc", gtfloatformat, false, dbcSpellCritBase, false);
+    LOAD_DBC("dbc/gtRegenMPPerSpt.dbc", gtfloatformat, false, dbcManaRegenBase, false); //it's not a mistake.
+    LOAD_DBC("dbc/gtOCTRegenMP.dbc", gtfloatformat, false, dbcManaRegen, false); //it's not a mistake.
+    LOAD_DBC("dbc/gtRegenHPPerSpt.dbc", gtfloatformat, false, dbcHPRegenBase, false); //it's not a mistake.
+    LOAD_DBC("dbc/gtOCTRegenHP.dbc", gtfloatformat, false, dbcHPRegen, false); //it's not a mistake.
+    LOAD_DBC("dbc/AreaTrigger.dbc", areatriggerformat, true, dbcAreaTrigger, true);
+    LOAD_DBC("dbc/ScalingStatDistribution.dbc", scalingstatdistributionformat, true, dbcScalingStatDistribution, false);
+    LOAD_DBC("dbc/ScalingStatValues.dbc", scalingstatvaluesformat, true, dbcScalingStatValues, false);
+    LOAD_DBC("dbc/ItemLimitCategory.dbc", itemlimitcategoryformat, true, dbcItemLimitCategory, true);
+    LOAD_DBC("dbc/QuestXP.dbc", questxpformat, true, dbcQuestXP, false);
+    LOAD_DBC("dbc/MailTemplate.dbc", mailTemplateEntryFormat, true, dbcMailTemplateEntry, true);
+    LOAD_DBC("dbc/WMOAreaTable.dbc", wmoareaformat, true, dbcWMOAreaTable, false);
+    LOAD_DBC("dbc/SummonProperties.dbc", summonpropertiesformat, true, dbcSummonProperties, false);
+    LOAD_DBC("dbc/NameGen.dbc", namegenentryformat, true, dbcNameGen, true);
+    LOAD_DBC("dbc/LFGDungeons.dbc", LFGDungeonEntryformat, true, dbcLFGDungeon, false);
+    LOAD_DBC("dbc/Vehicle.dbc", VehicleEntryfmt, true, dbcVehicle, true );
+    LOAD_DBC("dbc/VehicleSeat.dbc", VehicleSeatEntryfmt, true, dbcVehicleSeat, false );
 
-	return true;
+    return true;
 }

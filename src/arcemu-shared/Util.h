@@ -33,8 +33,8 @@ time_t convTimePeriod(uint32 dLength, char dType);
 
 inline uint32 secsToTimeBitFields(time_t secs)
 {
-	tm* lt = localtime(&secs);
-	return (lt->tm_year - 100) << 24 | lt->tm_mon  << 20 | (lt->tm_mday - 1) << 14 | lt->tm_wday << 11 | lt->tm_hour << 6 | lt->tm_min;
+    tm* lt = localtime(&secs);
+    return (lt->tm_year - 100) << 24 | lt->tm_mon  << 20 | (lt->tm_mday - 1) << 14 | lt->tm_wday << 11 | lt->tm_hour << 6 | lt->tm_min;
 }
 
 
@@ -50,33 +50,33 @@ volatile long Sync_Sub(volatile long* value);
 
 typedef struct tagTHREADNAME_INFO
 {
-	DWORD dwType; // must be 0x1000
-	LPCSTR szName; // pointer to name (in user addr space)
-	DWORD dwThreadID; // thread ID (-1=caller thread)
-	DWORD dwFlags; // reserved for future use, must be zero
+    DWORD dwType; // must be 0x1000
+    LPCSTR szName; // pointer to name (in user addr space)
+    DWORD dwThreadID; // thread ID (-1=caller thread)
+    DWORD dwFlags; // reserved for future use, must be zero
 } THREADNAME_INFO;
 
 #endif
 
 namespace Arcemu
 {
-	SERVER_DECL float round(float f);
-	SERVER_DECL double round(double d);
-	SERVER_DECL long double round(long double ld);
+    SERVER_DECL float round(float f);
+    SERVER_DECL double round(double d);
+    SERVER_DECL long double round(long double ld);
 
-	/////////////////////////////////////////////////////////////////////////
-	//void Sleep( unsigned long timems );
-	//  Puts the calling thread to sleep for the specified miliseconds
-	//
-	//Parameter(s)
-	//  unsigned long timemes  -  time interval to put the thread to sleep for
-	//
-	//Return Value
-	//  None
-	//
-	//
-	/////////////////////////////////////////////////////////////////////////
-	void Sleep(unsigned long timems);
+    /////////////////////////////////////////////////////////////////////////
+    //void Sleep( unsigned long timems );
+    //  Puts the calling thread to sleep for the specified miliseconds
+    //
+    //Parameter(s)
+    //  unsigned long timemes  -  time interval to put the thread to sleep for
+    //
+    //Return Value
+    //  None
+    //
+    //
+    /////////////////////////////////////////////////////////////////////////
+    void Sleep(unsigned long timems);
 }
 
 
@@ -94,15 +94,15 @@ namespace Arcemu
 /////////////////////////////////////////////////////////
 ARCEMU_INLINE uint32 getMSTime()
 {
-	uint32 MSTime = 0;
+    uint32 MSTime = 0;
 #ifdef WIN32
-	MSTime = GetTickCount();
+    MSTime = GetTickCount();
 #else
-	timeval tv;
-	gettimeofday(&tv, NULL);
-	MSTime = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+    timeval tv;
+    gettimeofday(&tv, NULL);
+    MSTime = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 #endif
-	return MSTime;
+    return MSTime;
 }
 
 #endif

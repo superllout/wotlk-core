@@ -26,10 +26,10 @@
 #define arcemu_optional_argument      2
 struct arcemu_option
 {
-	const char* name;
-	int has_arg;
-	int* flag;
-	int val;
+    const char* name;
+    int has_arg;
+    int* flag;
+    int val;
 };
 extern char arcemu_optarg[514];
 int arcemu_getopt_long_only(int ___argc, char* const* ___argv, const char* __shortopts, const struct arcemu_option* __longopts, int* __longind);

@@ -29,83 +29,83 @@ require_once('../lib/StringTokenizer.inc.php');
 //
 ////////////////////////////////////////////////////////
 class BugReportTypeFieldParser{
-	private $BugReport;
-	private $Data;
-	
-	public function BugReportTypeFieldParser( $str  ){
-		$this->BugReport = $str;
-		$this->Data = array();
-	}
-	
-	
-	////////////////////////////////////////////////////////////
-	//public function Parse()
-	//  Parses the bugreport string and inserts the parsed
-	//  key/value pairs into an array.
-	//
-	//Parameters
-	//  None.
-	//
-	//
-	//Return Value
-	//  Returns true on success.
-	//  Returns false on failure.
-	//
-	///////////////////////////////////////////////////////////
-	public function Parse(){
-		if( $this->BugReport == NULL )
-			return false;
-			
-		$tokenizer =
-			new StringTokenizer( $this->BugReport, "</>" );
-		
-		if( !$tokenizer->HasNextToken() )
-			return false;
-		
-		
-		$key = 0;
-		$value = NULL;
-		$intag = false;
-		
-		while( $tokenizer->HasNextToken() ){
-			$i = 0;
-			
-			if( $intag == false ){
-				$key = $tokenizer->GetNextToken();
-				if( !is_numeric( $key ) )
-					return false;
-				
-				$intag = true;
-			}else{
-				if( $value == NULL ){
-					$value = $tokenizer->GetNextToken();
-				}else{
-					$i = $tokenizer->GetNextToken();
-					if( is_numeric( $i ) && ( $i == $key ) ){
-						$this->Data[ $key ] = $value;
-						$intag = false;
-						$value = NULL;
-						$key = 0;
-						$i = 0;
-					}else{
-						return false;
-					}
-				}
-			}
-		}
-		
-		return true;
-	}
-	
-	//////////////////////////////////////////////////////
-	//public function GetArray()
-	//  Returns an array that contains the parsed fields
-	//  as key/value pairs
-	//
-	//////////////////////////////////////////////////////
-	public function GetArray(){
-		return $this->Data;
-	}
+    private $BugReport;
+    private $Data;
+    
+    public function BugReportTypeFieldParser( $str  ){
+        $this->BugReport = $str;
+        $this->Data = array();
+    }
+    
+    
+    ////////////////////////////////////////////////////////////
+    //public function Parse()
+    //  Parses the bugreport string and inserts the parsed
+    //  key/value pairs into an array.
+    //
+    //Parameters
+    //  None.
+    //
+    //
+    //Return Value
+    //  Returns true on success.
+    //  Returns false on failure.
+    //
+    ///////////////////////////////////////////////////////////
+    public function Parse(){
+        if( $this->BugReport == NULL )
+            return false;
+            
+        $tokenizer =
+            new StringTokenizer( $this->BugReport, "</>" );
+        
+        if( !$tokenizer->HasNextToken() )
+            return false;
+        
+        
+        $key = 0;
+        $value = NULL;
+        $intag = false;
+        
+        while( $tokenizer->HasNextToken() ){
+            $i = 0;
+            
+            if( $intag == false ){
+                $key = $tokenizer->GetNextToken();
+                if( !is_numeric( $key ) )
+                    return false;
+                
+                $intag = true;
+            }else{
+                if( $value == NULL ){
+                    $value = $tokenizer->GetNextToken();
+                }else{
+                    $i = $tokenizer->GetNextToken();
+                    if( is_numeric( $i ) && ( $i == $key ) ){
+                        $this->Data[ $key ] = $value;
+                        $intag = false;
+                        $value = NULL;
+                        $key = 0;
+                        $i = 0;
+                    }else{
+                        return false;
+                    }
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+    //////////////////////////////////////////////////////
+    //public function GetArray()
+    //  Returns an array that contains the parsed fields
+    //  as key/value pairs
+    //
+    //////////////////////////////////////////////////////
+    public function GetArray(){
+        return $this->Data;
+    }
 }
 
 ?>

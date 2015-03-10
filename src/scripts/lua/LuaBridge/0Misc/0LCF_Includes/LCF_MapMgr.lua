@@ -29,22 +29,22 @@ setmetatable( getregistry("MapMgr"), MAP )
 setmetatable( getregistry("MapScriptInterface"), INTERFACE)
 
 local function malias(_func, ...)
-	for _,label in ipairs(arg) do
-		MAP[label] = _func
-	end
+    for _,label in ipairs(arg) do
+        MAP[label] = _func
+    end
 end
 local function ialias(_func, ...)
-	for _,label in ipairs(arg) do
-		INTERFACE[label] = _func
-	end
+    for _,label in ipairs(arg) do
+        INTERFACE[label] = _func
+    end
 end
 
 local function stub(self, entry, x, y, z, o, phase )
-	return self:FullSpawnCreature(entry, x, y, z, o, true, false, 0, 0, phase )
+    return self:FullSpawnCreature(entry, x, y, z, o, true, false, 0, 0, phase )
 end
 ialias(stub, "SpawnCreature", "spawnCreature", "spawncreature" )
 
 local function stub(self, entry, x, y, z, o, phase )
-	return self:FullSpawnGameObject(entry, x, y, z, o, true, 0, 0, phase )
+    return self:FullSpawnGameObject(entry, x, y, z, o, true, 0, 0, phase )
 end
 ialias(stub, "SpawnGameObject", "spawnGameObject", "spawngameobject")

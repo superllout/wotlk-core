@@ -30,66 +30,66 @@ local function alias(LHAname, LBname)
 end
 
 function UNIT:FullCastSpell( id)
-	self:CastSpell(self, id, false)
+    self:CastSpell(self, id, false)
 end
 function UNIT:FullCastSpellOnTarget( target, id)
-	self:CastSpell( target, id, false)
+    self:CastSpell( target, id, false)
 end
 function UNIT:CastSpell(id)
-	self:CastSpell(self, id, true)
+    self:CastSpell(self, id, true)
 end
 function UNIT:CastSpellOnTarget(target, id)
-	self:CastSpell(target, id, true)
+    self:CastSpell(target, id, true)
 end
 function UNIT:SetChannelTarget(target)
-	local guid = nil
-	if(target) then	
-		guid = target:GetGUID()
-	end
-	self:SetUInt64Value(LCF.UNIT_FIELD_CHANNEL_OBJECT,guid)
+    local guid = nil
+    if(target) then    
+        guid = target:GetGUID()
+    end
+    self:SetUInt64Value(LCF.UNIT_FIELD_CHANNEL_OBJECT,guid)
 end
 function UNIT:SetChannelSpell( spell)
-	self:SetUInt32Value(LCF.UNIT_CHANNEL_SPELL, spell)
+    self:SetUInt32Value(LCF.UNIT_CHANNEL_SPELL, spell)
 end
 
 function UNIT:GetChannelTarget()
-	local guid = self:GetUInt64Value(LCF.UNIT_FIELD_CHANNEL_OBJECT)
-	print( tostring(guid) )
-	if(guid) then
-		return MapMgr:GetObject(guid)
-	end
-	return nil
+    local guid = self:GetUInt64Value(LCF.UNIT_FIELD_CHANNEL_OBJECT)
+    print( tostring(guid) )
+    if(guid) then
+        return MapMgr:GetObject(guid)
+    end
+    return nil
 end
 function UNIT:GetChannelSpell()
-	return self:GetUInt32Value( LCF.UNIT_CHANNEL_SPELL )
+    return self:GetUInt32Value( LCF.UNIT_CHANNEL_SPELL )
 end
 function UNIT:ChannelSpell( spell, target)
-	self:SetChannelTarget( target)
-	self:SetChannelSpell( spell)
+    self:SetChannelTarget( target)
+    self:SetChannelSpell( spell)
 end
 function UNIT:StopChannel()
-	self:SetChannelTarget( nil)
-	self:SetChannelSpell( 0 )
+    self:SetChannelTarget( nil)
+    self:SetChannelSpell( 0 )
 end
 function UNIT:SetCreatedBy(creator)
-	local guid = 0
-	if(creator) then
-		guid = creator:GetGUID()
-	end
-	self:SetUInt64Value(LCF.UNIT_FIELD_CREATEDBY, guid)
+    local guid = 0
+    if(creator) then
+        guid = creator:GetGUID()
+    end
+    self:SetUInt64Value(LCF.UNIT_FIELD_CREATEDBY, guid)
 end
 function UNIT:SetSummonedBy( summoner)
-	local guid = 0
-	if(summoner) then
-		guid = summoner:GetGUID()
-	end
-	self:SetUInt64Value( LCF.UNIT_FIELD_SUMMONEDBY, summoner:GetGUID() )
+    local guid = 0
+    if(summoner) then
+        guid = summoner:GetGUID()
+    end
+    self:SetUInt64Value( LCF.UNIT_FIELD_SUMMONEDBY, summoner:GetGUID() )
 end
 function UNIT:GetCreatedBy()
-	return self:GetObject( self:GetUInt64Value(LCF.UNIT_FIELD_CREATEDBY) )
+    return self:GetObject( self:GetUInt64Value(LCF.UNIT_FIELD_CREATEDBY) )
 end
 function UNIT:GetSummonedBy()
-	return self:GetObject( self:GetUInt64Value(LCF.UNIT_FIELD_SUMMONEDBY) )
+    return self:GetObject( self:GetUInt64Value(LCF.UNIT_FIELD_SUMMONEDBY) )
 end
 
 function UNIT:CastSpellAoFID(x,y,z,id)
@@ -219,9 +219,9 @@ end
 
 --------------------------------- RE-DEFINED 'alias' here------------------------------
 alias = function(_func, ...)
-	for _,label in ipairs(arg) do
-		UNIT[label] = _func
-	end
+    for _,label in ipairs(arg) do
+        UNIT[label] = _func
+    end
 end
 
 alias( function(self, id, ...) for _,target in ipairs(arg) do self:CastSpell(target, id, false) end end, "FullCastSpellOnTargets", "fullCastSpellOnTargets", "fullcastspellontargets")

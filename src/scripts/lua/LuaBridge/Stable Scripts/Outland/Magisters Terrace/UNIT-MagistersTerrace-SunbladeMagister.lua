@@ -18,33 +18,33 @@ Staff of Moon Project, Feb 2008
 --Moon April 2008]]
 
 function SunbladeMagister_OnCombat(Unit, Event)
-	Unit:RegisterAIUpdateEvent(3000)
+    Unit:RegisterAIUpdateEvent(3000)
 end
 
 function SunbladeMagister_Frostbolt(Unit, Event)
-	local plr = Unit:GetRandomPlayer(1)
-	if plr then
-		Unit:FullCastSpellOnTarget(46035,plr)
-	end
+    local plr = Unit:GetRandomPlayer(1)
+    if plr then
+        Unit:FullCastSpellOnTarget(46035,plr)
+    end
 end
 
 function SunbladeMagister_ArcaneNova(Unit)
-	local arcaneflip = math.random(6)
-	local plr = Unit:GetRandomPlayer(7)
-	if arcaneflip == 1 and plr ~= nil then
-		Unit:FullCastSpellOnTarget(46036,plr)
-	else
-	end
+    local arcaneflip = math.random(6)
+    local plr = Unit:GetRandomPlayer(7)
+    if arcaneflip == 1 and plr ~= nil then
+        Unit:FullCastSpellOnTarget(46036,plr)
+    else
+    end
 end
 
 function SunbladeMagister_LeaveCombat(Unit)
-	Unit:RemoveEvents()
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveEvents()
+    Unit:RemoveAIUpdateEvent()
 end
 
 function SunbladeMagister_Died(Unit)
-	Unit:RemoveEvents()
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveEvents()
+    Unit:RemoveAIUpdateEvent()
 end
 
 

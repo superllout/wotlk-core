@@ -37,65 +37,65 @@ CREATURE.AI = function(self) return self:GetAIInterface() end
 CREATURE.ai = CREATURE.AI
 
 function CREATURE:SetUnselectable()
-	if(self:HasFlag(LCF.UNIT_FIELD_FLAGS, LCF.UNIT_FLAG_NOT_SELECTABLE) == false) then
-		self:SetUInt32Value(LCF.UNIT_FIELD_FLAGS,bit_or(self:GetUInt32Value(LCF.UNIT_FIELD_FLAGS),LCF.UNIT_FLAG_NOT_SELECTABLE))
-	end
+    if(self:HasFlag(LCF.UNIT_FIELD_FLAGS, LCF.UNIT_FLAG_NOT_SELECTABLE) == false) then
+        self:SetUInt32Value(LCF.UNIT_FIELD_FLAGS,bit_or(self:GetUInt32Value(LCF.UNIT_FIELD_FLAGS),LCF.UNIT_FLAG_NOT_SELECTABLE))
+    end
 end
 function CREATURE:SetSelectable()
-	if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_SELECTABLE)) then
-		self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_SELECTABLE)
-	end
+    if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_SELECTABLE)) then
+        self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_SELECTABLE)
+    end
 end
 function CREATURE:SetUnattackable()
-	if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9) == false) then
-		self:SetUInt32Value(LCF.UNIT_FIELD_FLAGS,bit_or(self:GetUInt32Value(LCF.UNIT_FIELD_FLAGS),LCF.UNIT_FLAG_NOT_ATTACKABLE_9))
-	end
+    if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9) == false) then
+        self:SetUInt32Value(LCF.UNIT_FIELD_FLAGS,bit_or(self:GetUInt32Value(LCF.UNIT_FIELD_FLAGS),LCF.UNIT_FLAG_NOT_ATTACKABLE_9))
+    end
 end
 function CREATURE:SetAttackable()
-	if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9) ) then
-		self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9)
-	end
-	if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_2) ) then
-		self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_2)
-	end
+    if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9) ) then
+        self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_9)
+    end
+    if(self:HasFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_2) ) then
+        self:RemoveFlag(LCF.UNIT_FIELD_FLAGS,LCF.UNIT_FLAG_NOT_ATTACKABLE_2)
+    end
 end
 function CREATURE:MonsterYell(msg) 
-	self:SendChatMessage( LCF.CHAT_MSG_MONSTER_YELL,  LCF.LANG_UNIVERSAL, msg, 0)
+    self:SendChatMessage( LCF.CHAT_MSG_MONSTER_YELL,  LCF.LANG_UNIVERSAL, msg, 0)
 end
 function CREATURE:MonsterSay(msg)
-	self:SendChatMessage(LCF.CHAT_MSG_MONSTER_SAY,LCF.LANG_UNIVERSAL,msg, 0)
+    self:SendChatMessage(LCF.CHAT_MSG_MONSTER_SAY,LCF.LANG_UNIVERSAL,msg, 0)
 end
 function CREATURE:MonsterEmote(msg)
-	self:SendChatMessage(LCF.CHAT_MSG_MONSTER_EMOTE,LCF.LANG_UNIVERSAL,msg, 0)
+    self:SendChatMessage(LCF.CHAT_MSG_MONSTER_EMOTE,LCF.LANG_UNIVERSAL,msg, 0)
 end
 function CREATURE:MonsterWhisper(msg)
-	self:SendChatMessage(LCF.CHAT_MSG_MONSTER_WHISPER,LCF.LANG_UNIVERSAL,msg, 0)
+    self:SendChatMessage(LCF.CHAT_MSG_MONSTER_WHISPER,LCF.LANG_UNIVERSAL,msg, 0)
 end
 function CREATURE:MonsterYellToPlayer(plr,msg)
-	self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_YELL,LCF.LANG_UNIVERSAL,msg,plr)
+    self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_YELL,LCF.LANG_UNIVERSAL,msg,plr)
 end
 function CREATURE:MonsterSayToPlayer(plr,msg)
-	self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_SAY,LCF.LANG_UNIVERSAL,msg,plr)
+    self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_SAY,LCF.LANG_UNIVERSAL,msg,plr)
 end
 function CREATURE:MonsterWhisperToPlayer(plr,msg)
-	self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_WHISPER,LCF.LANG_UNIVERSAL,msg,plr)
+    self:SendChatMessageToPlayer(LCF.CHAT_MSG_MONSTER_WHISPER,LCF.LANG_UNIVERSAL,msg,plr)
 end
 function CREATURE:BossRaidEmote(msg)
-	self:SendChatMessage(LCF.CHAT_MSG_RAID_BOSS_EMOTE,LCF.LANG_UNIVERSAL,msg, 0)
+    self:SendChatMessage(LCF.CHAT_MSG_RAID_BOSS_EMOTE,LCF.LANG_UNIVERSAL,msg, 0)
 end
 function CREATURE:MoveToUnit(target)
-	local x,y,z = target:GetLocation()
-	self:MoveTo(x,y,z,self:GetO())
+    local x,y,z = target:GetLocation()
+    self:MoveTo(x,y,z,self:GetO())
 end
 
 function CREATURE:RegisterAIUpdateEvent( interval)
-	self:GetScript():RegisterAIUpdateEvent(interval)
+    self:GetScript():RegisterAIUpdateEvent(interval)
 end
 function CREATURE:ModifyAIUpdateEvent( nInterval)
-	self:GetScript():ModifyAIUpdateEvent(nInterval)
+    self:GetScript():ModifyAIUpdateEvent(nInterval)
 end
 function CREATURE:RemoveAIUpdateEvent()
-	self:GetScript():RemoveAIUpdateEvent()
+    self:GetScript():RemoveAIUpdateEvent()
 end
 
 CREATURE.GetName = function(self) return self:GetCreatureInfo().Name end
@@ -103,64 +103,64 @@ CREATURE.Name = CREATURE.GetName
 CREATURE.name = CREATURE.Name
 
 function CREATURE:Type()
-	return self:GetCreatureInfo().Type
+    return self:GetCreatureInfo().Type
 end
 
 function CREATURE:WipeThreatList()
-	self:GetAIInterface():WipeHateList()
+    self:GetAIInterface():WipeHateList()
 end
 function CREATURE:WipeHateList() self:GetAIInterface():WipeHateList() end
 
 function CREATURE:DisableCombat( bewl)
-	self:GetAIInterface().disable_combat = bewl
+    self:GetAIInterface().disable_combat = bewl
 end
 function CREATURE:DisableMelee( bewl)
-	self:GetAIInterface().disable_melee = bewl
+    self:GetAIInterface().disable_melee = bewl
 end
 function CREATURE:DisableSpells( bewl)
-	self:GetAIInterface().disable_spell = bewl
+    self:GetAIInterface().disable_spell = bewl
 end
 function CREATURE:DisableTargeting( bewl)
-	self:GetAIInterface().disable_targeting = bewl
+    self:GetAIInterface().disable_targeting = bewl
 end
 function CREATURE:DisableRanged( bewl)
-	self:GetAIInterface().m_canRangedAttack = bewl
+    self:GetAIInterface().m_canRangedAttack = bewl
 end
 
 function CREATURE:SetCombatCapable( bewl)
-	self:GetAIInterface().disable_combat = not bewl
+    self:GetAIInterface().disable_combat = not bewl
 end
 function CREATURE:SetCombatMeleeCapable( bewl)
-	self:GetAIInterface().disable_melee = not bewl
+    self:GetAIInterface().disable_melee = not bewl
 end
 function CREATURE:SetCombatSpellCapable( bewl)
-	self:GetAIInterface().disable_spell = not bewl
+    self:GetAIInterface().disable_spell = not bewl
 end
 function CREATURE:SetCombatTargetingCapable( bewl)
-	self:GetAIInterface().disable_targeting = not bewl
+    self:GetAIInterface().disable_targeting = not bewl
 end
 function CREATURE:SetCombatRangedCapable( bewl)
-	self:GetAIInterface().m_canRangedAttack = not bewl
+    self:GetAIInterface().m_canRangedAttack = not bewl
 end
 
 CREATURE.DisableRespawn = function (self, bewl) self:GetAIInterface().m_noRespawn = bewl end
 CREATURE.NoRespawn = CREATURE.DisableRespawn
 
 function CREATURE:CallForHelpHp( hp)
-	self:GetAIInterface().m_CallForHelpHealth = hp
+    self:GetAIInterface().m_CallForHelpHealth = hp
 end
 function CREATURE:CanCallForHelp( bewl)
-	self:GetAIInterface().m_canCallForHelp = bewl
+    self:GetAIInterface().m_canCallForHelp = bewl
 end
 function CREATURE:RemoveThreat(target)
-	self:GetAIInterface():RemoveThreatByPtr( target)
+    self:GetAIInterface():RemoveThreatByPtr( target)
 end
 function CREATURE:WipeCurrentTarget()
-	local target = self:GetAIInterface():getNextTarget()
-	if( target ~= nil) then
-		self:GetAIInterface():RemoveThreatByPtr(target)
-	end
-	self:GetAIInterface():setNextTarget( nil)
+    local target = self:GetAIInterface():getNextTarget()
+    if( target ~= nil) then
+        self:GetAIInterface():RemoveThreatByPtr(target)
+    end
+    self:GetAIInterface():setNextTarget( nil)
 end
 aialias("GetNextTarget", "getNextTarget")
 function CREATURE:SetNextTarget(target) self:GetAIInterface():setNextTarget( target) end
@@ -174,11 +174,11 @@ CREATURE.GetAddTank = CREATURE.GetSecondHated
 function CREATURE:MoveTo(...) self:GetAIInterface():MoveTo(...) end
 
 function CREATURE:EventCastSpell(target, spell, delay, repeats)
-	assert( target and spell)
-	local function dospell(self, target, spell)
-		self:FullCastSpellOnTarget(spell, target)
-	end
-	self:RegisterEvent( dospell, delay, repeats, target, spell)
+    assert( target and spell)
+    local function dospell(self, target, spell)
+        self:FullCastSpellOnTarget(spell, target)
+    end
+    self:RegisterEvent( dospell, delay, repeats, target, spell)
 end
 
 function CREATURE:SetEquippedItem(slot, id)

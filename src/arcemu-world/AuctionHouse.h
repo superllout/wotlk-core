@@ -54,65 +54,65 @@ enum AuctionMailResult
 
 struct Auction
 {
-	uint32 Id;
+    uint32 Id;
 
-	uint32 Owner;
-	uint32 HighestBidder;
-	uint32 HighestBid;
-	uint32 StartingPrice;
-	uint32 BuyoutPrice;
-	uint32 DepositAmount;
+    uint32 Owner;
+    uint32 HighestBidder;
+    uint32 HighestBid;
+    uint32 StartingPrice;
+    uint32 BuyoutPrice;
+    uint32 DepositAmount;
 
-	uint32 ExpiryTime;
-	Item* pItem;
+    uint32 ExpiryTime;
+    Item* pItem;
 
-	void DeleteFromDB();
-	void SaveToDB(uint32 AuctionHouseId);
-	void UpdateInDB();
-	void AddToPacket(WorldPacket & data);
-	bool Deleted;
-	uint32 DeletedReason;
+    void DeleteFromDB();
+    void SaveToDB(uint32 AuctionHouseId);
+    void UpdateInDB();
+    void AddToPacket(WorldPacket & data);
+    bool Deleted;
+    uint32 DeletedReason;
 };
 
 class AuctionHouse
 {
-	public:
-		AuctionHouse(uint32 ID);
-		~AuctionHouse();
+    public:
+        AuctionHouse(uint32 ID);
+        ~AuctionHouse();
 
-		ARCEMU_INLINE uint32 GetID() { return dbc->id; }
-		void LoadAuctions();
+        ARCEMU_INLINE uint32 GetID() { return dbc->id; }
+        void LoadAuctions();
 
-		void UpdateAuctions();
-		void UpdateDeletionQueue();
+        void UpdateAuctions();
+        void UpdateDeletionQueue();
 
-		void RemoveAuction(Auction* auct);
-		void AddAuction(Auction* auct);
-		Auction* GetAuction(uint32 Id);
-		void QueueDeletion(Auction* auct, uint32 Reason);
+        void RemoveAuction(Auction* auct);
+        void AddAuction(Auction* auct);
+        Auction* GetAuction(uint32 Id);
+        void QueueDeletion(Auction* auct, uint32 Reason);
 
-		void SendOwnerListPacket(Player* plr, WorldPacket* packet);
-		void UpdateOwner(uint32 oldGuid, uint32 newGuid);
-		void SendBidListPacket(Player* plr, WorldPacket* packet);
-		void SendAuctionBuyOutNotificationPacket(Auction* auct);
-		void SendAuctionOutBidNotificationPacket(Auction* auct, uint64 newBidder, uint32 newHighestBid);
-		void SendAuctionExpiredNotificationPacket(Auction* auct);
-		void SendAuctionList(Player* plr, WorldPacket* packet);
+        void SendOwnerListPacket(Player* plr, WorldPacket* packet);
+        void UpdateOwner(uint32 oldGuid, uint32 newGuid);
+        void SendBidListPacket(Player* plr, WorldPacket* packet);
+        void SendAuctionBuyOutNotificationPacket(Auction* auct);
+        void SendAuctionOutBidNotificationPacket(Auction* auct, uint64 newBidder, uint32 newHighestBid);
+        void SendAuctionExpiredNotificationPacket(Auction* auct);
+        void SendAuctionList(Player* plr, WorldPacket* packet);
 
-	private:
-		RWLock auctionLock;
-		HM_NAMESPACE::hash_map<uint32, Auction*> auctions;
+    private:
+        RWLock auctionLock;
+        HM_NAMESPACE::hash_map<uint32, Auction*> auctions;
 
-		Mutex removalLock;
-		list<Auction*> removalList;
+        Mutex removalLock;
+        list<Auction*> removalList;
 
-		AuctionHouseDBC* dbc;
+        AuctionHouseDBC* dbc;
 
-	public:
-		float cut_percent;
-		float deposit_percent;
+    public:
+        float cut_percent;
+        float deposit_percent;
 
-		bool enabled;
+        bool enabled;
 };
 #endif
 

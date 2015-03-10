@@ -30,22 +30,22 @@
 //////////////////////////////////////////////////////////
 class CompanionSummon : public Summon
 {
-	public:
-		CompanionSummon(uint64 GUID);
+    public:
+        CompanionSummon(uint64 GUID);
 
 
-		~CompanionSummon();
+        ~CompanionSummon();
 
 
-		virtual void Load(CreatureProto* proto, Unit* owner, LocationVector & position, uint32 spellid, int32 summonslot);
+        virtual void Load(CreatureProto* proto, Unit* owner, LocationVector & position, uint32 spellid, int32 summonslot);
 
 
-		void OnPushToWorld();
+        void OnPushToWorld();
 
 
-		void OnPreRemoveFromWorld();
+        void OnPreRemoveFromWorld();
 
-	private:
+    private:
 };
 
 #endif

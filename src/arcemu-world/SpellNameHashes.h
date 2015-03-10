@@ -26905,4 +26905,4 @@
 #define SPELL_HASH_ONEFIVE_SEC_COOLDOWN_CREATURE_SPECIAL_TWO                              0x5A6F0397
 
 
-#endif		// _SPELLHASHES_H
+#endif        // _SPELLHASHES_H

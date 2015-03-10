@@ -32,75 +32,75 @@ require_once( 'BugReportContentFieldParser.inc.php' );
 //
 ////////////////////////////////////////////////////
 class BugReportLoader{
-	
-	private $db;
-	private $res;
-	private $reportfields;
-	
-	public function BugReportLoader(){
-		global $dbusername;
-		global $dbpassword;
-		global $dbhost;
-		global $dbport;
-		global $dbname;
-		
-		$this->reportfields = array();
-		$this->db = new MYSQLDatabase( $dbusername, $dbpassword, $dbhost, $dbport, $dbname );
-	
-	}
-	
-	////////////////////////////////////////////////
-	//public function Load( $uid )
-	//  Loads a single bugreport from the database
-	//
-	//Parameters
-	//  $uid  -  numeric identifier of the bugreport
-	//
-	//Return Value
-	//  None.
-	//
-	////////////////////////////////////////////////
-	public function Load( $uid ){
-		$query = "SELECT `UID`,`AccountID`, `TimeStamp`, `Type`, `Content` FROM `playerbugreports` WHERE `UID` = '$uid';";
-		
-		
-		$this->db->Connect();
-		
-		$this->res = $this->db->Query( $query );
-		
-		$row = $this->db->Fetch( $this->res );
-		
-		$this->reportfields[ 0 ] = $row[ 0 ];
-		$this->reportfields[ 1 ] = $row[ 1 ];
-		$this->reportfields[ 2 ] = $row[ 2 ];
-		
-		$typeparser = new BugReportTypeFieldParser( $row[ 3 ] );
-		$typeparser->Parse();
-		
-		$this->reportfields[ 3 ] = $typeparser->GetArray();
-		
-		$contentparser = new BugReportContentFieldParser( $row[ 4 ] );
-		$contentparser->Parse();
-		
-		$this->reportfields[ 4 ] = $contentparser->GetArray();
-		
-		return true;
-	}
-	
-	///////////////////////////////////////////////////////
-	//public function GetFieldArray()
-	//  Returns the bugreport fields as an array
-	//
-	//Parameters
-	//  None.
-	//
-	//Return Value
-	//  Returns an array containing the bugreport fields
-	//
-	//////////////////////////////////////////////////////
-	public function GetFieldArray(){
-		return $this->reportfields;
-	}
+    
+    private $db;
+    private $res;
+    private $reportfields;
+    
+    public function BugReportLoader(){
+        global $dbusername;
+        global $dbpassword;
+        global $dbhost;
+        global $dbport;
+        global $dbname;
+        
+        $this->reportfields = array();
+        $this->db = new MYSQLDatabase( $dbusername, $dbpassword, $dbhost, $dbport, $dbname );
+    
+    }
+    
+    ////////////////////////////////////////////////
+    //public function Load( $uid )
+    //  Loads a single bugreport from the database
+    //
+    //Parameters
+    //  $uid  -  numeric identifier of the bugreport
+    //
+    //Return Value
+    //  None.
+    //
+    ////////////////////////////////////////////////
+    public function Load( $uid ){
+        $query = "SELECT `UID`,`AccountID`, `TimeStamp`, `Type`, `Content` FROM `playerbugreports` WHERE `UID` = '$uid';";
+        
+        
+        $this->db->Connect();
+        
+        $this->res = $this->db->Query( $query );
+        
+        $row = $this->db->Fetch( $this->res );
+        
+        $this->reportfields[ 0 ] = $row[ 0 ];
+        $this->reportfields[ 1 ] = $row[ 1 ];
+        $this->reportfields[ 2 ] = $row[ 2 ];
+        
+        $typeparser = new BugReportTypeFieldParser( $row[ 3 ] );
+        $typeparser->Parse();
+        
+        $this->reportfields[ 3 ] = $typeparser->GetArray();
+        
+        $contentparser = new BugReportContentFieldParser( $row[ 4 ] );
+        $contentparser->Parse();
+        
+        $this->reportfields[ 4 ] = $contentparser->GetArray();
+        
+        return true;
+    }
+    
+    ///////////////////////////////////////////////////////
+    //public function GetFieldArray()
+    //  Returns the bugreport fields as an array
+    //
+    //Parameters
+    //  None.
+    //
+    //Return Value
+    //  Returns an array containing the bugreport fields
+    //
+    //////////////////////////////////////////////////////
+    public function GetFieldArray(){
+        return $this->reportfields;
+    }
 }
 
 

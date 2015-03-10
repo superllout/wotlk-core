@@ -30,19 +30,19 @@ WildSummon::~WildSummon()
 
 void WildSummon::Load(CreatureProto* proto, Unit* owner, LocationVector & position, uint32 spellid, int32 summonslot)
 {
-	Summon::Load(proto, owner, position, spellid, summonslot);
+    Summon::Load(proto, owner, position, spellid, summonslot);
 
-	setLevel(owner->getLevel());
+    setLevel(owner->getLevel());
 }
 
 void WildSummon::OnPushToWorld()
 {
-	Summon::OnPushToWorld();
+    Summon::OnPushToWorld();
 }
 
 void WildSummon::OnPreRemoveFromWorld()
 {
-	Summon::OnPreRemoveFromWorld();
+    Summon::OnPreRemoveFromWorld();
 }
 
 

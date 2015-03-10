@@ -15,28 +15,28 @@ enum QuestEvents
  */
 enum CreatureEvents
 {
-    CREATURE_EVENT_ON_ENTER_COMBAT		= 1,
-    CREATURE_EVENT_ON_LEAVE_COMBAT		= 2,
-    CREATURE_EVENT_ON_TARGET_DIED		= 3,
-    CREATURE_EVENT_ON_DIED		= 4,
-    CREATURE_EVENT_ON_TARGET_PARRIED		= 5,
-    CREATURE_EVENT_ON_TARGET_DODGED		= 6,
-    CREATURE_EVENT_ON_TARGET_BLOCKED		= 7,
-    CREATURE_EVENT_ON_TARGET_CRIT_HIT		= 8,
-    CREATURE_EVENT_ON_PARRY		= 9,
-    CREATURE_EVENT_ON_DODGED		= 10,
-    CREATURE_EVENT_ON_BLOCKED		= 11,
-    CREATURE_EVENT_ON_CRIT_HIT		= 12,
-    CREATURE_EVENT_ON_HIT		= 13,
-    CREATURE_EVENT_ON_ASSIST_TARGET_DIED		= 14,
-    CREATURE_EVENT_ON_FEAR		= 15,
-    CREATURE_EVENT_ON_FLEE		= 16,
-    CREATURE_EVENT_ON_CALL_FOR_HELP		= 17,
-    CREATURE_EVENT_ON_LOAD		= 18,
-    CREATURE_EVENT_ON_REACH_WP		= 19,
-    CREATURE_EVENT_ON_LOOT_TAKEN		= 20,
-    CREATURE_EVENT_ON_AIUPDATE		= 21,
-    CREATURE_EVENT_ON_EMOTE		= 22,
+    CREATURE_EVENT_ON_ENTER_COMBAT        = 1,
+    CREATURE_EVENT_ON_LEAVE_COMBAT        = 2,
+    CREATURE_EVENT_ON_TARGET_DIED        = 3,
+    CREATURE_EVENT_ON_DIED        = 4,
+    CREATURE_EVENT_ON_TARGET_PARRIED        = 5,
+    CREATURE_EVENT_ON_TARGET_DODGED        = 6,
+    CREATURE_EVENT_ON_TARGET_BLOCKED        = 7,
+    CREATURE_EVENT_ON_TARGET_CRIT_HIT        = 8,
+    CREATURE_EVENT_ON_PARRY        = 9,
+    CREATURE_EVENT_ON_DODGED        = 10,
+    CREATURE_EVENT_ON_BLOCKED        = 11,
+    CREATURE_EVENT_ON_CRIT_HIT        = 12,
+    CREATURE_EVENT_ON_HIT        = 13,
+    CREATURE_EVENT_ON_ASSIST_TARGET_DIED        = 14,
+    CREATURE_EVENT_ON_FEAR        = 15,
+    CREATURE_EVENT_ON_FLEE        = 16,
+    CREATURE_EVENT_ON_CALL_FOR_HELP        = 17,
+    CREATURE_EVENT_ON_LOAD        = 18,
+    CREATURE_EVENT_ON_REACH_WP        = 19,
+    CREATURE_EVENT_ON_LOOT_TAKEN        = 20,
+    CREATURE_EVENT_ON_AIUPDATE        = 21,
+    CREATURE_EVENT_ON_EMOTE        = 22,
     CREATURE_EVENT_ON_DAMAGE_TAKEN = 23,
     CREATURE_EVENT_COUNT,
 };
@@ -45,19 +45,19 @@ enum CreatureEvents
  */
 enum GameObjectEvents
 {
-    GAMEOBJECT_EVENT_ON_CREATE			= 1,
-    GAMEOBJECT_EVENT_ON_SPAWN			= 2,
-    GAMEOBJECT_EVENT_ON_LOOT_TAKEN		= 3,
-    GAMEOBJECT_EVENT_ON_USE				= 4,
-    GAMEOBJECT_EVENT_AIUPDATE			= 5,
-    GAMEOBJECT_EVENT_ON_DESPAWN			= 6,
+    GAMEOBJECT_EVENT_ON_CREATE            = 1,
+    GAMEOBJECT_EVENT_ON_SPAWN            = 2,
+    GAMEOBJECT_EVENT_ON_LOOT_TAKEN        = 3,
+    GAMEOBJECT_EVENT_ON_USE                = 4,
+    GAMEOBJECT_EVENT_AIUPDATE            = 5,
+    GAMEOBJECT_EVENT_ON_DESPAWN            = 6,
     GAMEOBJECT_EVENT_COUNT,
 };
 
 enum GossipEvents
 {
-    GOSSIP_EVENT_ON_TALK			= 1,
-    GOSSIP_EVENT_ON_SELECT_OPTION	= 2,
+    GOSSIP_EVENT_ON_TALK            = 1,
+    GOSSIP_EVENT_ON_SELECT_OPTION    = 2,
     GOSSIP_EVENT_ON_END             = 3,
     GOSSIP_EVENT_COUNT,
 };
@@ -132,145 +132,145 @@ enum custom_value_types
 
 class variadic_node
 {
-	public:
-		ptrdiff_t type;
-		union
-		{
-			lua_Number lua_number;
-			const char* lua_str;
-			lua_State* thread;
-			//for ud objects and functions, we store a reference to that.
-			ptrdiff_t obj_ref;
-			void* l_ud;
-			ptrdiff_t bewl;
-		} val;
-		//node to the next parameter
-		variadic_node* next;
-		variadic_node()
-		{
-			type = LUA_TNONE;
-			next = NULL;
-			val.lua_number = 0;
-		}
+    public:
+        ptrdiff_t type;
+        union
+        {
+            lua_Number lua_number;
+            const char* lua_str;
+            lua_State* thread;
+            //for ud objects and functions, we store a reference to that.
+            ptrdiff_t obj_ref;
+            void* l_ud;
+            ptrdiff_t bewl;
+        } val;
+        //node to the next parameter
+        variadic_node* next;
+        variadic_node()
+        {
+            type = LUA_TNONE;
+            next = NULL;
+            val.lua_number = 0;
+        }
 };
 class variadic_parameter
 {
-	public:
-		//how many parameters exist.
-		ptrdiff_t count;
-		//node type, represents any obtainable object.
-		variadic_node* head_node;
-		variadic_parameter()
-		{
-			count = 0;
-			head_node = NULL;
-		}
+    public:
+        //how many parameters exist.
+        ptrdiff_t count;
+        //node type, represents any obtainable object.
+        variadic_node* head_node;
+        variadic_parameter()
+        {
+            count = 0;
+            head_node = NULL;
+        }
 };
 
 class ReferenceHandler
 {
-		static const char* refTable;
-	public:
-		static ptrdiff_t addReference(lua_State* L, ptrdiff_t index)
-		{
-			ptrdiff_t key = LUA_REFNIL;
-			if(!lua_isnoneornil(L, index))
-			{
-				lua_getfield(L, LUA_REGISTRYINDEX, refTable);
-				if(lua_isnil(L, -1))
-				{
-					lua_pop(L, 1);
-					lua_newtable(L);
-					lua_pushvalue(L, -1);
-					lua_setfield(L, LUA_REGISTRYINDEX, refTable); // registry[refTable] = {}
-				}
-				assert(lua_type(L, -1) == LUA_TTABLE);
-				lua_pushvalue(L, index);
-				key = luaL_ref(L, -2);
-				lua_pop(L, 1); //pop refTable from stack.
-			}
-			return key;
-		}
-		static void removeReference(lua_State* L, ptrdiff_t key)
-		{
-			lua_getfield(L, LUA_REGISTRYINDEX, refTable);
-			assert(lua_type(L, -1) == LUA_TTABLE);
-			luaL_unref(L, -1, key);
-			lua_pop(L, 1); // pop refTable
-		}
-		static void getReference(lua_State* L, ptrdiff_t key)
-		{
-			lua_getfield(L, LUA_REGISTRYINDEX, refTable);
-			assert(lua_type(L, -1) == LUA_TTABLE);
-			lua_rawgeti(L, -1, key); //push to the stack the value at refTable[key]
-			lua_replace(L, -2); // do stack[refTable] = refTable[key]
-		}
+        static const char* refTable;
+    public:
+        static ptrdiff_t addReference(lua_State* L, ptrdiff_t index)
+        {
+            ptrdiff_t key = LUA_REFNIL;
+            if(!lua_isnoneornil(L, index))
+            {
+                lua_getfield(L, LUA_REGISTRYINDEX, refTable);
+                if(lua_isnil(L, -1))
+                {
+                    lua_pop(L, 1);
+                    lua_newtable(L);
+                    lua_pushvalue(L, -1);
+                    lua_setfield(L, LUA_REGISTRYINDEX, refTable); // registry[refTable] = {}
+                }
+                assert(lua_type(L, -1) == LUA_TTABLE);
+                lua_pushvalue(L, index);
+                key = luaL_ref(L, -2);
+                lua_pop(L, 1); //pop refTable from stack.
+            }
+            return key;
+        }
+        static void removeReference(lua_State* L, ptrdiff_t key)
+        {
+            lua_getfield(L, LUA_REGISTRYINDEX, refTable);
+            assert(lua_type(L, -1) == LUA_TTABLE);
+            luaL_unref(L, -1, key);
+            lua_pop(L, 1); // pop refTable
+        }
+        static void getReference(lua_State* L, ptrdiff_t key)
+        {
+            lua_getfield(L, LUA_REGISTRYINDEX, refTable);
+            assert(lua_type(L, -1) == LUA_TTABLE);
+            lua_rawgeti(L, -1, key); //push to the stack the value at refTable[key]
+            lua_replace(L, -2); // do stack[refTable] = refTable[key]
+        }
 };
 
 //easy clean up function for var params
 static void cleanup_varparam(variadic_parameter* param, lua_State* L)
 {
-	if(param != NULL)
-	{
-		variadic_node* current_node = param->head_node;
-		variadic_node* next_node = NULL;
-		for(; current_node != NULL;)
-		{
-			next_node = current_node->next;
-			//For ud,function objects, since we store them as references, we have to unref them when we are done with them.
-			switch(current_node->type)
-			{
-				case LUA_TUSERDATA:
-				case LUA_TTABLE:
-				case LUA_TFUNCTION:
-					ReferenceHandler::removeReference(L, current_node->val.obj_ref);
-					break;
-				case LUA_TSTRING:
-					free((void*)current_node->val.lua_str);
-					break;
-				default:
-					break;
-			}
-			//now we can delete the node
-			delete current_node;
-			current_node = next_node;
-		}
-		delete param;
-	}
+    if(param != NULL)
+    {
+        variadic_node* current_node = param->head_node;
+        variadic_node* next_node = NULL;
+        for(; current_node != NULL;)
+        {
+            next_node = current_node->next;
+            //For ud,function objects, since we store them as references, we have to unref them when we are done with them.
+            switch(current_node->type)
+            {
+                case LUA_TUSERDATA:
+                case LUA_TTABLE:
+                case LUA_TFUNCTION:
+                    ReferenceHandler::removeReference(L, current_node->val.obj_ref);
+                    break;
+                case LUA_TSTRING:
+                    free((void*)current_node->val.lua_str);
+                    break;
+                default:
+                    break;
+            }
+            //now we can delete the node
+            delete current_node;
+            current_node = next_node;
+        }
+        delete param;
+    }
 }
 
-//	Used to extract a reference to a function pointed by str, returns LUA_REFNIL if it can't.
+//    Used to extract a reference to a function pointed by str, returns LUA_REFNIL if it can't.
 extern ptrdiff_t extractfRefFromCString(lua_State* L, const char* str);
 
 /*static void dumpStackInfo(lua_State * L)
 {
-	if(L != NULL)
-	{
-		ptrdiff_t top = lua_gettop(L);
-		for(int i = 1; i <= top; ++i)
-		{
-			printf("\t%d. %s", i, luaL_typename(L, i) );
-			switch(lua_type(L,i) )
-			{
-			case LUA_TNONE:
-			case LUA_TNIL:
-				break;
-			case LUA_TNUMBER:
-				printf("(%f)", lua_tonumber(L, i));
-				break;
-			case LUA_TSTRING:
-				printf("(\"%s\")", lua_tostring(L,i) );
-				break;
-			case LUA_TLIGHTUSERDATA:
-			case LUA_TTABLE:
-			case LUA_TUSERDATA:
-			case LUA_TFUNCTION:
-				printf("(%p)", lua_topointer(L,i) );
-				break;
-			}
-			printf("\n");
-		}
-	}
+    if(L != NULL)
+    {
+        ptrdiff_t top = lua_gettop(L);
+        for(int i = 1; i <= top; ++i)
+        {
+            printf("\t%d. %s", i, luaL_typename(L, i) );
+            switch(lua_type(L,i) )
+            {
+            case LUA_TNONE:
+            case LUA_TNIL:
+                break;
+            case LUA_TNUMBER:
+                printf("(%f)", lua_tonumber(L, i));
+                break;
+            case LUA_TSTRING:
+                printf("(\"%s\")", lua_tostring(L,i) );
+                break;
+            case LUA_TLIGHTUSERDATA:
+            case LUA_TTABLE:
+            case LUA_TUSERDATA:
+            case LUA_TFUNCTION:
+                printf("(%p)", lua_topointer(L,i) );
+                break;
+            }
+            printf("\n");
+        }
+    }
 }*/
 
 #define INVALID_FUNCTION LUA_REFNIL
@@ -284,44 +284,44 @@ class LuaQuest;
 
 class SpellMapEntry
 {
-	public:
-		int32 ref;
-		variadic_parameter* params;
-		SpellMapEntry() : ref(LUA_REFNIL), params(NULL) {}
+    public:
+        int32 ref;
+        variadic_parameter* params;
+        SpellMapEntry() : ref(LUA_REFNIL), params(NULL) {}
 };
 typedef SpellMapEntry* PSpellMapEntry;
 
 class ObjectBinding
 {
-	public:
-		lua_function refs[CREATURE_EVENT_COUNT];
-		ObjectBinding()
-		{
-			for(size_t i = 0; i < CREATURE_EVENT_COUNT; ++i)
-				refs[i] = (lua_function)LUA_REFNIL;
-		}
+    public:
+        lua_function refs[CREATURE_EVENT_COUNT];
+        ObjectBinding()
+        {
+            for(size_t i = 0; i < CREATURE_EVENT_COUNT; ++i)
+                refs[i] = (lua_function)LUA_REFNIL;
+        }
 };
 typedef ObjectBinding* PObjectBinding;
 
 class LUA_SCRIPT
 {
-	public:
-		const void* data_;
-		size_t datasize_;
-		uint32 readpos_;
-		std::set<int32> maps_;
-		LUA_SCRIPT()
-		{
-			data_ = NULL;
-			datasize_ = 0;
-			readpos_ = 0;
-			maps_.clear();
-		}
-		~LUA_SCRIPT()
-		{
-			if(data_ != NULL)
-				free((void*)data_);
-		}
+    public:
+        const void* data_;
+        size_t datasize_;
+        uint32 readpos_;
+        std::set<int32> maps_;
+        LUA_SCRIPT()
+        {
+            data_ = NULL;
+            datasize_ = 0;
+            readpos_ = 0;
+            maps_.clear();
+        }
+        ~LUA_SCRIPT()
+        {
+            if(data_ != NULL)
+                free((void*)data_);
+        }
 };
 typedef LUA_SCRIPT* PLUA_SCRIPT;
 
@@ -330,29 +330,29 @@ typedef LUA_SCRIPT* PLUA_SCRIPT;
 template<typename T>
 struct ObjectWrap
 {
-	T value_;
-	void operator=(const T & newvalue) { value_ = newvalue; }
-	ObjectWrap(const T & val = T())  : value_(val) {}
-	ObjectWrap(const ObjectWrap<T> & _other) : value_(_other.value_) {}
+    T value_;
+    void operator=(const T & newvalue) { value_ = newvalue; }
+    ObjectWrap(const T & val = T())  : value_(val) {}
+    ObjectWrap(const ObjectWrap<T> & _other) : value_(_other.value_) {}
 };
 
 template<typename T>
 bool operator==(const ObjectWrap<T> & left, const ObjectWrap<T> & right)
 {
-	return left.value_ == right.value_;
+    return left.value_ == right.value_;
 }
 template<typename T>
 bool operator<(const ObjectWrap<T> & left, const ObjectWrap<T> & right)
 {
-	return left.value_ < right.value_;
+    return left.value_ < right.value_;
 }
 template<typename T>
 bool operator>(const ObjectWrap<T> & left, const ObjectWrap<T> & right)
 {
-	return left.value_ > right.value_;
+    return left.value_ > right.value_;
 }
 template<typename T>
 bool operator!=(const ObjectWrap<T> & left, const ObjectWrap<T> & right)
 {
-	return operator==(left, right);
+    return operator==(left, right);
 }

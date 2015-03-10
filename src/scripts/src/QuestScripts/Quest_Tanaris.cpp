@@ -26,122 +26,122 @@
 
 class SpiritScreeches : public GossipScript
 {
-	public:
-		void GossipHello(Object* pObject, Player* plr)
-		{
-			if(!plr)
-				return;
+    public:
+        void GossipHello(Object* pObject, Player* plr)
+        {
+            if(!plr)
+                return;
 
-			GossipMenu* Menu;
-			Creature* spirit = TO_CREATURE(pObject);
-			if(spirit == NULL)
-				return;
+            GossipMenu* Menu;
+            Creature* spirit = TO_CREATURE(pObject);
+            if(spirit == NULL)
+                return;
 
-			if(plr->GetQuestLogForEntry(3520))
-			{
-				objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2039, plr);
-				Menu->AddItem(0, "Goodbye", 1);
+            if(plr->GetQuestLogForEntry(3520))
+            {
+                objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2039, plr);
+                Menu->AddItem(0, "Goodbye", 1);
 
-				Menu->SendTo(plr);
-			}
+                Menu->SendTo(plr);
+            }
 
 
 
-		}
+        }
 
-		void GossipSelectOption(Object* pObject, Player* plr, uint32 Id, uint32 IntId, const char* EnteredCode)
-		{
-			if(!plr)
-				return;
+        void GossipSelectOption(Object* pObject, Player* plr, uint32 Id, uint32 IntId, const char* EnteredCode)
+        {
+            if(!plr)
+                return;
 
-			Creature* spirit = TO_CREATURE(pObject);
-			if(spirit == NULL)
-				return;
+            Creature* spirit = TO_CREATURE(pObject);
+            if(spirit == NULL)
+                return;
 
-			switch(IntId)
-			{
-				case 0:
-					GossipHello(pObject, plr);
-					break;
+            switch(IntId)
+            {
+                case 0:
+                    GossipHello(pObject, plr);
+                    break;
 
-				case 1:
-					{
-						QuestLogEntry* en = plr->GetQuestLogForEntry(3520);
-						if(en && en->GetMobCount(0) < en->GetQuest()->required_mobcount[0])
-						{
-							en->SetMobCount(0, en->GetMobCount(0) + 1);
-							en->SendUpdateAddKill(0);
-							en->UpdatePlayerFields();
-						}
-						if(!spirit)
-							return;
+                case 1:
+                    {
+                        QuestLogEntry* en = plr->GetQuestLogForEntry(3520);
+                        if(en && en->GetMobCount(0) < en->GetQuest()->required_mobcount[0])
+                        {
+                            en->SetMobCount(0, en->GetMobCount(0) + 1);
+                            en->SendUpdateAddKill(0);
+                            en->UpdatePlayerFields();
+                        }
+                        if(!spirit)
+                            return;
 
-						spirit->Despawn(1, 0);
-						return;
+                        spirit->Despawn(1, 0);
+                        return;
 
-					}
-			}
-		}
+                    }
+            }
+        }
 
 };
 
 class ScreecherSpirit : public CreatureAIScript
 {
-	public:
-		ADD_CREATURE_FACTORY_FUNCTION(ScreecherSpirit);
+    public:
+        ADD_CREATURE_FACTORY_FUNCTION(ScreecherSpirit);
 
-		ScreecherSpirit(Creature* pCreature) : CreatureAIScript(pCreature) {}
+        ScreecherSpirit(Creature* pCreature) : CreatureAIScript(pCreature) {}
 
-		void OnLoad()
-		{
-			if(!_unit)
-				return;
+        void OnLoad()
+        {
+            if(!_unit)
+                return;
 
-			Creature* cialo = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(_unit->GetPositionX(), _unit->GetPositionY(), _unit->GetPositionZ(), 5307);
-			if(!cialo)
-				return;
+            Creature* cialo = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(_unit->GetPositionX(), _unit->GetPositionY(), _unit->GetPositionZ(), 5307);
+            if(!cialo)
+                return;
 
-			if(!cialo->isAlive())
-				cialo->Despawn(1, 6 * 60 * 1000);
+            if(!cialo->isAlive())
+                cialo->Despawn(1, 6 * 60 * 1000);
 
-			_unit->Despawn(60 * 1000, 0);
-		}
+            _unit->Despawn(60 * 1000, 0);
+        }
 };
 
 class StewardOfTime : public GossipScript
 {
-	public:
-		void GossipHello(Object* pObject, Player* plr)
-		{
-			GossipMenu* Menu;
-			if(plr->GetQuestLogForEntry(10279) || plr->HasFinishedQuest(10279))
-			{
-				objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 9978, plr);
-				Menu->AddItem(0, "Please take me to the master's lair", 1);
-				Menu->SendTo(plr);
-			}
-		}
+    public:
+        void GossipHello(Object* pObject, Player* plr)
+        {
+            GossipMenu* Menu;
+            if(plr->GetQuestLogForEntry(10279) || plr->HasFinishedQuest(10279))
+            {
+                objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 9978, plr);
+                Menu->AddItem(0, "Please take me to the master's lair", 1);
+                Menu->SendTo(plr);
+            }
+        }
 
-		void GossipSelectOption(Object* pObject, Player* plr, uint32 Id, uint32 IntId, const char* Code)
-		{
-			Creature* creat = TO_CREATURE(pObject);
-			switch(IntId)
-			{
-				case 1:
-					creat->CastSpell(plr, dbcSpell.LookupEntry(34891), true);
-					break;
-			}
-		}
+        void GossipSelectOption(Object* pObject, Player* plr, uint32 Id, uint32 IntId, const char* Code)
+        {
+            Creature* creat = TO_CREATURE(pObject);
+            switch(IntId)
+            {
+                case 1:
+                    creat->CastSpell(plr, dbcSpell.LookupEntry(34891), true);
+                    break;
+            }
+        }
 
 };
 
 void SetupTanaris(ScriptMgr* mgr)
 {
-	GossipScript* Screeches = new SpiritScreeches();
-	mgr->register_gossip_script(8612, Screeches);
+    GossipScript* Screeches = new SpiritScreeches();
+    mgr->register_gossip_script(8612, Screeches);
 
-	mgr->register_creature_script(8612, &ScreecherSpirit::Create);
+    mgr->register_creature_script(8612, &ScreecherSpirit::Create);
 
-	GossipScript* StewardOfTimeGossip = new StewardOfTime();
-	mgr->register_gossip_script(20142, StewardOfTimeGossip);
+    GossipScript* StewardOfTimeGossip = new StewardOfTime();
+    mgr->register_gossip_script(20142, StewardOfTimeGossip);
 }

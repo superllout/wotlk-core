@@ -22,18 +22,18 @@
 
 class InnervateSpell : public Spell
 {
-		SPELL_FACTORY_FUNCTION(InnervateSpell);
+        SPELL_FACTORY_FUNCTION(InnervateSpell);
 
-		int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
-		{
-			if(p_caster != NULL && i == 0 && target != NULL)
-				value = (uint32)(p_caster->GetBaseMana() * 0.225f);
+        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        {
+            if(p_caster != NULL && i == 0 && target != NULL)
+                value = (uint32)(p_caster->GetBaseMana() * 0.225f);
 
-			return value;
-		}
+            return value;
+        }
 };
 
 void SpellFactoryMgr::SetupDruid()
 {
-	AddSpellByNameHash(SPELL_HASH_INNERVATE, &InnervateSpell::Create);
+    AddSpellByNameHash(SPELL_HASH_INNERVATE, &InnervateSpell::Create);
 }

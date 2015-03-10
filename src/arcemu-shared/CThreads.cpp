@@ -25,8 +25,8 @@
 
 CThread::CThread() : ThreadBase()
 {
-	ThreadState.SetVal(THREADSTATE_AWAITING);
-	start_time  = 0;
+    ThreadState.SetVal(THREADSTATE_AWAITING);
+    start_time  = 0;
 }
 
 CThread::~CThread()
@@ -36,11 +36,11 @@ CThread::~CThread()
 
 bool CThread::run()
 {
-	return false;
+    return false;
 }
 
 void CThread::OnShutdown()
 {
-	SetThreadState(THREADSTATE_TERMINATE);
+    SetThreadState(THREADSTATE_TERMINATE);
 }
 

@@ -27,12 +27,12 @@
 
 class DarkRuneStormcallerAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneStormcallerAI, MoonScriptCreatureAI);
-		DarkRuneStormcallerAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(STORMCALLER_LIGHTNINGBOLT, Target_RandomPlayer, 60, 3, 6);
-			AddSpell(STORMCALLER_SHADOWWORD, Target_RandomPlayer, 16, 0, 12);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneStormcallerAI, MoonScriptCreatureAI);
+        DarkRuneStormcallerAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(STORMCALLER_LIGHTNINGBOLT, Target_RandomPlayer, 60, 3, 6);
+            AddSpell(STORMCALLER_SHADOWWORD, Target_RandomPlayer, 16, 0, 12);
+        };
 
 };
 
@@ -44,12 +44,12 @@ class DarkRuneStormcallerAI : public MoonScriptCreatureAI
 
 class IronGolemCustodianAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(IronGolemCustodianAI, MoonScriptCreatureAI);
-		IronGolemCustodianAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(CUSTODIAN_CRUSH_ARMOR, Target_Current, 50, 0, 5);
-			AddSpell(CUSTODIAN_GROUND_SMASH, Target_ClosestPlayer, 20, 0, 14);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(IronGolemCustodianAI, MoonScriptCreatureAI);
+        IronGolemCustodianAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(CUSTODIAN_CRUSH_ARMOR, Target_Current, 50, 0, 5);
+            AddSpell(CUSTODIAN_GROUND_SMASH, Target_ClosestPlayer, 20, 0, 14);
+        };
 
 };
 
@@ -61,12 +61,12 @@ class IronGolemCustodianAI : public MoonScriptCreatureAI
 
 class DarkRuneProtectorAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneProtectorAI, MoonScriptCreatureAI);
-		DarkRuneProtectorAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(PROTECTOR_CHARGE, Target_RandomPlayerNotCurrent, 20, 0, 14, 10);
-			AddSpell(PROTECTOR_CLAVE, Target_Current, 35, 0, 8);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneProtectorAI, MoonScriptCreatureAI);
+        DarkRuneProtectorAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(PROTECTOR_CHARGE, Target_RandomPlayerNotCurrent, 20, 0, 14, 10);
+            AddSpell(PROTECTOR_CLAVE, Target_Current, 35, 0, 8);
+        };
 
 };
 
@@ -77,11 +77,11 @@ class DarkRuneProtectorAI : public MoonScriptCreatureAI
 
 class LesserAirElementalAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(LesserAirElementalAI, MoonScriptCreatureAI);
-		LesserAirElementalAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(ELEMENTAL_LIGHTNING_BOLT, Target_RandomPlayerNotCurrent, 20, 3, 14);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(LesserAirElementalAI, MoonScriptCreatureAI);
+        LesserAirElementalAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(ELEMENTAL_LIGHTNING_BOLT, Target_RandomPlayerNotCurrent, 20, 3, 14);
+        };
 
 };
 
@@ -93,12 +93,12 @@ class LesserAirElementalAI : public MoonScriptCreatureAI
 
 class DarkRuneWorkerAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneWorkerAI, MoonScriptCreatureAI);
-		DarkRuneWorkerAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(WORKER_ENRAGE, Target_Self, 5, 0, 60, 10);
-			AddSpell(WORKER_PIERCE_ARMOR, Target_Current, 35, 0, 45);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneWorkerAI, MoonScriptCreatureAI);
+        DarkRuneWorkerAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(WORKER_ENRAGE, Target_Self, 5, 0, 60, 10);
+            AddSpell(WORKER_PIERCE_ARMOR, Target_Current, 35, 0, 45);
+        };
 
 };
 
@@ -110,12 +110,12 @@ class DarkRuneWorkerAI : public MoonScriptCreatureAI
 
 class DarkRuneWarriorAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneWarriorAI, MoonScriptCreatureAI);
-		DarkRuneWarriorAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(WARRIOR_CLAVE, Target_Current, 15, 0, 8);
-			AddSpell(WARRIOR_HEROIC_STRIKE, Target_Current, 35, 0, 12);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneWarriorAI, MoonScriptCreatureAI);
+        DarkRuneWarriorAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(WARRIOR_CLAVE, Target_Current, 15, 0, 8);
+            AddSpell(WARRIOR_HEROIC_STRIKE, Target_Current, 35, 0, 12);
+        };
 
 };
 
@@ -128,13 +128,13 @@ class DarkRuneWarriorAI : public MoonScriptCreatureAI
 
 class DarkRuneTheurgistAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneTheurgistAI, MoonScriptCreatureAI);
-		DarkRuneTheurgistAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(THEURGIST_BLAST_WAVE, Target_Self, 22, 0, 25);
-			AddSpell(THEURGIST_FIREBOLT, Target_RandomPlayer, 40, 3, 6);
-			AddSpell(THEURGIST_IRON_MIGHT, Target_Self, 5, 0, 60);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneTheurgistAI, MoonScriptCreatureAI);
+        DarkRuneTheurgistAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(THEURGIST_BLAST_WAVE, Target_Self, 22, 0, 25);
+            AddSpell(THEURGIST_FIREBOLT, Target_RandomPlayer, 40, 3, 6);
+            AddSpell(THEURGIST_IRON_MIGHT, Target_Self, 5, 0, 60);
+        };
 
 };
 
@@ -145,11 +145,11 @@ class DarkRuneTheurgistAI : public MoonScriptCreatureAI
 
 class DarkRuneShaperAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneShaperAI, MoonScriptCreatureAI);
-		DarkRuneShaperAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(SHAPER_RAY, Target_RandomPlayer, 35, 1.5, 12);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneShaperAI, MoonScriptCreatureAI);
+        DarkRuneShaperAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(SHAPER_RAY, Target_RandomPlayer, 35, 1.5, 12);
+        };
 
 };
 
@@ -160,11 +160,11 @@ class DarkRuneShaperAI : public MoonScriptCreatureAI
 
 class DarkRuneScholarAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneScholarAI, MoonScriptCreatureAI);
-		DarkRuneScholarAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(SCHOLAR_SILANCE, Target_RandomPlayerNotCurrent, 35, 2.5, 12);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneScholarAI, MoonScriptCreatureAI);
+        DarkRuneScholarAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(SCHOLAR_SILANCE, Target_RandomPlayerNotCurrent, 35, 2.5, 12);
+        };
 
 };
 
@@ -176,12 +176,12 @@ class DarkRuneScholarAI : public MoonScriptCreatureAI
 
 class DarkRuneGiantAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneGiantAI, MoonScriptCreatureAI);
-		DarkRuneGiantAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(GIANT_FIST, Target_Self, 3, 2, 40);
-			AddSpell(GIANT_STOMP, Target_RandomPlayer, 35, 0, 14, 0, 10);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneGiantAI, MoonScriptCreatureAI);
+        DarkRuneGiantAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(GIANT_FIST, Target_Self, 3, 2, 40);
+            AddSpell(GIANT_STOMP, Target_RandomPlayer, 35, 0, 14, 0, 10);
+        };
 
 };
 
@@ -194,12 +194,12 @@ class DarkRuneGiantAI : public MoonScriptCreatureAI
 
 class DarkRuneConstructAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkRuneConstructAI, MoonScriptCreatureAI);
-		DarkRuneConstructAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(RAGING_POTENT_JOLT, Target_Self, 95, 0, 8);
-			AddSpell(RAGING_CLAVE, Target_Current, 30, 0, 9, 0, 10);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkRuneConstructAI, MoonScriptCreatureAI);
+        DarkRuneConstructAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(RAGING_POTENT_JOLT, Target_Self, 95, 0, 8);
+            AddSpell(RAGING_CLAVE, Target_Current, 30, 0, 9, 0, 10);
+        };
 
 };
 
@@ -211,12 +211,12 @@ class DarkRuneConstructAI : public MoonScriptCreatureAI
 
 class DarkLightningConstructAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(DarkLightningConstructAI, MoonScriptCreatureAI);
-		DarkLightningConstructAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(LIGHTNING_ELECTRICAL_OVERLOAD, Target_Self, 5, 1.5, 14);
-			AddSpell(LIGHTNING_CHAIN_LIGHTNING, Target_Current, 30, 3, 8, 0, 30);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(DarkLightningConstructAI, MoonScriptCreatureAI);
+        DarkLightningConstructAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(LIGHTNING_ELECTRICAL_OVERLOAD, Target_Self, 5, 1.5, 14);
+            AddSpell(LIGHTNING_CHAIN_LIGHTNING, Target_Current, 30, 3, 8, 0, 30);
+        };
 
 };
 
@@ -227,11 +227,11 @@ class DarkLightningConstructAI : public MoonScriptCreatureAI
 
 class ForgedIronTroggAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(ForgedIronTroggAI, MoonScriptCreatureAI);
-		ForgedIronTroggAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(LIGHTNING_CHAIN_LIGHTNING, Target_RandomPlayer, 30, 2, 8, 0, 10);
-		};
+        MOONSCRIPT_FACTORY_FUNCTION(ForgedIronTroggAI, MoonScriptCreatureAI);
+        ForgedIronTroggAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(LIGHTNING_CHAIN_LIGHTNING, Target_RandomPlayer, 30, 2, 8, 0, 10);
+        };
 
 };
 
@@ -244,31 +244,31 @@ class ForgedIronTroggAI : public MoonScriptCreatureAI
 
 class MaidenOfGriefAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(MaidenOfGriefAI, MoonScriptCreatureAI);
-		MaidenOfGriefAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(MAIDEN_STORM_OF_GRIEF, Target_RandomPlayerDestination, 100, 0, 19);
-			AddSpell(MAIDEN_PILLAR_OF_WOE, Target_RandomPlayerNotCurrent, 30, 0, 8);
-			mShock = AddSpell(MAIDEN_SHOCK_OF_SORROW, Target_Self, 20, 0, 18);
-			mShock->AddEmote("So much lost time... that you'll never get back!", Text_Yell, 13492);
+        MOONSCRIPT_FACTORY_FUNCTION(MaidenOfGriefAI, MoonScriptCreatureAI);
+        MaidenOfGriefAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(MAIDEN_STORM_OF_GRIEF, Target_RandomPlayerDestination, 100, 0, 19);
+            AddSpell(MAIDEN_PILLAR_OF_WOE, Target_RandomPlayerNotCurrent, 30, 0, 8);
+            mShock = AddSpell(MAIDEN_SHOCK_OF_SORROW, Target_Self, 20, 0, 18);
+            mShock->AddEmote("So much lost time... that you'll never get back!", Text_Yell, 13492);
 
-			//EMOTES
-			AddEmote(Event_OnCombatStart, "You shouldn't have come...now you will die! ", Text_Yell, 13487);
-			AddEmote(Event_OnTargetDied, "My burden grows heavier.", Text_Yell, 13488);
-			AddEmote(Event_OnTargetDied, "This is your own fault!", Text_Yell, 13489);
-			AddEmote(Event_OnTargetDied, "You had it coming!", Text_Yell, 13490);
-			AddEmote(Event_OnTargetDied, "Why must it be this way?", Text_Yell, 13491);
-			AddEmote(Event_OnDied, "I hope you all rot! I never...wanted...this.", Text_Yell, 13493);
-		};
+            //EMOTES
+            AddEmote(Event_OnCombatStart, "You shouldn't have come...now you will die! ", Text_Yell, 13487);
+            AddEmote(Event_OnTargetDied, "My burden grows heavier.", Text_Yell, 13488);
+            AddEmote(Event_OnTargetDied, "This is your own fault!", Text_Yell, 13489);
+            AddEmote(Event_OnTargetDied, "You had it coming!", Text_Yell, 13490);
+            AddEmote(Event_OnTargetDied, "Why must it be this way?", Text_Yell, 13491);
+            AddEmote(Event_OnDied, "I hope you all rot! I never...wanted...this.", Text_Yell, 13493);
+        };
 
-		void OnCombatStart(Unit* pTarget)
-		{
-			mShock->TriggerCooldown();
-			ParentClass::OnCombatStart(pTarget);
-		};
+        void OnCombatStart(Unit* pTarget)
+        {
+            mShock->TriggerCooldown();
+            ParentClass::OnCombatStart(pTarget);
+        };
 
-	protected:
-		SpellDesc* mShock;
+    protected:
+        SpellDesc* mShock;
 };
 
 // Krystallus
@@ -279,78 +279,78 @@ class MaidenOfGriefAI : public MoonScriptCreatureAI
 #define KRYSTALLUS_STOMP 50868
 
 // some macros
-#define STOMP_TIMER	    35000
-#define SHATTER_TIMER	4500
+#define STOMP_TIMER        35000
+#define SHATTER_TIMER    4500
 
 class KrystallusAI : public MoonScriptCreatureAI
 {
-		MOONSCRIPT_FACTORY_FUNCTION(KrystallusAI, MoonScriptCreatureAI);
-		KrystallusAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
-		{
-			AddSpell(KRYSTALLUS_BOULDER_TOSS, Target_ClosestPlayer, 35, 1, 4);
-			mShatter = AddSpell(KRYSTALLUS_SHATTER, Target_Self, 0, 0, 0);
-			mStomp = AddSpell(KRYSTALLUS_STOMP, Target_Self, 0, 0, 0);
-			mShatter->AddEmote("Break.... you....", Text_Yell, 14178);
+        MOONSCRIPT_FACTORY_FUNCTION(KrystallusAI, MoonScriptCreatureAI);
+        KrystallusAI(Creature* pCreature) : MoonScriptCreatureAI(pCreature)
+        {
+            AddSpell(KRYSTALLUS_BOULDER_TOSS, Target_ClosestPlayer, 35, 1, 4);
+            mShatter = AddSpell(KRYSTALLUS_SHATTER, Target_Self, 0, 0, 0);
+            mStomp = AddSpell(KRYSTALLUS_STOMP, Target_Self, 0, 0, 0);
+            mShatter->AddEmote("Break.... you....", Text_Yell, 14178);
 
-			//EMOTES
-			AddEmote(Event_OnCombatStart, "Crush....", Text_Yell, 14176);
-			AddEmote(Event_OnTargetDied, "Ha.... ha... hah....", Text_Yell, 14177);
-			AddEmote(Event_OnDied, "Uuuuhhhhhhhhhh......", Text_Yell, 14179);
+            //EMOTES
+            AddEmote(Event_OnCombatStart, "Crush....", Text_Yell, 14176);
+            AddEmote(Event_OnTargetDied, "Ha.... ha... hah....", Text_Yell, 14177);
+            AddEmote(Event_OnDied, "Uuuuhhhhhhhhhh......", Text_Yell, 14179);
 
-			mStompTimer = INVALIDATE_TIMER;
-			mShatterTimer = INVALIDATE_TIMER;
-		}
+            mStompTimer = INVALIDATE_TIMER;
+            mShatterTimer = INVALIDATE_TIMER;
+        }
 
-		void OnCombatStart(Unit* pTarget)
-		{
-			mStompTimer = AddTimer(STOMP_TIMER);
-			ParentClass::OnCombatStart(pTarget);
-		};
+        void OnCombatStart(Unit* pTarget)
+        {
+            mStompTimer = AddTimer(STOMP_TIMER);
+            ParentClass::OnCombatStart(pTarget);
+        };
 
-		void AIUpdate()
-		{
-			if(IsTimerFinished(mStompTimer))
-			{
-				CastSpellNowNoScheduling(mStomp);
-				SetCanMove(false);
-				ResetTimer(mStompTimer, (STOMP_TIMER + SHATTER_TIMER));
-				mShatterTimer = AddTimer(SHATTER_TIMER);
+        void AIUpdate()
+        {
+            if(IsTimerFinished(mStompTimer))
+            {
+                CastSpellNowNoScheduling(mStomp);
+                SetCanMove(false);
+                ResetTimer(mStompTimer, (STOMP_TIMER + SHATTER_TIMER));
+                mShatterTimer = AddTimer(SHATTER_TIMER);
 
-			}
-			if(IsTimerFinished(mShatterTimer))
-			{
-				CastSpellNowNoScheduling(mShatter);
-				SetCanMove(true);
-				RemoveTimer(mShatterTimer);
-			}
-		}
+            }
+            if(IsTimerFinished(mShatterTimer))
+            {
+                CastSpellNowNoScheduling(mShatter);
+                SetCanMove(true);
+                RemoveTimer(mShatterTimer);
+            }
+        }
 
-	protected:
-		SpellDesc* mStomp;
-		SpellDesc* mShatter;
+    protected:
+        SpellDesc* mStomp;
+        SpellDesc* mShatter;
 
-		int32 mStompTimer;
-		int32 mShatterTimer;
+        int32 mStompTimer;
+        int32 mShatterTimer;
 };
 
 
 void SetupHallsOfStone(ScriptMgr* mgr)
 {
-	// Trash!
-	mgr->register_creature_script(CN_DR_STORMCALLER, &DarkRuneStormcallerAI::Create);
-	mgr->register_creature_script(CN_GOLEM_CUSTODIAN, &IronGolemCustodianAI::Create);
-	mgr->register_creature_script(CN_DR_PROTECTOR, &DarkRuneProtectorAI::Create);
-	mgr->register_creature_script(CN_LASSER_AIR_ELEMENTAL, &LesserAirElementalAI::Create);
-	mgr->register_creature_script(CN_DR_WORKER, &DarkRuneWorkerAI::Create);
-	mgr->register_creature_script(CN_DR_THEURGIST, &DarkRuneTheurgistAI::Create);
-	mgr->register_creature_script(CN_DR_SHAPER, &DarkRuneShaperAI::Create);
-	mgr->register_creature_script(CN_DR_SCHOLAR, &DarkRuneScholarAI::Create);
-	mgr->register_creature_script(CN_DR_GIANT, &DarkRuneGiantAI::Create);
-	mgr->register_creature_script(CN_RAGING_CONSTRUCT, &DarkRuneConstructAI::Create);
-	mgr->register_creature_script(CN_LIGHTNING_CONSTRUCT, &DarkLightningConstructAI::Create);
-	mgr->register_creature_script(CN_FI_TRAGG, &ForgedIronTroggAI::Create);
+    // Trash!
+    mgr->register_creature_script(CN_DR_STORMCALLER, &DarkRuneStormcallerAI::Create);
+    mgr->register_creature_script(CN_GOLEM_CUSTODIAN, &IronGolemCustodianAI::Create);
+    mgr->register_creature_script(CN_DR_PROTECTOR, &DarkRuneProtectorAI::Create);
+    mgr->register_creature_script(CN_LASSER_AIR_ELEMENTAL, &LesserAirElementalAI::Create);
+    mgr->register_creature_script(CN_DR_WORKER, &DarkRuneWorkerAI::Create);
+    mgr->register_creature_script(CN_DR_THEURGIST, &DarkRuneTheurgistAI::Create);
+    mgr->register_creature_script(CN_DR_SHAPER, &DarkRuneShaperAI::Create);
+    mgr->register_creature_script(CN_DR_SCHOLAR, &DarkRuneScholarAI::Create);
+    mgr->register_creature_script(CN_DR_GIANT, &DarkRuneGiantAI::Create);
+    mgr->register_creature_script(CN_RAGING_CONSTRUCT, &DarkRuneConstructAI::Create);
+    mgr->register_creature_script(CN_LIGHTNING_CONSTRUCT, &DarkLightningConstructAI::Create);
+    mgr->register_creature_script(CN_FI_TRAGG, &ForgedIronTroggAI::Create);
 
-	// Bosses!
-	mgr->register_creature_script(BOSS_MAIDEN_OF_GRIEF, &MaidenOfGriefAI::Create);
-	mgr->register_creature_script(BOSS_KRYSTALLUS, &KrystallusAI::Create);
+    // Bosses!
+    mgr->register_creature_script(BOSS_MAIDEN_OF_GRIEF, &MaidenOfGriefAI::Create);
+    mgr->register_creature_script(BOSS_KRYSTALLUS, &KrystallusAI::Create);
 }

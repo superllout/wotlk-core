@@ -31,28 +31,28 @@ CompanionSummon::~CompanionSummon()
 
 void CompanionSummon::Load(CreatureProto* proto, Unit* owner, LocationVector & position, uint32 spellid, int32 summonslot)
 {
-	Summon::Load(proto, owner, position, spellid, summonslot);
+    Summon::Load(proto, owner, position, spellid, summonslot);
 
-	SetFaction(35);
-	setLevel(1);
-	m_aiInterface->Init(this, AITYPE_PET, MOVEMENTTYPE_NONE, owner);
-	m_aiInterface->SetUnitToFollow(owner);
-	m_aiInterface->SetUnitToFollowAngle(-M_PI_FLOAT / 2);
-	m_aiInterface->SetFollowDistance(3.0f);
-	m_aiInterface->disable_melee = true;
-	bInvincible = true;
+    SetFaction(35);
+    setLevel(1);
+    m_aiInterface->Init(this, AITYPE_PET, MOVEMENTTYPE_NONE, owner);
+    m_aiInterface->SetUnitToFollow(owner);
+    m_aiInterface->SetUnitToFollowAngle(-M_PI_FLOAT / 2);
+    m_aiInterface->SetFollowDistance(3.0f);
+    m_aiInterface->disable_melee = true;
+    bInvincible = true;
 
-	RemovePvPFlag();
-	RemoveFFAPvPFlag();
+    RemovePvPFlag();
+    RemoveFFAPvPFlag();
 }
 
 void CompanionSummon::OnPushToWorld()
 {
-	Summon::OnPushToWorld();
+    Summon::OnPushToWorld();
 }
 
 void CompanionSummon::OnPreRemoveFromWorld()
 {
-	Summon::OnPreRemoveFromWorld();
+    Summon::OnPreRemoveFromWorld();
 }
 

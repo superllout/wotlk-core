@@ -29,69 +29,69 @@ local function alias(LHAname, LBname)
 end
 
 function PLAYER:GetStrength()
-	return self:GetUInt32Value(LCF.UNIT_FIELD_STAT0)
+    return self:GetUInt32Value(LCF.UNIT_FIELD_STAT0)
 end
 function PLAYER:GetAgility()
-	return self:GetUInt32Value(LCF.UNIT_FIELD_STAT1)
+    return self:GetUInt32Value(LCF.UNIT_FIELD_STAT1)
 end
 function PLAYER:GetStamina()
-	return self:GetUInt32Value(LCF.UNIT_FIELD_STAT2)
+    return self:GetUInt32Value(LCF.UNIT_FIELD_STAT2)
 end
 function PLAYER:GetIntellect()
-	return self:GetUInt32Value(LCF.UNIT_FIELD_STAT3)
+    return self:GetUInt32Value(LCF.UNIT_FIELD_STAT3)
 end
 function PLAYER:GetSpirit()
-	return self:GetUInt32Value(LCF.UNIT_FIELD_STAT4)
+    return self:GetUInt32Value(LCF.UNIT_FIELD_STAT4)
 end
 function PLAYER:IsAlliance()
-	return self:GetTeam() == 0
+    return self:GetTeam() == 0
 end
 function PLAYER:IsHorde()
-	return self:GetTeam() ~= 0
+    return self:GetTeam() ~= 0
 end 
 function PLAYER:IsHeroic()
-	local dung = self:GetDungeonDifficulty()
-	if(self:IsInDungeon() ) then
-		return dung == 1
-	elseif(self:IsInRaid() ) then
-		return (dung == 3 or dung == 4)
-	end
-	return false
+    local dung = self:GetDungeonDifficulty()
+    if(self:IsInDungeon() ) then
+        return dung == 1
+    elseif(self:IsInRaid() ) then
+        return (dung == 3 or dung == 4)
+    end
+    return false
 end
 function PLAYER:SpawnLocalCreature(entry,faction,phase, duration)
-	local x,y,z,o = self:GetLocation()
-	local crc = MapMgr:GetInterface():SpawnCreature(entry, x,y,z,o, true, true, 0, 0, phase)
-	if(faction > 0) then
-		crc:SetFaction(faction)
-	end
-	if(duration) then
-		crc:Despawn(duration, 0)
-	end
+    local x,y,z,o = self:GetLocation()
+    local crc = MapMgr:GetInterface():SpawnCreature(entry, x,y,z,o, true, true, 0, 0, phase)
+    if(faction > 0) then
+        crc:SetFaction(faction)
+    end
+    if(duration) then
+        crc:Despawn(duration, 0)
+    end
 end
 function PLAYER:SpawnLocalGameObject(go_entry, phase, duration)
-	local x,y,z,o = self:GetLocation()
-	local go = MapMgr:GetInterface():SpawnGameObject(entry, x, y, z, o, true, 0, 0, phase)
-	if(duration) then
-		go:Despawn(duration ,0)
-	end
+    local x,y,z,o = self:GetLocation()
+    local go = MapMgr:GetInterface():SpawnGameObject(entry, x, y, z, o, true, 0, 0, phase)
+    if(duration) then
+        go:Despawn(duration ,0)
+    end
 end
 function PLAYER:MoveToUnit(target)
-	local x,y,z = target:GetLocation()
-	self:MoveTo(x,y,z,self:GetO())
+    local x,y,z = target:GetLocation()
+    self:MoveTo(x,y,z,self:GetO())
 end
 
 function PLAYER:IsCasting()
-	return player:GetCurrentSpell() ~= nil
+    return player:GetCurrentSpell() ~= nil
 end
 function PLAYER:GetLocalCreature(entry)
-	local x,y,z = self:GetLocation()
-	local crc = MapMgr:GetInterface():GetCreatureNearestCoords(x,y,z,entry)
-	return crc
+    local x,y,z = self:GetLocation()
+    local crc = MapMgr:GetInterface():GetCreatureNearestCoords(x,y,z,entry)
+    return crc
 end
 function PLAYER:GetLocalGameObject(entry)
-	local x,y,z = self:GetLocation()
-	local go = MapMgr:GetInterface():GetGameObjectNearestCoords(x,y,z,entry)
-	return go
+    local x,y,z = self:GetLocation()
+    local go = MapMgr:GetInterface():GetGameObjectNearestCoords(x,y,z,entry)
+    return go
 end
 
 function PLAYER:AddSkill(skill,cur,_max)

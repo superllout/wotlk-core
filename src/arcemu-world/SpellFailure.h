@@ -209,7 +209,7 @@ enum SpellCastResult
     SPELL_FAILED_SUMMON_PENDING                 = 0xB7,
     SPELL_FAILED_MAX_SOCKETS                    = 0xB8,
     SPELL_FAILED_PET_CAN_RENAME                 = 0xB9,
-    SPELL_FAILED_TARGET_CANNOT_BE_RESURRECTED	= 0xBA,
+    SPELL_FAILED_TARGET_CANNOT_BE_RESURRECTED    = 0xBA,
     SPELL_FAILED_UNKNOWN                        = 0xBB
 };
 #define SPELL_CANCAST_OK SPELL_FAILED_SUCCESS
@@ -247,7 +247,7 @@ enum MOUNT_FAILURE
 
 enum DISMOUNT_FAILURE
 {
-    ERR_DISMOUNT_NOPET											 = 0,
+    ERR_DISMOUNT_NOPET                                             = 0,
     ERR_DISMOUNT_NOTMOUNTED                                      = 1,
     ERR_DISMOUNT_NOTYOURPET                                      = 2
 };

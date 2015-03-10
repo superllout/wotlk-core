@@ -41,14 +41,14 @@ pthread_mutexattr_t Mutex::attr;
 
 Mutex::Mutex()
 {
-	if(!attr_initalized)
-	{
-		pthread_mutexattr_init(&attr);
-		pthread_mutexattr_settype(&attr, recursive_mutex_flag);
-		attr_initalized = true;
-	}
+    if(!attr_initalized)
+    {
+        pthread_mutexattr_init(&attr);
+        pthread_mutexattr_settype(&attr, recursive_mutex_flag);
+        attr_initalized = true;
+    }
 
-	pthread_mutex_init(&mutex, &attr);
+    pthread_mutex_init(&mutex, &attr);
 }
 
 Mutex::~Mutex() { pthread_mutex_destroy(&mutex); }
@@ -58,9 +58,9 @@ Mutex::~Mutex() { pthread_mutex_destroy(&mutex); }
 bool Mutex::AttemptAcquire()
 {
 #ifndef WIN32
-	return (pthread_mutex_trylock(&mutex) == 0);
+    return (pthread_mutex_trylock(&mutex) == 0);
 #else
-	return (TryEnterCriticalSection(&cs) == TRUE ? true : false);
+    return (TryEnterCriticalSection(&cs) == TRUE ? true : false);
 #endif
 }
 
@@ -68,9 +68,9 @@ bool Mutex::AttemptAcquire()
 void Mutex::Acquire()
 {
 #ifndef WIN32
-	pthread_mutex_lock(&mutex);
+    pthread_mutex_lock(&mutex);
 #else
-	EnterCriticalSection(&cs);
+    EnterCriticalSection(&cs);
 #endif
 }
 
@@ -78,9 +78,9 @@ void Mutex::Acquire()
 void Mutex::Release()
 {
 #ifndef WIN32
-	pthread_mutex_unlock(&mutex);
+    pthread_mutex_unlock(&mutex);
 #else
-	LeaveCriticalSection(&cs);
+    LeaveCriticalSection(&cs);
 #endif
 }
 
@@ -89,47 +89,47 @@ void Mutex::Release()
 
 bool FastMutex::AttemptAcquire()
 {
-	DWORD thread_id = GetCurrentThreadId();
-	if(thread_id == (DWORD)m_lock)
-	{
-		++m_recursiveCount;
-		return true;
-	}
+    DWORD thread_id = GetCurrentThreadId();
+    if(thread_id == (DWORD)m_lock)
+    {
+        ++m_recursiveCount;
+        return true;
+    }
 
-	DWORD owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
-	if(owner == 0)
-	{
-		++m_recursiveCount;
-		return true;
-	}
+    DWORD owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
+    if(owner == 0)
+    {
+        ++m_recursiveCount;
+        return true;
+    }
 
-	return false;
+    return false;
 }
 
 void FastMutex::Acquire()
 {
-	DWORD thread_id = GetCurrentThreadId(), owner;
-	if(thread_id == (DWORD)m_lock)
-	{
-		++m_recursiveCount;
-		return;
-	}
+    DWORD thread_id = GetCurrentThreadId(), owner;
+    if(thread_id == (DWORD)m_lock)
+    {
+        ++m_recursiveCount;
+        return;
+    }
 
-	for(;;)
-	{
-		owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
-		if(owner == 0)
-			break;
-		::Sleep(0);
-	}
-	++m_recursiveCount;
+    for(;;)
+    {
+        owner = InterlockedCompareExchange(&m_lock, thread_id, 0);
+        if(owner == 0)
+            break;
+        ::Sleep(0);
+    }
+    ++m_recursiveCount;
 
 }
 
 void FastMutex::Release()
 {
-	if((--m_recursiveCount) == 0)
-		InterlockedExchange(&m_lock, 0);
+    if((--m_recursiveCount) == 0)
+        InterlockedExchange(&m_lock, 0);
 }
 
 #endif

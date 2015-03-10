@@ -34,72 +34,72 @@ WorldRunnable::WorldRunnable() : CThread()
 
 bool WorldRunnable::run()
 {
-	SetThreadName("WorldRunnable (non-instance/logon)");
-	uint32 LastWorldUpdate = getMSTime();
-	uint32 LastSessionsUpdate = getMSTime();
+    SetThreadName("WorldRunnable (non-instance/logon)");
+    uint32 LastWorldUpdate = getMSTime();
+    uint32 LastSessionsUpdate = getMSTime();
 
-	THREAD_TRY_EXECUTION
+    THREAD_TRY_EXECUTION
 
-	while(GetThreadState() != THREADSTATE_TERMINATE)
-	{
-		// Provision for pausing this thread.
-		if(GetThreadState() == THREADSTATE_PAUSED)
-		{
-			while(GetThreadState() == THREADSTATE_PAUSED)
-			{
-				Arcemu::Sleep(200);
-			}
-		}
-		if(GetThreadState() == THREADSTATE_TERMINATE)
-			break;
+    while(GetThreadState() != THREADSTATE_TERMINATE)
+    {
+        // Provision for pausing this thread.
+        if(GetThreadState() == THREADSTATE_PAUSED)
+        {
+            while(GetThreadState() == THREADSTATE_PAUSED)
+            {
+                Arcemu::Sleep(200);
+            }
+        }
+        if(GetThreadState() == THREADSTATE_TERMINATE)
+            break;
 
-		ThreadState.SetVal(THREADSTATE_BUSY);
+        ThreadState.SetVal(THREADSTATE_BUSY);
 
-		uint32 diff;
-		//calc time passed
-		uint32 now, execution_start;
-		now = getMSTime();
-		execution_start = now;
+        uint32 diff;
+        //calc time passed
+        uint32 now, execution_start;
+        now = getMSTime();
+        execution_start = now;
 
-		if(now < LastWorldUpdate) //overrun
-			diff = WORLD_UPDATE_DELAY;
-		else
-			diff = now - LastWorldUpdate;
+        if(now < LastWorldUpdate) //overrun
+            diff = WORLD_UPDATE_DELAY;
+        else
+            diff = now - LastWorldUpdate;
 
-		LastWorldUpdate = now;
-		sWorld.Update(diff);
+        LastWorldUpdate = now;
+        sWorld.Update(diff);
 
-		now = getMSTime();
+        now = getMSTime();
 
-		if(now < LastSessionsUpdate) //overrun
-			diff = WORLD_UPDATE_DELAY;
-		else
-			diff = now - LastSessionsUpdate;
+        if(now < LastSessionsUpdate) //overrun
+            diff = WORLD_UPDATE_DELAY;
+        else
+            diff = now - LastSessionsUpdate;
 
-		LastSessionsUpdate = now;
-		sWorld.UpdateSessions(diff);
+        LastSessionsUpdate = now;
+        sWorld.UpdateSessions(diff);
 
-		now = getMSTime();
-		//we have to wait now
+        now = getMSTime();
+        //we have to wait now
 
-		if(execution_start > now)//overrun
-			diff = WORLD_UPDATE_DELAY - now;
+        if(execution_start > now)//overrun
+            diff = WORLD_UPDATE_DELAY - now;
 
-		else
-			diff = now - execution_start; //time used for updating
+        else
+            diff = now - execution_start; //time used for updating
 
-		if(GetThreadState() == THREADSTATE_TERMINATE)
-			break;
+        if(GetThreadState() == THREADSTATE_TERMINATE)
+            break;
 
-		ThreadState.SetVal(THREADSTATE_SLEEPING);
+        ThreadState.SetVal(THREADSTATE_SLEEPING);
 
-		/*This is execution time compensating system
-			if execution took more than default delay
-			no need to make this sleep*/
-		if(diff < WORLD_UPDATE_DELAY)
-			Arcemu::Sleep(WORLD_UPDATE_DELAY - diff);
-	}
+        /*This is execution time compensating system
+            if execution took more than default delay
+            no need to make this sleep*/
+        if(diff < WORLD_UPDATE_DELAY)
+            Arcemu::Sleep(WORLD_UPDATE_DELAY - diff);
+    }
 
-	THREAD_HANDLE_CRASH
-	return true;
+    THREAD_HANDLE_CRASH
+    return true;
 }

@@ -13,34 +13,34 @@
 //#include "lua_instance.h"
 namespace luabridge
 {
-	template <typename T>
-	class cshared_ptr
-	{
-		T * ptr;
-	public:
-		cshared_ptr (T* ptr_);
+    template <typename T>
+    class cshared_ptr
+    {
+        T * ptr;
+    public:
+        cshared_ptr (T* ptr_);
 
-		// Copy constructors: the first one is necessary to write out,
-		// since the compiler doesn't recognize the second as a copy ctor
-		cshared_ptr (const cshared_ptr<T>& rhs);
-		template <typename U> cshared_ptr (const cshared_ptr<U>& rhs);
+        // Copy constructors: the first one is necessary to write out,
+        // since the compiler doesn't recognize the second as a copy ctor
+        cshared_ptr (const cshared_ptr<T>& rhs);
+        template <typename U> cshared_ptr (const cshared_ptr<U>& rhs);
 
-		template <typename U> cshared_ptr& operator =
-			(const cshared_ptr<U> & rhs);
+        template <typename U> cshared_ptr& operator =
+            (const cshared_ptr<U> & rhs);
 
-		T* get();
-		void set(T *);
+        T* get();
+        void set(T *);
 
-		T* operator * ();
-		T* operator->();
-		long use_count () const;
-		
-		void reset ();
-		~cshared_ptr ();
-	};
+        T* operator * ();
+        T* operator->();
+        long use_count () const;
+        
+        void reset ();
+        ~cshared_ptr ();
+    };
 
-	// Include implementation
-#	include "impl/shared_ptr.hpp"
+    // Include implementation
+#    include "impl/shared_ptr.hpp"
 }
 
 #endif

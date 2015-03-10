@@ -91,7 +91,7 @@ static const char * GetPlainName(const char * szFileName)
 void ReadLiquidTypeTableDBC()
 {
     printf("Read LiquidType.dbc file...");
-	
+    
     DBCFile dbc("DBFilesClient\\LiquidType.dbc");
     if(!dbc.open())
     {
@@ -307,7 +307,7 @@ bool fillArchiveNameVector(std::vector<std::string>& pArchiveNames)
     searchLocales.push_back("enTW");
     searchLocales.push_back("esMX");
     searchLocales.push_back("ruRU");
-	searchLocales.push_back("ptBR");
+    searchLocales.push_back("ptBR");
 
     for (std::vector<std::string>::iterator i = searchLocales.begin(); i != searchLocales.end(); ++i)
     {

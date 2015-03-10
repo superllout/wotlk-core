@@ -27,7 +27,7 @@
 void Database::CleanupLibs()
 {
 #if defined(ENABLE_DATABASE_MYSQL)
-	mysql_library_end();
+    mysql_library_end();
 #endif
 }
 
@@ -35,6 +35,6 @@ void Database::CleanupLibs()
 Database* Database::CreateDatabaseInterface()
 {
 #if defined(ENABLE_DATABASE_MYSQL)
-	return new MySQLDatabase();
+    return new MySQLDatabase();
 #endif
 }

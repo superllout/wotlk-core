@@ -76,15 +76,15 @@ end
 
 function SetWeather(forWhat, forWhatExtra, _type, Density)
    local sound = 0;
-	if (_type == 2 or _type == 4) then                                             
+    if (_type == 2 or _type == 4) then                                             
       if (Density < 0.40) then
          sound = 8533;
       elseif (Density < 0.70) then
          sound = 8534;
       else
          sound = 8535;
-		end
-	elseif (_type == 8) then
+        end
+    elseif (_type == 8) then
       if (Density < 0.40) then
          sound = 8536;
       elseif (Density < 0.70) then
@@ -92,7 +92,7 @@ function SetWeather(forWhat, forWhatExtra, _type, Density)
       else
          sound = 8538;
       end
-	elseif (_type == 16) then
+    elseif (_type == 16) then
       if (Density < 0.40) then
          sound = 8556;
       elseif(Density < 0.70) then
@@ -106,7 +106,7 @@ function SetWeather(forWhat, forWhatExtra, _type, Density)
    if (_type == 0 or _type == 1) then
       data:WriteFloat(0);
       data:WriteUInt32(0);
-      data:WriteUInt8(0);		
+      data:WriteUInt8(0);        
    else
       data:WriteFloat(Density);
       data:WriteUInt32(sound);

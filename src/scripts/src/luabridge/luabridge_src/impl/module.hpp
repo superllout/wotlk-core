@@ -15,29 +15,29 @@
 template <typename FnPtr, typename Ret = typename fnptr<FnPtr>::resulttype>
 struct function_proxy
 {
-	typedef typename fnptr<FnPtr>::params params;
-	static int f (lua_State *L)
-	{
-		FnPtr fp = (FnPtr)lua_touserdata(L, lua_upvalueindex(1));
-		arglist<params> args(L);
-		int top = lua_gettop(L);
-		tdstack<Ret>::push(L, fnptr<FnPtr>::apply(fp, args));
-		return (lua_gettop(L) - top);
-	}
+    typedef typename fnptr<FnPtr>::params params;
+    static int f (lua_State *L)
+    {
+        FnPtr fp = (FnPtr)lua_touserdata(L, lua_upvalueindex(1));
+        arglist<params> args(L);
+        int top = lua_gettop(L);
+        tdstack<Ret>::push(L, fnptr<FnPtr>::apply(fp, args));
+        return (lua_gettop(L) - top);
+    }
 };
 
 template <typename FnPtr>
 struct function_proxy <FnPtr, void>
 {
-	typedef typename fnptr<FnPtr>::params params;
-	static int f (lua_State *L)
-	{
-		FnPtr fp = (FnPtr)lua_touserdata(L, lua_upvalueindex(1));
-		arglist<params> args(L);
-		int top = lua_gettop(L);
-		fnptr<FnPtr>::apply(fp, args);
-		return (lua_gettop(L) - top);
-	}
+    typedef typename fnptr<FnPtr>::params params;
+    static int f (lua_State *L)
+    {
+        FnPtr fp = (FnPtr)lua_touserdata(L, lua_upvalueindex(1));
+        arglist<params> args(L);
+        int top = lua_gettop(L);
+        fnptr<FnPtr>::apply(fp, args);
+        return (lua_gettop(L) - top);
+    }
 };
 
 /*
@@ -47,20 +47,20 @@ struct function_proxy <FnPtr, void>
 template <typename FnPtr>
 module& module::function (FnPtr fp, const char * start, ...)
 {
-	va_list arglist;
-	va_start(arglist, start);
-	const char * name = start;
-	lua_pushlightuserdata(L, (void *)fp);
-	lua_pushcclosure(L, &function_proxy<FnPtr>::f, 1);
-	while(name != NULL)
-	{
-		lua_pushvalue(L, -1);
-		lua_setglobal(L, name);
-		name = va_arg(arglist, const char*);
-	}
-	va_end(arglist);
-	lua_pop(L, 1);
-	return *this;
+    va_list arglist;
+    va_start(arglist, start);
+    const char * name = start;
+    lua_pushlightuserdata(L, (void *)fp);
+    lua_pushcclosure(L, &function_proxy<FnPtr>::f, 1);
+    while(name != NULL)
+    {
+        lua_pushvalue(L, -1);
+        lua_setglobal(L, name);
+        name = va_arg(arglist, const char*);
+    }
+    va_end(arglist);
+    lua_pop(L, 1);
+    return *this;
 }
 
 /*
@@ -72,17 +72,17 @@ module& module::function (FnPtr fp, const char * start, ...)
 template <typename U>
 int propget_proxy (lua_State *L)
 {
-	U *data = (U *)lua_touserdata(L, lua_upvalueindex(1));
-	tdstack<U>::push(L, *data);
-	return 1;
+    U *data = (U *)lua_touserdata(L, lua_upvalueindex(1));
+    tdstack<U>::push(L, *data);
+    return 1;
 }
 
 template <typename U>
 int propset_proxy (lua_State *L)
 {
-	U *data = (U *)lua_touserdata(L, lua_upvalueindex(1));
-	*data = tdstack<U>::get(L, 1);
-	return 0;
+    U *data = (U *)lua_touserdata(L, lua_upvalueindex(1));
+    *data = tdstack<U>::get(L, 1);
+    return 0;
 }
 
 /*
@@ -92,25 +92,25 @@ int propset_proxy (lua_State *L)
 template <typename T>
 class__<T> module::class_ ()
 {
-	return class__<T>(L);
+    return class__<T>(L);
 }
 
 template <typename T, typename Base>
 class__<T> module::subclass (const char *name, bool destruct)
 {
-	assert(classname<Base>::name() != classname_unknown);
-	return class__<T>(L, name, classname<Base>::name(), destruct);
+    assert(classname<Base>::name() != classname_unknown);
+    return class__<T>(L, name, classname<Base>::name(), destruct);
 }
 
 template <typename T>
 class__<T> module::class_ (const char *name, bool destruct)
 {
-	return class__<T>(L, name, destruct);
+    return class__<T>(L, name, destruct);
 }
 
 template <typename T>
 module& module::class_decl(const char * name)
 {
-	classname<T>::set_name(name);
-	return *this;
+    classname<T>::set_name(name);
+    return *this;
 }

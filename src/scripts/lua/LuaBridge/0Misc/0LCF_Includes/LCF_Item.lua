@@ -62,17 +62,17 @@ end
 function ITEM:GetContainerItemCount(itemid)
    if (not self:IsContainer()) then return 0; end
    local pCont = TO_CONTAINER(self);
-	local TotalSlots = pCont:GetNumSlots();
+    local TotalSlots = pCont:GetNumSlots();
    local cnt = 0;
-	for i=0, TotalSlots do
-		local item = pCont:GetItem(i);
-		if (item) then
-			if (item:GetEntry() == itemid) then
-				cnt = cnt + item:GetStackCount(); 
-			end
-		end
-	end
-	return cnt;
+    for i=0, TotalSlots do
+        local item = pCont:GetItem(i);
+        if (item) then
+            if (item:GetEntry() == itemid) then
+                cnt = cnt + item:GetStackCount(); 
+            end
+        end
+    end
+    return cnt;
 end
 
 local oldGetItemLink = getregistry("Item").GetItemLink;

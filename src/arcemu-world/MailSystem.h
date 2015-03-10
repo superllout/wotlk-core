@@ -33,12 +33,12 @@ enum MailCMD
 
 enum MailFlags
 {
-    MAIL_FLAG_NO_COST_FOR_GM					= 1,
-    MAIL_FLAG_CAN_SEND_TO_OPPOSITE_FACTION	  = 2,
+    MAIL_FLAG_NO_COST_FOR_GM                    = 1,
+    MAIL_FLAG_CAN_SEND_TO_OPPOSITE_FACTION      = 2,
     MAIL_FLAG_CAN_SEND_TO_OPPOSITE_FACTION_GM   = 4,
-    MAIL_FLAG_DISABLE_POSTAGE_COSTS			 = 8,
-    MAIL_FLAG_DISABLE_HOUR_DELAY_FOR_ITEMS	  = 16,
-    MAIL_FLAG_NO_EXPIRY						 = 32,
+    MAIL_FLAG_DISABLE_POSTAGE_COSTS             = 8,
+    MAIL_FLAG_DISABLE_HOUR_DELAY_FOR_ITEMS      = 16,
+    MAIL_FLAG_NO_EXPIRY                         = 32,
 };
 
 enum MailTypes
@@ -66,12 +66,12 @@ enum MailError
 enum MailStationery
 {
     // item:
-    MAIL_STATIONERY_TEST1		= 1,	// 8164
-    MAIL_STATIONERY_DEFAULT		= 41,	// 9311
-    MAIL_STATIONERY_GM			= 61,	// 18154
-    MAIL_STATIONERY_AUCTION		= 62,	// 21140
-    MAIL_STATIONERY_VAL			= 64,	// 22058, Valentines day
-    MAIL_STATIONERY_CHR			= 65	// 34171, Winter
+    MAIL_STATIONERY_TEST1        = 1,    // 8164
+    MAIL_STATIONERY_DEFAULT        = 41,    // 9311
+    MAIL_STATIONERY_GM            = 61,    // 18154
+    MAIL_STATIONERY_AUCTION        = 62,    // 21140
+    MAIL_STATIONERY_VAL            = 64,    // 22058, Valentines day
+    MAIL_STATIONERY_CHR            = 65    // 34171, Winter
 };
 
 enum MailCheckMask
@@ -88,74 +88,74 @@ enum MailCheckMask
 
 struct MailMessage
 {
-	uint32 message_id;
-	uint32 message_type;
-	uint64 player_guid;
-	uint64 sender_guid;
-	string subject;
-	string body;
-	uint32 money;
-	vector<uint32> items;
-	uint32 cod;
-	uint32 stationery;
-	uint32 expire_time;
-	uint32 delivery_time;
-	uint32 checked_flag;
-	bool deleted_flag;
+    uint32 message_id;
+    uint32 message_type;
+    uint64 player_guid;
+    uint64 sender_guid;
+    string subject;
+    string body;
+    uint32 money;
+    vector<uint32> items;
+    uint32 cod;
+    uint32 stationery;
+    uint32 expire_time;
+    uint32 delivery_time;
+    uint32 checked_flag;
+    bool deleted_flag;
 
-	bool AddMessageDataToPacket(WorldPacket & data);
+    bool AddMessageDataToPacket(WorldPacket & data);
 };
 
 typedef map<uint32, MailMessage> MessageMap;
 
 class Mailbox
 {
-	protected:
-		uint64 owner;
-		MessageMap Messages;
+    protected:
+        uint64 owner;
+        MessageMap Messages;
 
-	public:
-		Mailbox(uint64 owner_) : owner(owner_) {}
+    public:
+        Mailbox(uint64 owner_) : owner(owner_) {}
 
-		void AddMessage(MailMessage* Message);
-		void DeleteMessage(uint32 MessageId, bool sql);
-		MailMessage* GetMessage(uint32 message_id)
-		{
-			MessageMap::iterator iter = Messages.find(message_id);
-			if(iter == Messages.end())
-				return NULL;
-			return &(iter->second);
-		}
+        void AddMessage(MailMessage* Message);
+        void DeleteMessage(uint32 MessageId, bool sql);
+        MailMessage* GetMessage(uint32 message_id)
+        {
+            MessageMap::iterator iter = Messages.find(message_id);
+            if(iter == Messages.end())
+                return NULL;
+            return &(iter->second);
+        }
 
-		WorldPacket* BuildMailboxListingPacket();
-		void CleanupExpiredMessages();
-		ARCEMU_INLINE size_t MessageCount() { return Messages.size(); }
-		void FillTimePacket(WorldPacket & data);
-		ARCEMU_INLINE uint64 GetOwner() { return owner; }
-		void Load(QueryResult* result);
+        WorldPacket* BuildMailboxListingPacket();
+        void CleanupExpiredMessages();
+        ARCEMU_INLINE size_t MessageCount() { return Messages.size(); }
+        void FillTimePacket(WorldPacket & data);
+        ARCEMU_INLINE uint64 GetOwner() { return owner; }
+        void Load(QueryResult* result);
 };
 
 
 class SERVER_DECL MailSystem : public Singleton<MailSystem>, public EventableObject
 {
-	public:
+    public:
 
-		void StartMailSystem();
-		MailError DeliverMessage(uint64 recipent, MailMessage* message);
-		void RemoveMessageIfDeleted(uint32 message_id, Player* plr);
-		void SaveMessageToSQL(MailMessage* message);
-		void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
+        void StartMailSystem();
+        MailError DeliverMessage(uint64 recipent, MailMessage* message);
+        void RemoveMessageIfDeleted(uint32 message_id, Player* plr);
+        void SaveMessageToSQL(MailMessage* message);
+        void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
                                   uint32 cod, vector<uint64> &item_guids, uint32 stationery = MAIL_STATIONERY_DEFAULT, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
 
-		//overload to keep backward compatibility (passing just 1 item guid instead of a vector)
-		void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
+        //overload to keep backward compatibility (passing just 1 item guid instead of a vector)
+        void SendAutomatedMessage(uint32 type, uint64 sender, uint64 receiver, string subject, string body, uint32 money,
                                   uint32 cod, uint64 item_guid, uint32 stationery = MAIL_STATIONERY_DEFAULT, MailCheckMask checked = MAIL_CHECK_MASK_HAS_BODY, uint32 deliverdelay = 0);
 
-		ARCEMU_INLINE bool MailOption(uint32 flag)
-		{
-			return (config_flags & flag) ? true : false;
-		}
-		uint32 config_flags;
+        ARCEMU_INLINE bool MailOption(uint32 flag)
+        {
+            return (config_flags & flag) ? true : false;
+        }
+        uint32 config_flags;
 
 };
 

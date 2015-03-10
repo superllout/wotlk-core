@@ -20,7 +20,7 @@
 
 extern "C"
 {
-	// we're C++, and LUA is C, so the compiler needs to know to use C function names.
+    // we're C++, and LUA is C, so the compiler needs to know to use C function names.
 #include "../../lualib/lua.h"
 #include "../../lualib/lauxlib.h"
 #include "../../lualib/lualib.h"
@@ -36,17 +36,17 @@ extern "C"
 
 #include "../luabridge_src/luabridge.hpp"
 
-/*	A thread local storage lua_instance that will only get initialized for maps that attempt to run lua scripts. */
-/*	A lua_State that acts like a compiler for lua scripts, it loads scripts during engine startup to detect and report any errors */
+/*    A thread local storage lua_instance that will only get initialized for maps that attempt to run lua scripts. */
+/*    A lua_State that acts like a compiler for lua scripts, it loads scripts during engine startup to detect and report any errors */
 
 #define lua_state (lua_instance.get() )->lu
 
 
 
 //Used for checking headers in scripts.
-#define ARCLUA_PREFIX "--?!"	//begins with a comment notation so that Lua will ignore our header.
+#define ARCLUA_PREFIX "--?!"    //begins with a comment notation so that Lua will ignore our header.
 #define ARCLUA_PREFIX_SIZE 4
-#define ARCLUA_SUFFIX '\x0A'	//line feed char
+#define ARCLUA_SUFFIX '\x0A'    //line feed char
 #define ARCLUA_SUFFIX_SIZE 1
 #define GET_LOCK
 #define RELEASE_LOCK
@@ -56,75 +56,75 @@ extern "C"
 
 namespace lua_engine
 {
-	extern CreatureAIScript* createluacreature(Creature*);
-	extern GameObjectAIScript* createluagameobject(GameObject*);
-	extern QuestScript* createluaquest(uint32);
-	extern Arcemu::Gossip::Script* createunitgossipInterface(uint32 id);
-	extern Arcemu::Gossip::Script* createitemgossipInterface(uint32 id);
-	extern Arcemu::Gossip::Script* creategogossipInterface(uint32 id);
-	extern InstanceScript* createluainstance(MapMgr*);
+    extern CreatureAIScript* createluacreature(Creature*);
+    extern GameObjectAIScript* createluagameobject(GameObject*);
+    extern QuestScript* createluaquest(uint32);
+    extern Arcemu::Gossip::Script* createunitgossipInterface(uint32 id);
+    extern Arcemu::Gossip::Script* createitemgossipInterface(uint32 id);
+    extern Arcemu::Gossip::Script* creategogossipInterface(uint32 id);
+    extern InstanceScript* createluainstance(MapMgr*);
 
-	typedef HM_NAMESPACE::hash_map<std::string, PLUA_SCRIPT> LuaScriptData;
-	typedef std::set<uint32> hooked_dummySpells;
-	typedef std::set<MapMgr*> ActiveStates;
+    typedef HM_NAMESPACE::hash_map<std::string, PLUA_SCRIPT> LuaScriptData;
+    typedef std::set<uint32> hooked_dummySpells;
+    typedef std::set<MapMgr*> ActiveStates;
 
-	//static Object binding maps.
-	//static InstanceInterfaceMap m_instanceInterfaceMap;
-	//All scripts are read and stored here, then when new states are created, they load the script data contained here.
-	extern LuaScriptData compiled_scripts;
-	extern hooked_dummySpells _hooked_dummies;
-	//Store thread ids and whether they need to restart.
-	extern ActiveStates activeStates;
-	extern FastMutex activestates_lock;
-	//Locked when we are accessing cached script data
-	extern FastMutex scriptLock;
-
-
-	static void startupEngine();
-	static void loadScripts(PLUA_INSTANCE);
-	extern bool loadScript(const char*);
-	static void loadScripts();
-	static void scriptload_searchdir(char* Dirname, deque<string>&);
-	extern void restartEngine();
-	//static void shutdownEngine();
-	extern void restartThread(MapMgr*);
-	extern void shutdownThread(MapMgr*);
-
-	static void unload_resources(PLUA_INSTANCE);
-	extern void report(lua_State*);
-	//static void loadCompiler(PLUA_INSTANCE);
-	static void loadState(PLUA_INSTANCE);
-	//a lua reader that simply passes lua script data.
-	static const char* readScript(lua_State*, void*, size_t*);
-	//a lua writer that dumps scripts in binary form
-	//static int dumpScript(lua_State *, const void *, size_t, void*);
-
-	//static void dumpScripts2HDD();
-	//special header parsing
-	static void parseHeader(PLUA_SCRIPT);
-	//c to lua and lua to c methods
-	extern void BeginLuaFunctionCall(lua_function ref);
-	extern bool ExecuteLuaFunction(int = 0, int = 0, variadic_parameter** = NULL, bool = false);
-	extern void ExecuteLuaFunction(variadic_parameter*);
-	extern void EndLuaFunctionCall(int results = 0);
+    //static Object binding maps.
+    //static InstanceInterfaceMap m_instanceInterfaceMap;
+    //All scripts are read and stored here, then when new states are created, they load the script data contained here.
+    extern LuaScriptData compiled_scripts;
+    extern hooked_dummySpells _hooked_dummies;
+    //Store thread ids and whether they need to restart.
+    extern ActiveStates activeStates;
+    extern FastMutex activestates_lock;
+    //Locked when we are accessing cached script data
+    extern FastMutex scriptLock;
 
 
-	//Binding methods, implemented in other files to keep things neat.
-	extern void bindRegisterMethods(luabridge::module &);
-	extern void bindObjectMethods(luabridge::module &);
-	extern void bindUnitMethods(luabridge::module &);
-	extern void bindCreatureMethods(luabridge::module &);
-	extern void bindPlayerMethods(luabridge::module &);
-	extern void bindQuestMethods(luabridge::module &);
-	extern void bindGameobjectMethods(luabridge::module &);
-	extern void bindSQLMethods(luabridge::module &);
-	extern void bindSpellMethods(luabridge::module &);
-	extern void bindPacketMethods(luabridge::module &);
-	extern void bindAuraMethods(luabridge::module &);
-	extern void bindTaxiMethods(luabridge::module &);
-	extern void bindItemMethods(luabridge::module &);
-	extern void bindGlobalMethods(luabridge::module &);
-	extern void bindMapMethods(luabridge::module &);
+    static void startupEngine();
+    static void loadScripts(PLUA_INSTANCE);
+    extern bool loadScript(const char*);
+    static void loadScripts();
+    static void scriptload_searchdir(char* Dirname, deque<string>&);
+    extern void restartEngine();
+    //static void shutdownEngine();
+    extern void restartThread(MapMgr*);
+    extern void shutdownThread(MapMgr*);
+
+    static void unload_resources(PLUA_INSTANCE);
+    extern void report(lua_State*);
+    //static void loadCompiler(PLUA_INSTANCE);
+    static void loadState(PLUA_INSTANCE);
+    //a lua reader that simply passes lua script data.
+    static const char* readScript(lua_State*, void*, size_t*);
+    //a lua writer that dumps scripts in binary form
+    //static int dumpScript(lua_State *, const void *, size_t, void*);
+
+    //static void dumpScripts2HDD();
+    //special header parsing
+    static void parseHeader(PLUA_SCRIPT);
+    //c to lua and lua to c methods
+    extern void BeginLuaFunctionCall(lua_function ref);
+    extern bool ExecuteLuaFunction(int = 0, int = 0, variadic_parameter** = NULL, bool = false);
+    extern void ExecuteLuaFunction(variadic_parameter*);
+    extern void EndLuaFunctionCall(int results = 0);
+
+
+    //Binding methods, implemented in other files to keep things neat.
+    extern void bindRegisterMethods(luabridge::module &);
+    extern void bindObjectMethods(luabridge::module &);
+    extern void bindUnitMethods(luabridge::module &);
+    extern void bindCreatureMethods(luabridge::module &);
+    extern void bindPlayerMethods(luabridge::module &);
+    extern void bindQuestMethods(luabridge::module &);
+    extern void bindGameobjectMethods(luabridge::module &);
+    extern void bindSQLMethods(luabridge::module &);
+    extern void bindSpellMethods(luabridge::module &);
+    extern void bindPacketMethods(luabridge::module &);
+    extern void bindAuraMethods(luabridge::module &);
+    extern void bindTaxiMethods(luabridge::module &);
+    extern void bindItemMethods(luabridge::module &);
+    extern void bindGlobalMethods(luabridge::module &);
+    extern void bindMapMethods(luabridge::module &);
 
 
 //push macros
@@ -157,7 +157,7 @@ namespace lua_engine
 #define le lua_engine
 #define li LUA_INSTANCE
 
-//	We can no longer insert double pointers so we are safe here.
+//    We can no longer insert double pointers so we are safe here.
 #define RegisterHook(evt, _func) { if(!m_scriptMgr->has_hook(evt, _func) ) m_scriptMgr->register_hook( (ServerHookEvents)(evt), (_func) ); }
 
 extern void DestroyAllLuaEvents(PLUA_INSTANCE instance);

@@ -18,22 +18,22 @@ Staff of Moon Project, Feb 2008
 --Moon April 2008]]
 
 function SunbladeKeeper_OnCombat(Unit, Event)
-	Unit:RegisterAIUpdateEvent(6000)
+    Unit:RegisterAIUpdateEvent(6000)
 end
 
 function SunbladeKeeper_ShadowBolt(Unit, Event)
-	if Unit:GetRandomPlayer(7) then
-		Unit:FullCastSpellOnTarget(15232, Unit:GetRandomPlayer(7))
-	end
+    if Unit:GetRandomPlayer(7) then
+        Unit:FullCastSpellOnTarget(15232, Unit:GetRandomPlayer(7))
+    end
 end
 
 
 function SunbladeKeeper_LeaveCombat(Unit, Event)
-	Unit:RegisterAIUpdateEvent()
+    Unit:RegisterAIUpdateEvent()
 end
 
 function SunbladeKeeper_Died(Unit, Event)
-	Unit:RegisterAIUpdateEvent()
+    Unit:RegisterAIUpdateEvent()
 end
 
 

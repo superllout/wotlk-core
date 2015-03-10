@@ -60,20 +60,20 @@
 
 
 /**
-	CriteriaProgress structure
+    CriteriaProgress structure
 */
 struct CriteriaProgress
 {
-	CriteriaProgress(uint32 iid, uint32 icounter, time_t tdate = time(NULL))
-		:
-		id(iid),
-		counter(icounter),
-		date(tdate)
-	{ }
+    CriteriaProgress(uint32 iid, uint32 icounter, time_t tdate = time(NULL))
+        :
+        id(iid),
+        counter(icounter),
+        date(tdate)
+    { }
 
-	uint32 id;     //! Criteria ID
-	int32 counter; //! Completed count: how many times the criteria has been completed
-	time_t date;   //! Date/time
+    uint32 id;     //! Criteria ID
+    int32 counter; //! Completed count: how many times the criteria has been completed
+    time_t date;   //! Date/time
 };
 
 typedef HM_NAMESPACE::hash_map<uint32, CriteriaProgress*> CriteriaProgressMap;
@@ -85,7 +85,7 @@ class WorldPacket;
 class ObjectMgr;
 
 /**
-	Achievement completion state
+    Achievement completion state
 */
 enum AchievementCompletionState
 {
@@ -95,8 +95,8 @@ enum AchievementCompletionState
 };
 
 /**
-	Achievement criteria conditions
-	Currently these are not being used at all.
+    Achievement criteria conditions
+    Currently these are not being used at all.
 */
 enum AchievementCriteriaCondition
 {
@@ -110,7 +110,7 @@ enum AchievementCriteriaCondition
 };
 
 /**
-	Achievement Criteria Types
+    Achievement Criteria Types
 */
 enum AchievementCriteriaTypes
 {
@@ -268,41 +268,41 @@ Achievement Working List:
 */
 class SERVER_DECL AchievementMgr
 {
-	public:
-		AchievementMgr(Player* pl);
-		~AchievementMgr();
-		void LoadFromDB(QueryResult* achievementResult, QueryResult* criteriaResult);
-		void SaveToDB(QueryBuffer* buf);
-		void CheckAllAchievementCriteria();
-		void SendAllAchievementData(Player* player);
-		void UpdateAchievementCriteria(AchievementCriteriaTypes type, int32 miscvalue1, int32 miscvalue2, uint32 time);
-		void UpdateAchievementCriteria(AchievementCriteriaTypes type);
-		bool GMCompleteAchievement(WorldSession* gmSession, int32 achievementID);
-		bool GMCompleteCriteria(WorldSession* gmSession, int32 criteriaID);
-		void GMResetAchievement(int achievementID);
-		void GMResetCriteria(int criteriaID);
-		bool HasCompleted(uint32 achievementID);
-		uint32 GetCompletedAchievementsCount() const;
-		uint32 GetCriteriaProgressCount();
-		time_t GetCompletedTime(AchievementEntry const* achievement);
-		Player* GetPlayer() { return m_player; }
+    public:
+        AchievementMgr(Player* pl);
+        ~AchievementMgr();
+        void LoadFromDB(QueryResult* achievementResult, QueryResult* criteriaResult);
+        void SaveToDB(QueryBuffer* buf);
+        void CheckAllAchievementCriteria();
+        void SendAllAchievementData(Player* player);
+        void UpdateAchievementCriteria(AchievementCriteriaTypes type, int32 miscvalue1, int32 miscvalue2, uint32 time);
+        void UpdateAchievementCriteria(AchievementCriteriaTypes type);
+        bool GMCompleteAchievement(WorldSession* gmSession, int32 achievementID);
+        bool GMCompleteCriteria(WorldSession* gmSession, int32 criteriaID);
+        void GMResetAchievement(int achievementID);
+        void GMResetCriteria(int criteriaID);
+        bool HasCompleted(uint32 achievementID);
+        uint32 GetCompletedAchievementsCount() const;
+        uint32 GetCriteriaProgressCount();
+        time_t GetCompletedTime(AchievementEntry const* achievement);
+        Player* GetPlayer() { return m_player; }
 
-	private:
-		void GiveAchievementReward(AchievementEntry const* entry);
-		void SendAchievementEarned(AchievementEntry const* achievement);
-		void SendCriteriaUpdate(CriteriaProgress* progress);
-		void SetCriteriaProgress(AchievementCriteriaEntry const* entry, int32 newValue, bool relative = false);
-		void UpdateCriteriaProgress(AchievementCriteriaEntry const* entry, int32 updateByValue);
-		void CompletedCriteria(AchievementCriteriaEntry const* entry);
-		void CompletedAchievement(AchievementEntry const* entry);
-		bool IsCompletedCriteria(AchievementCriteriaEntry const* entry);
-		AchievementCompletionState GetAchievementCompletionState(AchievementEntry const* entry);
+    private:
+        void GiveAchievementReward(AchievementEntry const* entry);
+        void SendAchievementEarned(AchievementEntry const* achievement);
+        void SendCriteriaUpdate(CriteriaProgress* progress);
+        void SetCriteriaProgress(AchievementCriteriaEntry const* entry, int32 newValue, bool relative = false);
+        void UpdateCriteriaProgress(AchievementCriteriaEntry const* entry, int32 updateByValue);
+        void CompletedCriteria(AchievementCriteriaEntry const* entry);
+        void CompletedAchievement(AchievementEntry const* entry);
+        bool IsCompletedCriteria(AchievementCriteriaEntry const* entry);
+        AchievementCompletionState GetAchievementCompletionState(AchievementEntry const* entry);
 
-		RWLock m_lock;
-		Player* m_player;
-		CriteriaProgressMap m_criteriaProgress;
-		CompletedAchievementMap m_completedAchievements;
-		bool isCharacterLoading;
+        RWLock m_lock;
+        Player* m_player;
+        CriteriaProgressMap m_criteriaProgress;
+        CompletedAchievementMap m_completedAchievements;
+        bool isCharacterLoading;
 };
 
 // Function declarations - related to achievements - not in AchievementMgr class - defined in AchievementMgr.cpp

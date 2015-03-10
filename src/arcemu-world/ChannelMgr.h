@@ -21,21 +21,21 @@
 class SERVER_DECL ChannelMgr :  public Singleton < ChannelMgr >
 {
 
-	public:
-		ChannelMgr();
-		~ChannelMgr();
+    public:
+        ChannelMgr();
+        ~ChannelMgr();
 
-		Channel* GetCreateChannel(const char* name, Player* p, uint32 type_id);
-		Channel* GetChannel(const char* name, Player* p);
-		Channel* GetChannel(const char* name, uint32 team);
-		void RemoveChannel(Channel* chn);
-		bool seperatechannels;
+        Channel* GetCreateChannel(const char* name, Player* p, uint32 type_id);
+        Channel* GetChannel(const char* name, Player* p);
+        Channel* GetChannel(const char* name, uint32 team);
+        void RemoveChannel(Channel* chn);
+        bool seperatechannels;
 
-	private:
-		//team 0: alliance, team 1 horde
-		typedef map<string, Channel*> ChannelList;
-		ChannelList Channels[2];
-		Mutex lock;
+    private:
+        //team 0: alliance, team 1 horde
+        typedef map<string, Channel*> ChannelList;
+        ChannelList Channels[2];
+        Mutex lock;
 };
 
 #define channelmgr ChannelMgr::getSingleton()

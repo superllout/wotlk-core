@@ -401,9 +401,9 @@ You should keep in mind that for Instance GO's saving everything should be read 
 r817 | azolex | 2009-05-10 17:30:35 -0400 (Sun, 10 May 2009) | 4 lines
 
 * MoonInstanceScript new functions:
-CreaturePointer				SpawnCreature( uint32 pEntry, float pX, float pY, float pZ, float pO );
-CreaturePointer				SpawnCreature( uint32 pEntry, float pX, float pY, float pZ, float pO, uint32 pFactionId );
-GameObjectPointer			SpawnGameObject( uint32 pEntry, float pX, float pY, float pZ, float pO );
+CreaturePointer                SpawnCreature( uint32 pEntry, float pX, float pY, float pZ, float pO );
+CreaturePointer                SpawnCreature( uint32 pEntry, float pX, float pY, float pZ, float pO, uint32 pFactionId );
+GameObjectPointer            SpawnGameObject( uint32 pEntry, float pX, float pY, float pZ, float pO );
 ------------------------------------------------------------------------
 r816 | M4ksiu | 2009-05-10 16:46:38 -0400 (Sun, 10 May 2009) | 1 line
 
@@ -537,10 +537,10 @@ r792 | azolex | 2009-05-05 08:31:40 -0400 (Tue, 05 May 2009) | 8 lines
 * My utgarde keep, all 3 bosses fully blizzlike, trash also, small to-do left. Tested!
 NOTE: you will need a lot of db updates that i cannot provide atm, as i lack on sources.
 /*
-	To-Do:
-	Ingvar the Plunderer - Ressurection Event
-	Fix despawn(i think all bosses)
-	Add sound ID's
+    To-Do:
+    Ingvar the Plunderer - Ressurection Event
+    Fix despawn(i think all bosses)
+    Add sound ID's
 */
 ------------------------------------------------------------------------
 r791 | mikebeck | 2009-05-05 06:42:39 -0400 (Tue, 05 May 2009) | 5 lines

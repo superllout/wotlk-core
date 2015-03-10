@@ -90,7 +90,7 @@ static const char* const langs[] = {"enGB", "enUS", "deDE", "esES", "frFR", "koK
 
 namespace
 {
-	const int REQUIRED_BUILD = 12340;
+    const int REQUIRED_BUILD = 12340;
 }
 
 
@@ -208,11 +208,11 @@ uint32 ReadBuild(int locale)
         exit(1);
     }
 
-	if( build != REQUIRED_BUILD )
-	{
-		printf( "FATAL ERROR: Required client version: %d\nYour client version: %d", REQUIRED_BUILD, build );
-		exit( 1 );
-	}
+    if( build != REQUIRED_BUILD )
+    {
+        printf( "FATAL ERROR: Required client version: %d\nYour client version: %d", REQUIRED_BUILD, build );
+        exit( 1 );
+    }
 
     return build;
 }
@@ -919,7 +919,7 @@ void ExtractMapsFromMpq(uint32 build)
 
     printf("Extracting maps...\n");
 
-	uint32 map_count = ReadMapDBC();
+    uint32 map_count = ReadMapDBC();
 
     ReadAreaTableDBC();
     ReadLiquidTypeTableDBC();

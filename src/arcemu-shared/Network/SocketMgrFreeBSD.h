@@ -26,76 +26,76 @@ class ListenSocketBase;
 
 class SocketMgr : public Singleton<SocketMgr>
 {
-		// kqueue handle
-		int kq;
+        // kqueue handle
+        int kq;
 
-		// fd -> pointer binding.
-		Socket* fds[SOCKET_HOLDER_SIZE];
-		ListenSocketBase* listenfds[SOCKET_HOLDER_SIZE];		// shouldnt be more than 1024
+        // fd -> pointer binding.
+        Socket* fds[SOCKET_HOLDER_SIZE];
+        ListenSocketBase* listenfds[SOCKET_HOLDER_SIZE];        // shouldnt be more than 1024
 
-		/// socket counter
-		int socket_count;
+        /// socket counter
+        int socket_count;
 
-	public:
+    public:
 
-		/// friend class of the worker thread -> it has to access our private resources
-		friend class SocketWorkerThread;
+        /// friend class of the worker thread -> it has to access our private resources
+        friend class SocketWorkerThread;
 
-		/// constructor > create epoll device handle + initialize event set
-		SocketMgr()
-		{
-			kq = kqueue();
-			if(kq == -1)
-			{
-				sLog.outError("Could not create a kqueue fd.");
-				exit(-1);
-			}
+        /// constructor > create epoll device handle + initialize event set
+        SocketMgr()
+        {
+            kq = kqueue();
+            if(kq == -1)
+            {
+                sLog.outError("Could not create a kqueue fd.");
+                exit(-1);
+            }
 
-			// null out the pointer array
-			memset(fds, 0, sizeof(Socket*) * SOCKET_HOLDER_SIZE);
-			memset(listenfds, 0, sizeof(Socket*) * SOCKET_HOLDER_SIZE);
-		}
+            // null out the pointer array
+            memset(fds, 0, sizeof(Socket*) * SOCKET_HOLDER_SIZE);
+            memset(listenfds, 0, sizeof(Socket*) * SOCKET_HOLDER_SIZE);
+        }
 
-		/// destructor > destroy epoll handle
-		~SocketMgr()
-		{
-			// close epoll handle
-			close(kq);
-		}
+        /// destructor > destroy epoll handle
+        ~SocketMgr()
+        {
+            // close epoll handle
+            close(kq);
+        }
 
-		/// add a new socket to the set and to the fd mapping
-		void AddSocket(Socket* s);
-		void AddListenSocket(ListenSocketBase* s);
+        /// add a new socket to the set and to the fd mapping
+        void AddSocket(Socket* s);
+        void AddListenSocket(ListenSocketBase* s);
 
-		void ShowStatus();	//TODO: Script it
+        void ShowStatus();    //TODO: Script it
 
-		/// remove a socket from set/fd mapping
-		void RemoveSocket(Socket* s);
+        /// remove a socket from set/fd mapping
+        void RemoveSocket(Socket* s);
 
-		/// returns kqueue fd
-		inline int GetKq() { return kq; }
+        /// returns kqueue fd
+        inline int GetKq() { return kq; }
 
-		/// returns number of sockets in array
-		inline int Count() { return socket_count; }
+        /// returns number of sockets in array
+        inline int Count() { return socket_count; }
 
-		/// closes all sockets
-		void CloseAll();
+        /// closes all sockets
+        void CloseAll();
 
-		/// spawns worker threads
-		void SpawnWorkerThreads();
+        /// spawns worker threads
+        void SpawnWorkerThreads();
 };
 
 class SocketWorkerThread : public ThreadBase
 {
-		/// epoll event struct
-		struct kevent events[THREAD_EVENT_SIZE];
-		bool running;
-	public:
-		bool run();
-		void OnShutdown()
-		{
-			running = false;
-		}
+        /// epoll event struct
+        struct kevent events[THREAD_EVENT_SIZE];
+        bool running;
+    public:
+        bool run();
+        void OnShutdown()
+        {
+            running = false;
+        }
 };
 
 #define sSocketMgr SocketMgr::getSingleton()

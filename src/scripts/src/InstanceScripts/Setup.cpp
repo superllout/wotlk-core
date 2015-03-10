@@ -22,96 +22,96 @@
 
 extern "C" SCRIPT_DECL uint32 _exp_get_script_type()
 {
-	return SCRIPT_TYPE_MISC;
+    return SCRIPT_TYPE_MISC;
 }
 
-extern "C" SCRIPT_DECL void _exp_script_register(ScriptMgr* mgr)	// Comment any script to disable it
+extern "C" SCRIPT_DECL void _exp_script_register(ScriptMgr* mgr)    // Comment any script to disable it
 {
-	//Instances
-	SetupArcatraz(mgr);
-	SetupAuchenaiCrypts(mgr);
-	SetupAzjolNerub(mgr);
-	SetupTheBlackMorass(mgr);
-	SetupBlackfathomDeeps(mgr);
-	SetupBlackrockDepths(mgr);
-	SetupBlackrockSpire(mgr);
-	SetupBloodFurnace(mgr);
-	SetupBotanica(mgr);
-	SetupCullingOfStratholme(mgr);
-	SetupDrakTharonKeep(mgr);
-	SetupDeadmines(mgr);
-	SetupDireMaul(mgr);
-	SetupGundrak(mgr);
-	SetupHellfireRamparts(mgr);
-	SetupHallsOfStone(mgr);
-	SetupHallsOfLightning(mgr);
-	SetupManaTombs(mgr);
-	SetupMaraudon(mgr);
-	SetupNexus(mgr);
-	SetupOldHillsbradFoothills(mgr);
-	SetupRagefireChasm(mgr);
-	SetupRazorfenDowns(mgr);
-	SetupScarletMonastery(mgr);
-	SetupScholomance(mgr);
-	SetupSethekkHalls(mgr);
-	SetupShadowfangKeep(mgr);
-	SetupShadowLabyrinth(mgr);
-	SetupTheMechanar(mgr);
-	SetupTheShatteredHalls(mgr);
-	SetupTheSlavePens(mgr);
-	SetupTheSteamvault(mgr);
-	SetupTheUnderbog(mgr);
-	SetupUldaman(mgr);
-	SetupUtgardeKeep(mgr);
-	SetupTheStockade(mgr);
-	SetupWailingCaverns(mgr);
-	SetupMagistersTerrace(mgr);
-	//Raids
-	SetupBlackTemple(mgr);
-	SetupBlackwingLair(mgr);
-	SetupBattleOfMountHyjal(mgr);
-	SetupGruulsLair(mgr);
-	SetupKarazhan(mgr);
-	SetupMoltenCore(mgr);
-	SetupNaxxramas(mgr);
-	SetupOnyxiasLair(mgr);
-	SetupTheEye(mgr);
-	SetupTheObsidianSanctum(mgr);
-	SetupUlduar(mgr);
-	SetupZulFarrak(mgr);
-	SetupZulGurub(mgr);
-	SetupSerpentshrineCavern(mgr);
-	SetupMagtheridonsLair(mgr);
-	SetupSunwellPlateau(mgr);
-	SetupWorldBosses(mgr);
-	SetupZulAman(mgr);
-	//Other
-	//SetupGenericAI(mgr);
+    //Instances
+    SetupArcatraz(mgr);
+    SetupAuchenaiCrypts(mgr);
+    SetupAzjolNerub(mgr);
+    SetupTheBlackMorass(mgr);
+    SetupBlackfathomDeeps(mgr);
+    SetupBlackrockDepths(mgr);
+    SetupBlackrockSpire(mgr);
+    SetupBloodFurnace(mgr);
+    SetupBotanica(mgr);
+    SetupCullingOfStratholme(mgr);
+    SetupDrakTharonKeep(mgr);
+    SetupDeadmines(mgr);
+    SetupDireMaul(mgr);
+    SetupGundrak(mgr);
+    SetupHellfireRamparts(mgr);
+    SetupHallsOfStone(mgr);
+    SetupHallsOfLightning(mgr);
+    SetupManaTombs(mgr);
+    SetupMaraudon(mgr);
+    SetupNexus(mgr);
+    SetupOldHillsbradFoothills(mgr);
+    SetupRagefireChasm(mgr);
+    SetupRazorfenDowns(mgr);
+    SetupScarletMonastery(mgr);
+    SetupScholomance(mgr);
+    SetupSethekkHalls(mgr);
+    SetupShadowfangKeep(mgr);
+    SetupShadowLabyrinth(mgr);
+    SetupTheMechanar(mgr);
+    SetupTheShatteredHalls(mgr);
+    SetupTheSlavePens(mgr);
+    SetupTheSteamvault(mgr);
+    SetupTheUnderbog(mgr);
+    SetupUldaman(mgr);
+    SetupUtgardeKeep(mgr);
+    SetupTheStockade(mgr);
+    SetupWailingCaverns(mgr);
+    SetupMagistersTerrace(mgr);
+    //Raids
+    SetupBlackTemple(mgr);
+    SetupBlackwingLair(mgr);
+    SetupBattleOfMountHyjal(mgr);
+    SetupGruulsLair(mgr);
+    SetupKarazhan(mgr);
+    SetupMoltenCore(mgr);
+    SetupNaxxramas(mgr);
+    SetupOnyxiasLair(mgr);
+    SetupTheEye(mgr);
+    SetupTheObsidianSanctum(mgr);
+    SetupUlduar(mgr);
+    SetupZulFarrak(mgr);
+    SetupZulGurub(mgr);
+    SetupSerpentshrineCavern(mgr);
+    SetupMagtheridonsLair(mgr);
+    SetupSunwellPlateau(mgr);
+    SetupWorldBosses(mgr);
+    SetupZulAman(mgr);
+    //Other
+    //SetupGenericAI(mgr);
 }
 
 #ifdef WIN32
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
-	return TRUE;
+    return TRUE;
 }
 
 #endif
 
 SP_AI_Spell::SP_AI_Spell()
 {
-	info					= NULL;
-	targettype				= 0;
-	instant					= false;
-	perctrigger				= 0.0f;
-	attackstoptimer			= 0;
-	soundid					= 0;
-	cooldown				= 0;
-	casttime				= 0;
-	reqlvl					= 0;
-	hpreqtocast				= 0.0f;
-	mindist2cast			= 0.0f;
-	maxdist2cast			= 0.0f;
-	minhp2cast				= 0;
-	maxhp2cast				= 0;
+    info                    = NULL;
+    targettype                = 0;
+    instant                    = false;
+    perctrigger                = 0.0f;
+    attackstoptimer            = 0;
+    soundid                    = 0;
+    cooldown                = 0;
+    casttime                = 0;
+    reqlvl                    = 0;
+    hpreqtocast                = 0.0f;
+    mindist2cast            = 0.0f;
+    maxdist2cast            = 0.0f;
+    minhp2cast                = 0;
+    maxhp2cast                = 0;
 }

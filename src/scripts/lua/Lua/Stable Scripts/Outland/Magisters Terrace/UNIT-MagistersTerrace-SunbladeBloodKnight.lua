@@ -18,20 +18,20 @@ Staff of Moon Project, Feb 2008
 --Moon April 2008]]
 
 function SunbladeBloodKnight_OnCombat(Unit, Event)
-	Unit:RegisterAIUpdateEvent(10000)
+    Unit:RegisterAIUpdateEvent(10000)
 end
 
 --[[-- I dont't know how often he does this just set it to 6, 3 sec--]]
 function SunbladeBloodKnight_HolyLight(Unit, Event)
-	Unit:FullCastSpell(27136)
+    Unit:FullCastSpell(27136)
 end
 
 function SunbladeBloodKnight_LeaveCombat(Unit, Event)
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveAIUpdateEvent()
 end
 
 function SunbladeBloodKnight_Died(Unit, Event)
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveAIUpdateEvent()
 end
 
 

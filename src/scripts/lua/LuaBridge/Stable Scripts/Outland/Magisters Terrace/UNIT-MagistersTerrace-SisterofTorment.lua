@@ -18,32 +18,32 @@ Staff of Moon Project, Feb 2008
 --Moon April 2008]]
 
 function SunbladeSisterofTorment_OnCombat(Unit, Event)
-	Unit:RegisterEvent("SunbladeSisterofTorment_DeadlyEmbrace", 10000, 0)
-	Unit:RegisterEvent("SunbladeSisterofTorment_LashofPain",7000, 0) 
+    Unit:RegisterEvent("SunbladeSisterofTorment_DeadlyEmbrace", 10000, 0)
+    Unit:RegisterEvent("SunbladeSisterofTorment_LashofPain",7000, 0) 
 end
 
 --Deadly Embrace
 function SunbladeSisterofTorment_DeadlyEmbrace(Unit, Event)
-	if Unit:GetRandomPlayer(1) then
-		Unit:FullCastSpellOnTarget(44547, Unit:GetRandomPlayer(1))
-	end
+    if Unit:GetRandomPlayer(1) then
+        Unit:FullCastSpellOnTarget(44547, Unit:GetRandomPlayer(1))
+    end
 end
 
 --44640 Lash of Pain
 function SunbladeSisterofTorment_LashofPain(Unit, Event)
-	local Flip = math.random(2)
-	if Flip == 1 and Unit:GetClosestPlayer() then
-		Unit:CastSpellOnTarget(44640, Unit:GetClosestPlayer())
-	end
+    local Flip = math.random(2)
+    if Flip == 1 and Unit:GetClosestPlayer() then
+        Unit:CastSpellOnTarget(44640, Unit:GetClosestPlayer())
+    end
 end
 
 
 function SunbladeSisterofTorment_LeaveCombat(Unit, Event)
-	Unit:RemoveEvents()
+    Unit:RemoveEvents()
 end
 
 function SunbladeSisterofTorment_Died(Unit, Event)
-	Unit:RemoveEvents()
+    Unit:RemoveEvents()
 end
 
 

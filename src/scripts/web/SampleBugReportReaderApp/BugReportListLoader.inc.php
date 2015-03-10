@@ -30,60 +30,60 @@ require_once('../lib/MYSQLDatabase.inc.php');
 //
 ////////////////////////////////////////////////////
 class BugReportListLoader{
-	private $db;
-	private $res;
-	private $reportlist;
-	private $query;
-	private $count;
-	
-	public function BugReportListLoader(){
-		global $dbusername;
-		global $dbpassword;
-		global $dbhost;
-		global $dbport;
-		global $dbname;
-		
-		$this->reportlist = array();
-		$this->count = 0;
-		$this->db = new MYSQLDatabase( $dbusername, $dbpassword, $dbhost, $dbport, $dbname );
-		$this->query = "SELECT `UID`,`TimeStamp` FROM `playerbugreports` WHERE `Suggestion` = '0' ORDER BY `UID` DESC LIMIT 50;";
-	}
-	
-	/////////////////////////////////////////
-	//public function Load()
-	//  Loads the bugreport list
-	//
-	//Parameters
-	//  None.
-	//
-	//Return Value
-	//  None.
-	//
-	////////////////////////////////////////
-	public function Load(){
-		$this->db->Connect();
-		$this->res = $this->db->Query( $this->query );
-		
-		while( ( $row = $this->db->Fetch( $this->res ) ) !== false ){
-			$this->reportlist[ $this->count ] = $row;
-			$this->count++;
-		}
-	}
-	
-	////////////////////////////////////////////
-	//public function GetList()
-	//  Returns the bugreport list as an array
-	//
-	//Parameters
-	//  None.
-	//
-	//Return Value
-	//  Returns the bugreport list as an array
-	//
-	///////////////////////////////////////////
-	public function GetList(){
-		return $this->reportlist;
-	}
+    private $db;
+    private $res;
+    private $reportlist;
+    private $query;
+    private $count;
+    
+    public function BugReportListLoader(){
+        global $dbusername;
+        global $dbpassword;
+        global $dbhost;
+        global $dbport;
+        global $dbname;
+        
+        $this->reportlist = array();
+        $this->count = 0;
+        $this->db = new MYSQLDatabase( $dbusername, $dbpassword, $dbhost, $dbport, $dbname );
+        $this->query = "SELECT `UID`,`TimeStamp` FROM `playerbugreports` WHERE `Suggestion` = '0' ORDER BY `UID` DESC LIMIT 50;";
+    }
+    
+    /////////////////////////////////////////
+    //public function Load()
+    //  Loads the bugreport list
+    //
+    //Parameters
+    //  None.
+    //
+    //Return Value
+    //  None.
+    //
+    ////////////////////////////////////////
+    public function Load(){
+        $this->db->Connect();
+        $this->res = $this->db->Query( $this->query );
+        
+        while( ( $row = $this->db->Fetch( $this->res ) ) !== false ){
+            $this->reportlist[ $this->count ] = $row;
+            $this->count++;
+        }
+    }
+    
+    ////////////////////////////////////////////
+    //public function GetList()
+    //  Returns the bugreport list as an array
+    //
+    //Parameters
+    //  None.
+    //
+    //Return Value
+    //  Returns the bugreport list as an array
+    //
+    ///////////////////////////////////////////
+    public function GetList(){
+        return $this->reportlist;
+    }
 }
 
 ?>

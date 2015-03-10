@@ -6,17 +6,17 @@
 // Declaration of container for the refcounts
 //#include "StdAfx.h"
 #ifdef WIN32
-	typedef stdext::hash_map<const void *, int> refcounts_t;
+    typedef stdext::hash_map<const void *, int> refcounts_t;
 #else
-	struct ptr_hash
-	{
-		size_t operator () (const void * const v) const
-		{
-			static __gnu_cxx::hash<unsigned int> H;
-			return H((unsigned int)v);
-		}
-	};
-	typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> refcounts_t;
+    struct ptr_hash
+    {
+        size_t operator () (const void * const v) const
+        {
+            static __gnu_cxx::hash<unsigned int> H;
+            return H((unsigned int)v);
+        }
+    };
+    typedef __gnu_cxx::hash_map<const void *, int, ptr_hash> refcounts_t;
 #endif
 extern refcounts_t refcounts_;
 
@@ -26,63 +26,63 @@ extern refcounts_t refcounts_;
 template <typename T>
 cshared_ptr<T>::cshared_ptr (T* ptr_ ): ptr(ptr_)
 {
-	++refcounts_[ptr];
+    ++refcounts_[ptr];
 }
 
 template <typename T>
 cshared_ptr<T>::cshared_ptr (const cshared_ptr<T>& rhs): u.ptr(rhs.get() )
 {
-	++refcounts_[ptr];
+    ++refcounts_[ptr];
 }
 
 template <typename T>
 template <typename U>
 cshared_ptr<T>::cshared_ptr (const cshared_ptr<U>& rhs): ptr(rhs.get() )
 {
-	++refcounts_[ptr];
+    ++refcounts_[ptr];
 }
 
 template <typename T>
 template <typename U>
 cshared_ptr<T>& cshared_ptr<T>::operator = (const cshared_ptr<U>& rhs)
 {
-	reset();
-	ptr = static_cast<T*>(rhs.get());
-	++refcounts_[ptr];
-	return *this;
+    reset();
+    ptr = static_cast<T*>(rhs.get());
+    ++refcounts_[ptr];
+    return *this;
 }
 template <typename T>
 T * cshared_ptr<T>::get()
 {
-	return ptr;
+    return ptr;
 }
 
 template <typename T>
 void cshared_ptr<T>::set(T * ptr)
 {
-	ptr = ptr;
+    ptr = ptr;
 }
 
 template <typename T>
 T* cshared_ptr<T>::operator -> ()
 {
-	return ptr;
+    return ptr;
 }
 
 template <typename T>
 long cshared_ptr<T>::use_count () const
 {
-	return refcounts_[ptr];
+    return refcounts_[ptr];
 }
 template <typename T>
 void cshared_ptr<T>::reset ()
 {
-	if (!ptr) return;
-	--refcounts_[ptr];
-	ptr = 0;
+    if (!ptr) return;
+    --refcounts_[ptr];
+    ptr = 0;
 }
 template <typename T>
 cshared_ptr<T>::~cshared_ptr ()
 {
-	reset();
+    reset();
 }

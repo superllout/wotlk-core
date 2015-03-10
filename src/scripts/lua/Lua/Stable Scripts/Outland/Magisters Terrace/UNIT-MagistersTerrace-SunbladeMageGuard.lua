@@ -18,24 +18,24 @@ Staff of Moon Project, Feb 2008
 --Moon April 2008]]
 
 function SunbladeMageGuard_OnCombat(Unit, Event)
-	Unit:RegisterAIUpdateEvent(7000)
+    Unit:RegisterAIUpdateEvent(7000)
 end
 
 function SunbladeMageGuard_GlaiveThrow(Unit)
-	local FlipGlaive = math.random(2)
-	if FlipGlaive ==1 and Unit:GetRandomPlayer(7) then
-		Unit:CastSpellOnTarget(44478, Unit:GetRandomPlayer(7))
-	else
-		Unit:CastSpellOnTarget(46028, Unit:GetRandomPlayer(7))
-	end
+    local FlipGlaive = math.random(2)
+    if FlipGlaive ==1 and Unit:GetRandomPlayer(7) then
+        Unit:CastSpellOnTarget(44478, Unit:GetRandomPlayer(7))
+    else
+        Unit:CastSpellOnTarget(46028, Unit:GetRandomPlayer(7))
+    end
 end
 
 function SunbladeMageGuard_LeaveCombat(Unit, Event)
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveAIUpdateEvent()
 end
 
 function SunbladeMageGuard_Died(Unit, Event)
-	Unit:RemoveAIUpdateEvent()
+    Unit:RemoveAIUpdateEvent()
 end
 
 

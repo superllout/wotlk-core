@@ -24,9 +24,9 @@
  */
 class DummyLock
 {
-	public:
-		ARCEMU_INLINE void Acquire() { }
-		ARCEMU_INLINE void Release() { }
+    public:
+        ARCEMU_INLINE void Acquire() { }
+        ARCEMU_INLINE void Release() { }
 };
 
 /** linked-list style queue
@@ -34,111 +34,111 @@ class DummyLock
 template<class T, class LOCK>
 class FastQueue
 {
-		struct node
-		{
-			T element;
-			node* next;
-		};
+        struct node
+        {
+            T element;
+            node* next;
+        };
 
-		node* last;
-		node* first;
-		LOCK m_lock;
+        node* last;
+        node* first;
+        LOCK m_lock;
 
-	public:
+    public:
 
-		FastQueue()
-		{
-			last = NULL;
-			first = NULL;
-		}
+        FastQueue()
+        {
+            last = NULL;
+            first = NULL;
+        }
 
-		~FastQueue()
-		{
-			Clear();
-		}
+        ~FastQueue()
+        {
+            Clear();
+        }
 
-		void Clear()
-		{
-			// clear any elements
-			while(last != NULL)
-				Pop();
-		}
+        void Clear()
+        {
+            // clear any elements
+            while(last != NULL)
+                Pop();
+        }
 
-		void Push(T elem)
-		{
-			m_lock.Acquire();
-			node* n = new node;
-			if(last)
-				last->next = n;
-			else
-				first = n;
+        void Push(T elem)
+        {
+            m_lock.Acquire();
+            node* n = new node;
+            if(last)
+                last->next = n;
+            else
+                first = n;
 
-			last = n;
-			n->next = NULL;
-			n->element = elem;
-			m_lock.Release();
-		}
+            last = n;
+            n->next = NULL;
+            n->element = elem;
+            m_lock.Release();
+        }
 
-		T Pop()
-		{
-			m_lock.Acquire();
-			if(first == NULL)
-			{
-				m_lock.Release();
-				return reinterpret_cast<T>(NULL);
-			}
+        T Pop()
+        {
+            m_lock.Acquire();
+            if(first == NULL)
+            {
+                m_lock.Release();
+                return reinterpret_cast<T>(NULL);
+            }
 
-			T ret = first->element;
-			node* td = first;
-			first = td->next;
-			if(!first)
-				last = NULL;
+            T ret = first->element;
+            node* td = first;
+            first = td->next;
+            if(!first)
+                last = NULL;
 
-			delete td;
-			m_lock.Release();
-			return ret;
-		}
+            delete td;
+            m_lock.Release();
+            return ret;
+        }
 
-		T front()
-		{
-			m_lock.Acquire();
-			if(first == NULL)
-			{
-				m_lock.Release();
-				return reinterpret_cast<T>(NULL);
-			}
+        T front()
+        {
+            m_lock.Acquire();
+            if(first == NULL)
+            {
+                m_lock.Release();
+                return reinterpret_cast<T>(NULL);
+            }
 
-			T ret = first->element;
-			m_lock.Release();
-			return ret;
-		}
+            T ret = first->element;
+            m_lock.Release();
+            return ret;
+        }
 
-		void pop_front()
-		{
-			m_lock.Acquire();
-			if(first == NULL)
-			{
-				m_lock.Release();
-				return;
-			}
+        void pop_front()
+        {
+            m_lock.Acquire();
+            if(first == NULL)
+            {
+                m_lock.Release();
+                return;
+            }
 
-			node* td = first;
-			first = td->next;
-			if(!first)
-				last = NULL;
+            node* td = first;
+            first = td->next;
+            if(!first)
+                last = NULL;
 
-			delete td;
-			m_lock.Release();
-		}
+            delete td;
+            m_lock.Release();
+        }
 
-		bool HasItems()
-		{
-			bool ret;
-			m_lock.Acquire();
-			ret = (first != NULL);
-			m_lock.Release();
-			return ret;
-		}
+        bool HasItems()
+        {
+            bool ret;
+            m_lock.Acquire();
+            ret = (first != NULL);
+            m_lock.Release();
+            return ret;
+        }
 };
 
 #endif

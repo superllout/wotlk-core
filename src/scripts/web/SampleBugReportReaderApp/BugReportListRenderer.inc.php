@@ -28,45 +28,45 @@
 //
 ///////////////////////////////////////////
 class BugReportListRenderer{
-	
-	
-	/////////////////////////////////////////////////////////////
-	//public function Render( $bugreportlist )
-	//  Renders the bugreport list to HTML
-	//
-	//Parameters
-	//  $bugreportlist  -  An array containing the bugreports
-	//
-	//Return Value
-	//  None.
-	//
-	////////////////////////////////////////////////////////////
-	public function Render( $bugreportlist ){
-		echo "<html>";
-		echo "<head><title>Arcemu bug reports</title></head>";
-		echo "<body>";
-		echo "<table border=\"1\">";
-		
-		echo "<tr>";
-		echo "<td>uid</td>";
-		echo "<td>date of submission</td>";
-		echo "<td>link</td>";
-		echo "</tr>";
-		
-		foreach( $bugreportlist as $v ){
-			$id = $v[ 0 ];
-			$date = date( "M j G:i:s T Y", $v[ 1 ] );
-			
-			echo "<tr>";
-			echo "<td> $id </td>";
-			echo "<td> $date </td>";
-			echo "<td> <a href=\"bugreport.php?uid=$id\">view</a></td>";
-			echo "</tr>";
-		}
-		echo "</table>";
-		echo "</body>";
-		echo "</html>";
-	}
+    
+    
+    /////////////////////////////////////////////////////////////
+    //public function Render( $bugreportlist )
+    //  Renders the bugreport list to HTML
+    //
+    //Parameters
+    //  $bugreportlist  -  An array containing the bugreports
+    //
+    //Return Value
+    //  None.
+    //
+    ////////////////////////////////////////////////////////////
+    public function Render( $bugreportlist ){
+        echo "<html>";
+        echo "<head><title>Arcemu bug reports</title></head>";
+        echo "<body>";
+        echo "<table border=\"1\">";
+        
+        echo "<tr>";
+        echo "<td>uid</td>";
+        echo "<td>date of submission</td>";
+        echo "<td>link</td>";
+        echo "</tr>";
+        
+        foreach( $bugreportlist as $v ){
+            $id = $v[ 0 ];
+            $date = date( "M j G:i:s T Y", $v[ 1 ] );
+            
+            echo "<tr>";
+            echo "<td> $id </td>";
+            echo "<td> $date </td>";
+            echo "<td> <a href=\"bugreport.php?uid=$id\">view</a></td>";
+            echo "</tr>";
+        }
+        echo "</table>";
+        echo "</body>";
+        echo "</html>";
+    }
 }
 
 ?>
