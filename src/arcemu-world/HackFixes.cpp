@@ -52,24 +52,23 @@ void ApplyNormalFixes()
     SpellEntry* sp = dbcSpell.LookupEntry(4);
     if(crc32((const unsigned char*)sp->Name, (unsigned int)strlen(sp->Name)) != SPELL_HASH_WORD_OF_RECALL_OTHER)
     {
-        Log.LargeErrorMessage("You are using DBCs extracted from an unsupported client.", "ArcEmu supports only enUS and enGB!!!", NULL);
+        Log.LargeErrorMessage("You are using DBCs extracted from an unsupported client.", "ArcEmu supports only enUS and enGB!!!");
         abort();
     }
 
-    uint32 cnt = dbcSpell.GetNumRows();
     /* uint32 result;  // unused */
 
     map<uint32, uint32> talentSpells;
-    uint32 i, j;
-    for(i = 0; i < dbcTalent.GetNumRows(); ++i)
+
+    for(uint32 i = 0; i < dbcTalent.GetNumRows(); i++)
     {
-        TalentEntry* tal = dbcTalent.LookupRow(i);
-        for(j = 0; j < 5; ++j)
-            if(tal->RankID[j] != 0)
-                talentSpells.insert(make_pair(tal->RankID[j], tal->TalentTree));
+        TalentEntry* pTalentInfo = dbcTalent.LookupRow(i);
+        for(uint8 j = 0; j < 5; j++)
+            if (pTalentInfo && pTalentInfo->RankID[j])
+                talentSpells.insert(make_pair(pTalentInfo->RankID[j], pTalentInfo->TalentTree));
     }
 
-    for(uint32 x = 0; x < cnt; x++)
+    for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // Read every SpellEntry row
         sp = dbcSpell.LookupRow(x);
@@ -105,7 +104,7 @@ void ApplyNormalFixes()
 
         // Save School as SchoolMask, and set School as an index
         sp->SchoolMask = sp->School;
-        for(i = 0; i < SCHOOL_COUNT; i++)
+        for(uint8 i = 0; i < SCHOOL_COUNT; i++)
         {
             if(sp->School & (1 << i))
             {
@@ -134,13 +133,11 @@ void ApplyNormalFixes()
 
         //there are some spells that change the "damage" value of 1 effect to another : devastate = bonus first then damage
         //this is a total bullshit so remove it when spell system supports effect overwriting
-        for(uint32 col1_swap = 0; col1_swap < 2 ; col1_swap++)
-            for(uint32 col2_swap = col1_swap ; col2_swap < 3 ; col2_swap++)
+        for(uint8 col1_swap = 0; col1_swap < 2 ; col1_swap++)
+            for(uint8 col2_swap = col1_swap ; col2_swap < 3 ; col2_swap++)
                 if(sp->Effect[col1_swap] == SPELL_EFFECT_WEAPON_PERCENT_DAMAGE && sp->Effect[col2_swap] == SPELL_EFFECT_DUMMYMELEE)
                 {
-                    uint32 temp;
-                    float ftemp;
-                    temp = sp->Effect[col1_swap];
+                    uint32 temp = sp->Effect[col1_swap];
                     sp->Effect[col1_swap] = sp->Effect[col2_swap] ;
                     sp->Effect[col2_swap] = temp;
                     temp = sp->EffectDieSides[col1_swap];
@@ -148,7 +145,7 @@ void ApplyNormalFixes()
                     sp->EffectDieSides[col2_swap] = temp;
                     //temp = sp->EffectBaseDice[col1_swap];    sp->EffectBaseDice[col1_swap] = sp->EffectBaseDice[col2_swap] ;        sp->EffectBaseDice[col2_swap] = temp;
                     //ftemp = sp->EffectDicePerLevel[col1_swap];            sp->EffectDicePerLevel[col1_swap] = sp->EffectDicePerLevel[col2_swap] ;                sp->EffectDicePerLevel[col2_swap] = ftemp;
-                    ftemp = sp->EffectRealPointsPerLevel[col1_swap];
+                    float ftemp = sp->EffectRealPointsPerLevel[col1_swap];
                     sp->EffectRealPointsPerLevel[col1_swap] = sp->EffectRealPointsPerLevel[col2_swap] ;
                     sp->EffectRealPointsPerLevel[col2_swap] = ftemp;
                     temp = sp->EffectBasePoints[col1_swap];
@@ -189,18 +186,14 @@ void ApplyNormalFixes()
                     sp->EffectPointsPerComboPoint[col2_swap] = ftemp;
                 }
 
-        for(uint32 b = 0; b < 3; ++b)
+        for(uint8 b = 0; b < 3; ++b)
         {
             if(sp->EffectTriggerSpell[b] != 0 && dbcSpell.LookupEntryForced(sp->EffectTriggerSpell[b]) == NULL)
-            {
-                /* proc spell referencing non-existent spell. create a dummy spell for use w/ it. */
-                CreateDummySpell(sp->EffectTriggerSpell[b]);
-            }
+                CreateDummySpell(sp->EffectTriggerSpell[b]);    /* proc spell referencing non-existent spell. create a dummy spell for use w/ it. */
+
 
             if(sp->Attributes & ATTRIBUTES_ONLY_OUTDOORS && sp->EffectApplyAuraName[b] == SPELL_AURA_MOUNTED)
-            {
                 sp->Attributes &= ~ATTRIBUTES_ONLY_OUTDOORS;
-            }
         }
 
         if(!strcmp(sp->Name, "Hearthstone") || !strcmp(sp->Name, "Stuck") || !strcmp(sp->Name, "Astral Recall"))
@@ -439,7 +432,7 @@ void ApplyNormalFixes()
             sp->Attributes |= ATTRIBUTES_PASSIVE;
 
         uint32 pr = sp->procFlags;
-        for(uint32 y = 0; y < 3; y++)
+        for(uint8 y = 0; y < 3; y++)
         {
             // get the effect number from the spell
             uint32 effect = sp->Effect[y];
@@ -470,7 +463,7 @@ void ApplyNormalFixes()
                     pr = 0;
 
                     uint32 len = (uint32)strlen(sp->Description);
-                    for(i = 0; i < len; ++i)
+                    for(uint32 i = 0; i < len; i++)
                         sp->Description[i] = static_cast<char>(tolower(sp->Description[i]));
                     //dirty code for procs, if any1 got any better idea-> u are welcome
                     //139944 --- some magic number, it will trigger on all hits etc
@@ -921,7 +914,7 @@ void ApplyNormalFixes()
     //SPELL COEFFICIENT SETTINGS START
     //////////////////////////////////////////////////////////////////
 
-    for(uint32 x = 0; x < cnt; x++)
+    for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // get spellentry
         sp = dbcSpell.LookupRow(x);
@@ -940,7 +933,7 @@ void ApplyNormalFixes()
         bool spcheck = false;
 
         //Flag for DoT and HoT
-        for(i = 0 ; i < 3 ; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_DAMAGE ||
                     sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_HEAL ||
@@ -952,7 +945,7 @@ void ApplyNormalFixes()
         }
 
         //Flag for DD or DH
-        for(i = 0 ; i < 3 ; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_TRIGGER_SPELL && sp->EffectTriggerSpell[i])
             {
@@ -973,7 +966,7 @@ void ApplyNormalFixes()
             }
         }
 
-        for(i = 0 ; i < 3; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             switch(sp->EffectImplicitTargetA[i])
             {
@@ -999,7 +992,7 @@ void ApplyNormalFixes()
             }
         }
 
-        for(i = 0 ; i < 3 ; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             switch(sp->EffectImplicitTargetB[i])
             {
@@ -1033,7 +1026,7 @@ void ApplyNormalFixes()
 
 
         //Additional Effect (not healing or damaging)
-        for(i = 0 ; i < 3 ; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->Effect[i] == SPELL_EFFECT_NULL)
                 continue;
@@ -1309,14 +1302,14 @@ void ApplyNormalFixes()
     }
 
     //Fully loaded coefficients, we must share channeled coefficient to its triggered spells
-    for(uint32 x = 0; x < cnt; x++)
+    for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // get spellentry
         sp = dbcSpell.LookupRow(x);
         SpellEntry* spz;
 
         //Case SPELL_AURA_PERIODIC_TRIGGER_SPELL
-        for(i = 0 ; i < 3 ; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_TRIGGER_SPELL)
             {
@@ -1364,7 +1357,7 @@ void ApplyNormalFixes()
      * thrown - add a 1.6 second cooldown
      **********************************************************/
     const static uint32 thrown_spells[] = {SPELL_RANGED_GENERAL, SPELL_RANGED_THROW, SPELL_RANGED_WAND, 26679, 29436, 37074, 41182, 41346, 0};
-    for(i = 0; thrown_spells[i] != 0; ++i)
+    for(uint32 i = 0; thrown_spells[i] != 0; i++)
     {
         sp = CheckAndReturnSpellEntry(thrown_spells[i]);
         if(sp != NULL && sp->RecoveryTime == 0 && sp->StartRecoveryTime == 0)
@@ -3895,7 +3888,7 @@ void ApplyNormalFixes()
     sp = CheckAndReturnSpellEntry(20608);   //Reincarnation
     if(sp != NULL)
     {
-        for(i = 0; i < 8; i++)
+        for(uint8 i = 0; i < 8; i++)
         {
             if(sp->Reagent[i])
             {
@@ -5016,7 +5009,7 @@ void ApplyNormalFixes()
         sp->c_is_flags |= SPELL_FLAG_IS_EXPIREING_WITH_PET;
         sp->Effect[0] = SPELL_EFFECT_APPLY_AURA;
     }
-    for(i = 23833; i <= 23844; i++)
+    for(uint32 i = 23833; i <= 23844; i++)
     {
         sp = CheckAndReturnSpellEntry(i);
         if(sp != NULL)
@@ -5192,7 +5185,7 @@ void ApplyNormalFixes()
 
     //Warlock Healthstones
     int HealthStoneID[8] = {6201, 6202, 5699, 11729, 11730, 27230, 47871, 47878};
-    for(i = 0; i < 8; i++)
+    for(uint8 i = 0; i < 8; i++)
     {
         sp = CheckAndReturnSpellEntry(HealthStoneID[i]);
         if(sp != NULL)
@@ -6479,7 +6472,7 @@ void ApplyNormalFixes()
     sp = CheckAndReturnSpellEntry(20619);
     if(sp != NULL)
     {
-        for(i = 0; i < 3; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectImplicitTargetA[i] > 0)
                 sp->EffectImplicitTargetA[i] = EFF_TARGET_ALL_FRIENDLY_IN_AREA;
@@ -6492,7 +6485,7 @@ void ApplyNormalFixes()
     sp = CheckAndReturnSpellEntry(21075);
     if(sp != NULL)
     {
-        for(i = 0; i < 3; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectImplicitTargetA[i] > 0)
                 sp->EffectImplicitTargetA[i] = EFF_TARGET_ALL_FRIENDLY_IN_AREA;
