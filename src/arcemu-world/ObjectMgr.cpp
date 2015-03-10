@@ -2008,11 +2008,11 @@ void ObjectMgr::GenerateLevelUpInfo()
 			LevelInfo* lvl = 0, lastlvl;
 			lastlvl.HP = PCI->health;
 			lastlvl.Mana = PCI->mana;
-			lastlvl.Stat[0] = PCI->strength;
-			lastlvl.Stat[1] = PCI->ability;
-			lastlvl.Stat[2] = PCI->stamina;
-			lastlvl.Stat[3] = PCI->intellect;
-			lastlvl.Stat[4] = PCI->spirit;
+            lastlvl.Stat[STAT_STRENGTH] = PCI->strength;
+            lastlvl.Stat[STAT_AGILITY] = PCI->ability;
+            lastlvl.Stat[STAT_STAMINA] = PCI->stamina;
+            lastlvl.Stat[STAT_INTELLECT] = PCI->intellect;
+            lastlvl.Stat[STAT_SPIRIT] = PCI->spirit;
 			lastlvl.XPToNextLevel = 400;
 			LevelMap* lMap = new LevelMap;
 

@@ -27,7 +27,7 @@
 
 enum Stats
 {
-    STAT_STRENGTH,
+    STAT_STRENGTH = 0,
     STAT_AGILITY,
     STAT_STAMINA,
     STAT_INTELLECT,

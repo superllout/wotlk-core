@@ -719,29 +719,37 @@ bool Player::Create(WorldPacket & data)
 	// Set Starting stats for char
 	//SetScale(  ((race==RACE_TAUREN)?1.3f:1.0f));
 	SetScale(1.0f);
-	SetHealth(info->health);
+    setLevel((class_ == DEATHKNIGHT && sWorld.StartingLevel <= 55) ? 55 : sWorld.StartingLevel);
+
+    LevelInfo* pLevelInfo = objmgr.GetLevelInfo(race, class_, getLevel());
+    if (!pLevelInfo)
+    {
+        sLog.Error("Player::Create", "account %u tried to create player with class %u, race %u and level %u but level info was not found!",
+            m_session->GetAccountId(), class_, race, getLevel());
+        m_session->Disconnect();
+    }
 
     // NOTE: hunters had focus power on first betas wow versions, it was reintroduced only on cataclysm first release.
     if (class_ != WARRIOR || class_ != ROGUE || class_ != DEATHKNIGHT /* || class_ != HUNTER */)
     {
-        SetPower(POWER_TYPE_MANA, info->mana);
-        SetMaxPower(POWER_TYPE_MANA, info->mana);
+        SetMaxPower(POWER_TYPE_MANA, pLevelInfo->Mana);
+        SetPower(POWER_TYPE_MANA, pLevelInfo->Mana);
     }
     else if (class_ == WARRIOR)
     {
-        SetPower(POWER_TYPE_RAGE, 0);
         SetMaxPower(POWER_TYPE_RAGE, info->rage);
+        SetPower(POWER_TYPE_RAGE, 0);
     }
     else if (class_ == ROGUE)
     {
-        SetPower(POWER_TYPE_ENERGY, info->energy);
         SetMaxPower(POWER_TYPE_ENERGY, info->energy);
+        SetPower(POWER_TYPE_ENERGY, info->energy);
     }
     else if (class_ == DEATHKNIGHT)
     {
+        SetMaxPower(POWER_TYPE_RUNIC_POWER, 1000);  // TODO: add value to playercreateinfo
         SetPower(POWER_TYPE_RUNES, 8);
         SetPower(POWER_TYPE_RUNIC_POWER, 0);
-        SetMaxPower(POWER_TYPE_RUNIC_POWER, 1000);
     }
     /*
     else if (class_ == HUNTER) // Hunters got focus power on cataclysm 
@@ -751,28 +759,25 @@ bool Player::Create(WorldPacket & data)
     }
     */
 
-	SetMaxHealth(info->health);
+    SetMaxHealth(pLevelInfo->HP);
+    SetHealth(pLevelInfo->HP);
 
 	//THIS IS NEEDED
-	SetBaseHealth(info->health);
-	SetBaseMana(info->mana);
+    SetBaseHealth(pLevelInfo->HP);
+    SetBaseMana(pLevelInfo->HP);
 	SetFaction(info->factiontemplate);
 
 	if(class_ == DEATHKNIGHT)
-		SetTalentPointsForAllSpec(sWorld.DKStartTalentPoints); // Default is 0 in case you do not want to modify it
-	else
-		SetTalentPointsForAllSpec(0);
-	if(class_ != DEATHKNIGHT || sWorld.StartingLevel > 55)
+		SetTalentPointsForAllSpec(sWorld.DKStartTalentPoints);
+
+	if(class_ != DEATHKNIGHT && sWorld.StartingLevel > 55)
 	{
-		setLevel(sWorld.StartingLevel);
 		if(sWorld.StartingLevel >= 10 && class_ != DEATHKNIGHT)
 			SetTalentPointsForAllSpec(sWorld.StartingLevel - 9);
 	}
-	else
-	{
-		setLevel(55);
-		SetNextLevelXp(148200);
-	}
+
+	SetNextLevelXp(pLevelInfo->XPToNextLevel);
+
 	UpdateGlyphs();
 
 	SetPrimaryProfessionPoints(sWorld.MaxProfs);
@@ -788,23 +793,16 @@ bool Player::Create(WorldPacket & data)
 		SetShapeShift(FORM_BATTLESTANCE);
 
 	SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP_ATTACKABLE);
-	SetStat(STAT_STRENGTH, info->strength);
-	SetStat(STAT_AGILITY, info->ability);
-	SetStat(STAT_STAMINA, info->stamina);
-	SetStat(STAT_INTELLECT, info->intellect);
-	SetStat(STAT_SPIRIT, info->spirit);
+	SetStat(STAT_STRENGTH, pLevelInfo->Stat[STAT_STRENGTH]);
+    SetStat(STAT_AGILITY, pLevelInfo->Stat[STAT_AGILITY]);
+	SetStat(STAT_STAMINA, pLevelInfo->Stat[STAT_STAMINA]);
+	SetStat(STAT_INTELLECT, pLevelInfo->Stat[STAT_INTELLECT]);
+	SetStat(STAT_SPIRIT, pLevelInfo->Stat[STAT_SPIRIT]);
 	SetBoundingRadius(0.388999998569489f);
 	SetCombatReach(1.5f);
-	if(race != RACE_BLOODELF)
-	{
-		SetDisplayId(info->displayId + gender);
-		SetNativeDisplayId(info->displayId + gender);
-	}
-	else
-	{
-		SetDisplayId(info->displayId - gender);
-		SetNativeDisplayId(info->displayId - gender);
-	}
+    SetDisplayId(race != RACE_BLOODELF ? (info->displayId + gender) : (info->displayId - gender));
+    SetNativeDisplayId(race != RACE_BLOODELF ? (info->displayId + gender) : (info->displayId - gender));
+
 	EventModelChange();
 	//SetMinDamage(info->mindmg );
 	//SetMaxDamage(info->maxdmg );
@@ -815,7 +813,6 @@ bool Player::Create(WorldPacket & data)
 
 	//PLAYER_BYTES_3						   DRUNKENSTATE				 PVPRANK
 	SetUInt32Value(PLAYER_BYTES_3, ((gender) | (0x00 << 8) | (0x00 << 16) | (GetPVPRank() << 24)));
-	SetNextLevelXp(400);
 	SetUInt32Value(PLAYER_FIELD_BYTES, 0x08);
 	SetCastSpeedMod(1.0f);
 	SetUInt32Value(PLAYER_FIELD_MAX_LEVEL, sWorld.m_levelCap);
@@ -824,13 +821,12 @@ bool Player::Create(WorldPacket & data)
 	SetGold(sWorld.GoldStartAmount);
 
 
-	for(uint32 x = 0; x < 7; x++)
+	for(uint8 x = 0; x < 7; x++)
 		SetFloatValue(PLAYER_FIELD_MOD_DAMAGE_DONE_PCT + x, 1.00);
 
 	SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, 0xEEEEEEEE);
 
 	m_StableSlotCount = 0;
-	Item* item;
 
 	for(std::set<uint32>::iterator sp = info->spell_list.begin(); sp != info->spell_list.end(); ++sp)
 		mSpells.insert((*sp));
@@ -852,16 +848,13 @@ bool Player::Create(WorldPacket & data)
 
 	// Add actionbars
 	for(std::list<CreateInfo_ActionBarStruct>::iterator itr = info->actionbars.begin(); itr != info->actionbars.end(); ++itr)
-	{
 		setAction(static_cast<uint8>(itr->button), static_cast<uint16>(itr->action), static_cast<uint8>(itr->type), static_cast<uint8>(itr->misc));
-	}
 
 	for(std::list<CreateInfo_ItemStruct>::iterator is = info->items.begin(); is != info->items.end(); ++is)
 	{
 		if((*is).protoid != 0)
 		{
-			item = objmgr.CreateItem((*is).protoid, this);
-			if(item)
+            if (Item* item = objmgr.CreateItem((*is).protoid, this))
 			{
 				item->SetStackCount((*is).amount);
 				if((*is).slot < INVENTORY_SLOT_BAG_END)
