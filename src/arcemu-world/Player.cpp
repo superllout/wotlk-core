@@ -698,14 +698,25 @@ bool Player::Create(WorldPacket & data)
 
     // set race dbc
     myRace = dbcCharRace.LookupEntryForced(race);
-    myClass = dbcCharClass.LookupEntryForced(class_);
-    if(!myRace || !myClass)
+    if (!myRace)
     {
         // information not found
-        sCheatLog.writefromsession(m_session, "tried to create invalid player with race %u and class %u, dbc info not found", race, class_);
+        sLog.Error("Player::Create", "Account %u tried to create player with unknown race %u", m_session->GetAccountId(), race);
         m_session->Disconnect();
         return false;
     }
+
+    myClass = dbcCharClass.LookupEntryForced(class_);
+    if (!myRace)
+    {
+        // information not found
+        sLog.Error("Player::Create", "Account %u tried to create player with unknown class %u", m_session->GetAccountId(), race);
+        m_session->Disconnect();
+        return false;
+    }
+
+    setRace(race);
+    setClass(class_);
 
     m_team = myRace->team_id == 7 ? TEAM_ALLIANCE : TEAM_HORDE;
     m_cache->SetUInt32Value(CACHE_PLAYER_INITIALTEAM, m_team);
@@ -717,7 +728,6 @@ bool Player::Create(WorldPacket & data)
     memcpy(m_taximask, info->taximask, sizeof(m_taximask));
 
     // Set Starting stats for char
-    //SetScale(  ((race==RACE_TAUREN)?1.3f:1.0f));
     SetScale(1.0f);
     setLevel((class_ == DEATHKNIGHT && sWorld.StartingLevel <= 55) ? 55 : sWorld.StartingLevel);
 
@@ -730,6 +740,7 @@ bool Player::Create(WorldPacket & data)
     }
 
     // NOTE: hunters had focus power on first betas wow versions, it was reintroduced only on cataclysm first release.
+    SetPowerType(powertype);
     if (class_ != WARRIOR || class_ != ROGUE || class_ != DEATHKNIGHT /* || class_ != HUNTER */)
     {
         SetMaxPower(POWER_TYPE_MANA, pLevelInfo->Mana);
@@ -777,15 +788,10 @@ bool Player::Create(WorldPacket & data)
     }
 
     SetNextLevelXp(pLevelInfo->XPToNextLevel);
-
     UpdateGlyphs();
-
     SetPrimaryProfessionPoints(sWorld.MaxProfs);
 
-    setRace(race);
-    setClass(class_);
     setGender(gender);
-    SetPowerType(powertype);
 
     SetUInt32Value(UNIT_FIELD_BYTES_2, (U_FIELD_BYTES_FLAG_PVP << 8));
 
@@ -872,8 +878,8 @@ bool Player::Create(WorldPacket & data)
     }
 
     sHookInterface.OnCharacterCreate(this);
-    load_health = GetHealth();
-    load_mana = GetPower(POWER_TYPE_MANA);
+    load_health = GetMaxHealth();
+    load_mana = GetMaxPower(POWER_TYPE_MANA);
     return true;
 }
 
@@ -8275,12 +8281,20 @@ void Player::ApplyLevelInfo(LevelInfo* Info, uint32 Level)
 
     _UpdateMaxSkillCounts();
     UpdateStats();
+
     //UpdateChances();
     UpdateGlyphs();
     m_playerInfo->lastLevel = Level;
     GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_REACH_LEVEL);
     //VLack: 3.1.3, as a final step, send the player's talents, this will set the talent points right too...
     smsg_TalentsInfo(false);
+
+    if (m_FirstLogin)
+    {
+        SetHealthPct(100);
+        if (GetPower(POWER_TYPE_MANA))
+            SetPower(POWER_TYPE_MANA, GetMaxPower(POWER_TYPE_MANA));
+    }
 
     LOG_DETAIL("Player %s set parameters to level %u", GetName(), Level);
 }
@@ -13695,4 +13709,4 @@ void Player::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){
 void Player::RemoveVehicleComponent(){
     delete vehicle;
     vehicle = NULL;
-}
+}
