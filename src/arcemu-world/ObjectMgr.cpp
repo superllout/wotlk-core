@@ -2973,8 +2973,13 @@ NpcMonsterSay* ObjectMgr::HasMonsterSay(uint32 Entry, MONSTER_SAY_EVENTS Event)
 
 void ObjectMgr::LoadInstanceReputationModifiers()
 {
+    Log.Debug("ObjectMgr", "Loading reputation_instance_onkill");
     QueryResult* result = WorldDatabase.Query("SELECT * FROM reputation_instance_onkill");
-    if(!result) return;
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "Loaded %u instance reputation modifiers");
+        return;
+    }
 
     do
     {
@@ -3002,13 +3007,13 @@ void ObjectMgr::LoadInstanceReputationModifiers()
     }
     while(result->NextRow());
     delete result;
-    Log.Success("ObjectMgr", "%u instance reputation modifiers loaded.", m_reputation_instance.size());
+    Log.Success("ObjectMgr", "Loaded %u instance reputation modifiers", m_reputation_instance.size());
 }
 
 bool ObjectMgr::HandleInstanceReputationModifiers(Player* pPlayer, Unit* pVictim)
 {
     uint32 team = pPlayer->GetTeam();
-    bool is_boss;
+    bool is_boss = false;
     if(!pVictim->IsCreature())
         return false;
 
@@ -3016,13 +3021,12 @@ bool ObjectMgr::HandleInstanceReputationModifiers(Player* pPlayer, Unit* pVictim
     if(itr == m_reputation_instance.end())
         return false;
 
-    is_boss = false;//TO< Creature* >( pVictim )->GetCreatureInfo() ? ((Creature*)pVictim)->GetCreatureInfo()->Rank : 0;
     if(TO< Creature* >(pVictim)->GetProto()->boss)
         is_boss = true;
 
     // Apply the bonuses as normal.
-    int32 replimit;
-    int32 value;
+    int32 replimit = 0;
+    int32 value = 0;
 
     for(vector<InstanceReputationMod>::iterator i = itr->second->mods.begin(); i !=  itr->second->mods.end(); ++i)
     {
@@ -3053,6 +3057,7 @@ bool ObjectMgr::HandleInstanceReputationModifiers(Player* pPlayer, Unit* pVictim
 
 void ObjectMgr::LoadDisabledSpells()
 {
+    Log.Debug("ObjectMgr", "Loading spell_disable");
     QueryResult* result = WorldDatabase.Query("SELECT * FROM spell_disable");
     if(result)
     {
@@ -3064,7 +3069,7 @@ void ObjectMgr::LoadDisabledSpells()
         delete result;
     }
 
-    Log.Notice("ObjectMgr", "%u disabled spells.", m_disabled_spells.size());
+    Log.Success("ObjectMgr", "%u disabled spells.", m_disabled_spells.size());
 }
 
 void ObjectMgr::ReloadDisabledSpells()
@@ -3075,8 +3080,8 @@ void ObjectMgr::ReloadDisabledSpells()
 
 void ObjectMgr::LoadGroups()
 {
-    QueryResult* result = CharacterDatabase.Query("SELECT * FROM groups");
-    if(result)
+    Log.Debug("ObjectMgr", "Loading groups");
+    if (QueryResult* result = CharacterDatabase.Query("SELECT * FROM groups"))
     {
         if(result->GetFieldCount() != 52)
         {
@@ -3097,8 +3102,8 @@ void ObjectMgr::LoadGroups()
 
 void ObjectMgr::LoadArenaTeams()
 {
-    QueryResult* result = CharacterDatabase.Query("SELECT * FROM arenateams");
-    if(result != NULL)
+    uint32 count = 0;
+    if (QueryResult* result = CharacterDatabase.Query("SELECT * FROM arenateams"))
     {
         if(result->GetFieldCount() != 22)
         {
@@ -3111,7 +3116,7 @@ void ObjectMgr::LoadArenaTeams()
             AddArenaTeam(team);
             if(team->m_id > uint32(m_hiArenaTeamId.GetVal()))
                 m_hiArenaTeamId.SetVal(uint32(team->m_id));
-
+            ++count;
         }
         while(result->NextRow());
         delete result;
@@ -3119,6 +3124,7 @@ void ObjectMgr::LoadArenaTeams()
 
     /* update the ranking */
     UpdateArenaTeamRankings();
+    Log.Success("ObjectMgr", "Loaded %u arena teams", count);
 }
 
 ArenaTeam* ObjectMgr::GetArenaTeamByGuid(uint32 guid, uint32 Type)
@@ -3274,13 +3280,14 @@ void ObjectMgr::UpdateArenaTeamWeekly()
 void ObjectMgr::ResetDailies()
 {
     _playerslock.AcquireReadLock();
-    PlayerStorageMap::iterator itr = _players.begin();
-    for(; itr != _players.end(); itr++)
+    for (PlayerStorageMap::iterator itr = _players.begin(); itr != _players.end(); itr++)
     {
-        Player* pPlayer = itr->second;
-        pPlayer->DailyMutex.Acquire();
-        pPlayer->m_finishedDailies.clear();
-        pPlayer->DailyMutex.Release();
+        if (Player* pPlayer = itr->second)
+        {
+            pPlayer->DailyMutex.Acquire();
+            pPlayer->m_finishedDailies.clear();
+            pPlayer->DailyMutex.Release();
+        }
     }
     _playerslock.ReleaseReadLock();
 }
@@ -3289,7 +3296,7 @@ void ObjectMgr::LoadSpellTargetConstraints()
 {
     enum { CREATURE_TYPE, GAMEOBJECT_TYPE };
 
-    Log.Success("ObjectMgr", "Loading spell target constraints...");
+    Log.Debug("ObjectMgr", "Loading spell target constraints...");
     if(QueryResult* result = WorldDatabase.Query("SELECT * FROM spelltargetconstraints WHERE SpellID > 0 ORDER BY SpellID"))
     {
         do
@@ -3346,46 +3353,31 @@ SpellTargetConstraint* ObjectMgr::GetSpellTargetConstraintForSpell(uint32 spelli
 
 uint32 ObjectMgr::GenerateArenaTeamId()
 {
-    uint32 ret;
-
-    ret = ++m_hiArenaTeamId;
-
+    uint32 ret = ++m_hiArenaTeamId;
     return ret;
 }
 
 uint32 ObjectMgr::GenerateGroupId()
 {
-    uint32 r;
-
-    r = ++m_hiGroupId;
-
+    uint32 r = ++m_hiGroupId;
     return r;
 }
 
 uint32 ObjectMgr::GenerateGuildId()
 {
-    uint32 r;
-
-    r = ++m_hiGuildId;
-
+    uint32 r = ++m_hiGuildId;
     return r;
 }
 
 uint32 ObjectMgr::GenerateCreatureSpawnID()
 {
-    uint32 r;
-
-    r = ++m_hiCreatureSpawnId;
-
+    uint32 r = ++m_hiCreatureSpawnId;
     return r;
 }
 
 uint32 ObjectMgr::GenerateGameObjectSpawnID()
 {
-    uint32 r;
-
-    r = ++m_hiGameObjectSpawnId;
-
+    uint32 r = ++m_hiGameObjectSpawnId;
     return r;
 }
 
@@ -3435,13 +3427,12 @@ PlayerCache* ObjectMgr::GetPlayerCache(const char* name, bool caseSensitive /*= 
 {
     PlayerCache* ret = NULL;
     m_playerCacheLock.Acquire();
-    PlayerCacheMap::iterator itr;
 
     if(!caseSensitive)
     {
         std::string strName = name;
         arcemu_TOLOWER(strName);
-        for(itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
+        for (PlayerCacheMap::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
         {
             std::string cachename;
             itr->second->GetStringValue(CACHE_PLAYER_NAME, cachename);
@@ -3455,7 +3446,7 @@ PlayerCache* ObjectMgr::GetPlayerCache(const char* name, bool caseSensitive /*= 
     }
     else
     {
-        for(itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
+        for (PlayerCacheMap::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
         {
             std::string cachename;
             itr->second->GetStringValue(CACHE_PLAYER_NAME, cachename);
@@ -3473,40 +3464,47 @@ PlayerCache* ObjectMgr::GetPlayerCache(const char* name, bool caseSensitive /*= 
     return ret;
 }
 
-void ObjectMgr::LoadVehicleAccessories(){
-    QueryResult *result = WorldDatabase.Query( "SELECT creature_entry, accessory_entry, seat FROM vehicle_accessories;" );
-
-    if( result != NULL ){
+void ObjectMgr::LoadVehicleAccessories()
+{
+    Log.Debug("ObjectMgr", "Loading vehicle_accessories");
+    if (QueryResult *result = WorldDatabase.Query("SELECT creature_entry, accessory_entry, seat FROM vehicle_accessories;"))
+    {
 
         do{
             Field *row = result->Fetch();
             VehicleAccessoryEntry *entry = new VehicleAccessoryEntry();
-            uint32 creature_entry = 0;
+            uint32 creature_entry = row[0].GetUInt32();
+            if (!CreatureNameStorage.LookupEntry(creature_entry))
+            {
+                Log.Error("ObjectMgr", "Tried to load vehicle acessory data for non existing creature entry %u", creature_entry);
+                continue;
+            }
+            entry->accessory_entry = row[1].GetUInt32();
+            entry->seat = row[2].GetUInt32();
+            if (!dbcVehicleSeat.LookupEntryForced(row[2].GetUInt32()))
+            {
+                Log.Error("ObjectMgr", "Tried to load vehicle acessory data for creature entry %u with non existing seat %u", creature_entry, entry->seat);
+                continue;
+            }
+            std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr = vehicle_accessories.find(creature_entry);
 
-            creature_entry = row[ 0 ].GetUInt32();
-            entry->accessory_entry = row[ 1 ].GetUInt32();
-            entry->seat = row[ 2 ].GetUInt32();
-
-            std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr
-                = vehicle_accessories.find( creature_entry );
-
-            if( itr != vehicle_accessories.end() ){
+            if( itr != vehicle_accessories.end() )
                 itr->second->push_back( entry );
-            }else{
+            else
+            {
                 std::vector< VehicleAccessoryEntry* >* v = new std::vector< VehicleAccessoryEntry* >();
                 v->push_back( entry );
                 vehicle_accessories.insert( std::make_pair( creature_entry, v ) );
             }
-
         }while( result->NextRow() );
-
         delete result;
     }
+    Log.Success("ObjectMgr", "Loaded %u vehicle accessories", vehicle_accessories.size());
 }
 
-std::vector< VehicleAccessoryEntry* >* ObjectMgr::GetVehicleAccessories( uint32 creature_entry ){
-    std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr =
-        vehicle_accessories.find( creature_entry );
+std::vector< VehicleAccessoryEntry* >* ObjectMgr::GetVehicleAccessories( uint32 creature_entry )
+{
+    std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr = vehicle_accessories.find( creature_entry );
 
     if( itr == vehicle_accessories.end() )
         return NULL;
@@ -3514,11 +3512,15 @@ std::vector< VehicleAccessoryEntry* >* ObjectMgr::GetVehicleAccessories( uint32 
         return itr->second;
 }
 
-void ObjectMgr::LoadWorldStateTemplates(){
+void ObjectMgr::LoadWorldStateTemplates()
+{
+    Log.Debug("ObjectMgr", "Loading worldstate_templates");
     QueryResult *result = WorldDatabase.QueryNA( "SELECT DISTINCT map FROM worldstate_templates ORDER BY map;" );
-
-    if( result == NULL )
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "Loaded 0 worldstate_templates");
         return;
+    }
 
     do{
         Field *row = result->Fetch();
@@ -3527,13 +3529,14 @@ void ObjectMgr::LoadWorldStateTemplates(){
         worldstate_templates.insert( std::make_pair( mapid, new std::multimap< uint32, WorldState >() ) );
 
     }while( result->NextRow() );
-
     delete result;
 
     result = WorldDatabase.QueryNA( "SELECT map, zone, field, value FROM worldstate_templates;" );
-
-    if( result == NULL )
+    if (result == NULL)
+    {
+        Log.Success("ObjectMgr", "Loaded 0 worldstate_templates");
         return;
+    }
 
     do{
         Field *row = result->Fetch();
@@ -3554,6 +3557,7 @@ void ObjectMgr::LoadWorldStateTemplates(){
 
     }while( result->NextRow() );
     delete result;
+    Log.Success("ObjectMgr", "Loaded %u worldstate_templates", worldstate_templates.size());
 }
 
 std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map ) const{
@@ -3568,6 +3572,7 @@ std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map
 
 void ObjectMgr::LoadAchievementRewards()
 {
+    Log.Debug("ObjectMgr", "Loading achievement_rewards");
     if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title`,`item`,`sender`,`subject`,`text` FROM `achievement_reward` ORDER BY `id`"))
     {
         do{
@@ -3599,7 +3604,7 @@ void ObjectMgr::LoadAchievementRewards()
         }while (result->NextRow());
         delete result;
     }
-    sLog.Success("ObjectMgr", "Loaded %u achievement rewards", mAchievementRewards.size());
+    Log.Success("ObjectMgr", "Loaded %u achievement rewards", mAchievementRewards.size());
 }
 
 AchievementReward* ObjectMgr::GetRewardForAchievementId(uint32 id)
