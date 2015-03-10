@@ -1441,17 +1441,11 @@ void ObjectMgr::LoadSpellProcs()
             {
                 if (SpellEntry* sp = dbcSpell.LookupEntryForced(spe_spellId))
                 {
-                    int x;
-                    for (x = 0; x < 3; ++x)
-                        if (sp->ProcOnNameHash[x] == 0)
-                            break;
-
-                    if (x != 3)
+                    for (uint8 x = 0; x < 3; ++x)
                     {
-                        sp->ProcOnNameHash[x] = spe_NameHash;
+                        if (sp->ProcOnNameHash[x] == 0)
+                            sp->ProcOnNameHash[x] = spe_NameHash;
                     }
-                    else
-                        LOG_ERROR("Wrong ProcOnNameHash for Spell: %u!", spe_spellId);
 
                     sp->procFlags = f[2].GetUInt32();
 
@@ -1485,9 +1479,9 @@ void ObjectMgr::LoadSpellProcs()
 
 void ObjectMgr::LoadSpellEffectsOverride()
 {
-    SpellEntry* sp;
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM spell_effects_override");
-    if(result)
+    Log.Debug("ObjectMgr", "Loading spell_effects_override data");
+    uint32 count = 0;
+    if (QueryResult* result = WorldDatabase.Query("SELECT * FROM spell_effects_override"))
     {
         do
         {
@@ -1507,8 +1501,7 @@ void ObjectMgr::LoadSpellEffectsOverride()
 
             if(seo_SpellId)
             {
-                sp = dbcSpell.LookupEntryForced(seo_SpellId);
-                if(sp != NULL)
+                if (SpellEntry* sp = dbcSpell.LookupEntryForced(seo_SpellId))
                 {
                     if(seo_Disable)
                         sp->Effect[seo_EffectId] = SPELL_EFFECT_NULL;
@@ -1539,23 +1532,24 @@ void ObjectMgr::LoadSpellEffectsOverride()
 
                     if(seo_EffectCustomFlag != 0)
                         sp->EffectCustomFlag[ seo_Effect ] = seo_EffectCustomFlag;
+                    ++count;
                 }
                 else
-                {
                     Log.Error("ObjectMgr", "Tried to load a spell effect override for a nonexistant spell: %u", seo_SpellId);
-                }
             }
 
         }
         while(result->NextRow());
         delete result;
     }
+    Log.Success("ObjectMgr", "Loaded spell_effects_override data for %u spells", count);
 }
 
 Item* ObjectMgr::CreateItem(uint32 entry, Player* owner)
 {
     ItemPrototype* proto = ItemPrototypeStorage.LookupEntry(entry);
-    if(proto == NULL) return 0;
+    if(proto == NULL)
+        return NULL;
 
     if(proto->InventoryType == INVTYPE_BAG)
     {
@@ -1583,10 +1577,11 @@ Item* ObjectMgr::CreateItem(uint32 entry, Player* owner)
 
 Item* ObjectMgr::LoadItem(uint32 lowguid)
 {
-    QueryResult* result = CharacterDatabase.Query("SELECT * FROM playeritems WHERE guid = %u", lowguid);
-    Item* pReturn = 0;
+    Log.Debug("ObjectMgr", "Loading playeritems for player %u", lowguid);
 
-    if(result)
+    Item* pReturn = NULL;
+
+    if (QueryResult* result = CharacterDatabase.Query("SELECT * FROM playeritems WHERE guid = %u", lowguid))
     {
         ItemPrototype* pProto = ItemPrototypeStorage.LookupEntry(result->Fetch()[2].GetUInt32());
         if(!pProto)
@@ -1613,16 +1608,14 @@ Item* ObjectMgr::LoadItem(uint32 lowguid)
 
 void ObjectMgr::LoadCorpses(MapMgr* mgr)
 {
-    Corpse* pCorpse = NULL;
-
-    QueryResult* result = CharacterDatabase.Query("SELECT * FROM corpses WHERE instanceid = %u", mgr->GetInstanceID());
-
-    if(result)
+    Log.Debug("ObjectMgr", "Loading corpses for instance id %u", mgr->GetInstanceID());
+    uint32 count = 0;
+    if (QueryResult* result = CharacterDatabase.Query("SELECT * FROM corpses WHERE instanceid = %u", mgr->GetInstanceID()))
     {
         do
         {
             Field* fields = result->Fetch();
-            pCorpse = new Corpse(HIGHGUID_TYPE_CORPSE, fields[0].GetUInt32());
+            Corpse* pCorpse = new Corpse(HIGHGUID_TYPE_CORPSE, fields[0].GetUInt32());
             pCorpse->SetPosition(fields[1].GetFloat(), fields[2].GetFloat(), fields[3].GetFloat(), fields[4].GetFloat());
             pCorpse->SetZoneId(fields[5].GetUInt32());
             pCorpse->SetMapId(fields[6].GetUInt32());
@@ -1635,11 +1628,12 @@ void ObjectMgr::LoadCorpses(MapMgr* mgr)
             }
 
             pCorpse->PushToWorld(mgr);
+            ++count;
         }
         while(result->NextRow());
-
         delete result;
     }
+    Log.Debug("ObjectMgr", "Loaded %u corpses for instance %u", count, mgr->GetInstanceID());
 }
 
 AchievementCriteriaEntryList const & ObjectMgr::GetAchievementCriteriaByType(AchievementCriteriaTypes type)
@@ -1649,9 +1643,9 @@ AchievementCriteriaEntryList const & ObjectMgr::GetAchievementCriteriaByType(Ach
 
 void ObjectMgr::LoadAchievementCriteriaList()
 {
-    for(uint32 rowId = 0; rowId < dbcAchievementCriteriaStore.GetNumRows(); ++rowId)
+    for(uint32 i = 0; i < dbcAchievementCriteriaStore.GetNumRows(); i++)
     {
-        AchievementCriteriaEntry const* criteria = dbcAchievementCriteriaStore.LookupRowForced(rowId);
+        AchievementCriteriaEntry const* criteria = dbcAchievementCriteriaStore.LookupRowForced(i);
         if(!criteria)
             continue;
 
@@ -1674,12 +1668,10 @@ void ObjectMgr::CorpseAddEventDespawn(Corpse* pCorpse)
 
 void ObjectMgr::CorpseCollectorUnload()
 {
-    CorpseMap::const_iterator itr;
     _corpseslock.Acquire();
-    for(itr = m_corpses.begin(); itr != m_corpses.end();)
+    for (CorpseMap::const_iterator itr = m_corpses.begin(); itr != m_corpses.end(); ++itr)
     {
         Corpse* c = itr->second;
-        ++itr;
         if(c->IsInWorld())
             c->RemoveFromWorld(false);
         delete c;
@@ -1739,8 +1731,7 @@ void GossipMenu::BuildPacket(WorldPacket & Packet)
     Packet << TextId;
     Packet << uint32(Menu.size());
 
-    for(std::vector<GossipMenuItem>::iterator iter = Menu.begin();
-            iter != Menu.end(); ++iter)
+    for(std::vector<GossipMenuItem>::iterator iter = Menu.begin(); iter != Menu.end(); ++iter)
     {
         Packet << iter->Id;
         Packet << iter->Icon;
@@ -1789,9 +1780,7 @@ GossipMenuItem GossipMenu::GetItem(uint32 Id)
         return k;
     }
     else
-    {
         return Menu[Id];
-    }
 }
 
 uint32 ObjectMgr::GetGossipTextForNpc(uint32 ID)
@@ -1801,22 +1790,24 @@ uint32 ObjectMgr::GetGossipTextForNpc(uint32 ID)
 
 void ObjectMgr::LoadTrainers()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM trainer_defs");
-    QueryResult* result2;
-    Field* fields2;
-    const char* temp;
-    size_t len;
-
     LoadDisabledSpells();
 
-    if(!result)
+    QueryResult* result = WorldDatabase.Query("SELECT * FROM trainer_defs");
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "0 trainers loaded");
         return;
-
+    }
 
     do
     {
         Field* fields = result->Fetch();
         uint32 entry = fields[0].GetUInt32();
+        if (!CreatureNameStorage.LookupEntry(entry))
+        {
+            Log.Error("ObjectMgr", "Tried to load trainer_defs data for non existing npc entry %u", entry);
+            continue;
+        }
         Trainer* tr = new Trainer;
         tr->RequiredSkill = fields[1].GetUInt32();
         tr->RequiredSkillLine = fields[2].GetUInt32();
@@ -1828,13 +1819,20 @@ void ObjectMgr::LoadTrainers()
         tr->Can_Train_Gossip_TextId = fields[9].GetUInt32();
         tr->Cannot_Train_GossipTextId = fields[10].GetUInt32();
 
-        if(!tr->Can_Train_Gossip_TextId)
+        if (!NpcTextStorage.LookupEntry(tr->Can_Train_Gossip_TextId))
+        {
+            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can train gossip textid\" is incorrect, overriting to 1");
             tr->Can_Train_Gossip_TextId = 1;
-        if(!tr->Cannot_Train_GossipTextId)
-            tr->Cannot_Train_GossipTextId = 1;
+        }
 
-        temp = fields[8].GetString();
-        len = strlen(temp);
+        if (!NpcTextStorage.LookupEntry(tr->Cannot_Train_GossipTextId))
+        {
+            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can not train gossip textid\" is incorrect, overriting to 1");
+            tr->Cannot_Train_GossipTextId = 1;
+        }
+
+        const char* temp = fields[8].GetString();
+        size_t len = strlen(temp);
         if(len)
         {
             tr->UIMessage = new char[len + 1];
@@ -1849,14 +1847,14 @@ void ObjectMgr::LoadTrainers()
         }
 
         //now load the spells
-        result2 = WorldDatabase.Query("SELECT * FROM trainer_spells where entry='%u'", entry);
+        QueryResult* result2 = WorldDatabase.Query("SELECT * FROM trainer_spells where entry='%u'", entry);
         if(!result2)
         {
             if (tr->TrainerType != TRAINER_TYPE_PET)
                 Log.Error("LoadTrainers", "Trainer with no spells, entry %u.", entry);
 
             if(tr->UIMessage != NormalTalkMessage)
-                delete [] tr->UIMessage;
+                delete[] tr->UIMessage;
 
             delete tr;
             continue;
@@ -1873,7 +1871,7 @@ void ObjectMgr::LoadTrainers()
         {
             do
             {
-                fields2 = result2->Fetch();
+                Field* fields2 = result2->Fetch();
                 TrainerSpell ts;
                 bool abrt = false;
                 uint32 CastSpellID = fields2[1].GetUInt32();
@@ -1886,14 +1884,14 @@ void ObjectMgr::LoadTrainers()
                 if(CastSpellID != 0)
                 {
                     ts.pCastSpell = dbcSpell.LookupEntryForced(CastSpellID);
-                    if(ts.pCastSpell)
+                    if (ts.pCastSpell)
                     {
-                        for(int k = 0; k < 3; ++k)
+                        for (int k = 0; k < 3; ++k)
                         {
-                            if(ts.pCastSpell->Effect[k] == SPELL_EFFECT_LEARN_SPELL)
+                            if (ts.pCastSpell->Effect[k] == SPELL_EFFECT_LEARN_SPELL)
                             {
                                 ts.pCastRealSpell = dbcSpell.LookupEntryForced(ts.pCastSpell->EffectTriggerSpell[k]);
-                                if(ts.pCastRealSpell == NULL)
+                                if (ts.pCastRealSpell == NULL)
                                 {
                                     Log.Error("Trainers", "Trainer %u contains cast spell %u that is non-teaching", entry, CastSpellID);
                                     abrt = true;
@@ -1902,20 +1900,19 @@ void ObjectMgr::LoadTrainers()
                             }
                         }
                     }
+                    else
+                        Log.Error("ObjectMgr", "Tried to load trainer spell  data with non existing cast spell %u for creature %u", CastSpellID, entry);
 
                     if(abrt)
                         continue;
                 }
 
-                if(LearnSpellID != 0)
-                {
+                if (SpellEntry* pLearnSpell = dbcSpell.LookupEntryForced(LearnSpellID))
                     ts.pLearnSpell = dbcSpell.LookupEntryForced(LearnSpellID);
-                }
-
-                if(ts.pCastSpell == NULL && ts.pLearnSpell == NULL)
+                else
                 {
-                    Log.Error("LoadTrainers", "Trainer %u without valid spells (%u/%u).", entry, CastSpellID, LearnSpellID);
-                    continue; //omg a bad spell !
+                    Log.Error("ObjectMgr", "Tried to load trainer spell  data with non existing learn spell %u for creature %u", LearnSpellID, entry);
+                    continue;
                 }
 
                 if(ts.pCastSpell && !ts.pCastRealSpell)
@@ -1932,11 +1929,7 @@ void ObjectMgr::LoadTrainers()
                 {
                     uint32 skill = ts.pCastRealSpell->EffectMiscValue[1];
                     skilllineentry* sk = dbcSkillLine.LookupEntryForced(skill);
-                    ARCEMU_ASSERT(sk != NULL);
-                    if(sk->type == SKILL_TYPE_PROFESSION)
-                        ts.IsProfession = true;
-                    else
-                        ts.IsProfession = false;
+                    ts.IsProfession = sk->type == SKILL_TYPE_PROFESSION ? true : false;
                 }
                 else
                     ts.IsProfession = false;
@@ -1978,7 +1971,6 @@ Trainer* ObjectMgr::GetTrainer(uint32 Entry)
 void ObjectMgr::GenerateLevelUpInfo()
 {
     // Generate levelup information for each class.
-    PlayerCreateInfo* PCI;
     for(uint32 Class = WARRIOR; Class <= DRUID; ++Class)
     {
         // These are empty.
@@ -1988,7 +1980,7 @@ void ObjectMgr::GenerateLevelUpInfo()
         // Search for a playercreateinfo.
         for(uint32 Race = RACE_HUMAN; Race <= RACE_DRAENEI; ++Race)
         {
-            PCI = GetPlayerCreateInfo(static_cast<uint8>(Race), static_cast<uint8>(Class));
+            PlayerCreateInfo* PCI = GetPlayerCreateInfo(static_cast<uint8>(Race), static_cast<uint8>(Class));
 
             if(PCI == 0)
                 continue;   // Class not valid for this race.
@@ -2192,8 +2184,7 @@ void ObjectMgr::GenerateLevelUpInfo()
 LevelInfo* ObjectMgr::GetLevelInfo(uint32 Race, uint32 Class, uint32 Level)
 {
     // Iterate levelinfo map until we find the right class+race.
-    LevelInfoMap::iterator itr = mLevelInfo.begin();
-    for(; itr != mLevelInfo.end(); ++itr)
+    for (LevelInfoMap::iterator itr = mLevelInfo.begin(); itr != mLevelInfo.end(); ++itr)
     {
         if(itr->first.first == Race && itr->first.second == Class)
         {
@@ -2215,33 +2206,40 @@ LevelInfo* ObjectMgr::GetLevelInfo(uint32 Race, uint32 Class, uint32 Level)
 
 void ObjectMgr::LoadDefaultPetSpells()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM petdefaultspells");
-    if(result)
+    Log.Debug("ObjectMgr", "Loading petdefaultspells");
+    if (QueryResult* result = WorldDatabase.Query("SELECT * FROM petdefaultspells"))
     {
         do
         {
             Field* f = result->Fetch();
             uint32 Entry = f[0].GetUInt32();
-            uint32 spell = f[1].GetUInt32();
-            SpellEntry* sp = dbcSpell.LookupEntryForced(spell);
-
-            if(spell && Entry && sp)
+            if (!CreatureNameStorage.LookupEntry(Entry))
             {
-                PetDefaultSpellMap::iterator itr = mDefaultPetSpells.find(Entry);
-                if(itr != mDefaultPetSpells.end())
-                    itr->second.insert(sp);
-                else
-                {
-                    set<SpellEntry*> s;
-                    s.insert(sp);
-                    mDefaultPetSpells[Entry] = s;
-                }
+                Log.Error("ObjectMgr", "Tried to load petdefaultspells for invalid entry %u", Entry);
+                continue;
+            }
+
+            SpellEntry* sp = dbcSpell.LookupEntryForced(f[1].GetUInt32());
+            if (!sp)
+            {
+                Log.Error("ObjectMgr", "Tried to load petdefaultspells for npc entry %u with invalid spell %u", Entry, f[1].GetUInt32());
+                continue;
+            }
+
+            PetDefaultSpellMap::iterator itr = mDefaultPetSpells.find(Entry);
+            if(itr != mDefaultPetSpells.end())
+                itr->second.insert(sp);
+            else
+            {
+                set<SpellEntry*> s;
+                s.insert(sp);
+                mDefaultPetSpells[Entry] = s;
             }
         }
         while(result->NextRow());
-
         delete result;
     }
+    Log.Success("ObjectMgr", "Loaded %u petdefaultspells data", mDefaultPetSpells);
 }
 
 set<SpellEntry*>* ObjectMgr::GetDefaultPetSpells(uint32 Entry)
@@ -2255,7 +2253,8 @@ set<SpellEntry*>* ObjectMgr::GetDefaultPetSpells(uint32 Entry)
 
 void ObjectMgr::LoadPetSpellCooldowns()
 {
-
+    Log.Debug("ObjectMgr", "Loading pet spell cooldowns");
+    uint32 count = 0;
     for(DBCStorage< CreatureSpellDataEntry >::iterator itr = dbcCreatureSpellData.begin(); itr != dbcCreatureSpellData.end(); ++itr)
     {
         CreatureSpellDataEntry* csde = *itr;
@@ -2280,7 +2279,9 @@ void ObjectMgr::LoadPetSpellCooldowns()
                 }
             }
         }
+        ++count;
     }
+    Log.Success("ObjectMgr", "Loaded %u pet spell cooldowns");
 }
 
 uint32 ObjectMgr::GetPetSpellCooldown(uint32 SpellId)
@@ -2298,43 +2299,44 @@ uint32 ObjectMgr::GetPetSpellCooldown(uint32 SpellId)
 
 void ObjectMgr::LoadSpellOverride()
 {
-//    int i = 0;
-    std::stringstream query;
+    Log.Debug("ObjectMgr", "Loading spelloverride");
     QueryResult* result = WorldDatabase.Query("SELECT DISTINCT overrideId FROM spelloverride");
-
     if(!result)
     {
+        Log.Success("ObjectMgr", "Loaded 0 spelloverrides");
         return;
     }
-
-//    int num = 0;
-//    uint32 total =(uint32) result->GetRowCount();
-    SpellEntry* sp;
-    uint32 spellid;
 
     do
     {
         Field* fields = result->Fetch();
-        query.rdbuf()->str("");
-        query << "SELECT spellId FROM spelloverride WHERE overrideId = ";
-        query << fields[0].GetUInt32();
-        QueryResult* resultIn = WorldDatabase.Query(query.str().c_str());
+        uint32 spEntry = fields[0].GetUInt32();
+        if (!dbcSpell.LookupEntry(spEntry))
+        {
+            Log.Error("ObjectMgr", "Tried to load spelloverride data for non existing spell %u");
+            continue;
+        }
+        QueryResult* resultIn = WorldDatabase.Query("SELECT spellId FROM spelloverride WHERE overrideId = %u", spEntry);
         std::list<SpellEntry*>* list = new std::list<SpellEntry*>;
         if(resultIn)
         {
             do
             {
                 Field* fieldsIn = resultIn->Fetch();
-                spellid = fieldsIn[0].GetUInt32();
-                sp = dbcSpell.LookupEntryForced(spellid);
-                if(!spellid || !sp)
+                SpellEntry* sp = dbcSpell.LookupEntryForced(fieldsIn[0].GetUInt32());
+                if (!sp)
+                {
+                    Log.Error("ObjectMgr", "spelloverride for spell %u contains wrong override spell %u", spEntry, fieldsIn[0].GetUInt32());
                     continue;
+                }
+
                 list->push_back(sp);
             }
             while(resultIn->NextRow());
             delete resultIn;
         }
-        if(list->size() == 0)
+
+        if(list->empty())
             delete list;
         else
             mOverrideIdMap.insert(OverrideIdMap::value_type(fields[0].GetUInt32(), list));
@@ -2351,13 +2353,20 @@ void ObjectMgr::SetVendorList(uint32 Entry, std::vector<CreatureItem>* list_)
 
 void ObjectMgr::LoadCreatureTimedEmotes()
 {
+    Log.Debug("ObjectMgr", "Loading creature_timed_emotes");
     QueryResult* result = WorldDatabase.Query("SELECT * FROM creature_timed_emotes order by rowid asc");
-    if(!result)return;
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "Loaded creature_timed_emotes data for 0 spawns");
+        return;
+    }
 
+    uint32 count = 0;
     do
     {
         Field* fields = result->Fetch();
         spawn_timed_emotes* te = new spawn_timed_emotes;
+        uint32 spawnid = fields[0].GetUInt32();
         te->type = fields[2].GetUInt8();
         te->value = fields[3].GetUInt32();
         char* str = (char*) fields[4].GetString();
@@ -2367,13 +2376,13 @@ void ObjectMgr::LoadCreatureTimedEmotes()
             te->msg = new char[ len + 1 ];
             memcpy(te->msg, str, len + 1);
         }
-        else te->msg = NULL;
+        else 
+            te->msg = NULL;
         te->msg_type = static_cast<uint8>(fields[5].GetUInt32());
         te->msg_lang = static_cast<uint8>(fields[6].GetUInt32());
         te->expire_after = fields[7].GetUInt32();
 
         HM_NAMESPACE::hash_map<uint32, TimedEmoteList*>::const_iterator i;
-        uint32 spawnid = fields[0].GetUInt32();
         i = m_timedemotes.find(spawnid);
         if(i == m_timedemotes.end())
         {
@@ -2382,33 +2391,37 @@ void ObjectMgr::LoadCreatureTimedEmotes()
             m_timedemotes[spawnid] = m;
         }
         else
-        {
             i->second->push_back(te);
-        }
+        ++count;
     }
     while(result->NextRow());
-
-    Log.Notice("ObjectMgr", "%u timed emotes cached.", result->GetRowCount());
     delete result;
+    Log.Success("ObjectMgr", "Loaded creature_timed_emotes data for %u spawns", count);
 }
 
 TimedEmoteList* ObjectMgr::GetTimedEmoteList(uint32 spawnid)
 {
-    HM_NAMESPACE::hash_map<uint32, TimedEmoteList*>::const_iterator i;
-    i = m_timedemotes.find(spawnid);
+    HM_NAMESPACE::hash_map<uint32, TimedEmoteList*>::const_iterator i = m_timedemotes.find(spawnid);
     if(i != m_timedemotes.end())
     {
         TimedEmoteList* m = i->second;
         return m;
     }
-    else return NULL;
+    else 
+        return NULL;
 }
 
 void ObjectMgr::LoadCreatureWaypoints()
 {
+    Log.Debug("ObjectMgr", "Loading creature_waypoints");
     QueryResult* result = WorldDatabase.Query("SELECT * FROM creature_waypoints");
-    if(!result)return;
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "Loaded 0 creature waypoints");
+        return;
+    }
 
+    int count = 0;
     do
     {
         Field* fields = result->Fetch();
@@ -2426,9 +2439,8 @@ void ObjectMgr::LoadCreatureWaypoints()
         wp->forwardskinid = fields[11].GetUInt32();
         wp->backwardskinid = fields[12].GetUInt32();
 
-        HM_NAMESPACE::hash_map<uint32, WayPointMap*>::const_iterator i;
         uint32 spawnid = fields[0].GetUInt32();
-        i = m_waypoints.find(spawnid);
+        HM_NAMESPACE::hash_map<uint32, WayPointMap*>::const_iterator i = m_waypoints.find(spawnid);
         if(i == m_waypoints.end())
         {
             WayPointMap* m = new WayPointMap;
@@ -2444,17 +2456,17 @@ void ObjectMgr::LoadCreatureWaypoints()
 
             (*(i->second))[wp->id] = wp;
         }
+        ++count;
     }
     while(result->NextRow());
-
-    Log.Notice("ObjectMgr", "%u waypoints cached.", result->GetRowCount());
     delete result;
+
+    Log.Success("ObjectMgr", "Loaded %lu creature waypoints", count);
 }
 
 WayPointMap* ObjectMgr::GetWayPointMap(uint32 spawnid)
 {
-    HM_NAMESPACE::hash_map<uint32, WayPointMap*>::const_iterator i;
-    i = m_waypoints.find(spawnid);
+    HM_NAMESPACE::hash_map<uint32, WayPointMap*>::const_iterator i = m_waypoints.find(spawnid);
     if(i != m_waypoints.end())
     {
         WayPointMap* m = i->second;
@@ -2469,18 +2481,14 @@ WayPointMap* ObjectMgr::GetWayPointMap(uint32 spawnid)
 
 Pet* ObjectMgr::CreatePet(uint32 entry)
 {
-    uint32 guid;
-
-    guid = ++m_hiPetGuid;
+    uint32 guid = ++m_hiPetGuid;
 
     return new Pet(Arcemu::Util::MAKE_PET_GUID(entry, guid));
 }
 
 Player* ObjectMgr::CreatePlayer(uint8 _class)
 {
-    uint32 guid;
-
-    guid = ++m_hiPlayerGuid;
+    uint32 guid = ++m_hiPlayerGuid;
 
     Player* result = NULL;
 
@@ -2516,6 +2524,8 @@ Player* ObjectMgr::CreatePlayer(uint8 _class)
         case DRUID:
             result = new Druid(guid);
             break;
+        default:
+            break;
     }
 
     return result;
@@ -2533,15 +2543,11 @@ void ObjectMgr::RemovePlayer(Player* p)
     _playerslock.AcquireWriteLock();
     _players.erase(p->GetLowGUID());
     _playerslock.ReleaseWriteLock();
-
 }
 
 Corpse* ObjectMgr::CreateCorpse()
 {
-    uint32 guid;
-
-    guid = ++m_hiCorpseGuid;
-
+    uint32 guid = ++m_hiCorpseGuid;
     return new Corpse(HIGHGUID_TYPE_CORPSE, guid);
 }
 
@@ -2561,20 +2567,20 @@ void ObjectMgr::RemoveCorpse(Corpse* p)
 
 Corpse* ObjectMgr::GetCorpse(uint32 corpseguid)
 {
-    Corpse* rv;
+    Corpse* rv = NULL;
     _corpseslock.Acquire();
     CorpseMap::const_iterator itr = m_corpses.find(corpseguid);
-    rv = (itr != m_corpses.end()) ? itr->second : 0;
+    rv = (itr != m_corpses.end()) ? itr->second : NULL;
     _corpseslock.Release();
     return rv;
 }
 
 Transporter* ObjectMgr::GetTransporter(uint32 guid)
 {
-    Transporter* rv;
+    Transporter* rv = NULL;
     _TransportLock.Acquire();
     HM_NAMESPACE::hash_map<uint32, Transporter*>::const_iterator itr = mTransports.find(guid);
-    rv = (itr != mTransports.end()) ? itr->second : 0;
+    rv = (itr != mTransports.end()) ? itr->second : NULL;
     _TransportLock.Release();
     return rv;
 }
@@ -2588,10 +2594,9 @@ void ObjectMgr::AddTransport(Transporter* pTransporter)
 
 Transporter* ObjectMgr::GetTransporterByEntry(uint32 entry)
 {
-    Transporter* rv = 0;
+    Transporter* rv = NULL;
     _TransportLock.Acquire();
-    HM_NAMESPACE::hash_map<uint32, Transporter*>::iterator itr = mTransports.begin();
-    for(; itr != mTransports.end(); ++itr)
+    for (HM_NAMESPACE::hash_map<uint32, Transporter*>::iterator itr = mTransports.begin(); itr != mTransports.end(); ++itr)
     {
         if(itr->second->GetEntry() == entry)
         {
@@ -2605,9 +2610,15 @@ Transporter* ObjectMgr::GetTransporterByEntry(uint32 entry)
 
 void ObjectMgr::LoadGuildCharters()
 {
+    Log.Debug("ObjectMgr", "Loading charters");
     m_hiCharterId.SetVal(0);
     QueryResult* result = CharacterDatabase.Query("SELECT * FROM charters");
-    if(!result) return;
+    if (!result)
+    {
+        Log.Success("ObjectMgr", "0 charters loaded.");
+        return;
+    }
+
     do
     {
         Charter* c = new Charter(result->Fetch());
@@ -2623,9 +2634,8 @@ void ObjectMgr::LoadGuildCharters()
 Charter* ObjectMgr::GetCharter(uint32 CharterId, CharterTypes Type)
 {
     Charter* rv;
-    HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr;
     m_charterLock.AcquireReadLock();
-    itr = m_charters[Type].find(CharterId);
+    HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[Type].find(CharterId);
     rv = (itr == m_charters[Type].end()) ? 0 : itr->second;
     m_charterLock.ReleaseReadLock();
     return rv;
@@ -2634,9 +2644,7 @@ Charter* ObjectMgr::GetCharter(uint32 CharterId, CharterTypes Type)
 Charter* ObjectMgr::CreateCharter(uint32 LeaderGuid, CharterTypes Type)
 {
 
-    uint32 charterid = 0;
-
-    charterid = ++m_hiCharterId;
+    uint32 charterid = ++m_hiCharterId;
 
     Charter* c = new Charter(charterid, LeaderGuid, Type);
     m_charters[c->CharterType].insert(make_pair(c->GetID(), c));
@@ -2760,10 +2768,9 @@ void Charter::SaveToDB()
 Charter* ObjectMgr::GetCharterByItemGuid(uint64 guid)
 {
     m_charterLock.AcquireReadLock();
-    for(int i = 0; i < NUM_CHARTER_TYPES; ++i)
+    for(uint8 i = 0; i < NUM_CHARTER_TYPES; ++i)
     {
-        HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[i].begin();
-        for(; itr != m_charters[i].end(); ++itr)
+        for (HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[i].begin(); itr != m_charters[i].end(); ++itr)
         {
             if(itr->second->ItemGuid == guid)
             {
@@ -2779,8 +2786,7 @@ Charter* ObjectMgr::GetCharterByItemGuid(uint64 guid)
 Charter* ObjectMgr::GetCharterByGuid(uint64 playerguid, CharterTypes type)
 {
     m_charterLock.AcquireReadLock();
-    HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[type].begin();
-    for(; itr != m_charters[type].end(); ++itr)
+    for (HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[type].begin(); itr != m_charters[type].end(); ++itr)
     {
         if(playerguid == itr->second->LeaderGuid)
         {
@@ -2805,8 +2811,7 @@ Charter* ObjectMgr::GetCharterByName(string & charter_name, CharterTypes Type)
 {
     Charter* rv = 0;
     m_charterLock.AcquireReadLock();
-    HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[Type].begin();
-    for(; itr != m_charters[Type].end(); ++itr)
+    for (HM_NAMESPACE::hash_map<uint32, Charter*>::iterator itr = m_charters[Type].begin(); itr != m_charters[Type].end(); ++itr)
     {
         if(itr->second->GuildName == charter_name)
         {
