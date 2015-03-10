@@ -57,11 +57,9 @@ void ApplyNormalFixes()
     }
 
     uint32 cnt = dbcSpell.GetNumRows();
-    uint32 effect;
-    uint32 result;
+    /* uint32 result;  // unused */
 
     map<uint32, uint32> talentSpells;
-    map<uint32, uint32>::iterator talentSpellIterator;
     uint32 i, j;
     for(i = 0; i < dbcTalent.GetNumRows(); ++i)
     {
@@ -69,7 +67,6 @@ void ApplyNormalFixes()
         for(j = 0; j < 5; ++j)
             if(tal->RankID[j] != 0)
                 talentSpells.insert(make_pair(tal->RankID[j], tal->TalentTree));
-
     }
 
     for(uint32 x = 0; x < cnt; x++)
@@ -218,7 +215,7 @@ void ApplyNormalFixes()
         sp->fixed_dddhcoef = -1;
         sp->fixed_hotdotcoef = -1;
 
-        talentSpellIterator = talentSpells.find(sp->Id);
+        map<uint32, uint32>::iterator talentSpellIterator = talentSpells.find(sp->Id);
         if(talentSpellIterator == talentSpells.end())
             sp->talent_tree = 0;
         else
@@ -445,7 +442,7 @@ void ApplyNormalFixes()
         for(uint32 y = 0; y < 3; y++)
         {
             // get the effect number from the spell
-            effect = sp->Effect[y];
+            uint32 effect = sp->Effect[y];
 
             //spell group
 
@@ -457,6 +454,7 @@ void ApplyNormalFixes()
                   )//search for spellid in description
                 {
                     const char* p = sp->Description;
+                    /*
                     while((p = strstr(p, "$")) != 0)
                     {
                         p++;
@@ -468,6 +466,7 @@ void ApplyNormalFixes()
                             result = atoi(p);
                         }
                     }
+                    */
                     pr = 0;
 
                     uint32 len = (uint32)strlen(sp->Description);
