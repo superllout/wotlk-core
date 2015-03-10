@@ -707,10 +707,7 @@ bool Player::Create(WorldPacket & data)
 		return false;
 	}
 
-	if(myRace->team_id == 7)
-		m_team = 0;
-	else
-		m_team = 1;
+    m_team = myRace->team_id == 7 ? TEAM_ALLIANCE : TEAM_HORDE;
 	m_cache->SetUInt32Value(CACHE_PLAYER_INITIALTEAM, m_team);
 
 	uint8 powertype = static_cast<uint8>(myClass->power_type);
@@ -723,19 +720,38 @@ bool Player::Create(WorldPacket & data)
 	//SetScale(  ((race==RACE_TAUREN)?1.3f:1.0f));
 	SetScale(1.0f);
 	SetHealth(info->health);
-	SetPower(POWER_TYPE_MANA, info->mana);
-	SetPower(POWER_TYPE_RAGE, 0);
-	SetPower(POWER_TYPE_FOCUS, info->focus); // focus
-	SetPower(POWER_TYPE_ENERGY, info->energy);
-	SetPower(POWER_TYPE_RUNES, 8);
+
+    // NOTE: hunters had focus power on first betas wow versions, it was reintroduced only on cataclysm first release.
+    if (class_ != WARRIOR || class_ != ROGUE || class_ != DEATHKNIGHT /* || class_ != HUNTER */)
+    {
+        SetPower(POWER_TYPE_MANA, info->mana);
+        SetMaxPower(POWER_TYPE_MANA, info->mana);
+    }
+    else if (class_ == WARRIOR)
+    {
+        SetPower(POWER_TYPE_RAGE, 0);
+        SetMaxPower(POWER_TYPE_RAGE, info->rage);
+    }
+    else if (class_ == ROGUE)
+    {
+        SetPower(POWER_TYPE_ENERGY, info->energy);
+        SetMaxPower(POWER_TYPE_ENERGY, info->energy);
+    }
+    else if (class_ == DEATHKNIGHT)
+    {
+        SetPower(POWER_TYPE_RUNES, 8);
+        SetPower(POWER_TYPE_RUNIC_POWER, 0);
+        SetMaxPower(POWER_TYPE_RUNIC_POWER, 1000);
+    }
+    /*
+    else if (class_ == HUNTER) // Hunters got focus power on cataclysm 
+    {
+	    SetPower(POWER_TYPE_FOCUS, info->focus); // focus
+        SetMaxPower(POWER_TYPE_FOCUS, info->focus);
+    }
+    */
 
 	SetMaxHealth(info->health);
-	SetMaxPower(POWER_TYPE_MANA, info->mana);
-	SetMaxPower(POWER_TYPE_RAGE, info->rage);
-	SetMaxPower(POWER_TYPE_FOCUS, info->focus);
-	SetMaxPower(POWER_TYPE_ENERGY, info->energy);
-	SetMaxPower(POWER_TYPE_RUNES, 8);
-	SetMaxPower(POWER_TYPE_RUNIC_POWER, 1000);
 
 	//THIS IS NEEDED
 	SetBaseHealth(info->health);
@@ -816,18 +832,15 @@ bool Player::Create(WorldPacket & data)
 	m_StableSlotCount = 0;
 	Item* item;
 
-	for(std::set<uint32>::iterator sp = info->spell_list.begin(); sp != info->spell_list.end(); sp++)
-	{
+	for(std::set<uint32>::iterator sp = info->spell_list.begin(); sp != info->spell_list.end(); ++sp)
 		mSpells.insert((*sp));
-	}
 
 	m_FirstLogin = true;
 
-	skilllineentry* se;
 	for(std::list<CreateInfo_SkillStruct>::iterator ss = info->skills.begin(); ss != info->skills.end(); ++ss)
 	{
-		se = dbcSkillLine.LookupEntry(ss->skillid);
-		if(se->type != SKILL_TYPE_LANGUAGE)
+        skilllineentry* se = dbcSkillLine.LookupEntry(ss->skillid);
+		if(se && se->type != SKILL_TYPE_LANGUAGE)
 			_AddSkillLine(se->id, ss->currentval, ss->maxval);
 	}
 	_UpdateMaxSkillCounts();
