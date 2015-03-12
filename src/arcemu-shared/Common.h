@@ -496,8 +496,10 @@ static inline int long2int32(const double value)
 
 ARCEMU_INLINE uint32 now()
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(WIN64)
     return GetTickCount();
+#elif defined(WIN64)
+    return GetTickCount64();
 #else
     struct timeval tv;
     gettimeofday(&tv, NULL);
@@ -546,10 +548,9 @@ typedef std::list<spawn_timed_emotes*> TimedEmoteList;
 
 ARCEMU_INLINE void reverse_array(uint8* pointer, size_t count)
 {
-    size_t x;
     uint8* temp = (uint8*)malloc(count);
     memcpy(temp, pointer, count);
-    for(x = 0; x < count; ++x)
+    for(size_t x = 0; x < count; ++x)
         pointer[x] = temp[count - x - 1];
     free(temp);
 }

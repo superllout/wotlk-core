@@ -1836,6 +1836,10 @@ class ShadeofAranAI : public CreatureAIScript
                     Available[0] = SUPER_BLIZZARD;
                     Available[1] = SUPER_FLAME;
                     break;
+                default:
+                    Available[0] = 0;
+                    Available[1] = 0;
+                    break;
             }
 
             LastSuperSpell = Available[RandomUInt(100) % 2];

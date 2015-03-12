@@ -1358,8 +1358,7 @@ void WorldSession::InitPacketHandlerTable()
 
 }
 
-void SessionLogWriter::writefromsession(WorldSession* session,
-                                        const char* format, ...)
+void SessionLogWriter::writefromsession(WorldSession* session, const char* format, ...)
 {
     if(!IsOpen())
         return;

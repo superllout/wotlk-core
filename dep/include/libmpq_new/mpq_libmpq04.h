@@ -1,5 +1,5 @@
 #define _CRT_SECURE_NO_DEPRECATE
-#define _CRT_SECURE_NO_WARNINGS
+//#define _CRT_SECURE_NO_WARNINGS
 
 #ifndef MPQ_H
 #define MPQ_H
@@ -43,7 +43,7 @@ public:
             token[strlen(token) - 1] = 0;
             string s = token;
             filelist.push_back(s);
-            counter += strlen(token) + 2;
+            counter += uint32(strlen(token) + 2);
             token = strtok(NULL, seps);
         }
 

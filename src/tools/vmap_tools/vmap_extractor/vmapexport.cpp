@@ -447,8 +447,7 @@ int main(int argc, char ** argv)
         {
             printf("Your output directory seems to be polluted, please use an empty directory!\n");
             printf("<press return to exit>");
-            char garbage[2];
-            scanf("%c", garbage);
+            std::cin.get();
             return 1;
         }
     }
@@ -515,7 +514,8 @@ int main(int argc, char ** argv)
     if(!success)
     {
         printf("ERROR: Extract %s. Work NOT complete.\n   Precise vector data=%d.\nPress any key.\n",versionString, preciseVectorData);
-        getchar();
+        std::cin.get();
+        return 0;
     }
 
     printf("Extract %s. Work complete. No errors.\n",versionString);

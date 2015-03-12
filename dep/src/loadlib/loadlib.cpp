@@ -50,6 +50,10 @@ bool FileLoader::prepareLoadedData()
 {
     // Check version
     version = (file_MVER *) data;
+
+    if (!version)
+        return false;
+
 	if( ( version->fcc_txt[ 3 ] != 'M' ) ||
 		( version->fcc_txt[ 2 ] != 'V' ) ||
 		( version->fcc_txt[ 1 ] != 'E' ) ||

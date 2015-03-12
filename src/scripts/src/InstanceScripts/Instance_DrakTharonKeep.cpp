@@ -549,10 +549,12 @@ class NOVOS_THE_SUMMONER_AI : public CreatureAIScript
                     }
                     break;
             }
-            GameObject* go = _unit->GetMapMgr()->CreateGameObject(entry);
-            go->CreateFromProto(entry, _unit->GetMapMgr()->GetMapId(), x, y, z, o, 0.0f, 0.0f, 0.0f, 0.0f);
-            go->PushToWorld(_unit->GetMapMgr());
-            _unit->m_ObjectSlots[id] = go->GetUIdFromGUID();
+            if (GameObject* go = _unit->GetMapMgr()->CreateGameObject(entry))
+            {
+                go->CreateFromProto(entry, _unit->GetMapMgr()->GetMapId(), x, y, z, o, 0.0f, 0.0f, 0.0f, 0.0f);
+                go->PushToWorld(_unit->GetMapMgr());
+                _unit->m_ObjectSlots[id] = go->GetUIdFromGUID();
+            }
         }
 
         void Destroy()

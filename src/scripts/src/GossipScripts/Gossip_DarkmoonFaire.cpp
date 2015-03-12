@@ -19,10 +19,8 @@ class SetupCarnies_Gossip : public GossipScript
     public:
         void GossipHello(Object* pObject, Player* plr)
         {
-            GossipMenu* Menu;
-            int randGossip;
-            randGossip = rand() % 4;
-            switch(randGossip)
+            GossipMenu* Menu = NULL;
+            switch (rand() % 4)
             {
                 case 0:
                     objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 50000, plr);
@@ -302,11 +300,8 @@ class FliksFrog_Gossip : public GossipScript
     public:
         void GossipHello(Object* pObject, Player* plr)
         {
-            GossipMenu* Menu;
-
-            int randGossip;
-            randGossip = rand() % 2;
-            switch(randGossip)
+            GossipMenu* Menu = NULL;
+            switch (rand() % 2)
             {
                 case 0:
                     objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 60011, plr);
