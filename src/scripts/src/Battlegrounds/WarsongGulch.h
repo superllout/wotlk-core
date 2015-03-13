@@ -104,6 +104,9 @@ class WarsongGulch : public CBattleground
 
         void SetIsWeekend(bool isweekend);
         void DespawnGates(uint32 delay);
+
+    private:
+        void rewardObjectBuff(uint32 areaId, Player* plr);
 };
 
 #endif

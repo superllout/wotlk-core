@@ -95,44 +95,18 @@ WarsongGulch::~WarsongGulch()
 
 void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
 {
-    int32 buffslot = -1;
-    switch(id)
+    switch (id)
     {
         case 3686:      // Speed
-            buffslot = 0;
-            break;
         case 3687:      // Speed (Horde)
-            buffslot = 1;
-            break;
         case 3706:      // Restoration
-            buffslot = 2;
-            break;
         case 3708:      // Restoration (Horde)
-            buffslot = 3;
-            break;
         case 3707:      // Berserking
-            buffslot = 4;
-            break;
         case 3709:      // Berserking (Horde)
-            buffslot = 5;
+            rewardObjectBuff(id, plr);
             break;
     }
-
-    if(buffslot >= 0)
-    {
-        if(m_buffs[buffslot] != 0 && m_buffs[buffslot]->IsInWorld())
-        {
-            /* apply the buff */
-            SpellEntry* sp = dbcSpell.LookupEntry(m_buffs[buffslot]->GetInfo()->sound3);
-            Spell* s = sSpellFactoryMgr.NewSpell(plr, sp, true, 0);
-            SpellCastTargets targets(plr->GetGUID());
-            s->prepare(&targets);
-
-            /* despawn the gameobject (not delete!) */
-            m_buffs[buffslot]->Despawn(0, BUFF_RESPAWN_TIME);
-        }
-        return;
-    }
+    
 
     if(((id == 3646 && plr->IsTeamAlliance()) || (id == 3647 && plr->IsTeamHorde())) && (plr->m_bgHasFlag && m_flagHolders[plr->GetTeam()] == plr->GetLowGUID()))
     {
@@ -576,4 +550,42 @@ GameObject* WarsongGulch::SpawnBgGameObject(wsgObjectLocation objectLocation)
     }
 
     return pObject;
+}
+
+void WarsongGulch::rewardObjectBuff(uint32 areaId, Player* plr)
+{
+    uint8 buffId = MAX_WSG_BUFFS;
+    switch (areaId)
+    {
+        case 3686:      // Speed
+            buffId = 0;
+            break;
+        case 3687:      // Speed (Horde)
+            buffId = 1;
+            break;
+        case 3706:      // Restoration
+            buffId = 2;
+            break;
+        case 3708:      // Restoration (Horde)
+            buffId = 3;
+            break;
+        case 3707:      // Berserking
+            buffId = 4;
+            break;
+        case 3709:      // Berserking (Horde)
+            buffId = 5;
+            break;
+    }
+
+    if (buffId == MAX_WSG_BUFFS)
+        return;
+
+    if (m_buffs[buffId] != NULL && m_buffs[buffId]->IsInWorld())
+    {
+        if (SpellEntry* buffSpell = dbcSpell.LookupEntry(m_buffs[buffId]->GetInfo()->sound3))
+        {
+            plr->CastSpell(plr, buffSpell, true);
+            m_buffs[buffId]->Despawn(0, BUFF_RESPAWN_TIME);
+        }
+    }
 }
