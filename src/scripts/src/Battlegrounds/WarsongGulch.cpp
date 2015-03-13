@@ -24,21 +24,24 @@
 
 WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CBattleground(mgr, id, lgroup, t)
 {
-    // Set zone id
+    // Set general stuff
     m_zoneid = 3277;
+    m_lgroup = lgroup;
 
     // Set stats
     for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
     {
         m_players[i].clear();
-        m_pendPlayers[i].clear();
-        m_pvpData.clear();
+        m_pendPlayers[i].clear(); 
         m_flagHolders[i] = 0;
         m_scores[i] = 0;
     }
-    m_resurrectMap.clear();
 
-    m_lgroup = lgroup;
+    // Clear general containers
+    m_resurrectMap.clear();
+    m_pvpData.clear();
+
+
 
     // Create the buffs
     for (uint8 i = 0; i < MAX_WSG_BUFFS; i++)
