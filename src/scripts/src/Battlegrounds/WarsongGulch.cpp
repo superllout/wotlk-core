@@ -529,7 +529,7 @@ void WarsongGulch::onCaptureFlag(Player* plr)
 
     PlaySoundToAll(plr->IsTeamHorde() ? SOUND_HORDE_SCORES : SOUND_ALLIANCE_SCORES);
 
-    SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "%s captured the %s flag!", plr->GetName(), plr->IsTeamAlliance() ? "Horde" : "Alliance");
+    SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, plr->GetGUID(), "%s captured the %s flag!", plr->GetName(), plr->IsTeamAlliance() ? "Horde" : "Alliance");
 
     SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 1);
 
