@@ -105,93 +105,23 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
         case 3709:      // Berserking (Horde)
             rewardObjectBuff(id, plr);
             break;
+        case 3646:      // Alliance base (alliance flag spawn location)
+        case 3647:      // Horde base (horde flag spawn location)
+        {
+            if (canPlayerCaptureFlag(plr))
+            {
+                onCaptureFlag(plr);
+                if (m_scores[plr->GetTeam()] == MAX_WSG_POINTS)
+                    giveRewardsAndFinalize(plr->GetTeam());
+
+                SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_HORDE_SCORE : WORLDSTATE_WSG_ALLIANCE_SCORE, m_scores[plr->GetTeam()]);
+                UpdatePvPData();
+            }
+        }break;
+        default:
+            break;
     }
     
-
-    if(((id == 3646 && plr->IsTeamAlliance()) || (id == 3647 && plr->IsTeamHorde())) && (plr->m_bgHasFlag && m_flagHolders[plr->GetTeam()] == plr->GetLowGUID()))
-    {
-        if(m_flagHolders[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE] != 0 || m_dropFlags[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE]->IsInWorld())
-        {
-            /* can't cap while flag dropped */
-            return;
-        }
-        float distance = plr->IsTeamAlliance() ? plr->CalcDistance(1540.29f, 1481.34f, 352.64f) : plr->CalcDistance(915.367f, 1433.78f, 346.089f);
-        if(distance > 50.0f)
-        {
-            //50 yards from the spawn, gtfo hacker.
-            sCheatLog.writefromsession(plr->GetSession(), "Tried to capture the flag in WSG while being more then 50 yards away. (%f yards)", plr->CalcDistance(915.367f, 1433.78f, 346.089f));
-            plr->GetSession()->Disconnect();
-            return;
-        }
-
-        /* remove the bool from the player so the flag doesn't drop */
-        m_flagHolders[plr->GetTeam()] = 0;
-        plr->m_bgHasFlag = 0;
-
-        /* remove flag aura from player */
-        plr->RemoveAura(23333 + (plr->GetTeam() * 2));
-
-        /* capture flag points */
-        plr->m_bgScore.MiscData[BG_SCORE_WSG_FLAGS_CAPTURED]++;
-
-        PlaySoundToAll(plr->IsTeamHorde() ? SOUND_HORDE_SCORES : SOUND_ALLIANCE_SCORES);
-
-        if(plr->IsTeamHorde())
-            SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "%s captured the Alliance flag!", plr->GetName());
-        else
-            SendChatMessage(CHAT_MSG_BG_EVENT_ALLIANCE, plr->GetGUID(), "%s captured the Horde flag!", plr->GetName());
-
-        SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 1);
-
-        // Remove the Other Flag
-        if(m_homeFlags[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE]->IsInWorld())
-            m_homeFlags[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE]->RemoveFromWorld(false);
-
-        // Add the Event to respawn the Flags
-        sEventMgr.AddEvent(this, &WarsongGulch::EventReturnFlags, EVENT_BATTLEGROUND_WSG_AUTO_RETURN_FLAG, 20000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
-
-        /* give each player on that team bonus honor and reputation*/
-        uint32 honorToAdd = 2 * m_honorPerKill;
-        uint32 repToAdd = m_isWeekend ? 45 : 35;
-        uint32 fact = plr->IsTeamHorde() ? 889 : 890; /*Warsong Outriders : Sliverwing Sentinels*/
-        for(set<Player*>::iterator itr = m_players[plr->GetTeam()].begin(); itr != m_players[plr->GetTeam()].end(); ++itr)
-        {
-            (*itr)->m_bgScore.BonusHonor += honorToAdd;
-            HonorHandler::AddHonorPointsToPlayer((*itr), honorToAdd);
-            plr->ModStanding(fact, repToAdd);
-        }
-
-        m_scores[plr->GetTeam()]++;
-        if(m_scores[plr->GetTeam()] == 3)
-        {
-            /* victory! */
-            m_ended = true;
-            m_winningteam = (uint8)plr->GetTeam();
-            m_nextPvPUpdateTime = 0;
-
-            sEventMgr.RemoveEvents(this, EVENT_BATTLEGROUND_CLOSE);
-            sEventMgr.AddEvent(TO< CBattleground* >(this), &CBattleground::Close, EVENT_BATTLEGROUND_CLOSE, 120000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
-
-            AddHonorToTeam( m_winningteam, 3 * 185 );
-
-            CastSpellOnTeam( m_winningteam, 69158 );
-            CastSpellOnTeam( m_winningteam, 69496 );
-            CastSpellOnTeam( m_winningteam, 69497 );
-            CastSpellOnTeam( m_winningteam, 69498 );
-
-            if( m_winningteam == TEAM_ALLIANCE )
-                AddHonorToTeam( TEAM_HORDE, 1 * 185 );
-            else
-                AddHonorToTeam( TEAM_ALLIANCE, 1 * 185 );
-
-            m_mainLock.Release();
-        }
-
-        /* increment the score world state */
-        SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_HORDE_SCORE : WORLDSTATE_WSG_ALLIANCE_SCORE, m_scores[plr->GetTeam()]);
-
-        UpdatePvPData();
-    }
 }
 
 void WarsongGulch::EventReturnFlags()
@@ -588,4 +518,86 @@ void WarsongGulch::rewardObjectBuff(uint32 areaId, Player* plr)
             m_buffs[buffId]->Despawn(0, BUFF_RESPAWN_TIME);
         }
     }
+}
+
+bool WarsongGulch::canPlayerCaptureFlag(Player* plr)
+{
+    if ((plr->IsTeamAlliance() && plr->m_bgHasFlag && m_flagHolders[TEAM_ALLIANCE] == plr->GetLowGUID()) || (plr->IsTeamHorde() && plr->m_bgHasFlag && m_flagHolders[TEAM_HORDE] == plr->GetLowGUID()))
+    {
+        // Do not cap if flag is dropped
+        if (m_dropFlags[plr->GetTeam()]->IsInWorld())
+            return false;
+
+        // Do not count if player team flag was taken by other faction player
+        if (m_flagHolders[plr->IsTeamAlliance() ? TEAM_HORDE : TEAM_ALLIANCE] != 0)
+            return false;
+
+        float distance = plr->CalcDistance(wsgFlags[TEAM_ALLIANCE].x, wsgFlags[TEAM_ALLIANCE].y, wsgFlags[TEAM_ALLIANCE].z);
+        if (distance > FLAG_CAPTURE_MIN_RANGE)
+        {
+            //50 yards from the spawn, gtfo hacker.
+            sCheatLog.writefromsession(plr->GetSession(), "Tried to capture the flag in WSG while being more then 50 yards away. (%f yards)", distance);
+            plr->GetSession()->Disconnect();
+            return false;
+        }
+    }
+    return true;
+}
+
+void WarsongGulch::onCaptureFlag(Player* plr)
+{
+    /* remove the bool from the player so the flag doesn't drop */
+    m_flagHolders[plr->GetTeam()] = 0;
+    plr->m_bgHasFlag = false;
+
+    /* remove flag aura from player */
+    plr->RemoveAura(plr->IsTeamAlliance() ? WSG_SPELL_HORDE_FLAG : WSG_SPELL_ALLIANCE_FLAG);
+
+    /* capture flag points */
+    plr->m_bgScore.MiscData[BG_SCORE_WSG_FLAGS_CAPTURED]++;
+
+    PlaySoundToAll(plr->IsTeamHorde() ? SOUND_HORDE_SCORES : SOUND_ALLIANCE_SCORES);
+
+    SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "%s captured the %s flag!", plr->GetName(), plr->IsTeamAlliance() ? "Horde" : "Alliance");
+
+    SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 1);
+
+    // Remove the Other Flag
+    if (m_homeFlags[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE]->IsInWorld())
+        m_homeFlags[plr->IsTeamHorde() ? TEAM_ALLIANCE : TEAM_HORDE]->RemoveFromWorld(false);
+
+    // Add the Event to respawn the Flags
+    sEventMgr.AddEvent(this, &WarsongGulch::EventReturnFlags, EVENT_BATTLEGROUND_WSG_AUTO_RETURN_FLAG, 20000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+
+    /* give each player on that team bonus honor and reputation*/
+    uint32 honorToAdd = 2 * m_honorPerKill;
+    uint32 repToAdd = m_isWeekend ? 45 : 35;
+    uint32 fact = plr->IsTeamHorde() ? FACTION_WARSONG_OUTRIDERS : FACTION_SLIVERWING_SENTINELS;
+    for (set<Player*>::iterator itr = m_players[plr->GetTeam()].begin(); itr != m_players[plr->GetTeam()].end(); ++itr)
+    {
+        (*itr)->m_bgScore.BonusHonor += honorToAdd;
+        HonorHandler::AddHonorPointsToPlayer((*itr), honorToAdd);
+        plr->ModStanding(fact, repToAdd);
+    }
+
+    m_scores[plr->GetTeam()]++;
+}
+
+void WarsongGulch::giveRewardsAndFinalize(uint8 team)
+{
+    m_ended = true;
+    m_winningteam = team;
+    m_nextPvPUpdateTime = 0;
+
+    sEventMgr.RemoveEvents(this, EVENT_BATTLEGROUND_CLOSE);
+    sEventMgr.AddEvent(TO< CBattleground* >(this), &CBattleground::Close, EVENT_BATTLEGROUND_CLOSE, 120000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+
+    AddHonorToTeam(m_winningteam, 3 * WSG_WINNER_REWARD_HONOR_AMOUNT);
+
+    for (uint8 i = 0; i < MAX_WSG_REWARD_SPELLS; i++)
+        CastSpellOnTeam(m_winningteam, wsgRewardSpells[i]);
+
+    AddHonorToTeam(team, 1 * WSG_WINNER_REWARD_HONOR_AMOUNT);
+
+    m_mainLock.Release();
 }
