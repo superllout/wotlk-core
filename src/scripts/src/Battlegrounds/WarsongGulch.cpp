@@ -33,10 +33,10 @@ WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CB
         m_players[i].clear();
         m_pendPlayers[i].clear();
         m_pvpData.clear();
-        m_resurrectMap.clear();
         m_flagHolders[i] = 0;
         m_scores[i] = 0;
     }
+    m_resurrectMap.clear();
 
     m_lgroup = lgroup;
 
