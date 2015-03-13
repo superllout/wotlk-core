@@ -35,6 +35,9 @@ void WorldSession::HandleSetVisibleRankOpcode(WorldPacket & recv_data)
 
 void HonorHandler::AddHonorPointsToPlayer(Player* pPlayer, uint32 uAmount)
 {
+    if (pPlayer->m_bgScore.Deaths >= 50)    // if player dies 50 times, he is not able to get honor points
+        return;
+
     pPlayer->HandleProc(PROC_ON_GAIN_EXPIERIENCE, pPlayer, NULL);
     pPlayer->m_procCounter = 0;
 
