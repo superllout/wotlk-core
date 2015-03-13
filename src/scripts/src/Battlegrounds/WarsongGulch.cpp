@@ -21,6 +21,36 @@
 #include "StdAfx.h"
 #include "WarsongGulch.h"
 
+// Gives citeria for "Call to Arms : Warsong Gulch(both factions)"
+static uint32 wsgRewardSpells[MAX_WSG_REWARD_SPELLS] = { 69158, 69456, 69497, 69498 };
+
+static LocationVector wsgStartLocations[MAX_PLAYER_TEAMS] =
+{
+    LocationVector(933.989685f, 1430.735840f, 345.537140f, M_PI_FLOAT), // Horde
+    LocationVector(1519.530273f, 1481.868408f, 352.023743f, M_PI_FLOAT) // Alliance
+};
+
+static LocationVector wsgRepopLocation[MAX_PLAYER_TEAMS] =
+{
+    LocationVector(1032.644775f, 1388.316040f, 340.559937f, 0.043200f), // Horde
+    LocationVector(1423.218872f, 1554.663574f, 342.833801f, 3.124139f)  // Alliance
+};
+
+static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
+{
+    { 179871, 1449.9296875f, 1470.70971679688f, 342.634552001953f, -1.64060950279236f, 0.0f, 0.73135370016098f, -0.681998312473297f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179899, 1005.17071533203f, 1447.94567871094f, 335.903228759766f, 1.64060950279236f, 0.0f, 0.73135370016098f, 0.681998372077942f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179904, 1317.50573730469f, 1550.85070800781f, 313.234375f, -0.26179963350296f, 0.0f, 0.130526319146156f, -0.991444826126099f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179906, 1110.45129394531f, 1353.65563964844f, 316.518096923828f, -0.68067866563797f, 0.0f, 0.333806991577148f, -0.94264143705368f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179905, 1320.09375f, 1378.78967285156f, 314.753234863281f, 1.18682384490967f, 0.0f, 0.559192895889282f, 0.829037606716156f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179907, 1139.68774414063f, 1560.28771972656f, 306.843170166016f, -2.4434609413147f, 0.0f, 0.939692616462708f, -0.342020124197006f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 }
+};
+
+static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
+{
+    { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Horde flag
+    { 179830, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 1314, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 }   // Alliance flag
+};
 
 WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CBattleground(mgr, id, lgroup, t)
 {
@@ -327,13 +357,7 @@ void WarsongGulch::HookOnMount(Player* plr)
 
 bool WarsongGulch::HookHandleRepop(Player* plr)
 {
-    LocationVector dest;
-    if(plr->IsTeamHorde())
-        dest.ChangeCoords(1032.644775f, 1388.316040f, 340.559937f, 0.043200f);
-    else
-        dest.ChangeCoords(1423.218872f, 1554.663574f, 342.833801f, 3.124139f);
-    plr->SafeTeleport(plr->GetMapId(), plr->GetInstanceID(), dest);
-    return true;
+    return plr->SafeTeleport(plr->GetMapId(), plr->GetInstanceID(), wsgRepopLocation[plr->GetTeam()]);
 }
 
 void WarsongGulch::OnCreate()
