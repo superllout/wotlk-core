@@ -64,7 +64,7 @@ void RuinsOfLordaeron::HookOnShadowSight(){
 
 }
 
-LocationVector RuinsOfLordaeron::GetStartingCoords( uint32 Team ){
+LocationVector RuinsOfLordaeron::GetStartingCoords( uint8 Team ){
     if(Team)
         return LocationVector(1277.105103f, 1743.956177f, 31.603209f);
     else

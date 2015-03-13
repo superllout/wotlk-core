@@ -135,7 +135,7 @@ class SERVER_DECL CBattleground : public EventableObject
         void SendPVPData(Player* plr);
 
         /* Get the starting position for this team. */
-        virtual LocationVector GetStartingCoords(uint32 Team) = 0;
+        virtual LocationVector GetStartingCoords(uint8 Team) = 0;
 
         /* Send a packet to the entire battleground */
         void DistributePacketToAll(WorldPacket* packet);

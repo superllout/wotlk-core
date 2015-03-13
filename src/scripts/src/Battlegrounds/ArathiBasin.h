@@ -91,7 +91,7 @@ class ArathiBasin : public CBattleground
         void HookOnShadowSight();
         void HookGenerateLoot(Player* plr, Object* pCorpse);
         void SpawnBuff(uint32 x);
-        LocationVector GetStartingCoords(uint32 Team);
+        LocationVector GetStartingCoords(uint8 Team);
         void HookOnFlagDrop(Player* plr);
 
         static CBattleground* Create(MapMgr* m, uint32 i, uint32 l, uint32 t) { return new ArathiBasin(m, i, l, t); }

@@ -141,7 +141,7 @@ class StrandOfTheAncient : public CBattleground
         uint32 GetNameID() { return 34; } // in worldstring_tables
 
         uint32 GetRoundTime() { return RoundTime; };
-        LocationVector GetStartingCoords(uint32 team);
+        LocationVector GetStartingCoords(uint8 team);
         void HookOnAreaTrigger(Player* plr, uint32 id);
         void HookFlagStand(Player* plr, GameObject* obj);
         void HookOnFlagDrop(Player* plr);

@@ -18,14 +18,56 @@
  *
  */
 
+#ifndef WARSONG_GULCH_BG
+#define WARSONG_GULCH_BG
+
+#define MAP_WARSONG_GULCH 489
+
+static LocationVector wsgStartLocations[MAX_PLAYER_TEAMS] =
+{
+    LocationVector(933.989685f, 1430.735840f, 345.537140f, M_PI_FLOAT), // Horde
+    LocationVector(1519.530273f, 1481.868408f, 352.023743f, M_PI_FLOAT) // Alliance
+};
+
+struct wsgObjectLocation
+{
+    uint32 entry;
+    float x, y, z;
+    float orientation[5];
+    uint32 flags;
+    uint16 faction;
+    float scale;
+    uint8 state;
+    uint16 animProgress;
+};
+
+#define MAX_WSG_BUFFS 6
 #define BUFF_RESPAWN_TIME 90000
+static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
+{
+    { 179871, 1449.9296875f, 1470.70971679688f, 342.634552001953f, -1.64060950279236f, 0.0f, 0.73135370016098f, -0.681998312473297f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179899, 1005.17071533203f, 1447.94567871094f, 335.903228759766f, 1.64060950279236f, 0.0f, 0.73135370016098f, 0.681998372077942f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179904, 1317.50573730469f, 1550.85070800781f, 313.234375f, -0.26179963350296f, 0.0f, 0.130526319146156f, -0.991444826126099f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179906, 1110.45129394531f, 1353.65563964844f, 316.518096923828f, -0.68067866563797f, 0.0f, 0.333806991577148f, -0.94264143705368f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179905, 1320.09375f, 1378.78967285156f, 314.753234863281f, 1.18682384490967f, 0.0f, 0.559192895889282f, 0.829037606716156f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179907, 1139.68774414063f, 1560.28771972656f, 306.843170166016f, -2.4434609413147f, 0.0f, 0.939692616462708f, -0.342020124197006f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 }
+};
+
+#define MAX_WSG_FLAGS 2
+#define DROPPED_HORDE_FLAG_ENTRY 179786
+#define DROPPED_ALLIANCE_FLAG_ENTRY 179786
+static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
+{
+    { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Horde flag
+    { 179830, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 1314, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 }   // Alliance flag
+};
 
 class WarsongGulch : public CBattleground
 {
-        GameObject* m_buffs[6];
-        GameObject* m_homeFlags[2];
-        GameObject* m_dropFlags[2];
-        uint32 m_flagHolders[2];
+        GameObject* m_buffs[MAX_WSG_BUFFS];
+        GameObject* m_homeFlags[MAX_WSG_FLAGS];
+        GameObject* m_dropFlags[MAX_WSG_FLAGS];
+        uint32 m_flagHolders[MAX_WSG_FLAGS];
         list<GameObject*> m_gates;
         uint32 m_scores[2];
         uint32 m_lgroup;
@@ -47,8 +89,8 @@ class WarsongGulch : public CBattleground
         void HookOnHK(Player* plr);
         void HookOnShadowSight();
         void HookGenerateLoot(Player* plr, Object* pCorpse);
-        void SpawnBuff(uint32 x);
-        LocationVector GetStartingCoords(uint32 Team);
+        GameObject* SpawnBgGameObject(wsgObjectLocation objectLocation);
+        LocationVector GetStartingCoords(uint8 Team);
         void HookOnFlagDrop(Player* plr);
         void ReturnFlag(uint32 team);
 
@@ -63,3 +105,5 @@ class WarsongGulch : public CBattleground
         void SetIsWeekend(bool isweekend);
         void DespawnGates(uint32 delay);
 };
+
+#endif

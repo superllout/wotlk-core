@@ -481,7 +481,7 @@ int main(int argc, char ** argv)
 
     // extract data
     if(success)
-        success = ExtractWmo();
+        success = ExtractWmo() ? true : false;
 
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     //map.dbc
@@ -494,7 +494,7 @@ int main(int argc, char ** argv)
             printf("FATAL ERROR: Map.dbc not found in data file.\n");
             return 1;
         }
-        map_count=dbc->getRecordCount ();
+        map_count = uint32(dbc->getRecordCount());
         map_ids=new map_id[map_count];
         for(unsigned int x=0;x<map_count;++x)
         {

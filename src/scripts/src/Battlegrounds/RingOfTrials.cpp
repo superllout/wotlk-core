@@ -74,7 +74,7 @@ void RingOfTrials::HookOnShadowSight(){
     m_buffs[1]->PushToWorld(m_mapMgr);
 }
 
-LocationVector RingOfTrials::GetStartingCoords( uint32 Team ){
+LocationVector RingOfTrials::GetStartingCoords( uint8 Team ){
     if(Team)
         return LocationVector(4027.004883f, 2976.964844f, 11.600499f);
     else

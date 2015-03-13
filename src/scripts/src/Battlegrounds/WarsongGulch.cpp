@@ -24,78 +24,61 @@
 
 WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CBattleground(mgr, id, lgroup, t)
 {
-    int i;
+    // Set zone id
+    m_zoneid = 3277;
 
-    for(i = 0; i < 2; i++)
+    // Set stats
+    for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
     {
         m_players[i].clear();
         m_pendPlayers[i].clear();
+        m_pvpData.clear();
+        m_resurrectMap.clear();
+        m_flagHolders[i] = 0;
+        m_scores[i] = 0;
     }
 
-    m_pvpData.clear();
-    m_resurrectMap.clear();
-
-    m_flagHolders[0] = m_flagHolders[1] = 0;
     m_lgroup = lgroup;
 
-    /* create the buffs */
-    for(i = 0; i < 6; ++i)
-        SpawnBuff(i);
+    // Create the buffs
+    for (uint8 i = 0; i < MAX_WSG_BUFFS; i++)
+        m_buffs[i] = SpawnBgGameObject(wsgBuffs[i]);
 
-    /* take note: these are swapped around for performance bonus */
-    // warsong flag - horde base
-    m_homeFlags[0] = SpawnGameObject(179831, 489, 915.367f, 1433.78f, 346.089f, 3.17301f, 0, 210, 2.5f);
-    m_homeFlags[0]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-    m_homeFlags[0]->SetType(GAMEOBJECT_TYPE_FLAGSTAND);
-    m_homeFlags[0]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-
-    // silverwing flag - alliance base
-    m_homeFlags[1] = SpawnGameObject(179830, 489, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0, 1314, 2.5f);
-    m_homeFlags[1]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-    m_homeFlags[1]->SetType(GAMEOBJECT_TYPE_FLAGSTAND);
-    m_homeFlags[1]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-
-    // dropped flags
-    m_dropFlags[1] = m_mapMgr->CreateGameObject(179786);
-    if(!m_dropFlags[1]->CreateFromProto(179785, 489, 0, 0, 0, 0))
-        Log.Warning("WarsongGulch", "Could not create dropped flag 1");
-
-    m_dropFlags[0] = m_mapMgr->CreateGameObject(179786);
-    if(!m_dropFlags[0]->CreateFromProto(179786, 489, 0, 0, 0, 0))
-        Log.Warning("WarsongGulch", "Could not create dropped flag 0");
-
-    for(i = 0; i < 2; ++i)
+    // Create dropped flags
+    for (uint8 i = 0; i < MAX_WSG_FLAGS; i++)
     {
-        m_dropFlags[i]->SetUInt32Value(GAMEOBJECT_DYNAMIC, 1);
-        m_dropFlags[i]->SetScale(2.5f);
+        m_dropFlags[i] = m_mapMgr->CreateGameObject(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_FLAG_ENTRY : DROPPED_HORDE_FLAG_ENTRY);
+        if (m_dropFlags[i] && m_dropFlags[i]->CreateFromProto(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_FLAG_ENTRY : DROPPED_HORDE_FLAG_ENTRY, MAP_WARSONG_GULCH, 0.0f, 0.0f, 0.0f, 0.0f))
+        {
+            m_dropFlags[i]->SetUInt32Value(GAMEOBJECT_DYNAMIC, 1);
+            m_dropFlags[i]->SetScale(2.5f);
+        }
+        else
+            Log.Warning("WarsongGulch", "Could not create %s dropped flag", i == TEAM_ALLIANCE ? "alliance" : "horde");
     }
-
-    m_scores[0] = m_scores[1] = 0;
-
-    m_zoneid = 3277;
-
 }
 
 WarsongGulch::~WarsongGulch()
 {
-    // gates are always spawned, so mapmgr will clean them up
-    for(uint32 i = 0; i < 6; ++i)
+    // Remove buffs
+    for(uint8 i = 0; i < MAX_WSG_BUFFS; i++)
     {
         // buffs may not be spawned, so delete them if they're not
-        if(m_buffs[i] && m_buffs[i]->IsInWorld() == false)
+        if(m_buffs[i] != NULL && !m_buffs[i]->IsInWorld())
             delete m_buffs[i];
     }
 
-    for(uint32 i = 0; i < 2; ++i)
+    // Remove flags
+    for (uint8 i = 0; i < MAX_WSG_FLAGS; i++)
     {
-        if(m_dropFlags[i] && m_dropFlags[i]->IsInWorld() == false)
+        if(m_dropFlags[i] && !m_dropFlags[i]->IsInWorld())
             delete m_dropFlags[i];
 
-        if(m_homeFlags[i] && m_homeFlags[i]->IsInWorld() == false)
+        if(m_homeFlags[i] && !m_homeFlags[i]->IsInWorld())
             delete m_homeFlags[i];
     }
 
-    for(list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
+    for (list<GameObject*>::iterator itr = m_gates.begin(); itr != m_gates.end(); ++itr)
     {
         if((*itr) != NULL)
         {
@@ -105,7 +88,6 @@ WarsongGulch::~WarsongGulch()
     }
 
     m_resurrectMap.clear();
-
 }
 
 void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
@@ -427,12 +409,9 @@ void WarsongGulch::OnRemovePlayer(Player* plr)
     plr->RemoveAura(BG_PREPARATION);
 }
 
-LocationVector WarsongGulch::GetStartingCoords(uint32 Team)
+LocationVector WarsongGulch::GetStartingCoords(uint8 Team)
 {
-    if(Team)        // Horde
-        return LocationVector(933.989685f, 1430.735840f, 345.537140f, M_PI_FLOAT);
-    else            // Alliance
-        return LocationVector(1519.530273f, 1481.868408f, 352.023743f, M_PI_FLOAT);
+    return wsgStartLocations[Team];
 }
 
 void WarsongGulch::HookOnPlayerDeath(Player* plr)
@@ -462,61 +441,6 @@ bool WarsongGulch::HookHandleRepop(Player* plr)
         dest.ChangeCoords(1423.218872f, 1554.663574f, 342.833801f, 3.124139f);
     plr->SafeTeleport(plr->GetMapId(), plr->GetInstanceID(), dest);
     return true;
-}
-
-void WarsongGulch::SpawnBuff(uint32 x)
-{
-    switch(x)
-    {
-        case 0:
-            m_buffs[x] = SpawnGameObject(179871, 489, 1449.9296875f, 1470.70971679688f, 342.634552001953f, -1.64060950279236f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.73135370016098f);
-            m_buffs[x]->SetParentRotation(3, -0.681998312473297f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-        case 1:
-            m_buffs[x] = SpawnGameObject(179899, 489, 1005.17071533203f, 1447.94567871094f, 335.903228759766f, 1.64060950279236f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.73135370016098f);
-            m_buffs[x]->SetParentRotation(3, 0.681998372077942f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-        case 2:
-            m_buffs[x] = SpawnGameObject(179904, 489, 1317.50573730469f, 1550.85070800781f, 313.234375f, -0.26179963350296f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.130526319146156f);
-            m_buffs[x]->SetParentRotation(3, -0.991444826126099f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-        case 3:
-            m_buffs[x] = SpawnGameObject(179906, 489, 1110.45129394531f, 1353.65563964844f, 316.518096923828f, -0.68067866563797f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.333806991577148f);
-            m_buffs[x]->SetParentRotation(3, -0.94264143705368f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-        case 4:
-            m_buffs[x] = SpawnGameObject(179905, 489, 1320.09375f, 1378.78967285156f, 314.753234863281f, 1.18682384490967f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.559192895889282f);
-            m_buffs[x]->SetParentRotation(3, 0.829037606716156f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-        case 5:
-            m_buffs[x] = SpawnGameObject(179907, 489, 1139.68774414063f, 1560.28771972656f, 306.843170166016f, -2.4434609413147f, 0, 114, 1);
-            m_buffs[x]->SetParentRotation(2, 0.939692616462708f);
-            m_buffs[x]->SetParentRotation(3, -0.342020124197006f);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 0, 1);
-            m_buffs[x]->SetType(GAMEOBJECT_TYPE_TRAP);
-            m_buffs[x]->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
-            break;
-    }
 }
 
 void WarsongGulch::OnCreate()
@@ -635,4 +559,18 @@ void WarsongGulch::DespawnGates(uint32 delay)
         (*itr)->Despawn(0, 0);
     }
     m_gates.clear();
+}
+
+GameObject* WarsongGulch::SpawnBgGameObject(wsgObjectLocation objectLocation)
+{
+    GameObject* pObject = NULL;
+    if (pObject = SpawnGameObject(objectLocation.entry, MAP_WARSONG_GULCH, objectLocation.x, objectLocation.y, objectLocation.z, objectLocation.orientation[0], objectLocation.flags, objectLocation.faction, objectLocation.scale))
+    {
+        for (uint8 i = 0; i < 3; i++)
+            pObject->SetParentRotation(i + 1, objectLocation.orientation[i+1]);
+        pObject->SetByte(GAMEOBJECT_BYTES_1, 3, objectLocation.animProgress);
+        pObject->SetState(objectLocation.state);
+    }
+
+    return pObject;
 }

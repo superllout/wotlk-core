@@ -46,7 +46,7 @@ void DalaranSewers::OnCreate(){
     Arena::OnCreate();
 }
 
-LocationVector DalaranSewers::GetStartingCoords( uint32 Team ){
+LocationVector DalaranSewers::GetStartingCoords( uint8 Team ){
     if(Team)
         return LocationVector(1363.3609f, 817.3569f, 14.8128f);
     else

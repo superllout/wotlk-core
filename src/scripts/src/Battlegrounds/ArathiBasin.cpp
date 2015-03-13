@@ -589,7 +589,7 @@ void ArathiBasin::HookFlagStand(Player* plr, GameObject* obj)
     // nothing?
 }
 
-LocationVector ArathiBasin::GetStartingCoords(uint32 Team)
+LocationVector ArathiBasin::GetStartingCoords(uint8 Team)
 {
     if(Team)
         return LocationVector(684.75629f, 681.945007f, -12.915456f, 0.881211f);

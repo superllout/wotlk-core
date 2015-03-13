@@ -797,7 +797,7 @@ void IsleOfConquest::HookOnUnitDied( Unit *victim ){
     }
 }
 
-LocationVector IsleOfConquest::GetStartingCoords(uint32 Team)
+LocationVector IsleOfConquest::GetStartingCoords(uint8 Team)
 {
         if(Team)                // Horde
                 return LocationVector(1264.06f, -736.73f, 48.91f, 3.07f);

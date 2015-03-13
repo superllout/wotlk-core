@@ -1645,7 +1645,7 @@ void AlteracValley::OnRemovePlayer(Player* plr)
     plr->RemoveAura(BG_PREPARATION);
 }
 
-LocationVector AlteracValley::GetStartingCoords(uint32 Team)
+LocationVector AlteracValley::GetStartingCoords(uint8 Team)
 {
     if(Team)
         return LocationVector(-1433.550903f, -608.329529f, 51.149689f, 1.140702f);

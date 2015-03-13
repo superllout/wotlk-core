@@ -75,7 +75,7 @@ void CircleOfBlood::HookOnShadowSight(){
     m_buffs[1]->PushToWorld(m_mapMgr);
 }
 
-LocationVector CircleOfBlood::GetStartingCoords( uint32 Team ){
+LocationVector CircleOfBlood::GetStartingCoords( uint8 Team ){
     if(Team)
         return LocationVector(6292.032227f, 287.570343f, 5.003577f);
     else

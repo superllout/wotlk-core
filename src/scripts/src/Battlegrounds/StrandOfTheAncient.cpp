@@ -257,7 +257,7 @@ void StrandOfTheAncient::OnRemovePlayer(Player* plr)
         plr->RemoveAura(BG_PREPARATION);
 }
 
-LocationVector StrandOfTheAncient::GetStartingCoords( uint32 team ){
+LocationVector StrandOfTheAncient::GetStartingCoords( uint8 team ){
     if( team == Attackers )
         return sotaAttackerStartingPosition[ roundprogress ];
     else

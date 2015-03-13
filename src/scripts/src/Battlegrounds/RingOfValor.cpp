@@ -62,7 +62,7 @@ void RingOfValor::OnCreate(){
     Arena::OnCreate();
 }
 
-LocationVector RingOfValor::GetStartingCoords( uint32 Team ){
+LocationVector RingOfValor::GetStartingCoords( uint8 Team ){
     if(Team)
         return LocationVector(763.6011f, -294.3227f, 28.4f);
     else

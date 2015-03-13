@@ -33,7 +33,7 @@ public:
     }
 
     void OnCreate();
-    LocationVector GetStartingCoords( uint32 Team );
+    LocationVector GetStartingCoords( uint8 Team );
     bool HookHandleRepop( Player *plr );
 };
 
