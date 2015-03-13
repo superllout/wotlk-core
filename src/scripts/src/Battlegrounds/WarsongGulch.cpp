@@ -41,8 +41,6 @@ WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CB
     m_resurrectMap.clear();
     m_pvpData.clear();
 
-
-
     // Create the buffs
     for (uint8 i = 0; i < MAX_WSG_BUFFS; i++)
         m_buffs[i] = SpawnBgGameObject(wsgBuffs[i]);
@@ -50,8 +48,8 @@ WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CB
     // Create dropped flags
     for (uint8 i = 0; i < MAX_WSG_FLAGS; i++)
     {
-        m_dropFlags[i] = m_mapMgr->CreateGameObject(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_FLAG_ENTRY : DROPPED_HORDE_FLAG_ENTRY);
-        if (m_dropFlags[i] && m_dropFlags[i]->CreateFromProto(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_FLAG_ENTRY : DROPPED_HORDE_FLAG_ENTRY, MAP_WARSONG_GULCH, 0.0f, 0.0f, 0.0f, 0.0f))
+        m_dropFlags[i] = m_mapMgr->CreateGameObject(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_WSG_FLAG_ENTRY : DROPPED_HORDE_WSG_FLAG_ENTRY);
+        if (m_dropFlags[i] && m_dropFlags[i]->CreateFromProto(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_WSG_FLAG_ENTRY : DROPPED_HORDE_WSG_FLAG_ENTRY, MAP_WARSONG_GULCH, 0.0f, 0.0f, 0.0f, 0.0f))
         {
             m_dropFlags[i]->SetUInt32Value(GAMEOBJECT_DYNAMIC, 1);
             m_dropFlags[i]->SetScale(2.5f);
@@ -93,9 +91,9 @@ WarsongGulch::~WarsongGulch()
     m_resurrectMap.clear();
 }
 
-void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
+void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 areaId)
 {
-    switch (id)
+    switch (areaId)
     {
         case 3686:      // Speed
         case 3687:      // Speed (Horde)
@@ -103,7 +101,7 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
         case 3708:      // Restoration (Horde)
         case 3707:      // Berserking
         case 3709:      // Berserking (Horde)
-            rewardObjectBuff(id, plr);
+            rewardObjectBuff(areaId, plr);
             break;
         case 3646:      // Alliance base (alliance flag spawn location)
         case 3647:      // Horde base (horde flag spawn location)
@@ -121,7 +119,6 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 id)
         default:
             break;
     }
-    
 }
 
 void WarsongGulch::EventReturnFlags()
@@ -140,12 +137,7 @@ void WarsongGulch::HookOnFlagDrop(Player* plr)
     if(!plr->m_bgHasFlag || m_dropFlags[plr->GetTeam()]->IsInWorld())
         return;
 
-    /* drop the flag! */
     m_dropFlags[plr->GetTeam()]->SetPosition(plr->GetPosition());
-//    m_dropFlags[plr->GetTeam()]->SetFloatValue(GAMEOBJECT_POS_X, plr->GetPositionX());
-//    m_dropFlags[plr->GetTeam()]->SetFloatValue(GAMEOBJECT_POS_Y, plr->GetPositionY());
-//    m_dropFlags[plr->GetTeam()]->SetFloatValue(GAMEOBJECT_POS_Z, plr->GetPositionZ());
-//    m_dropFlags[plr->GetTeam()]->SetFloatValue(GAMEOBJECT_FACING, plr->GetOrientation());
     m_dropFlags[plr->GetTeam()]->PushToWorld(m_mapMgr);
 
     m_flagHolders[plr->GetTeam()] = 0;
@@ -156,10 +148,7 @@ void WarsongGulch::HookOnFlagDrop(Player* plr)
 
     sEventMgr.AddEvent(this, &WarsongGulch::ReturnFlag, plr->GetTeam(), EVENT_BATTLEGROUND_WSG_AUTO_RETURN_FLAG + plr->GetTeam(), 5000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 
-    if(plr->IsTeamHorde())
-        SendChatMessage(CHAT_MSG_BG_EVENT_ALLIANCE, plr->GetGUID(), "The Alliance flag was dropped by %s!", plr->GetName());
-    else
-        SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "The Horde flag was dropped by %s!", plr->GetName());
+    SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, plr->GetGUID(), "The %s flag was dropped by %s!", plr->IsTeamHorde() ? "Alliance" : "Horde", plr->GetName());
 }
 
 void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
@@ -237,10 +226,7 @@ void WarsongGulch::ReturnFlag(uint32 team)
     if(!m_homeFlags[team]->IsInWorld())
         m_homeFlags[team]->PushToWorld(m_mapMgr);
 
-    if(team)
-        SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Alliance flag was returned to its base!");
-    else
-        SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Horde flag was returned to its base!");
+    SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The %s flag was returned to its base!", team == TEAM_ALLIANCE ? "Horde" : "Alliance");
 }
 
 void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)

@@ -71,8 +71,8 @@ static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
 };
 
 #define MAX_WSG_FLAGS 2
-#define DROPPED_HORDE_FLAG_ENTRY 179786
-#define DROPPED_ALLIANCE_FLAG_ENTRY 179786
+#define DROPPED_HORDE_WSG_FLAG_ENTRY 179786
+#define DROPPED_ALLIANCE_WSG_FLAG_ENTRY 179786
 static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
 {
     { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Horde flag
