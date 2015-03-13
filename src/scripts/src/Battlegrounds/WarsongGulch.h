@@ -86,7 +86,7 @@ class WarsongGulch : public CBattleground
     GameObject* m_dropFlags[MAX_WSG_FLAGS];
     uint32 m_flagHolders[MAX_WSG_FLAGS];
     list<GameObject*> m_gates;
-    uint32 m_scores[2];
+    uint32 m_scores[MAX_PLAYER_TEAMS];
     uint32 m_lgroup;
 public:
     WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t);
@@ -130,7 +130,7 @@ private:
     // Check do player can capture flag
     bool canPlayerCaptureFlag(Player* plr);
 
-    // Sets bg stats and rewards player and his team
+    // Sets bg stats and rewards for player and his team
     void onCaptureFlag(Player* plr);
 
     // Rewards players and closes battleground
