@@ -380,8 +380,8 @@ void WarsongGulch::OnCreate()
     SetWorldState(WORLDSTATE_WSG_MAX_SCORE, MAX_WSG_POINTS);
 
     /* spawn spirit guides */
-    AddSpiritGuide(SpawnSpiritGuide(1423.218872f, 1554.663574f, 342.833801f, 3.124139f, 0));
-    AddSpiritGuide(SpawnSpiritGuide(1032.644775f, 1388.316040f, 340.559937f, 0.043200f, 1));
+    for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
+        AddSpiritGuide(SpawnSpiritGuide(wsgRepopLocation[i].x, wsgRepopLocation[i].y, wsgRepopLocation[i].z, wsgRepopLocation[i].o, i));
 }
 
 void WarsongGulch::OnStart()
