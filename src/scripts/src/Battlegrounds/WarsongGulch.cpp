@@ -26,14 +26,14 @@ static uint32 wsgRewardSpells[MAX_WSG_REWARD_SPELLS] = { 69158, 69456, 69497, 69
 
 static LocationVector wsgStartLocations[MAX_PLAYER_TEAMS] =
 {
-    LocationVector(933.989685f, 1430.735840f, 345.537140f, M_PI_FLOAT), // Horde
-    LocationVector(1519.530273f, 1481.868408f, 352.023743f, M_PI_FLOAT) // Alliance
+    LocationVector(1523.81f, 1481.76f, 352.008f, M_PI_FLOAT), // Alliance
+    LocationVector(933.331f, 1433.72f, 345.536f, M_PI_FLOAT)  // Horde
 };
 
 static LocationVector wsgRepopLocation[MAX_PLAYER_TEAMS] =
 {
-    LocationVector(1032.644775f, 1388.316040f, 340.559937f, 0.043200f), // Horde
-    LocationVector(1423.218872f, 1554.663574f, 342.833801f, 3.124139f)  // Alliance
+    LocationVector(1415.33f, 1554.79f, 343.156f, 3.124139f), // Alliance
+    LocationVector(1029.14f, 1387.49f, 340.836f, 0.043200f)  // Horde
 };
 
 static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
@@ -48,8 +48,8 @@ static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
 
 static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
 {
-    { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Horde flag
-    { 179830, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 1314, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 }   // Alliance flag
+    { 179830, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 1314, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Alliance flag
+    { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 }   // Horde flag
 };
 
 #define MAX_WSG_GATES 5
