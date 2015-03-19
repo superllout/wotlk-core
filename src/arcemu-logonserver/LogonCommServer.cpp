@@ -373,7 +373,8 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 
     HM_NAMESPACE::hash_map<uint32, uint8>::iterator itr;
     buf >> count;
-    LOG_BASIC("Got mapping packet for realm %u, total of %u entries.", (unsigned int)realm_id, (unsigned int)count);
+    Log.Success("Realm","Got mapping packet for realm %u, total of %u entries.", (unsigned int)realm_id, (unsigned int)count);
+
     for(uint32 i = 0; i < count; ++i)
     {
         buf >> account_id >> number_of_characters;

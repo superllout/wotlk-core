@@ -1524,13 +1524,13 @@ void Object::_setFaction()
     {
         factT = dbcFactionTemplate.LookupEntryForced(TO_UNIT(this)->GetFaction());
         if(!factT)
-            LOG_ERROR("Unit does not have a valid faction. It will make him act stupid in world. Don't blame us, blame yourself for not checking :P, faction %u set to entry %u", TO_UNIT(this)->GetFaction(), GetEntry());
+            LOG_ERROR("Unit does not have a valid faction %u set to entry %u", TO_UNIT(this)->GetFaction(), GetEntry());
     }
     else if(IsGameObject())
     {
         factT = dbcFactionTemplate.LookupEntryForced(TO< GameObject* >(this)->GetFaction());
         if(!factT)
-            LOG_ERROR("Game Object does not have a valid faction. It will make him act stupid in world. Don't blame us, blame yourself for not checking :P, faction %u set to entry %u", TO< GameObject* >(this)->GetFaction(), GetEntry());
+            LOG_ERROR("Game Object does not have a valid faction %u set to entry %u", TO< GameObject* >(this)->GetFaction(), GetEntry());
     }
 
     if(!factT)

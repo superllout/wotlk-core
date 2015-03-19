@@ -178,7 +178,7 @@ void ScriptMgr::LoadScripts()
         std::string fname = Path + findres.GetNext();
         Arcemu::DynLib* dl = new Arcemu::DynLib(fname.c_str());
 
-        loadmessage << "  " << dl->GetName() << " : ";
+        loadmessage << dl->GetName() << " : ";
 
         if(!dl->Load())
         {
@@ -216,7 +216,7 @@ void ScriptMgr::LoadScripts()
                 }
                 else
                 {
-                    loadmessage << ' ' << std::string( BUILD_HASH_STR ) << " : ";
+                    loadmessage << std::string( BUILD_HASH_STR ) << " : ";
 
                     if((stype & SCRIPT_TYPE_SCRIPT_ENGINE) != 0)
                     {
@@ -238,7 +238,7 @@ void ScriptMgr::LoadScripts()
 
                         loadmessage << "loaded";
                     }
-                    LOG_BASIC(loadmessage.str().c_str());
+                    Log.Success("ScriptMgr", loadmessage.str().c_str());
                     count++;
                 }
             }
@@ -247,7 +247,7 @@ void ScriptMgr::LoadScripts()
 
     if(count == 0)
     {
-        LOG_ERROR("  No external scripts found! Server will continue to function with limited functionality.");
+        Log.Error("ScriptMgr", "No external scripts found! Server will continue to function with limited functionality.");
     }
     else
     {
@@ -289,7 +289,7 @@ void ScriptMgr::DumpUnimplementedSpells()
 {
     std::ofstream of;
 
-    LOG_BASIC("Dumping IDs for spells with unimplemented dummy/script effect(s)");
+    Log.Success("DumpUnimplementedSpells", "Dumping IDs for spells with unimplemented dummy/script effect(s)");
     uint32 count = 0;
 
     of.open("unimplemented1.txt");
@@ -320,9 +320,9 @@ void ScriptMgr::DumpUnimplementedSpells()
 
     of.close();
 
-    LOG_BASIC("Dumped %u IDs.", count);
+    Log.Success("DumpUnimplementedSpells", "Dumped %u IDs.", count);
 
-    LOG_BASIC("Dumping IDs for spells with unimplemented dummy aura effect.");
+    Log.Success("DumpUnimplementedSpells", "Dumping IDs for spells with unimplemented dummy aura effect.");
 
     std::ofstream of2;
     of2.open("unimplemented2.txt");
@@ -351,7 +351,7 @@ void ScriptMgr::DumpUnimplementedSpells()
 
     of2.close();
 
-    LOG_BASIC("Dumped %u IDs.", count);
+    Log.Success("DumpUnimplementedSpells", "Dumped %u IDs.", count);
 }
 
 void ScriptMgr::register_creature_script(uint32 entry, exp_create_creature_ai callback)

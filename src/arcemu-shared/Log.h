@@ -26,10 +26,8 @@
 class WorldPacket;
 class WorldSession;
 
-#define SZLTR "\xe5\xcf\xfe\xed\xf3\xfb\x03\xeb"
-#define SZLTR_LENGTH 9
-#define TIME_FORMAT "[%m-%d-%Y][%H:%M]"
-#define TIME_FORMAT_LENGTH 100
+#define TIME_FORMAT "[%H:%M:%S]"
+#define TIME_FORMAT_LENGTH 50
 
 enum LogType
 {
@@ -54,11 +52,14 @@ class SERVER_DECL oLog : public Singleton< oLog >
         void outDetail(const char* str, ...);
         //log level 2
         void outDebug(const char* str, ...);
+        //log lovel 3
+        void outMap(const char* str, ...);
 
         void logError(const char* file, int line, const char* fncname, const char* msg, ...);
         void logDebug(const char* file, int line, const char* fncname, const char* msg, ...);
         void logBasic(const char* file, int line, const char* fncname,  const char* msg, ...);
         void logDetail(const char* file, int line, const char* fncname, const char* msg, ...);
+        void logMap(const char* file, int line, const char* fncname, const char* msg, ...);
 
         //old NGLog.h methods
         //log level 0
@@ -70,6 +71,8 @@ class SERVER_DECL oLog : public Singleton< oLog >
         void Warning(const char* source, const char* format, ...);
         //log level 2
         void Debug(const char* source, const char* format, ...);
+        //log level 3
+        void Map(const char* source, const char* format, ...);
 
         void SetLogging(bool enabled);
 

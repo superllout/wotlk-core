@@ -1664,7 +1664,7 @@ void World::AnnounceColorChooser(int tagcolor, int gmtagcolor, int namecolor, in
             ann_msgcolor = "|cffffff00"; //yellow
             break;
     }
-    LOG_BASIC("Announce colors initialized.");
+    Log.Success("World", "Announce colors initialized.");
 }
 
 void World::LoadAccountDataProc(QueryResultVector & results, uint32 AccountId)

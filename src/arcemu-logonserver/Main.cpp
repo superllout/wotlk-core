@@ -25,7 +25,7 @@
 #endif
 #include "../arcemu-shared/arcemu_getopt.h"
 
-#define BANNER "ArcEmu %s %s/%s-%s (%s) :: Logon Server"
+#define BANNER "<< ArcEmu %s %s/%s-%s-%s :: Logon Server >>"
 
 #ifndef WIN32
 #include <sched.h>
@@ -321,7 +321,9 @@ void LogonServer::Run(int argc, char** argv)
     sLog.Init(0, LOGON_LOG);
     
     sLog.outBasic(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
+	sLog.outBasic("================================================================");
     sLog.outErrorSilent(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
+    sLog.outErrorSilent("================================================================");
 
     if(do_version)
     {
@@ -331,11 +333,12 @@ void LogonServer::Run(int argc, char** argv)
 
     if(do_check_conf)
     {
-        LOG_BASIC("Checking config file: %s", config_file);
+        Log.Success("Checking config file: %s", config_file);
         if(Config.MainConfig.SetSource(config_file, true))
-            LOG_BASIC("  Passed without errors.");
+            Log.Success("Config","Passed without errors.");
         else
-            LOG_BASIC("  Encountered one or more errors.");
+            Log.Success("Config","Encountered one or more errors.");
+
         /* Remved useless die directive */
         /*
         string die;
@@ -350,7 +353,7 @@ void LogonServer::Run(int argc, char** argv)
     if(file_log_level != (int)DEF_VALUE_NOT_SET)
         sLog.SetFileLoggingLevel(file_log_level);
 
-    printf("The key combination <Ctrl-C> will safely shut down the server at any time.\n");
+    sLog.outBasic("The key combination <Ctrl-C> will safely shut down the server at any time.");
     Log.Success("System", "Initializing Random Number Generators...");
 
     Log.Success("Config", "Loading Config Files...");
@@ -526,7 +529,7 @@ void LogonServer::Run(int argc, char** argv)
     delete pfc;
     delete cl;
     delete sl;
-    LOG_BASIC("Shutdown complete.");
+    Log.Success("Server","Shutdown complete.");
     sLog.Close();
 }
 

@@ -52,12 +52,12 @@ void LogonConsole::Kill()
     ir[1].Event.KeyEvent.wVirtualScanCode = 28;
     WriteConsoleInput(GetStdHandle(STD_INPUT_HANDLE), ir, 2, & dwTmp);
 #endif
-    LOG_BASIC("Waiting for console thread to terminate....");
+    Log.Success("System","Waiting for console thread to terminate....");
     while(_thread != NULL)
     {
         Arcemu::Sleep(100);
     }
-    LOG_BASIC("Console shut down.");
+    Log.Success("System","Console shut down.");
 }
 
 bool LogonConsoleThread::run()
