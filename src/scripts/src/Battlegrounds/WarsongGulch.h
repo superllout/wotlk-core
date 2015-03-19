@@ -48,12 +48,10 @@ struct wsgObjectLocation
 {
     uint32 entry;
     float x, y, z;
-    float orientation[5];
+    float orientation;
+    float rotation[4];
     uint32 flags;
     uint16 faction;
-    float scale;
-    uint8 state;
-    uint16 animProgress;
 };
 
 class WarsongGulch : public CBattleground

@@ -36,33 +36,38 @@ static LocationVector wsgRepopLocation[MAX_PLAYER_TEAMS] =
     LocationVector(1029.14f, 1387.49f, 340.836f, 0.043200f)  // Horde
 };
 
-static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
-{
-    { 179871, 1449.9296875f, 1470.70971679688f, 342.634552001953f, -1.64060950279236f, 0.0f, 0.73135370016098f, -0.681998312473297f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179899, 1005.17071533203f, 1447.94567871094f, 335.903228759766f, 1.64060950279236f, 0.0f, 0.73135370016098f, 0.681998372077942f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179904, 1317.50573730469f, 1550.85070800781f, 313.234375f, -0.26179963350296f, 0.0f, 0.130526319146156f, -0.991444826126099f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179906, 1110.45129394531f, 1353.65563964844f, 316.518096923828f, -0.68067866563797f, 0.0f, 0.333806991577148f, -0.94264143705368f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179905, 1320.09375f, 1378.78967285156f, 314.753234863281f, 1.18682384490967f, 0.0f, 0.559192895889282f, 0.829037606716156f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179907, 1139.68774414063f, 1560.28771972656f, 306.843170166016f, -2.4434609413147f, 0.0f, 0.939692616462708f, -0.342020124197006f, 0, 114, 1.0f, GAMEOBJECT_STATE_CLOSED, 100 }
-};
-
 static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
 {
-    { 179830, 1540.29f, 1481.34f, 352.64f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 1314, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 },  // Alliance flag
-    { 179831, 915.367f, 1433.78f, 346.089f, 3.17301f, 0.0f, 0.0f, 0.0f, 0, 210, 2.5f, GAMEOBJECT_STATE_CLOSED, 100 }   // Horde flag
+    { 179830, 1540.423f, 1481.325f, 351.8284f, 3.089233f, 0, 0, 0.9996573f, 0.02617699f, 0, 1314 },   // Alliance flag
+    { 179831, 916.0226f, 1434.405f, 345.413f, 0.01745329f, 0, 0, 0.008726535f, 0.9999619f, 0, 210 }   // Horde flag
 };
 
-#define MAX_WSG_GATES 5
+static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
+{
+    { 179871, 1449.93f, 1470.71f, 342.6346f, -1.64061f, 0, 0, 0.7313537f, -0.6819983f, 0, 114 },      // Speed buff (1)
+    { 179871, 1005.171f, 1447.946f, 335.9032f, 1.64061f, 0, 0, 0.7313537f, 0.6819984f, 0, 114 },      // Speed buff (2)
+    { 179904, 1317.506f, 1550.851f, 313.2344f, -0.2617996f, 0, 0, 0.1305263f, -0.9914448f, 0, 114 },  // Regen buff (1)
+    { 179904, 1110.451f, 1353.656f, 316.5181f, -0.6806787f, 0, 0, 0.333807f, -0.9426414f, 0, 114 },   // Regen buff (2)
+    { 179905, 1320.09f, 1378.79f, 314.7532f, 1.186824f, 0, 0, 0.5591929f, 0.8290376f, 0, 114 },       // Berserker buff (1)
+    { 179905, 1139.688f, 1560.288f, 306.8432f, -2.443461f, 0, 0, 0.9396926f, -0.3420201f, 0, 114 },   // berserker buff (2)
+};
+
+#define MAX_WSG_GATES 10
 static wsgObjectLocation wsgGates[MAX_WSG_GATES] =
 {
     // Alliance gates
-    { 179921, 1471.554688f, 1458.778076f, 362.633240f, 0.0f, 0.0f, 0.0f, 0.0f, 33, 114, 2.33271f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179919, 1492.477783f, 1457.912354f, 342.968933f, 0.0f, 0.0f, 0.0f, 0.0f, 33, 114, 2.68149f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179918, 1503.335327f, 1493.465820f, 352.188843f, 0.0f, 0.0f, 0.0f, 0.0f, 33, 114, 2.26f, GAMEOBJECT_STATE_CLOSED, 100 },
+    { 179918, 1503.335f, 1493.466f, 352.1888f, 3.115414f, 0, 0, 0.9999143f, 0.01308903f, 33, 114 },
+    { 179919, 1492.478f, 1457.912f, 342.9689f, 3.115414f, 0, 0, 0.9999143f, 0.01308903f, 33, 114 },
+    { 179920, 1468.503f, 1494.357f, 351.8618f, 3.115414f, 0, 0, 0.9999143f, 0.01308903f, 33, 114 },
+    { 179921, 1471.555f, 1458.778f, 362.6332f, 3.115414f, 0, 0, 0.9999143f, 0.01308903f, 33, 114 },
+    { 179922, 1492.347f, 1458.34f, 342.3712f, -0.03490669f, 0, 0, 0.01745246f, -0.9998477f, 33, 114 },
+    { 179922, 1503.466f, 1493.367f, 351.7352f, -0.03490669f, 0, 0, 0.01745246f, -0.9998477f, 33, 114 },
 
     // Horde gates
-    { 179916, 489, 949.1663208f, 1423.7717285f, 345.6241455f, -0.0167336f, -0.004956f, -0.283972f, 0.9586736f, 32, 114, 0.900901f, GAMEOBJECT_STATE_CLOSED, 100 },
-    { 179917, 953.0507202f, 1459.8424072f, 340.6525573f, -0.1971825f, 0.1575096f, -0.8239487f, 0.5073640f, 32, 114, 0.854700f, GAMEOBJECT_STATE_CLOSED, 100 }
+    { 179916, 949.1663f, 1423.772f, 345.6241f, -0.5756807f, -0.01673368f, -0.004956111f, -0.2839723f, 0.9586737f, 32, 114 },
+    { 179917, 953.0507f, 1459.842f, 340.6526f, -1.99662f, -0.1971825f, 0.1575096f, -0.8239487f, 0.5073641f, 32, 114 },
+    { 180322, 949.9523f, 1422.751f, 344.9273f, 0.0f, 0, 0, 0, 1.0f, 32, 114 },
+    { 180322, 950.7952f, 1459.583f, 342.1523f, 0.05235988f, 0, 0, 0.02617695f, 0.9996573f, 32, 114 }
 };
 
 WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CBattleground(mgr, id, lgroup, t)
@@ -440,14 +445,16 @@ void WarsongGulch::DespawnGates(uint32 delay)
 GameObject* WarsongGulch::SpawnBgGameObject(wsgObjectLocation objectLocation)
 {
     GameObject* pObject = NULL;
-    if (pObject = SpawnGameObject(objectLocation.entry, MAP_WARSONG_GULCH, objectLocation.x, objectLocation.y, objectLocation.z, objectLocation.orientation[0], objectLocation.flags, objectLocation.faction, objectLocation.scale))
+    if (GameObjectInfo* pInfo = GameObjectNameStorage.LookupEntry(objectLocation.entry))
     {
-        for (uint8 i = 0; i < 3; i++)
-            pObject->SetParentRotation(i + 1, objectLocation.orientation[i+1]);
-        pObject->SetByte(GAMEOBJECT_BYTES_1, 3, objectLocation.animProgress);
-        pObject->SetState(objectLocation.state);
+        if (pObject = SpawnGameObject(objectLocation.entry, MAP_WARSONG_GULCH, objectLocation.x, objectLocation.y, objectLocation.z, objectLocation.orientation, objectLocation.flags, objectLocation.faction, pInfo->Size))
+        {
+            for (uint8 i = 0; i < 4; i++)
+                pObject->SetParentRotation(i, objectLocation.rotation[i]);
+            pObject->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
+            pObject->SetState(GAMEOBJECT_STATE_CLOSED);
+        }
     }
-
     return pObject;
 }
 
