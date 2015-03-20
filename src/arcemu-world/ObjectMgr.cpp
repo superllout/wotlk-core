@@ -1911,8 +1911,11 @@ void ObjectMgr::LoadTrainers()
                     ts.pLearnSpell = dbcSpell.LookupEntryForced(LearnSpellID);
                 else
                 {
-                    Log.Error("ObjectMgr", "Tried to load trainer spell  data with non existing learn spell %u for creature %u", LearnSpellID, entry);
-                    continue;
+                    if (LearnSpellID != 0)
+                    {
+                        Log.Error("ObjectMgr", "Tried to load trainer spell  data with non existing learn spell %u for creature %u", LearnSpellID, entry);
+                        continue;
+                    }
                 }
 
                 if(ts.pCastSpell && !ts.pCastRealSpell)
@@ -3481,11 +3484,13 @@ void ObjectMgr::LoadVehicleAccessories()
             }
             entry->accessory_entry = row[1].GetUInt32();
             entry->seat = row[2].GetUInt32();
+            /*
             if (!dbcVehicleSeat.LookupEntryForced(row[2].GetUInt32()))
             {
                 Log.Error("ObjectMgr", "Tried to load vehicle acessory data for creature entry %u with non existing seat %u", creature_entry, entry->seat);
                 continue;
             }
+            */
             std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr = vehicle_accessories.find(creature_entry);
 
             if( itr != vehicle_accessories.end() )
