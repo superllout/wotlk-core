@@ -33,6 +33,8 @@
 #define WSG_SPELL_HORDE_FLAG 23333
 #define WSG_SPELL_ALLIANCE_FLAG 23335
 
+#define WSG_ASSAULT_BUFF_TIME 15 // 15 minutes (focused assault - 10 min, brutal assault - 15)
+
 #define WSG_WINNER_REWARD_HONOR_AMOUNT 185
 
 #define FACTION_WARSONG_OUTRIDERS 889
@@ -47,6 +49,9 @@
 #define MAX_WSG_FLAGS 2
 #define DROPPED_HORDE_WSG_FLAG_ENTRY 179786
 #define DROPPED_ALLIANCE_WSG_FLAG_ENTRY 179786
+
+#define WSG_SPELL_FOCUSED_ASSAULT 46392
+#define WSG_SPELL_BRUTAL_ASSAULT 46393
 
 struct wsgObjectLocation
 {
@@ -69,6 +74,8 @@ class WarsongGulch : public CBattleground
     uint32 m_lgroup;
     uint8 m_lastCapturedTeam;
     uint8 m_timeElapsed;
+    uint8 m_Counter;
+    uint8 m_buffTimer;
 public:
     WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t);
     ~WarsongGulch();
@@ -122,6 +129,9 @@ private:
 
     // BG timer
     void bgTimerTick();
+
+    // Flag Timer
+    void flagTimerTick();
 };
 
 #endif

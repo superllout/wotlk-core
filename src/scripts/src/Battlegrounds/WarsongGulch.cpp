@@ -75,6 +75,8 @@ WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CB
     m_lgroup = lgroup;
     m_lastCapturedTeam = MAX_PLAYER_TEAMS;
     m_timeElapsed = WSG_TIME_ELAPSED;
+    m_Counter = 0;
+    m_buffTimer = WSG_ASSAULT_BUFF_TIME;
 
     // Set stats
     for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
@@ -153,7 +155,7 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 areaId)
         case 3707:      // Berserking
         case 3709:      // Berserking (Horde)
             rewardObjectBuff(areaId, plr);
-            break;
+            return;
         case 3646:      // Alliance base (alliance flag spawn location)
         case 3647:      // Horde base (horde flag spawn location)
         {
@@ -203,6 +205,11 @@ void WarsongGulch::HookOnFlagDrop(Player* plr)
     SendChatMessage(plr->IsTeamHorde() ? CHAT_MSG_BG_EVENT_HORDE : CHAT_MSG_BG_EVENT_ALLIANCE, plr->GetGUID(), "The %s flag was dropped by %s!", plr->IsTeamHorde() ? "Alliance" : "Horde", plr->GetName());
     if (plr->isAlive())
         plr->CastSpell(plr, SPELL_RECENTLY_DROPPED_FLAG, true);
+
+    if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+        plr->RemoveAura(WSG_SPELL_FOCUSED_ASSAULT);
+    else if (m_buffTimer == 0 && m_Counter == 1 && plr->HasAura(WSG_SPELL_BRUTAL_ASSAULT))
+        plr->RemoveAura(WSG_SPELL_BRUTAL_ASSAULT);
 }
 
 void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
@@ -259,6 +266,14 @@ void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
     SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 2);
     PlaySoundToAll(plr->IsTeamHorde() ? 8212 : 8174);   // Pick up sounds
     SendChatMessage(plr->IsTeamHorde() ? CHAT_MSG_BG_EVENT_HORDE : CHAT_MSG_BG_EVENT_ALLIANCE, plr->GetGUID(), "The %s flag has been taken by %s!", plr->IsTeamHorde() ? "Alliance's" : "Horde's", plr->GetName());
+    
+    if (m_flagHolders[TEAM_ALLIANCE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
+    {
+        if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+            plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
+        else if (m_buffTimer == 0 && m_Counter == 1)
+            plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
+    }
 }
 
 void WarsongGulch::ReturnFlag(uint32 team)
@@ -310,7 +325,19 @@ void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
     PlaySoundToAll(plr->IsTeamHorde() ? 8212 : 8174);   // Pick up sounds
 
     SendChatMessage(plr->IsTeamHorde() ? CHAT_MSG_BG_EVENT_HORDE : CHAT_MSG_BG_EVENT_ALLIANCE, plr->GetGUID(), "The %s flag has been taken by %s!", plr->IsTeamHorde() ? "Alliance's" : "Horde's", plr->GetName());
-    SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 2);
+    SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, plr->IsTeamHorde() ? 3 : 2);
+
+    if (!sEventMgr.HasEvent(this, EVENT_WSG_BUFF_TIMER))
+        sEventMgr.AddEvent(this, &WarsongGulch::flagTimerTick, EVENT_WSG_BUFF_TIMER, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+
+    // Cast buff
+    if (m_flagHolders[TEAM_ALLIANCE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
+    {
+        if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+            plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
+        else if (m_buffTimer == 0 && m_Counter == 1)
+            plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
+    }
 }
 
 void WarsongGulch::HookOnPlayerKill(Player* plr, Player* pVictim)
@@ -579,6 +606,17 @@ void WarsongGulch::onCaptureFlag(Player* plr)
 
     m_scores[plr->GetTeam()]++;
     m_lastCapturedTeam = plr->GetTeam();
+
+    // Remove and reset buff timer
+    sEventMgr.RemoveEvents(this, EVENT_WSG_BUFF_TIMER);
+    m_Counter = 0;
+    m_buffTimer = WSG_ASSAULT_BUFF_TIME;
+
+    // Remove buff
+    if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+        plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
+    else if (m_buffTimer == 0 && m_Counter == 1)
+        plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
 }
 
 void WarsongGulch::giveRewardsAndFinalize(uint8 team)
@@ -601,6 +639,13 @@ void WarsongGulch::giveRewardsAndFinalize(uint8 team)
         PlaySoundToAll(team == TEAM_HORDE ? SOUND_HORDEWINS : SOUND_ALLIANCEWINS);
     }
     m_mainLock.Release();
+
+    // Remove bg related buffs
+    for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
+    {
+        RemoveAuraFromTeam(i, WSG_SPELL_FOCUSED_ASSAULT);
+        RemoveAuraFromTeam(i, WSG_SPELL_BRUTAL_ASSAULT);
+    }
 
     setBgFinishForPlayers();
 }
@@ -641,4 +686,40 @@ void WarsongGulch::bgTimerTick()
         return;
     }
     sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_UNK, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+}
+
+void WarsongGulch::flagTimerTick()
+{
+    --m_buffTimer;
+    if (m_Counter == 0 && m_buffTimer == 5)
+    {
+        // Cast buff only if we have both flag holders
+        if (m_flagHolders[TEAM_HORDE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
+        {
+            for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
+            {
+                if (Player* plr = GetMapMgr()->GetPlayer(m_flagHolders[i]))
+                    plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
+            }
+        }
+        ++m_Counter;
+    }
+    else if (m_Counter == 1 && m_buffTimer == 0)
+    {
+        sEventMgr.RemoveEvents(this, EVENT_WSG_BUFF_TIMER);
+
+        // Cast buff only if we have both flag holders
+        if (m_flagHolders[TEAM_HORDE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
+        {
+            for (uint8 i = 0; i < MAX_PLAYER_TEAMS; i++)
+            {
+                if (Player* plr = GetMapMgr()->GetPlayer(m_flagHolders[i]))
+                    plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
+            }
+        }
+    }
+
+    if (m_buffTimer == 0)
+        return;
+    sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_WSG_BUFF_TIMER, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 }
