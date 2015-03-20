@@ -583,7 +583,7 @@ void StrandOfTheAncient::StartRound(){
 
     SetWorldState( WORLDSTATE_SOTA_TIMER_1, 10 );
     SetTime( ROUND_LENGTH );
-    sEventMgr.AddEvent( this, &StrandOfTheAncient::TimeTick, EVENT_SOTA_TIMER, MSTIME_SECOND * 5, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT );
+    sEventMgr.AddEvent( this, &StrandOfTheAncient::TimeTick, EVENT_SOTA_TIMER, MSTIME_SECOND * 1, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT );
     UpdatePvPData();
 }
 
@@ -625,7 +625,7 @@ void StrandOfTheAncient::Finish( uint32 winningteam ){
 }
 
 void StrandOfTheAncient::TimeTick(){
-    SetTime( RoundTime - 5 );
+    SetTime( RoundTime - 1 );
 
     if( RoundTime == 0){
         sEventMgr.RemoveEvents(this, EVENT_SOTA_TIMER);
