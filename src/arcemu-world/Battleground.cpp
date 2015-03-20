@@ -518,6 +518,11 @@ void CBattleground::RemovePlayer(Player* plr, bool logout)
     }
 
     plr->m_bgTeam = plr->GetTeam();
+    plr->RemoveNegativeAuras();
+    if (Pet* pPet = plr->GetSummon())
+    {
+        pPet->WipeHateList();
+    }
 
     m_mainLock.Release();
 }

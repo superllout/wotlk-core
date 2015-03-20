@@ -137,8 +137,7 @@ struct BGScore
 #define SOUND_ALLIANCE_SCORES                8173
 #define SOUND_ALLIANCE_CAPTURE                8174
 #define SOUND_HORDE_CAPTURE                8212
-#define SOUND_ALLIANCE_RETURNED                8192
-#define SOUND_HORDE_RETURNED                8192    // huh?
+#define SOUND_BATTLEGROUND_FLAG_RETURNED    8192
 #define SOUND_HORDEWINS                    8454
 #define SOUND_ALLIANCEWINS                8455
 #define SOUND_HORDE_BGALMOSTEND                0x2108
