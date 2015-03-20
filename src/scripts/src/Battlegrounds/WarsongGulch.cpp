@@ -206,7 +206,7 @@ void WarsongGulch::HookOnFlagDrop(Player* plr)
     if (plr->isAlive())
         plr->CastSpell(plr, SPELL_RECENTLY_DROPPED_FLAG, true);
 
-    if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+    if ((m_buffTimer >= 5 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
         plr->RemoveAura(WSG_SPELL_FOCUSED_ASSAULT);
     else if (m_buffTimer == 0 && m_Counter == 1 && plr->HasAura(WSG_SPELL_BRUTAL_ASSAULT))
         plr->RemoveAura(WSG_SPELL_BRUTAL_ASSAULT);
@@ -269,7 +269,7 @@ void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
     
     if (m_flagHolders[TEAM_ALLIANCE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
     {
-        if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+        if ((m_buffTimer >= 5 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
             plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
         else if (m_buffTimer == 0 && m_Counter == 1)
             plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
@@ -333,7 +333,7 @@ void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
     // Cast buff
     if (m_flagHolders[TEAM_ALLIANCE] != 0 && m_flagHolders[TEAM_HORDE] != 0)
     {
-        if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+        if ((m_buffTimer >= 5 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
             plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
         else if (m_buffTimer == 0 && m_Counter == 1)
             plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
@@ -613,7 +613,7 @@ void WarsongGulch::onCaptureFlag(Player* plr)
     m_buffTimer = WSG_ASSAULT_BUFF_TIME;
 
     // Remove buff
-    if ((m_buffTimer >= 10 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
+    if ((m_buffTimer >= 5 && m_buffTimer != 0) && m_Counter == 0 && plr->HasAura(WSG_SPELL_FOCUSED_ASSAULT))
         plr->CastSpell(plr, WSG_SPELL_FOCUSED_ASSAULT, true);
     else if (m_buffTimer == 0 && m_Counter == 1)
         plr->CastSpell(plr, WSG_SPELL_BRUTAL_ASSAULT, true);
