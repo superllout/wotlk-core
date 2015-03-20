@@ -450,7 +450,7 @@ void WarsongGulch::OnStart()
 
     PlaySoundToAll(SOUND_BATTLEGROUND_BEGIN);
 
-    sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_UNK, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+    sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_UNK, 60000, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 
     m_started = true;
 }
@@ -683,9 +683,7 @@ void WarsongGulch::bgTimerTick()
             winners = TEAM_HORDE;
 
         giveRewardsAndFinalize(winners);
-        return;
     }
-    sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_UNK, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 }
 
 void WarsongGulch::flagTimerTick()
