@@ -138,7 +138,7 @@ class StrandOfTheAncient : public CBattleground
         StrandOfTheAncient(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t);
         ~StrandOfTheAncient();
 
-        uint32 GetNameID() { return 34; } // in worldstring_tables
+        uint32 GetNameID() { return 86; } // in worldstring_tables
 
         uint32 GetRoundTime() { return RoundTime; };
         LocationVector GetStartingCoords(uint8 team);

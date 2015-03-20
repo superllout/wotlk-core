@@ -189,7 +189,7 @@ class IsleOfConquest : public CBattleground{
         void CaptureControlPoint( uint32 id );
         bool HookHandleRepop( Player *plr );
         void BuildWorkshopVehicle( uint32 delay );
-
+        uint32 GetNameID() { return 85; }
 
         // Capture events
         void EventRefineryCaptured();
