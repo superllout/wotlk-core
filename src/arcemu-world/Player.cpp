@@ -3713,8 +3713,8 @@ void Player::OnPushToWorld()
         m_taxiMapChangeNode = 0;
     }
 
-    if(flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING) && getDeathState() == ALIVE)))
-        // can only fly in outlands or northrend (northrend requires cold weather flying)
+    // Can only fly in outlands or northrend (northrend requires cold weather flying)
+    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))) && getDeathState() == ALIVE)
     {
         RemoveAura(flying_aura);
         flying_aura = 0;
