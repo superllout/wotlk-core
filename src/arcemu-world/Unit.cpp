@@ -4277,7 +4277,6 @@ void Unit::AddAura(Aura* aur)
     }
 
     // Can't use flying auras in non-outlands or non-northrend (northrend requires cold weather flying)
-    if (m_mapId != 530 && (m_mapId != 571 || (IsPlayer() && !TO_PLAYER(this)->HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))) TO_PLAYER(this)->getDeathState() == ALIVE)
     {
         for(uint32 i = 0; i < 3; ++i)
         {

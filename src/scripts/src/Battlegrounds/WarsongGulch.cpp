@@ -719,5 +719,6 @@ void WarsongGulch::flagTimerTick()
 
     if (m_buffTimer == 0)
         return;
+
     sEventMgr.AddEvent(this, &WarsongGulch::bgTimerTick, EVENT_WSG_BUFF_TIMER, 60000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 }
