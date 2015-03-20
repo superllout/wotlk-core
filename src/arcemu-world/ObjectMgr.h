@@ -28,11 +28,12 @@ ARCEMU_INLINE bool FindXinYString(std::string & x, std::string & y)
 
 struct AchievementReward
 {
-    uint16 title;       // title id
-    uint32 itemId;      // item id
-    uint32 senderEntry; // creature entry
+    uint16 title[MAX_PLAYER_TEAMS];       // title id
+    uint32 itemId;       // item id
+    uint32 senderEntry;  // creature entry
     std::string subject; // letter subject
-    std::string text;   // letter text
+    std::string text;    // letter text
+    uint32 mailTemplate; // mail template
 };
 
 struct WorldState

@@ -3578,7 +3578,7 @@ std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map
 void ObjectMgr::LoadAchievementRewards()
 {
     Log.Debug("ObjectMgr", "Loading achievement_rewards");
-    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title`,`item`,`sender`,`subject`,`text` FROM `achievement_reward` ORDER BY `id`"))
+    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title_A`,`title_H`,`item`,`sender`,`subject`,`text`,`mail_template` FROM `achievement_reward` ORDER BY `id`"))
     {
         do{
             Field* fields = result->Fetch();
@@ -3589,27 +3589,41 @@ void ObjectMgr::LoadAchievementRewards()
                 continue;
             }
             AchievementReward* reward = new AchievementReward;
-            reward->title = fields[1].GetUInt16();
-            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title))
+            reward->title[TEAM_ALLIANCE] = fields[1].GetUInt16();
+            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
             {
-                Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title %u", id, reward->title);
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_A %u", id, reward->title[TEAM_ALLIANCE]);
                 continue;
             }
 
-            reward->itemId = fields[2].GetUInt32();
+            reward->title[TEAM_HORDE] = fields[2].GetUInt16();
+            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_HORDE]))
+            {
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_H %u", id, reward->title[TEAM_HORDE]);
+                continue;
+            }
+
+            reward->itemId = fields[3].GetUInt32();
             if (reward->itemId != 0 && !ItemPrototypeStorage.LookupEntry(reward->itemId))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing item (entry %u)!", id, reward->itemId);
                 continue;
             }
-            reward->senderEntry = fields[3].GetUInt32();
+            reward->senderEntry = fields[4].GetUInt32();
             if (reward->senderEntry != 0 && !CreatureNameStorage.LookupEntry(reward->senderEntry))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
                 continue;
             }
-            reward->subject = fields[4].GetString() ? fields[4].GetString() : "";
-            reward->text = fields[5].GetString() ? fields[5].GetString() : "";
+            reward->subject = fields[5].GetString() ? fields[4].GetString() : "";
+            reward->text = fields[6].GetString() ? fields[5].GetString() : "";
+
+            reward->mailTemplate = fields[7].GetUInt32();
+            if (reward->mailTemplate != 0 && dbcMailTemplateEntry.LookupEntryForced(reward->mailTemplate))
+            {
+                Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong mail template (entry %u)!", id, reward->mailTemplate);
+                continue;
+            }
 
             mAchievementRewards[id] = reward;
         }while (result->NextRow());

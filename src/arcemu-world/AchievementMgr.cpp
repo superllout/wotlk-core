@@ -1787,7 +1787,7 @@ void AchievementMgr::GiveAchievementReward(AchievementEntry const* entry)
     if (!reward)
         return;
 
-    uint32 title = reward->title;
+    uint32 title = reward->title[GetPlayer()->GetTeam()];
     uint32 senderEntry = reward->senderEntry;
 
     uint32 itemId = reward->itemId;
@@ -1797,8 +1797,20 @@ void AchievementMgr::GiveAchievementReward(AchievementEntry const* entry)
 
     if (senderEntry != 0)
     {
-        string subject = reward->subject;
-        string text = reward->text;
+        string subject;
+        string text;
+        // Use mail template first
+        if (MailTemplateEntry* pMail = dbcMailTemplateEntry.LookupEntryForced(reward->mailTemplate))
+        {
+            subject = pMail->subject;
+            text = pMail->content;
+        }
+        else
+        {
+            subject = reward->subject;
+            subject = reward->text;
+        }
+
         if (Item* pItem = objmgr.CreateItem(itemId, GetPlayer()))
         {
             pItem->SaveToDB(INVENTORY_SLOT_NOT_SET, INVENTORY_SLOT_NOT_SET, true, NULL);
