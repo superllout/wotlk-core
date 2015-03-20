@@ -21,6 +21,8 @@
 #include "StdAfx.h"
 #include "WarsongGulch.h"
 
+#define SPELL_RECENTLY_DROPPED_FLAG 42792
+
 // Gives citeria for "Call to Arms : Warsong Gulch(both factions)"
 static uint32 wsgRewardSpells[MAX_WSG_REWARD_SPELLS] = { 69158, 69456, 69497, 69498 };
 
@@ -201,12 +203,17 @@ void WarsongGulch::HookOnFlagDrop(Player* plr)
     sEventMgr.AddEvent(this, &WarsongGulch::ReturnFlag, plr->GetTeam(), EVENT_BATTLEGROUND_WSG_AUTO_RETURN_FLAG + plr->GetTeam(), 5000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, plr->GetGUID(), "The %s flag was dropped by %s!", plr->IsTeamHorde() ? "Alliance" : "Horde", plr->GetName());
+    if (plr->isAlive())
+        plr->CastSpell(plr, SPELL_RECENTLY_DROPPED_FLAG, true);
 }
 
 void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
 {
+    if (plr->HasAura(SPELL_RECENTLY_DROPPED_FLAG))
+        return;
+
     /* picking up a dropped flag */
-    if(m_dropFlags[plr->GetTeam()] != obj)
+    if (m_dropFlags[plr->GetTeam()] != obj)
     {
         /* are we returning it? */
         if((obj->GetEntry() == 179785 && plr->IsTeamAlliance()) ||
@@ -302,6 +309,8 @@ void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
         m_homeFlags[plr->GetTeam()]->RemoveFromWorld(false);
 
     PlaySoundToAll(plr->IsTeamHorde() ? 8212 : 8174);   // Pick up sounds
+
+    SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "The %s flag has been taken by %s!", plr->IsTeamHorde() ? "Alliance's" : "Horde's", plr->GetName());
     SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 2);
 }
 
