@@ -3714,7 +3714,7 @@ void Player::OnPushToWorld()
     }
 
     // Can only fly in outlands or northrend (northrend requires cold weather flying)
-    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))) && getDeathState() == ALIVE)
+    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))))
     {
         RemoveAura(flying_aura);
         flying_aura = 0;
@@ -8418,7 +8418,7 @@ bool Player::SafeTeleport(uint32 MapID, uint32 InstanceID, const LocationVector 
         m_UnderwaterState &= ~UNDERWATERSTATE_UNDERWATER;
 
     // Can only fly in outlands or northrend (northrend requires cold weather flying)
-    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))) && getDeathState() == ALIVE)
+    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))))
     {
         RemoveAura(flying_aura);
         flying_aura = 0;
@@ -8480,7 +8480,7 @@ void Player::SafeTeleport(MapMgr* mgr, const LocationVector & vec)
     SpeedCheatDelay(10000);
 
     // Can only fly in outlands or northrend (northrend requires cold weather flying)
-    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))) && getDeathState() == ALIVE)
+    if (flying_aura && ((m_mapId != 530) && (m_mapId != 571 || !HasSpellwithNameHash(SPELL_HASH_COLD_WEATHER_FLYING))))
     {
         RemoveAura(flying_aura);
         flying_aura = 0;
