@@ -38,8 +38,8 @@ static LocationVector wsgRepopLocation[MAX_PLAYER_TEAMS] =
 
 static wsgObjectLocation wsgFlags[MAX_WSG_FLAGS] =
 {
-    { 179830, 1540.423f, 1481.325f, 351.8284f, 3.089233f, 0, 0, 0.9996573f, 0.02617699f, 0, 1314 },   // Alliance flag
-    { 179831, 916.0226f, 1434.405f, 345.413f, 0.01745329f, 0, 0, 0.008726535f, 0.9999619f, 0, 210 }   // Horde flag
+    { 179831, 916.0226f, 1434.405f, 345.413f, 0.01745329f, 0, 0, 0.008726535f, 0.9999619f, 0, 210 },   // Horde flag
+    { 179830, 1540.423f, 1481.325f, 351.8284f, 3.089233f, 0, 0, 0.9996573f, 0.02617699f, 0, 1314 }   // Alliance flag
 };
 
 static wsgObjectLocation wsgBuffs[MAX_WSG_BUFFS] =
@@ -93,9 +93,12 @@ WarsongGulch::WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t) : CB
     for (uint8 i = 0; i < MAX_WSG_BUFFS; i++)
         m_buffs[i] = SpawnBgGameObject(wsgBuffs[i]);
 
-    // Create dropped flags
     for (uint8 i = 0; i < MAX_WSG_FLAGS; i++)
     {
+        // Create flags 
+        m_homeFlags[i] = SpawnBgGameObject(wsgFlags[i]);
+
+        // Create dropped flags
         m_dropFlags[i] = m_mapMgr->CreateGameObject(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_WSG_FLAG_ENTRY : DROPPED_HORDE_WSG_FLAG_ENTRY);
         if (m_dropFlags[i] && m_dropFlags[i]->CreateFromProto(i == TEAM_ALLIANCE ? DROPPED_ALLIANCE_WSG_FLAG_ENTRY : DROPPED_HORDE_WSG_FLAG_ENTRY, MAP_WARSONG_GULCH, 0.0f, 0.0f, 0.0f, 0.0f))
         {
@@ -154,7 +157,7 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 areaId)
         case 3646:      // Alliance base (alliance flag spawn location)
         case 3647:      // Horde base (horde flag spawn location)
         {
-            if (canPlayerCaptureFlag(plr))
+            if (canPlayerCaptureFlag(plr, areaId))
             {
                 onCaptureFlag(plr);
                 if (m_scores[plr->GetTeam()] == MAX_WSG_POINTS)
@@ -171,11 +174,12 @@ void WarsongGulch::HookOnAreaTrigger(Player* plr, uint32 areaId)
 
 void WarsongGulch::EventReturnFlags()
 {
-    for(uint32 x = 0; x < 2; x++)
+    for(uint8 x = 0; x < MAX_WSG_FLAGS; x++)
     {
         if(m_homeFlags[x] != NULL)
             m_homeFlags[x]->PushToWorld(m_mapMgr);
     }
+    PlaySoundToAll(8232);   // Sound for placed flag
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Alliance's flag is now placed at her base.");
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Horde's flag is now placed at her base.");
 }
@@ -220,9 +224,9 @@ void WarsongGulch::HookFlagDrop(Player* plr, GameObject* obj)
             UpdatePvPData();
 
             SendChatMessage(CHAT_MSG_BG_EVENT_HORDE, plr->GetGUID(), "The %s flag was returned to its base by %s!", plr->IsTeamHorde() ? "Horde" : "Alliance", plr->GetName());
+            PlaySoundToAll(SOUND_BATTLEGROUND_FLAG_RETURNED);
 
             SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 1);
-            PlaySoundToAll(plr->IsTeamHorde() ? SOUND_HORDE_RETURNED : SOUND_ALLIANCE_RETURNED);
         }
         return;
     }
@@ -260,6 +264,7 @@ void WarsongGulch::ReturnFlag(uint32 team)
         m_homeFlags[team]->PushToWorld(m_mapMgr);
 
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The %s flag was returned to its base!", team == TEAM_ALLIANCE ? "Horde" : "Alliance");
+    PlaySoundToAll(SOUND_BATTLEGROUND_FLAG_RETURNED);
 }
 
 void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
@@ -296,7 +301,7 @@ void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
     if(m_homeFlags[plr->GetTeam()]->IsInWorld())
         m_homeFlags[plr->GetTeam()]->RemoveFromWorld(false);
 
-    PlaySoundToAll(plr->IsTeamHorde() ? SOUND_HORDE_CAPTURE : SOUND_ALLIANCE_CAPTURE);
+    PlaySoundToAll(plr->IsTeamHorde() ? 8212 : 8174);   // Pick up sounds
     SetWorldState(plr->IsTeamHorde() ? WORLDSTATE_WSG_ALLIANCE_FLAG_DISPLAY : WORLDSTATE_WSG_HORDE_FLAG_DISPLAY, 2);
 }
 
@@ -331,6 +336,9 @@ void WarsongGulch::OnRemovePlayer(Player* plr)
 
     if (plr->HasAura(BG_PREPARATION))
         plr->RemoveAura(BG_PREPARATION);
+
+    if (Pet* pPet = plr->GetSummon())
+        pPet->GetAIInterface()->SetAllowedToEnterCombat(true);
 }
 
 LocationVector WarsongGulch::GetStartingCoords(uint8 Team)
@@ -369,6 +377,7 @@ void WarsongGulch::OnCreate()
         if (m_buffs[i] != NULL && !m_buffs[i]->IsInWorld())
             m_buffs[i]->PushToWorld(GetMapMgr());
 
+    // Spawn gates
     for (uint8 i = 0; i < MAX_WSG_GATES; i++)
         if (GameObject* pGate = SpawnBgGameObject(wsgGates[i]))
         {
@@ -405,7 +414,6 @@ void WarsongGulch::OnStart()
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Alliance's flag is now placed at her base.");
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The Horde's flag is now placed at her base.");
 
-    /* correct? - burlex */
     PlaySoundToAll(SOUND_BATTLEGROUND_BEGIN);
 
     m_started = true;
@@ -498,9 +506,9 @@ void WarsongGulch::rewardObjectBuff(uint32 areaId, Player* plr)
     }
 }
 
-bool WarsongGulch::canPlayerCaptureFlag(Player* plr)
+bool WarsongGulch::canPlayerCaptureFlag(Player* plr, uint32 areaId)
 {
-    if ((plr->IsTeamAlliance() && plr->m_bgHasFlag && m_flagHolders[TEAM_ALLIANCE] == plr->GetLowGUID()) || (plr->IsTeamHorde() && plr->m_bgHasFlag && m_flagHolders[TEAM_HORDE] == plr->GetLowGUID()))
+    if (!HasEnded() && plr->m_bgHasFlag && m_flagHolders[plr->GetTeam()] == plr->GetLowGUID() && areaId == (plr->IsTeamAlliance() ? 3646 : 3647))
     {
         // Do not cap if flag is dropped
         if (m_dropFlags[plr->GetTeam()]->IsInWorld())
@@ -510,7 +518,8 @@ bool WarsongGulch::canPlayerCaptureFlag(Player* plr)
         if (m_flagHolders[plr->IsTeamAlliance() ? TEAM_HORDE : TEAM_ALLIANCE] != 0)
             return false;
 
-        float distance = plr->CalcDistance(wsgFlags[TEAM_ALLIANCE].x, wsgFlags[TEAM_ALLIANCE].y, wsgFlags[TEAM_ALLIANCE].z);
+        uint8 team = plr->IsTeamAlliance() ? TEAM_HORDE : TEAM_ALLIANCE;
+        float distance = plr->CalcDistance(wsgFlags[team].x, wsgFlags[team].y, wsgFlags[team].z);
         if (distance > FLAG_CAPTURE_MIN_RANGE)
         {
             //50 yards from the spawn, gtfo hacker.
@@ -518,8 +527,9 @@ bool WarsongGulch::canPlayerCaptureFlag(Player* plr)
             plr->GetSession()->Disconnect();
             return false;
         }
+        return true;
     }
-    return true;
+    return false;
 }
 
 void WarsongGulch::onCaptureFlag(Player* plr)
@@ -578,4 +588,25 @@ void WarsongGulch::giveRewardsAndFinalize(uint8 team)
     AddHonorToTeam(team, 1 * WSG_WINNER_REWARD_HONOR_AMOUNT);
 
     m_mainLock.Release();
+
+    PlaySoundToAll(team == TEAM_HORDE ? SOUND_HORDEWINS : SOUND_ALLIANCEWINS);
+    setBgFinishForPlayers();
+}
+
+void WarsongGulch::setBgFinishForPlayers()
+{
+    for (std::set<Player*>::iterator itr = m_players->begin(); itr != m_players->end(); ++itr)
+    {
+        // Player cannot move or cast spells
+        (*itr)->m_canMove = false;
+        (*itr)->Root();
+
+
+        if (Pet* pPet = (*itr)->GetSummon())
+        {
+            pPet->WipeHateList();
+            pPet->GetAIInterface()->SetAllowedToEnterCombat(false);
+        }
+        (*itr)->RemoveNegativeAuras();
+    }
 }

@@ -103,13 +103,16 @@ private:
     void rewardObjectBuff(uint32 areaId, Player* plr);
 
     // Check do player can capture flag
-    bool canPlayerCaptureFlag(Player* plr);
+    bool canPlayerCaptureFlag(Player* plr, uint32 areaId);
 
     // Sets bg stats and rewards for player and his team
     void onCaptureFlag(Player* plr);
 
     // Rewards players and closes battleground
     void giveRewardsAndFinalize(uint8 team);
+
+    // Sets players stuff after finishing bg
+    void WarsongGulch::setBgFinishForPlayers();
 };
 
 #endif

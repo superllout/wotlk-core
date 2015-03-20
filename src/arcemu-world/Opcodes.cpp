@@ -21,6 +21,7 @@
 #include "StdAfx.h"
 
 // Updated for 3.2.0
+// sanctum32: this should be moved directly to opcode handlers as debug log instead using this container
 NameTableEntry g_worldOpcodeNames[] = {
  {MSG_NULL_ACTION,     "MSG_NULL_ACTION"},
  {CMSG_BOOTME,     "CMSG_BOOTME"},

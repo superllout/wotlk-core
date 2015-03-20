@@ -541,7 +541,7 @@ void EyeOfTheStorm::EventResetFlag()
     m_standFlag->PushToWorld(m_mapMgr);
 
     SetWorldState(2757, 1);
-    PlaySoundToAll(SOUND_ALLIANCE_RETURNED);
+    PlaySoundToAll(SOUND_BATTLEGROUND_FLAG_RETURNED);
     SendChatMessage(CHAT_MSG_BG_EVENT_NEUTRAL, 0, "The flag has been reset.");
     m_flagHolder = 0;
 }
