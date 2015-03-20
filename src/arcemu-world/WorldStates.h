@@ -266,6 +266,8 @@ enum WorldStates{
     WORLDSTATE_IOC_WORKSHOP_ALLIANCE_ASSAULTED                           = 4228,
     WORLDSTATE_IOC_WORKSHOP_ALLIANCE_CONTROLLED                          = 4229,
     WORLDSTATE_IOC_WORKSHOP_HORDE_CONTROLLED                             = 4230,
+    WORLDSTATE_WSG_TIME_ENABLED                                          = 4247,
+    WORLDSTATE_WSG_TIME_REMAINING                                        = 4248,
     WORLDSTATE_IOC_WORKSHOP_HORDE_ASSAULTED                              = 4293,
     WORLDSTATE_IOC_WORKSHOP_NETURAL                                      = 4294,
     WORLDSTATE_IOC_HANGAR_NETURAL                                        = 4296,

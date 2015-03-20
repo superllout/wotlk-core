@@ -23,6 +23,10 @@
 
 #define MAX_WSG_POINTS 3
 
+#define SPELL_RECENTLY_DROPPED_FLAG 42792
+
+#define WSG_TIME_ELAPSED 25 // 25 minutes
+
 #define MAP_WARSONG_GULCH 489
 #define FLAG_CAPTURE_MIN_RANGE 50.0f
 
@@ -63,6 +67,8 @@ class WarsongGulch : public CBattleground
     list<GameObject*> m_gates;
     uint32 m_scores[MAX_PLAYER_TEAMS];
     uint32 m_lgroup;
+    uint8 m_lastCapturedTeam;
+    uint8 m_timeElapsed;
 public:
     WarsongGulch(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t);
     ~WarsongGulch();
@@ -113,6 +119,9 @@ private:
 
     // Sets players stuff after finishing bg
     void WarsongGulch::setBgFinishForPlayers();
+
+    // BG timer
+    void bgTimerTick();
 };
 
 #endif
