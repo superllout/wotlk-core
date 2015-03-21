@@ -548,18 +548,15 @@ void EyeOfTheStorm::EventResetFlag()
 
 void EyeOfTheStorm::OnCreate()
 {
-    GameObjectInfo* goi;
-    uint32 i;
-
     /* create gameobjects */
-    for(i = 0; i < EOTS_TOWER_COUNT; ++i)
+    for(uint32 i = 0; i < EOTS_TOWER_COUNT; ++i)
     {
-        goi = GameObjectNameStorage.LookupEntry(EOTSTowerIds[i]);
+        GameObjectInfo* goi = GameObjectNameStorage.LookupEntry(EOTSTowerIds[i]);
         if(goi == NULL)
         {
             Log.LargeErrorMessage("EOTS is being created and you are missing gameobjects. Terminating.", NULL);
             abort();
-            return;
+            break;
         }
 
         m_CPStatusGO[i] = m_mapMgr->CreateGameObject(goi->ID);
@@ -588,7 +585,7 @@ void EyeOfTheStorm::OnCreate()
     }
 
     /* BUBBLES! */
-    for(i = 0; i < 2; ++i)
+    for(uint8 i = 0; i < 2; ++i)
     {
         m_bubbles[i] = m_mapMgr->CreateGameObject((uint32)EOTSBubbleLocations[i][0]);
         if(!m_bubbles[i]->CreateFromProto((uint32)EOTSBubbleLocations[i][0], m_mapMgr->GetMapId(), EOTSBubbleLocations[i][1], EOTSBubbleLocations[i][2], EOTSBubbleLocations[i][3], EOTSBubbleLocations[i][4]))

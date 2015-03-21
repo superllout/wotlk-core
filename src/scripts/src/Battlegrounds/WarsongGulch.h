@@ -125,7 +125,7 @@ private:
     void giveRewardsAndFinalize(uint8 team);
 
     // Sets players stuff after finishing bg
-    void WarsongGulch::setBgFinishForPlayers();
+    void setBgFinishForPlayers();
 
     // BG timer
     void bgTimerTick();

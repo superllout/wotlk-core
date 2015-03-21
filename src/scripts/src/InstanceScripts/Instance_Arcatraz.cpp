@@ -106,8 +106,7 @@ class ZerekethAI : public MoonScriptBossAI
             ResetTimer(VoidTimer, (RandomUInt(10) + 30) * 1000);
 
             std::vector<Player*> TargetTable;
-            set< Object* >::iterator Itr = _unit->GetInRangePlayerSetBegin();
-            for(; Itr != _unit->GetInRangePlayerSetEnd(); Itr++)
+            for(set< Object* >::iterator Itr = _unit->GetInRangePlayerSetBegin(); Itr != _unit->GetInRangePlayerSetEnd(); ++Itr)
             {
                 Player* RandomTarget = NULL;
                 if(!(*Itr)->IsPlayer())

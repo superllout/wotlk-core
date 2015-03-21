@@ -1878,7 +1878,7 @@ void PlagueFissureGO::DoErrupt()
     data << (uint32)0;
 
     //send packet to inrange players
-    for(std::set<Object*>::iterator plrIter = _gameobject->GetInRangePlayerSetBegin(); plrIter != _gameobject->GetInRangePlayerSetEnd(); plrIter++)
+    for(std::set<Object*>::iterator plrIter = _gameobject->GetInRangePlayerSetBegin(); plrIter != _gameobject->GetInRangePlayerSetEnd(); ++plrIter)
     {
         TO_PLAYER(*plrIter)->SendPacket(&data);
     };

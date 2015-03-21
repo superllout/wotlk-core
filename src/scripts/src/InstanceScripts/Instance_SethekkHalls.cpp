@@ -2331,7 +2331,7 @@ class ANZUAI : public CreatureAIScript
             Unit* pUnit;
             float dist;
 
-            for(set<Object*>::iterator itr = _unit->GetInRangeOppFactsSetBegin(); itr != _unit->GetInRangeOppFactsSetEnd(); itr++)
+            for(set<Object*>::iterator itr = _unit->GetInRangeOppFactsSetBegin(); itr != _unit->GetInRangeOppFactsSetEnd(); ++itr)
             {
                 if(!(*itr)->IsUnit())
                     continue;

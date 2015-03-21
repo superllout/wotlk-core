@@ -570,7 +570,8 @@ void StrandOfTheAncient::StartRound(){
 
     m_mainLock.Acquire();
     
-    for( std::set< Player* >::iterator itr = m_players[ Attackers ].begin(); itr != m_players[ Attackers ].end(); itr++ ){
+    for( std::set< Player* >::iterator itr = m_players[ Attackers ].begin(); itr != m_players[ Attackers ].end(); ++itr)
+    {
         Player *p = *itr;
         
         p->SafeTeleport( p->GetMapId(), p->GetInstanceID(), sotaAttackerStartingPosition[ SOTA_ROUND_STARTED ] );

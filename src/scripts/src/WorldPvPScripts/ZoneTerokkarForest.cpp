@@ -443,8 +443,7 @@ void TFSpawnObjects(shared_ptr<MapMgr> pmgr)
     {
         p = &godata[i];
 
-        GameObjectPointer pGo = NULLGOB;
-        pGo = pmgr->GetInterface()->SpawnGameObject(p->entry, p->posx, p->posy, p->posz, p->facing, false, 0, 0);
+        GameObjectPointer pGo = pmgr->GetInterface()->SpawnGameObject(p->entry, p->posx, p->posy, p->posz, p->facing, false, 0, 0);
         if(!pGo)
             continue;
 

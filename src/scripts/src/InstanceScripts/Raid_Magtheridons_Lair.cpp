@@ -175,18 +175,16 @@ class MagtheridonTriggerAI : public CreatureAIScript
                 // We clear old "list"
                 ChannelersTable.clear();
                 // In order to recreate channeler "list" we need ot look for them in hardcoded spawn positions
-                Unit* Channeler;
+                
                 for(int i = 0; i < 5; i++)
                 {
-                    Channeler = NULL;
-                    Channeler = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(Channelers[i].x, Channelers[i].y, Channelers[i].z, 17256);
+                    Unit* Channeler = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(Channelers[i].x, Channelers[i].y, Channelers[i].z, 17256);
                     if(!Channeler)
                         continue;
                     // If Channeler was found we push him at the end of our "list"
                     ChannelersTable.push_back(Channeler);
                     // If Magtheridon is spawned we tell channeler to cast spell on Pit Lord
-                    Unit* Magtheridon = NULL;
-                    Magtheridon = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(-22.657900f, 2.159050f, -0.345542f, 17257);
+                    Unit* Magtheridon = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(-22.657900f, 2.159050f, -0.345542f, 17257);
                     if(Magtheridon && Channeler->isAlive() && !Channeler->GetAIInterface()->getNextTarget())
                     {
                         Channeler->SetChannelSpellTargetGUID(Magtheridon->GetGUID());
@@ -221,11 +219,11 @@ class MagtheridonTriggerAI : public CreatureAIScript
                     if(Channeler && !Channeler->isAlive() && Channeler->IsInWorld())
                     {
                         // We look through list of channelers to find alive ones and buff them
-                        Unit* BuffedChanneler;
+                        
                         for(size_t x = 0; x < ChannelersTable.size(); x++)
                         {
                             // Safe check to prevent memory corruption
-                            BuffedChanneler = ChannelersTable[x];
+                            Unit* BuffedChanneler = ChannelersTable[x];
                             if(BuffedChanneler && !BuffedChanneler->IsInWorld())
                             {
                                 ChannelersTable[x] = NULL;
@@ -253,9 +251,7 @@ class MagtheridonTriggerAI : public CreatureAIScript
             // If table is empty (0 channelers spawned) we remove banish and go to phase 2 at once
             if(!ChannelersTable.size() && !Phase)
             {
-                Unit* Magtheridon = NULL;
-                Magtheridon = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(-22.657900f, 2.159050f, -0.345542f, 17257);
-                if(Magtheridon)
+                if(Unit* Magtheridon = _unit->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(-22.657900f, 2.159050f, -0.345542f, 17257))
                 {
                     Magtheridon->GetAIInterface()->SetAllowedToEnterCombat(true);
                     Magtheridon->SetUInt64Value(UNIT_FIELD_FLAGS, 0);
@@ -269,12 +265,11 @@ class MagtheridonTriggerAI : public CreatureAIScript
             if(!EventStarted)
             {
                 // We look for channeler that may be In Combat or was killed by that unit enemy
-                Unit* Channeler = NULL;
                 Unit* UnitTarget = NULL;
                 for(size_t i = 0; i < ChannelersTable.size(); i++)
                 {
                     // Safe check to prevent memory corruptions
-                    Channeler = ChannelersTable[i];
+                    Unit* Channeler = ChannelersTable[i];
                     if(Channeler && !Channeler->IsInWorld())
                     {
                         ChannelersTable[i] = NULL;
@@ -302,7 +297,7 @@ class MagtheridonTriggerAI : public CreatureAIScript
                     for(size_t i = 0; i < ChannelersTable.size(); i++)
                     {
                         // Safe check to prevent memory corruption
-                        Channeler = ChannelersTable[i];
+                        Unit* Channeler = ChannelersTable[i];
                         if(Channeler && !Channeler->IsInWorld())
                         {
                             ChannelersTable[i] = NULL;

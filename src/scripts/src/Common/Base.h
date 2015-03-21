@@ -90,16 +90,17 @@ enum MoveFlag
 
 struct EmoteDesc
 {
-    EmoteDesc(const char* pText, TextType pType, uint32 pSoundId)
-    {
-        mText = (pText && strlen(pText) > 0) ? pText : "";
-        mType = pType;
-        mSoundId = pSoundId;
-    }
+    public:
+        std::string   mText;
+        TextType      mType;
+        uint32        mSoundId;
 
-    std::string    mText;
-    TextType    mType;
-    uint32        mSoundId;
+        EmoteDesc(const char* pText, TextType pType, uint32 pSoundId)
+        {
+            mText = (pText && strlen(pText) > 0) ? pText : "";
+            mType = pType;
+            mSoundId = pSoundId;
+        }
 };
 
 struct Location

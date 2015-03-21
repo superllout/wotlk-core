@@ -1724,7 +1724,7 @@ class TidewalkerLurkerAI : public CreatureAIScript
             Unit* pUnit;
             float dist;
 
-            for(set<Object*>::iterator itr = _unit->GetInRangeOppFactsSetBegin(); itr != _unit->GetInRangeOppFactsSetEnd(); itr++)
+            for(set<Object*>::iterator itr = _unit->GetInRangeOppFactsSetBegin(); itr != _unit->GetInRangeOppFactsSetEnd(); ++itr)
             {
                 if(!(*itr)->IsUnit())
                     continue;
@@ -2889,6 +2889,9 @@ class ToxicSporeBatAI : public CreatureAIScript
 
         inline WayPoint* CreateWaypoint(int id, uint32 waittime, uint32 flags)
         {
+            if (id >= 12)
+                return NULL;
+
             WayPoint* wp = _unit->CreateWaypointStruct();
             wp->id = id;
             wp->x = fly[id].x;

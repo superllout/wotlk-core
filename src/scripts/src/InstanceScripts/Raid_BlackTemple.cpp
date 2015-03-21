@@ -39,7 +39,7 @@ class BlackTempleScript : public MoonInstanceScript
         {
             // Way to select bosses
             BuildEncounterMap();
-            if(mEncounters.size() == 0)
+            if(mEncounters.empty())
                 return;
 
             for(EncounterMap::iterator Iter = mEncounters.begin(); Iter != mEncounters.end(); ++Iter)

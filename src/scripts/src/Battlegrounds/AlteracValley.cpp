@@ -1013,14 +1013,15 @@ AlteracValley::AVNode::AVNode(AlteracValley* parent, AVNodeTemplate* tmpl, uint3
         const AVSpawnLocation* spi = g_initalGuardLocations[nodeid];
         CreatureInfo* ci = CreatureNameStorage.LookupEntry(m_template->m_initialSpawnId);
         CreatureProto* cp = CreatureProtoStorage.LookupEntry(m_template->m_initialSpawnId);
-        Creature* sp;
         Log.Debug("AlteracValley", "spawning guards at bunker %s of %s (%u)", m_template->m_name, ci->Name, ci->Id);
 
         while(spi->x != 0.0f)
         {
-            sp = m_bg->GetMapMgr()->CreateCreature(ci->Id);
-            sp->Load(cp, spi->x, spi->y, spi->z, spi->o);
-            sp->PushToWorld(m_bg->GetMapMgr());
+            if (Creature* sp = m_bg->GetMapMgr()->CreateCreature(ci->Id))
+            {
+                sp->Load(cp, spi->x, spi->y, spi->z, spi->o);
+                sp->PushToWorld(m_bg->GetMapMgr());
+            }
             ++spi;
         }
     }
@@ -1383,13 +1384,13 @@ void AlteracValley::AVNode::Capture()
         {
             // spawn fire!
             const AVSpawnLocation* spi = g_fireLocations[m_nodeId];
-            GameObject* go;
+            ;
 
             Log.Debug("AlteracValley", "spawning fires at bunker %s", m_template->m_name);
             while(spi->x != 0.0f)
             {
-                go = m_bg->SpawnGameObject(AV_GAMEOBJECT_FIRE, m_bg->GetMapMgr()->GetMapId(), spi->x, spi->y, spi->z, spi->o, 0, 35, 1.0f);
-                go->PushToWorld(m_bg->GetMapMgr());
+                if (GameObject* go = m_bg->SpawnGameObject(AV_GAMEOBJECT_FIRE, m_bg->GetMapMgr()->GetMapId(), spi->x, spi->y, spi->z, spi->o, 0, 35, 1.0f))
+                    go->PushToWorld(m_bg->GetMapMgr());
                 ++spi;
             }
 
@@ -1518,9 +1519,7 @@ void AlteracValley::HookOnAreaTrigger(Player* plr, uint32 id)
 
 bool AlteracValley::HookHandleRepop(Player* plr)
 {
-    uint32 x;
     float dist = 999999.0f;
-    float dt;
     LocationVector dest_pos;
     if(plr->IsTeamHorde())
         dest_pos.ChangeCoords(-1433.550903f, -608.329529f, 51.149689f);
@@ -1529,17 +1528,16 @@ bool AlteracValley::HookHandleRepop(Player* plr)
 
     if(m_started)
     {
-        for(x = 0; x < AV_NUM_CONTROL_POINTS; ++x)
+        for(uint32 x = 0; x < AV_NUM_CONTROL_POINTS; ++x)
         {
             // skip non-graveyards
             if(!m_nodes[x]->m_template->m_isGraveyard)
                 continue;
 
             // make sure they're owned by us
-            if((plr->IsTeamAlliance() && m_nodes[x]->m_state == AV_NODE_STATE_ALLIANCE_CONTROLLED) ||
-                    (plr->IsTeamHorde() && m_nodes[x]->m_state == AV_NODE_STATE_HORDE_CONTROLLED))
+            if ((plr->IsTeamAlliance() && m_nodes[x]->m_state == AV_NODE_STATE_ALLIANCE_CONTROLLED) || (plr->IsTeamHorde() && m_nodes[x]->m_state == AV_NODE_STATE_HORDE_CONTROLLED))
             {
-                dt = plr->GetPositionNC().Distance2DSq(m_nodes[x]->m_template->m_graveyardLocation.x, m_nodes[x]->m_template->m_graveyardLocation.y);
+                float dt = plr->GetPositionNC().Distance2DSq(m_nodes[x]->m_template->m_graveyardLocation.x, m_nodes[x]->m_template->m_graveyardLocation.y);
                 if(dt < dist)
                 {
                     // new one

@@ -123,7 +123,7 @@ class ElderKuruti : public GossipScript
 
         void GossipSelectOption(Object* pObject, Player* plr, uint32 Id, uint32 IntId, const char* Code)
         {
-            GossipMenu* Menu;
+            GossipMenu* Menu = NULL;
             switch(IntId)
             {
                 case 1:
