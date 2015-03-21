@@ -28,23 +28,11 @@ extern pSpellTarget SpellTargetHandler[EFF_TARGET_LIST_LENGTH_MARKER];
 
 extern const char* SpellEffectNames[TOTAL_SPELL_EFFECTS];
 
-enum SpellTargetSpecification
-{
-    TARGET_SPECT_NONE        = 0,
-    TARGET_SPEC_INVISIBLE    = 1,
-    TARGET_SPEC_DEAD        = 2,
-};
-
 bool CanAttackCreatureType(uint32 TargetTypeMask, uint32 type)
 {
     uint32 cmask = 1 << (type - 1);
 
-    if(type != 0 &&
-            TargetTypeMask != 0 &&
-            ((TargetTypeMask & cmask) == 0))
-        return false;
-    else
-        return true;
+    return (type != TARGET_SPECT_NONE && TargetTypeMask != TARGET_SPECT_NONE && ((TargetTypeMask & cmask) == TARGET_SPECT_NONE)) ? false : true;
 }
 
 void SpellCastTargets::read(WorldPacket & data, uint64 caster)
@@ -158,14 +146,16 @@ void SpellCastTargets::write(WorldPacket & data)
     if(m_targetMask & (TARGET_FLAG_ITEM | TARGET_FLAG_TRADE_ITEM))
         FastGUIDPack(data, m_itemTarget);
 
-    if(m_targetMask & TARGET_FLAG_SOURCE_LOCATION){
+    if(m_targetMask & TARGET_FLAG_SOURCE_LOCATION)
+    {
         data << WoWGuid( unkuint64_1 );        
         data << m_srcX;
         data << m_srcY;
         data << m_srcZ;
     }
 
-    if(m_targetMask & TARGET_FLAG_DEST_LOCATION){
+    if(m_targetMask & TARGET_FLAG_DEST_LOCATION)
+    {
         data << WoWGuid( unkuint64_2 );        
         data << m_destX;
         data << m_destY;
@@ -193,14 +183,15 @@ Spell::Spell(Object* Caster, SpellEntry* info, bool triggered, Aura* aur)
     bRadSet[1] = 0;
     bRadSet[2] = 0;
 
-    if( ( info->SpellDifficultyID != 0 ) && ( Caster->GetTypeId() != TYPEID_PLAYER ) && ( Caster->GetMapMgr() != NULL ) && ( Caster->GetMapMgr()->pInstance != NULL ) )
+    // Apply spell difficulty spell id
+    if (info->SpellDifficultyID != 0 && Caster->GetTypeId() != TYPEID_PLAYER && Caster->GetMapMgr() != NULL && Caster->GetMapMgr()->pInstance != NULL)
     {
-        SpellEntry* SpellDiffEntry = sSpellFactoryMgr.GetSpellEntryByDifficulty(info->SpellDifficultyID, Caster->GetMapMgr()->iInstanceMode);
-        if( SpellDiffEntry != NULL )
+        if (SpellEntry* SpellDiffEntry = sSpellFactoryMgr.GetSpellEntryByDifficulty(info->SpellDifficultyID, Caster->GetMapMgr()->iInstanceMode))
             m_spellInfo = SpellDiffEntry;
         else
             m_spellInfo = info;
-    }else
+    }
+    else
         m_spellInfo = info;
 
     m_spellInfo_override = NULL;
@@ -311,10 +302,9 @@ Spell::Spell(Object* Caster, SpellEntry* info, bool triggered, Aura* aur)
 
     UniqueTargets.clear();
     ModeratedTargets.clear();
-    for(uint32 i = 0; i < 3; ++i)
-    {
+
+    for(uint8 i = 0; i < 3; i++)
         m_targetUnits[i].clear();
-    }
 
     //create rune avail snapshot
     if(p_caster && p_caster->IsDeathKnight())
@@ -322,7 +312,7 @@ Spell::Spell(Object* Caster, SpellEntry* info, bool triggered, Aura* aur)
 
     m_target_constraint = objmgr.GetSpellTargetConstraintForSpell(info->Id);
     
-    m_missilePitch = 0.0f;
+    m_missilePitch = 0;
     m_missileTravelTime = 0;
 }
 
@@ -346,10 +336,8 @@ Spell::~Spell()
     ////////////////////////////////////////////////////////////////////////////////////////
 
 
-    for(uint32 i = 0; i < 3; ++i)
-    {
+    for(uint8 i = 0; i < 3; i++)
         m_targetUnits[i].clear();
-    }
 
     std::map<uint64, Aura*>::iterator itr;
     for(itr = m_pendingAuras.begin(); itr != m_pendingAuras.end(); ++itr)
@@ -365,6 +353,7 @@ bool Spell::IsStealthSpell()
     //check if aura name is some stealth aura
     if(GetProto()->EffectApplyAuraName[0] == SPELL_AURA_MOD_STEALTH || GetProto()->EffectApplyAuraName[1] == SPELL_AURA_MOD_STEALTH || GetProto()->EffectApplyAuraName[2] == SPELL_AURA_MOD_STEALTH)
         return true;
+
     return false;
 }
 
@@ -374,6 +363,7 @@ bool Spell::IsInvisibilitySpell()
     //check if aura name is some invisibility aura
     if(GetProto()->EffectApplyAuraName[0] == SPELL_AURA_MOD_INVISIBILITY || GetProto()->EffectApplyAuraName[1] == SPELL_AURA_MOD_INVISIBILITY || GetProto()->EffectApplyAuraName[2] == SPELL_AURA_MOD_INVISIBILITY)
         return true;
+
     return false;
 }
 
@@ -390,7 +380,7 @@ void Spell::FillSpecifiedTargetsInArea(uint32 i, float srcx, float srcy, float s
     float r = range * range;
     uint8 did_hit_result;
 
-    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); itr++)
+    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
         // don't add objects that are not units and that are dead
         if(!((*itr)->IsUnit()) || ! TO< Unit* >(*itr)->isAlive())
@@ -456,13 +446,9 @@ void Spell::FillAllTargetsInArea(uint32 i, float srcx, float srcy, float srcz, f
     TargetsList* tmpMap = &m_targetUnits[i];
     float r = range * range;
     uint8 did_hit_result;
-    std::set<Object*>::iterator itr, itr2;
 
-    for(itr2 = m_caster->GetInRangeSetBegin(); itr2 != m_caster->GetInRangeSetEnd();)
+    for (std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
-        itr = itr2;
-        //maybe scripts can change list. Should use lock instead of this to prevent multiple changes. This protects to 1 deletion only
-        itr2++;
         if(!((*itr)->IsUnit()) || ! TO< Unit* >(*itr)->isAlive())      //|| ( TO< Creature* >( *itr )->IsTotem() && !TO< Unit* >( *itr )->IsPlayer() ) ) why shouldn't we fill totems?
             continue;
 
@@ -525,12 +511,9 @@ void Spell::FillAllFriendlyInArea(uint32 i, float srcx, float srcy, float srcz, 
     TargetsList* tmpMap = &m_targetUnits[i];
     float r = range * range;
     uint8 did_hit_result;
-    std::set<Object*>::iterator itr, itr2;
 
-    for(itr2 = m_caster->GetInRangeSetBegin(); itr2 != m_caster->GetInRangeSetEnd();)
+    for (std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
-        itr = itr2;
-        itr2++; //maybe scripts can change list. Should use lock instead of this to prevent multiple changes. This protects to 1 deletion only
         if(!((*itr)->IsUnit()) || !TO< Unit* >(*itr)->isAlive())
             continue;
 
@@ -598,7 +581,7 @@ uint64 Spell::GetSinglePossibleEnemy(uint32 i, float prange)
     }
     float srcx = m_caster->GetPositionX(), srcy = m_caster->GetPositionY(), srcz = m_caster->GetPositionZ();
 
-    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); itr++)
+    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
         if(!((*itr)->IsUnit()) || !TO< Unit* >(*itr)->isAlive())
             continue;
@@ -652,7 +635,7 @@ uint64 Spell::GetSinglePossibleFriend(uint32 i, float prange)
     }
     float srcx = m_caster->GetPositionX(), srcy = m_caster->GetPositionY(), srcz = m_caster->GetPositionZ();
 
-    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); itr++)
+    for(std::set<Object*>::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
         if(!((*itr)->IsUnit()) || !TO< Unit* >(*itr)->isAlive())
             continue;
@@ -748,11 +731,10 @@ uint8 Spell::DidHit(uint32 effindex, Unit* target)
     /* Check if the target is immune to this mechanic                        */
     /*************************************************************************/
     if(m_spellInfo->MechanicsType < MECHANIC_END && u_victim->MechanicsDispels[ m_spellInfo->MechanicsType ])
-
     {
         // Immune - IF, and ONLY IF, there is no damage component!
         bool no_damage_component = true;
-        for(int x = 0 ; x <= 2 ; x ++)
+        for(uint8 x = 0 ; x < 3; x ++)
         {
             if(GetProto()->Effect[x] == SPELL_EFFECT_SCHOOL_DAMAGE
                     || GetProto()->Effect[x] == SPELL_EFFECT_WEAPON_PERCENT_DAMAGE
@@ -1197,7 +1179,7 @@ void Spell::cast(bool check)
             }
         }
 
-        for(uint32 i = 0; i < 3; i++)
+        for(uint8 i = 0; i < 3; i++)
         {
             uint32 TargetType = 0;
             TargetType |= GetTargetType(m_spellInfo->EffectImplicitTargetA[i], i);
@@ -1876,8 +1858,7 @@ void Spell::finish(bool successful)
         if(!(hasAttribute(ATTRIBUTE_ON_NEXT_ATTACK) && !m_triggeredSpell) && !isTamingQuestSpell)
         {
             uint32 numTargets = 0;
-            TargetsList::iterator itr = UniqueTargets.begin();
-            for(; itr != UniqueTargets.end(); ++itr)
+            for (TargetsList::iterator itr = UniqueTargets.begin(); itr != UniqueTargets.end(); ++itr)
             {
                 if(GET_TYPE_FROM_GUID(*itr) == HIGHGUID_TYPE_UNIT)
                 {
@@ -2052,7 +2033,7 @@ void Spell::SendSpellGo()
 {
     // Fill UniqueTargets
     TargetsList::iterator i, j;
-    for(uint32 x = 0; x < 3; x++)
+    for(uint8 x = 0; x < 3; x++)
     {
         if(GetProto()->Effect[x])
         {

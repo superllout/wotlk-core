@@ -40,6 +40,13 @@ struct SpellClickSpell
     uint32 SpellID;
 };
 
+enum SpellTargetSpecification
+{
+    TARGET_SPECT_NONE = 0,
+    TARGET_SPEC_INVISIBLE = 1,
+    TARGET_SPEC_DEAD = 2,
+};
+
 /* Spell Ranges:(for 1.10.2)
 Range ID|Range|Description
 1       0-0     Self Only

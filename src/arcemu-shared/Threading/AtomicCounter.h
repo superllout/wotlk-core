@@ -31,7 +31,7 @@ namespace Arcemu
         //  Implements atomic incrementation and decrementation
         //
         //////////////////////////////////////////////////////////
-        class SERVER_DECL AtomicCounter : public AtomicULong
+        class AtomicCounter : public AtomicULong
         {
             public:
                 AtomicCounter() { Value = 0; }
