@@ -33,7 +33,6 @@ class Item;
 class Group;
 class Aura;
 
-
 struct SpellClickSpell
 {
     uint32 CreatureID;
@@ -1545,18 +1544,40 @@ class DummySpellHandler;
 enum SpellDidHitResult
 {
     SPELL_DID_HIT_SUCCESS                    = 0,
-    SPELL_DID_HIT_MISS                        = 1,
-    SPELL_DID_HIT_RESIST                    = 2,
-    SPELL_DID_HIT_DODGE                        = 3,
-    SPELL_DID_HIT_PARRY                        = 4,
-    SPELL_DID_HIT_BLOCK                        = 5,
-    SPELL_DID_HIT_EVADE                        = 6,
-    SPELL_DID_HIT_IMMUNE                    = 7,
+    SPELL_DID_HIT_MISS                       = 1,
+    SPELL_DID_HIT_RESIST                     = 2,
+    SPELL_DID_HIT_DODGE                      = 3,
+    SPELL_DID_HIT_PARRY                      = 4,
+    SPELL_DID_HIT_BLOCK                      = 5,
+    SPELL_DID_HIT_EVADE                      = 6,
+    SPELL_DID_HIT_IMMUNE                     = 7,
     SPELL_DID_HIT_IMMUNE2                    = 8,
     SPELL_DID_HIT_DEFLECT                    = 9,  // See - http://www.wowwiki.com/Deflect
-    SPELL_DID_HIT_ABSORB                    = 10, // See - http://www.wowwiki.com/Absorb
+    SPELL_DID_HIT_ABSORB                     = 10, // See - http://www.wowwiki.com/Absorb
     SPELL_DID_HIT_REFLECT                    = 11, // See - http://www.wowwiki.com/Reflect
     NUM_SPELL_DID_HIT_RESULTS,
+};
+
+enum SpellFamilyNames
+{
+    SPELLFAMILY_GENERIC     = 0,
+    SPELLFAMILY_UNK1        = 1,                            // events, holidays
+    // 2 - unused
+    SPELLFAMILY_MAGE        = 3,
+    SPELLFAMILY_WARRIOR     = 4,
+    SPELLFAMILY_WARLOCK     = 5,
+    SPELLFAMILY_PRIEST      = 6,
+    SPELLFAMILY_DRUID       = 7,
+    SPELLFAMILY_ROGUE       = 8,
+    SPELLFAMILY_HUNTER      = 9,
+    SPELLFAMILY_PALADIN     = 10,
+    SPELLFAMILY_SHAMAN      = 11,
+    SPELLFAMILY_UNK2        = 12,                           // 2 spells (silence resistance)
+    SPELLFAMILY_POTION      = 13,
+    // 14 - unused
+    SPELLFAMILY_DEATHKNIGHT = 15,
+    // 16 - unused
+    SPELLFAMILY_PET         = 17
 };
 
 // Target constraints for spells ( mostly scripted stuff )
