@@ -630,8 +630,8 @@ inline static bool ParseCIDRBan(unsigned int IP, unsigned int Mask, unsigned int
 inline static unsigned int MakeIP(const char* str)
 {
     unsigned int bytes[4];
-    unsigned int res;
-    if(sscanf(str, "%u.%u.%u.%u", &bytes[0], &bytes[1], &bytes[2], &bytes[3]) != 4)
+    uint16 res;
+    if (sscanf(str, "%u.%u.%u.%u", &bytes[0], &bytes[1], &bytes[2], &bytes[3]) != 4)
         return 0;
 
     res = bytes[0] | (bytes[1] << 8) | (bytes[2] << 16) | (bytes[3] << 24);

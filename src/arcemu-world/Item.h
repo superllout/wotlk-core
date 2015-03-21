@@ -232,7 +232,7 @@ class SERVER_DECL Item : public Object
         void SetRandomSuffix(uint32 id)
         {
             int32 r_id = -(int32(id));
-            uint32 v = Item::GenerateRandomSuffixFactor(m_itemProto);
+            uint32 v = GenerateRandomSuffixFactor(m_itemProto);
             SetItemRandomPropertyId((uint32)r_id);
             SetItemRandomSuffixFactor(v);
             random_suffix = id;
@@ -389,7 +389,7 @@ class SERVER_DECL Item : public Object
 
         static uint32 GenerateRandomSuffixFactor(ItemPrototype* m_itemProto);
 
-        bool HasEnchantments() { return (Enchantments.size() > 0) ? true : false; }
+        bool HasEnchantments() { return !Enchantments.empty(); }
 
         uint32 wrapped_item_id;
 

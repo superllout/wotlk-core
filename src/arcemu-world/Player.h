@@ -1357,9 +1357,8 @@ class SERVER_DECL Player : public Unit
         uint8            GetStableSlotCount(void) { return m_StableSlotCount; }
         uint32                        GetUnstabledPetNumber(void)
         {
-            if(m_Pets.size() == 0) return 0;
-            std::map<uint32, PlayerPet*>::iterator itr = m_Pets.begin();
-            for(; itr != m_Pets.end(); itr++)
+            if(m_Pets.empty()) return 0;
+            for(std::map<uint32, PlayerPet*>::iterator itr = m_Pets.begin(); itr != m_Pets.end(); ++itr)
                 if(itr->second->stablestate == STABLE_STATE_ACTIVE)
                     return itr->first;
             return 0;

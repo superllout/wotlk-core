@@ -53,7 +53,7 @@ class TaxiPath
 
         ~TaxiPath()
         {
-            while(m_pathNodes.size())
+            while(!m_pathNodes.empty())
             {
                 TaxiPathNode* pn = m_pathNodes.begin()->second;
                 m_pathNodes.erase(m_pathNodes.begin());
