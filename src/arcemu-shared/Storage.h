@@ -72,6 +72,7 @@ class SERVER_DECL StorageContainerIterator
          */
         T* Pointer;
     public:
+        StorageContainerIterator() {}
         virtual ~StorageContainerIterator() {}
 
         /** Returns the currently stored object
@@ -692,15 +693,13 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
                 }
             }
 
-            uint32 Entry;
-            T* Allocated;
 #ifdef STORAGE_ALLOCATION_POOLS
             Storage<T, StorageType>::_storage.InitPool(result->GetRowCount());
 #endif
             do
             {
-                Entry = fields[0].GetUInt32();
-                Allocated = Storage<T, StorageType>::_storage.AllocateEntry(Entry);
+                uint32 Entry = fields[0].GetUInt32();
+                T* Allocated = Storage<T, StorageType>::_storage.AllocateEntry(Entry);
                 if(!Allocated)
                     continue;
 
@@ -757,12 +756,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
                 }
             }
 
-            uint32 Entry;
-            T* Allocated;
             do
             {
-                Entry = fields[0].GetUInt32();
-                Allocated = Storage<T, StorageType>::_storage.LookupEntryAllocate(Entry);
+                uint32 Entry = fields[0].GetUInt32();
+                T* Allocated = Storage<T, StorageType>::_storage.LookupEntryAllocate(Entry);
                 if(!Allocated)
                     continue;
 
@@ -808,12 +805,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
                 return;
             }
 
-            uint32 Entry;
-            T* Allocated;
             do
             {
-                Entry = fields[0].GetUInt32();
-                Allocated = Storage<T, StorageType>::_storage.LookupEntry(Entry);
+                uint32 Entry = fields[0].GetUInt32();
+                T* Allocated = Storage<T, StorageType>::_storage.LookupEntry(Entry);
                 if(Allocated)
                     LoadBlock(fields, Allocated, true);
                 else
