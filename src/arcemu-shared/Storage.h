@@ -20,10 +20,6 @@
 #ifndef STORAGE_H_
 #define STORAGE_H_
 
-#ifdef WIN32
-#pragma warning(disable:4312)
-#endif
-
 // pooled allocations
 //#define STORAGE_ALLOCATION_POOLS 1
 

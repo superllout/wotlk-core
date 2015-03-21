@@ -407,7 +407,8 @@ class SERVER_DECL ByteBuffer
             {
                 if(mask & (1 << i))
                 {
-                    uint8 temp << *this;
+                    uint8 temp;
+                    *this >> temp;
                     guid |= uint64(temp << uint64(i << 3));
                 }
             }

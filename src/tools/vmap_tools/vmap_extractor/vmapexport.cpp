@@ -35,9 +35,6 @@
 #undef min
 #undef max
 
-//#pragma warning(disable : 4505)
-//#pragma comment(lib, "Winmm.lib")
-
 #include <map>
 
 //From Extractor

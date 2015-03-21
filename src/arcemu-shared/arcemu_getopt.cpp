@@ -19,6 +19,7 @@
 
 #include "Common.h"
 #include "arcemu_getopt.h"
+#include "Threading/ThreadPool.h"
 
 int arg_counter = 1;
 char arcemu_optarg[514];
@@ -33,7 +34,7 @@ int arcemu_getopt_long_only(int ___argc, char* const* ___argv, const char* __sho
 //    int return_val = 0;
 
     // if we're not an option, return an error.
-    if(strnicmp(opt, "--", 2) != 0)
+    if(_strnicmp(opt, "--", 2) != 0)
         return 1;
     else
         opt += 2;
@@ -43,14 +44,14 @@ int arcemu_getopt_long_only(int ___argc, char* const* ___argv, const char* __sho
     int i = 0;
     for(; __longopts[i].name != 0; ++i)
     {
-        if(!strnicmp(__longopts[i].name, opt, strlen(__longopts[i].name)))
+        if(!_strnicmp(__longopts[i].name, opt, strlen(__longopts[i].name)))
         {
             // woot, found a valid argument =)
             char* par = 0;
             if((arg_counter + 1) != ___argc)
             {
                 // grab the parameter from the next argument (if its not another argument)
-                if(strnicmp(___argv[arg_counter + 1], "--", 2) != 0)
+                if(_strnicmp(___argv[arg_counter + 1], "--", 2) != 0)
                 {
                     arg_counter++;        // Trash this next argument, we won't be needing it.
                     par = ___argv[arg_counter];

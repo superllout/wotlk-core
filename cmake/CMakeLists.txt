@@ -26,19 +26,11 @@ ENDMACRO( IS_ARCH_64BIT )
 
 IF( WIN32 )
 	IF( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
-		SET( CMAKE_INSTALL_PREFIX "C:/Arcemu" CACHE PATH "Install path prefix" FORCE )
+		SET( CMAKE_INSTALL_PREFIX "C:/EasyWoW" CACHE PATH "Install path prefix" FORCE )
 	ENDIF( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
 ENDIF( WIN32 )
 
 SET( GLOBAL_DEFINES "-DHAVE_CONFIG_H")
-
-IF( CMAKE_GENERATOR MATCHES Visual*)
-	SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "/MP")
-ENDIF()
-
-IF(CMAKE_GENERATOR MATCHES Visual*)
-	SET(GLOBAL_DEFINES ${GLOBAL_DEFINES} "/bigobj")
-ENDIF()
 
 IS_ARCH_64BIT()
 
@@ -91,9 +83,9 @@ ENDIF(WIN32)
 #Our configurable variables.
 IF( WIN32 )
 	SET(ARCEMU_CONFIGSFILE_PATH configs CACHE PATH "Path where the arcemu config files are.")
-ELSE( WIN32 )
+ELSE()
 	SET(ARCEMU_CONFIGSFILE_PATH etc CACHE PATH "Path where the arcemu config files are.")
-ENDIF( WIN32 )
+ENDIF()
 
 SET(ARCEMU_SCRIPTLIB_PATH "modules" CACHE PATH "The directory which contains the 'lib' directory that has the script libraries." )
 SET(BUILD_ARCEMUSCRIPTS TRUE CACHE BOOL "Set to false to NOT build script libraries." )
@@ -117,7 +109,10 @@ ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	#Extract revision
 	execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
-	
+
+	SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "/MP")
+	SET(GLOBAL_DEFINES ${GLOBAL_DEFINES} "/bigobj")
+
 	#Check support for unordered_map/set
 	GetCompilerVersion( msvc_version)
 	IF(DEFINED ${msvc_version} AND ${msvc_version} GREATER "1599" )
@@ -193,7 +188,7 @@ if(WIN32)
 		else()
 			SET( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_x64.lib )
 		endif()
-	else(IS_64BIT )
+	else()
 		SET( EXTRA_LIBS libeay32_win32.lib )
 		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 			SET(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_win32.lib )
@@ -227,8 +222,8 @@ IF( APPLE )
 		SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32" )
 		SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -undefined dynamic_lookup" )
 		SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32" )
-	ENDIF( NOT IS_64BIT )
-ENDIF( APPLE )
+	ENDIF()
+ENDIF()
 
 add_subdirectory(g3dlite)
 add_subdirectory(vmaplib)

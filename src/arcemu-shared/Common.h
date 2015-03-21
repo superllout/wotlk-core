@@ -27,10 +27,8 @@
 #define REPACK_WEBSITE "www.google.com"*/
 
 #ifdef WIN32
-#pragma warning(disable:4996)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
-#pragma warning(disable:4251)        // dll-interface bullshit
 #endif
 
 enum TimeVariables
@@ -82,14 +80,6 @@ enum MsTimeVariables
 #else
 #  include <cstring>
 #  define MAX_PATH 1024
-#endif
-
-#ifdef min
-#undef min
-#endif
-
-#ifdef max
-#undef max
 #endif
 
 #ifdef CONFIG_USE_SELECT
@@ -197,14 +187,6 @@ enum MsTimeVariables
 #endif
 #ifdef USE_POLL
 #define CONFIG_USE_POLL
-#endif
-
-#ifdef min
-#undef min
-#endif
-
-#ifdef max
-#undef max
 #endif
 
 #include <cstdlib>
