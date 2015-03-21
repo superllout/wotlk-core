@@ -78,15 +78,26 @@ SERVER_DECL set<string> ExtraMapGameObjectTables;
 
 void ObjectMgr::LoadProfessionDiscoveries()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT * from professiondiscoveries");
-    if(result != NULL)
+    Log.Debug("ObjectMgr", "Loading professiondiscoveries");
+    if (QueryResult* result = WorldDatabase.Query("SELECT * from professiondiscoveries"))
     {
         do
         {
             Field* f = result->Fetch();
             ProfessionDiscovery* pf = new ProfessionDiscovery;
             pf->SpellId = f[0].GetUInt32();
+            if (!dbcSpell.LookupEntryForced(pf->SpellId))
+            {
+                Log.Error("LoadProfessionDiscoveries", "Tried to load data for non existing spell entry %u", pf->SpellId);
+                continue;
+            }
+
             pf->SpellToDiscover = f[1].GetUInt32();
+            if (!dbcSpell.LookupEntryForced(pf->SpellToDiscover))
+            {
+                Log.Error("LoadProfessionDiscoveries", "Tried to load data for spell entry %u with non existing discover spell %u", pf->SpellId, pf->SpellToDiscover);
+                continue;
+            }
             pf->SkillValue = f[2].GetUInt32();
             pf->Chance = f[3].GetFloat();
             ProfessionDiscoveryTable.insert(pf);
@@ -94,6 +105,7 @@ void ObjectMgr::LoadProfessionDiscoveries()
         while(result->NextRow());
         delete result;
     }
+    Log.Success("ObjectMgr", "Loaded professiondiscoveries data for %u spells", ProfessionDiscoveryTable.size());
 }
 
 void ObjectMgr::LoadExtraCreatureProtoStuff()
@@ -566,10 +578,9 @@ void Storage_Cleanup()
 {
     {
         StorageContainerIterator<CreatureProto> * itr = CreatureProtoStorage.MakeIterator();
-        CreatureProto* p;
         while(!itr->AtEnd())
         {
-            p = itr->Get();
+            CreatureProto* p = itr->Get();
             if(p->aura_string)
             {
                 free(p->aura_string);
