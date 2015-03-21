@@ -355,8 +355,11 @@ const char* SpellEffectNames[TOTAL_SPELL_EFFECTS] =
 
 void Spell::ApplyAA(uint32 i)   // Apply Area Aura
 {
-    if(!unitTarget || !unitTarget->isAlive()) return;
-    if(u_caster != unitTarget) return;
+    if(!unitTarget || !unitTarget->isAlive()) 
+        return;
+
+    if(u_caster != unitTarget)
+        return;
 
     Aura* pAura = NULL;
     std::map<uint64, Aura*>::iterator itr = m_pendingAuras.find(unitTarget->GetGUID());
@@ -364,7 +367,7 @@ void Spell::ApplyAA(uint32 i)   // Apply Area Aura
     {
         pAura = sSpellFactoryMgr.NewAura(GetProto(), GetDuration(), m_caster, unitTarget);
 
-        float r = GetRadius(i);
+        float auraRadius = GetRadius(i);
 
         uint32 eventtype = 0;
 
@@ -391,18 +394,17 @@ void Spell::ApplyAA(uint32 i)   // Apply Area Aura
         }
 
         if(!sEventMgr.HasEvent(pAura, eventtype))        /* only add it once */
-            sEventMgr.AddEvent(pAura, &Aura::EventUpdateAA, r * r, eventtype, 1000, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+            sEventMgr.AddEvent(pAura, &Aura::EventUpdateAA, auraRadius * auraRadius, eventtype, 1000, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 
         m_pendingAuras.insert(std::make_pair(unitTarget->GetGUID(), pAura));
         AddRef();
         sEventMgr.AddEvent(this, &Spell::HandleAddAura, unitTarget->GetGUID(), EVENT_SPELL_HIT, 100, 1, 0);
     }
     else
-    {
         pAura = itr->second;
-    }
 
-    pAura->AddMod(GetProto()->EffectApplyAuraName[i], damage, GetProto()->EffectMiscValue[i], i);
+    if (pAura)
+        pAura->AddMod(GetProto()->EffectApplyAuraName[i], damage, GetProto()->EffectMiscValue[i], i);
 }
 
 
