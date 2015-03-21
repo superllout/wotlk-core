@@ -20,23 +20,16 @@
 #include "Setup.h"
 #include "../Common/EasyFunctions.h"
 
-class ScourgeGryphonOne : public GossipScript
+class GossipScourgeGryphon : public GossipScript
 {
     public:
         void GossipHello(Object* pObject, Player* plr)
         {
-            TaxiPath* path = sTaxiMgr.GetTaxiPath(1053);
-            plr->TaxiStart(path, 26308, 0);
-        }
-};
-
-class ScourgeGryphonTwo : public GossipScript
-{
-    public:
-        void GossipHello(Object* pObject, Player* plr)
-        {
-            TaxiPath* path = sTaxiMgr.GetTaxiPath(1054);
-            plr->TaxiStart(path, 26308, 0);
+            if (plr->HasQuest(12670) || plr->HasFinishedQuest(12670))
+            {
+                if (TaxiPath* path = sTaxiMgr.GetTaxiPath(TO_CREATURE(pObject)->GetEntry() == 29488 ? 1053 : 1054))
+                    plr->TaxiStart(path, 26308, 0);
+            }
         }
 };
 
@@ -88,14 +81,21 @@ class AcherusSoulPrison : GameObjectAIScript
         }
 };
 
-
+class QuestInServiceOfLichKing : public QuestScript
+{
+    public:
+        void OnQuestStart(Player* mTarget, QuestLogEntry* qLogEntry)
+        {
+            mTarget->PlaySound(14734);
+            sEventMgr.AddEvent(mTarget, &Player::PlaySound, (uint32)14735, EVENT_UNK, 22500, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+            sEventMgr.AddEvent(mTarget, &Player::PlaySound, (uint32)14736, EVENT_UNK, 48500, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
+        }
+};
 
 void SetupDeathKnight(ScriptMgr* mgr)
 {
-    GossipScript* SGO = new ScourgeGryphonOne();
-    mgr->register_gossip_script(29488, SGO);
-    GossipScript* SGT = new ScourgeGryphonTwo();
-    mgr->register_gossip_script(29501, SGT);
+    mgr->register_gossip_script(29488, new GossipScourgeGryphon);
+    mgr->register_gossip_script(29501, new GossipScourgeGryphon);
 
     mgr->register_gameobject_script(191588, &AcherusSoulPrison::Create);
     mgr->register_gameobject_script(191577, &AcherusSoulPrison::Create);
@@ -110,4 +110,5 @@ void SetupDeathKnight(ScriptMgr* mgr)
     mgr->register_gameobject_script(191589, &AcherusSoulPrison::Create);
     mgr->register_gameobject_script(191590, &AcherusSoulPrison::Create);
 
+    mgr->register_quest_script(12593, new QuestInServiceOfLichKing);
 }
