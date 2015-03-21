@@ -3578,7 +3578,7 @@ std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map
 void ObjectMgr::LoadAchievementRewards()
 {
     Log.Debug("ObjectMgr", "Loading achievement_rewards");
-    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title_A`,`title_H`,`item`,`sender`,`subject`,`text`,`mail_template` FROM `achievement_reward` ORDER BY `id`"))
+    if (QueryResult *result = WorldDatabase.Query("SELECT `id`,`title_A`,`title_H`,`item`,`sender`,`subject`,`text`,`mailTemplate` FROM `achievement_reward` ORDER BY `id`"))
     {
         do{
             Field* fields = result->Fetch();
