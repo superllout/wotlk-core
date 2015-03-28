@@ -407,10 +407,8 @@ SpellEntry* ObjectMgr::GetNextSpellRank(SpellEntry* sp, uint32 level)
 void ObjectMgr::LoadPlayersInfo()
 {
     sLog.Debug("ObjectMgr", "Loading players information");
-    if(QueryResult* result = CharacterDatabase.Query("SELECT guid,name,race,class,level,gender,zoneid,timestamp,acct FROM characters"))
+    if (QueryResult* result = CharacterDatabase.Query("SELECT `guid`,`name`,`race`,`class`,`level`,`gender`,`zoneid`,`timestamp`,`acct` FROM `characters`"))
     {
-        uint32 period = (result->GetRowCount() / 20) + 1;
-        uint32 c = 0;
         do
         {
             Field* fields = result->Fetch();
@@ -433,7 +431,7 @@ void ObjectMgr::LoadPlayersInfo()
 
             // Raid & heroic Instance IDs
             // Must be done before entering world...
-            if(QueryResult* result2 = CharacterDatabase.Query("SELECT instanceid, mode, mapid FROM instanceids WHERE playerguid = %u", pn->guid))
+            if(QueryResult* result2 = CharacterDatabase.Query("SELECT `instanceid`, `mode`, `mapid` FROM `instanceids` WHERE `playerguid` = %u", pn->guid))
             {
                 do
                 {
@@ -487,9 +485,6 @@ void ObjectMgr::LoadPlayersInfo()
 
             //this is startup -> no need in lock -> don't use addplayerinfo
             m_playersinfo[(uint32)pn->guid] = pn;
-
-            if(!((++c) % period))
-                Log.Notice("PlayerInfo", "Done %u/%u, %u%% complete.", c, result->GetRowCount(), c * 100 / result->GetRowCount());
         }
         while(result->NextRow());
         delete result;
@@ -517,7 +512,7 @@ PlayerInfo* ObjectMgr::GetPlayerInfoByName(const char* name)
 void ObjectMgr::LoadCompletedAchievements()
 {
     sLog.Debug("ObjectMgr", "Loading characters completed achievements");
-    QueryResult* result = CharacterDatabase.Query("SELECT achievement FROM character_achievement GROUP BY achievement");
+    QueryResult* result = CharacterDatabase.Query("SELECT `achievement` FROM `character_achievement` GROUP BY `achievement`");
     if (result)
     {
         do
@@ -532,24 +527,20 @@ void ObjectMgr::LoadCompletedAchievements()
 
 void ObjectMgr::LoadPlayerCreateInfo()
 {
-    sLog.Debug("ObjectMgr", "Loading player create info");
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM playercreateinfo");
+    Log.Debug("ObjectMgr", "Loading player create info");
+    QueryResult* playerCreateInfoData = WorldDatabase.Query("SELECT `Index`,`race`,`factiontemplate`,`class`,`mapID`,`zoneID`,`positionX`,`positionY`,`positionZ`,`displayID`,`BaseStrength`, \
+    `BaseAgility`,`BaseStamina`,`BaseIntellect`,`BaseSpirit`,`BaseHealth`,`BaseMana`,`BaseRage`,`BaseFocus`,`BaseEnergy`, \
+    attackpower`,`mindmg`,`maxdmg`,`introid`,`taximask` FROM `playercreateinfo`");
 
-    if(!result)
+    if(!playerCreateInfoData)
     {
         Log.Error("MySQL", "Query failed: SELECT * FROM playercreateinfo");
-        return;
-    }
-    if(result->GetFieldCount() != 25)
-    {
-        Log.Error("MySQL", "Wrong field count in table playercreateinfo (got %lu, need 25)", result->GetFieldCount());
-        delete result;
         return;
     }
 
     do
     {
-        Field* fields = result->Fetch();
+        Field* fields = playerCreateInfoData->Fetch();
         PlayerCreateInfo* pPlayerCreateInfo = new PlayerCreateInfo;
 
         pPlayerCreateInfo->index = fields[0].GetUInt8();
@@ -586,62 +577,52 @@ void ObjectMgr::LoadPlayerCreateInfo()
         for(iter = tokens.begin(), index = 0; (index < 12) && (iter != tokens.end()); ++iter, ++index)
             pPlayerCreateInfo->taximask[index] = atol((*iter).c_str());
 
-        QueryResult* sk_sql = WorldDatabase.Query(
-                                  "SELECT * FROM playercreateinfo_skills WHERE indexid=%u", pPlayerCreateInfo->index);
-
-        if(sk_sql)
+        if(QueryResult* skillsData = WorldDatabase.Query("SELECT `skillid`,`level` FROM `playercreateinfo_skills` WHERE `indexid` = %u", pPlayerCreateInfo->index))
         {
             do
             {
-                Field* fields2 = sk_sql->Fetch();
+                Field* fields2 = skillsData->Fetch();
                 CreateInfo_SkillStruct tsk;
-                tsk.skillid = fields2[1].GetUInt32();
-                tsk.currentval = fields2[2].GetUInt32();
-                tsk.maxval = fields2[3].GetUInt32();
+                tsk.skillid = fields2[0].GetUInt32();
+                tsk.currentval = fields2[1].GetUInt32();
+                tsk.maxval = fields2[2].GetUInt32();
                 pPlayerCreateInfo->skills.push_back(tsk);
             }
-            while(sk_sql->NextRow());
-            delete sk_sql;
+            while(skillsData->NextRow());
+            delete skillsData;
         }
-        QueryResult* sp_sql = WorldDatabase.Query(
-                                  "SELECT * FROM playercreateinfo_spells WHERE indexid=%u", pPlayerCreateInfo->index);
 
-        if(sp_sql)
+        if(QueryResult* spellData = WorldDatabase.Query("SELECT `spellid` FROM `playercreateinfo_spells` WHERE `indexid` = %u", pPlayerCreateInfo->index))
         {
             do
             {
-                pPlayerCreateInfo->spell_list.insert(sp_sql->Fetch()[1].GetUInt32());
+                pPlayerCreateInfo->spell_list.insert(spellData->Fetch()[0].GetUInt32());
             }
-            while(sp_sql->NextRow());
-            delete sp_sql;
+            while(spellData->NextRow());
+            delete spellData;
         }
 
-        QueryResult* items_sql = WorldDatabase.Query(
-                                     "SELECT * FROM playercreateinfo_items WHERE indexid=%u", pPlayerCreateInfo->index);
-
-        if(items_sql)
+        if(QueryResult* itemsData = WorldDatabase.Query("SELECT `protoid`,`slotid`,`amount` FROM `playercreateinfo_items` WHERE `indexid` = %u", pPlayerCreateInfo->index))
         {
             do
             {
-                Field* fields2 = items_sql->Fetch();
+                Field* fields2 = itemsData->Fetch();
+
                 CreateInfo_ItemStruct itm;
-                itm.protoid = fields2[1].GetUInt32();
-                itm.slot = fields2[2].GetUInt8();
-                itm.amount = fields2[3].GetUInt32();
+                itm.protoid = fields2[0].GetUInt32();
+                itm.slot = fields2[1].GetUInt8();
+                itm.amount = fields2[2].GetUInt32();
                 pPlayerCreateInfo->items.push_back(itm);
             }
-            while(items_sql->NextRow());
-            delete items_sql;
+            while(itemsData->NextRow());
+            delete itemsData;
         }
 
-        QueryResult* bars_sql = WorldDatabase.Query(
-                                    "SELECT * FROM playercreateinfo_bars WHERE class=%u and race=%u", pPlayerCreateInfo->class_, pPlayerCreateInfo->race);
-
-        if(bars_sql)
+        if(QueryResult* actionBarsData = WorldDatabase.Query("SELECT `race`,`class`,`button`,`action`,`type`,`misc` FROM `playercreateinfo_bars` WHERE `class` = %u AND `race` = %u", pPlayerCreateInfo->class_, pPlayerCreateInfo->race))
         {
             do
             {
-                Field* fields2 = bars_sql->Fetch();
+                Field* fields2 = actionBarsData ->Fetch();
                 CreateInfo_ActionBarStruct bar;
                 bar.button = fields2[2].GetUInt32();
                 bar.action = fields2[3].GetUInt32();
@@ -649,29 +630,27 @@ void ObjectMgr::LoadPlayerCreateInfo()
                 bar.misc = fields2[5].GetUInt32();
                 pPlayerCreateInfo->actionbars.push_back(bar);
             }
-            while(bars_sql->NextRow());
-            delete bars_sql;
+            while(actionBarsData->NextRow());
+            delete actionBarsData;
         }
 
         mPlayerCreateInfo[pPlayerCreateInfo->index] = pPlayerCreateInfo;
     }
-    while(result->NextRow());
-
-    delete result;
+    while(playerCreateInfoData->NextRow());
+    delete playerCreateInfoData;
 
     Log.Success("ObjectMgr", "%u player create infos loaded.", mPlayerCreateInfo.size());
     GenerateLevelUpInfo();
 }
 
-// DK:LoadGuilds()
 void ObjectMgr::LoadGuilds()
 {
     Log.Debug("ObjectMgr", "Loading guilds");
-    QueryResult* result = CharacterDatabase.Query("SELECT * FROM guilds");
+    QueryResult* result = CharacterDatabase.Query("SELECT `guildId`,`guildName`,`leaderGuid`,`emblemStyle`,`emblemColor`,`borderStyle`,`borderColor`,`backgroundColor`,`guildInfo`, \
+    `motd`,`createDate`,`bankBlance` FROM `guilds`");
+
     if(result)
     {
-        uint32 period = (result->GetRowCount() / 20) + 1;
-        uint32 c = 0;
         do
         {
             Guild* pGuild = Guild::Create();
@@ -681,10 +660,6 @@ void ObjectMgr::LoadGuilds()
             }
             else
                 mGuild.insert(make_pair(pGuild->GetGuildId(), pGuild));
-
-            if(!((++c) % period))
-                Log.Notice("Guilds", "Done %u/%u, %u%% complete.", c, result->GetRowCount(), c * 100 / result->GetRowCount());
-
         }
         while(result->NextRow());
         delete result;
@@ -2242,7 +2217,7 @@ void ObjectMgr::LoadDefaultPetSpells()
         while(result->NextRow());
         delete result;
     }
-    Log.Success("ObjectMgr", "Loaded %u petdefaultspells data", mDefaultPetSpells);
+    Log.Success("ObjectMgr", "Loaded %u petdefaultspells data", mDefaultPetSpells.size());
 }
 
 set<SpellEntry*>* ObjectMgr::GetDefaultPetSpells(uint32 Entry)

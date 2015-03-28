@@ -95,12 +95,12 @@ void apply_setting(string & str, ConfigSetting & setting)
     if(str.length() > 1)
     {
         // this might be a yes/no?
-        if(str.size() >= 3 && !_strnicmp("yes", str.c_str(), 3))
+        if(str.size() >= 3 && !strnicmp("yes", str.c_str(), 3))
         {
             setting.AsBool = true;
             setting.AsInt = 1;
         }
-        else if(str.size() >= 2 && !_strnicmp("no", str.c_str(), 2))
+        else if(str.size() >= 2 && !strnicmp("no", str.c_str(), 2))
         {
             setting.AsBool = false;
             setting.AsInt = 0;
