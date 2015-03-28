@@ -309,9 +309,7 @@ void Creature::OnRemoveCorpse()
         m_position = m_spawnLocation;
 
         if((GetMapMgr()->GetMapInfo() && GetMapMgr()->GetMapInfo()->type == INSTANCE_RAID && proto->boss) || m_noRespawn)
-        {
             RemoveFromWorld(false, true);
-        }
         else
         {
             if(proto->RespawnTime || m_respawnTimeOverride)
@@ -321,10 +319,7 @@ void Creature::OnRemoveCorpse()
         }
     }
     else
-    {
-        // if we got here it's pretty bad
         ARCEMU_ASSERT(false);
-    }
 }
 
 void Creature::OnRespawn(MapMgr* m)
@@ -397,6 +392,9 @@ void Creature::OnRespawn(MapMgr* m)
     GetAIInterface()->StopMovement(0); // after respawn monster can move
     m_PickPocketed = false;
     PushToWorld(m);
+
+    if (CreatureAIScript* pScript = GetScript())
+        pScript->OnRespawn();
 }
 
 void Creature::Create(const char* name, uint32 mapid, float x, float y, float z, float ang)

@@ -335,6 +335,7 @@ class SERVER_DECL CreatureAIScript
         virtual void AIUpdate() {}
         virtual void OnEmote(Player* pPlayer, EmoteType Emote) {}
         virtual void StringFunctionCall(int) {}
+        virtual void OnRespawn() {}
 
         void RegisterAIUpdateEvent(uint32 frequency);
         void ModifyAIUpdateEvent(uint32 newfrequency);
