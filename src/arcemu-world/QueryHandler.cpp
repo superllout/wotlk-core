@@ -53,12 +53,10 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket & recv_data)
 //////////////////////////////////////////////////////////////
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & recv_data)
 {
-
     WorldPacket data(SMSG_QUERY_TIME_RESPONSE, 4 + 4);
     data << (uint32)UNIXTIME;
     data << (uint32)0; //VLack: 3.1; thanks Stewart for reminding me to have the correct structure even if it seems the old one still works.
     SendPacket(&data);
-
 }
 
 //////////////////////////////////////////////////////////////
@@ -73,7 +71,6 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
     WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 250); //VLack: thanks Aspire, this was 146 before
     uint32 entry;
     uint64 guid;
-    CreatureInfo* ci;
 
     recv_data >> entry;
     recv_data >> guid;
@@ -92,12 +89,11 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
     }
     else
     {
-        ci = CreatureNameStorage.LookupEntry(entry);
+        CreatureInfo* ci = CreatureNameStorage.LookupEntry(entry);
         if(ci == NULL)
             return;
 
         LocalizedCreatureName* lcn = (language > 0) ? sLocalizationMgr.GetLocalizedCreatureName(entry, language) : NULL;
-
         if(lcn == NULL)
         {
             LOG_DETAIL("WORLD: CMSG_CREATURE_QUERY '%s'", ci->Name);
@@ -134,10 +130,9 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket & recv_data)
         data << ci->Leader;         // faction leader
 
         // these are the 6 seperate quest items a creature can drop
-        for(uint32 i = 0; i < 6; ++i)
-        {
+        for(uint8 i = 0; i < 6; ++i)
             data << uint32(ci->QuestItems[i]);
-        }
+
         data << ci->waypointid;
     }
 
@@ -156,7 +151,6 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
 
     uint32 entryID;
     uint64 guid;
-    GameObjectInfo* goinfo;
 
 
     recv_data >> entryID;
@@ -164,7 +158,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
 
     LOG_DETAIL("WORLD: CMSG_GAMEOBJECT_QUERY '%u'", entryID);
 
-    goinfo = GameObjectNameStorage.LookupEntry(entryID);
+    GameObjectInfo* goinfo = GameObjectNameStorage.LookupEntry(entryID);
     if(goinfo == NULL)
         return;
 
@@ -213,11 +207,8 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
     data << float(goinfo->Size);       // scaling of the GO
 
     // questitems that the go can contain
-    for(uint32 i = 0; i < 6; ++i)
-    {
+    for(uint8 i = 0; i < 6; ++i)
         data << uint32(goinfo->QuestItems[i]);
-
-    }
 
     SendPacket(&data);
 }
@@ -231,17 +222,13 @@ void WorldSession::HandleCorpseQueryOpcode(WorldPacket & recv_data)
 
     LOG_DETAIL("WORLD: Received MSG_CORPSE_QUERY");
 
-    Corpse* pCorpse;
     WorldPacket data(MSG_CORPSE_QUERY, 25);
-    MapInfo* pMapinfo;
 
-    pCorpse = objmgr.GetCorpseByOwner(GetPlayer()->GetLowGUID());
-    if(pCorpse)
+    if (Corpse* pCorpse = objmgr.GetCorpseByOwner(GetPlayer()->GetLowGUID()))
     {
-        pMapinfo = WorldMapInfoStorage.LookupEntry(pCorpse->GetMapId());
-        if(pMapinfo)
+        if (MapInfo* pMapinfo = WorldMapInfoStorage.LookupEntry(pCorpse->GetMapId()))
         {
-            if(pMapinfo->type == INSTANCE_NULL || pMapinfo->type == INSTANCE_BATTLEGROUND)
+            if (pMapinfo->type == INSTANCE_NULL || pMapinfo->type == INSTANCE_BATTLEGROUND)
             {
                 data << uint8(0x01); //show ?
                 data << pCorpse->GetMapId(); // mapid (that tombstones shown on)
@@ -288,16 +275,15 @@ void WorldSession::HandlePageTextQueryOpcode(WorldPacket & recv_data)
     uint32 pageid = 0;
     recv_data >> pageid;
 
-    while(pageid)
+    while (pageid)
     {
         ItemPage* page = ItemPageStorage.LookupEntry(pageid);
-        if(!page)
+        if (!page)
             return;
 
-        LocalizedItemPage* lpi = (language > 0) ? sLocalizationMgr.GetLocalizedItemPage(pageid, language) : NULL;
         WorldPacket data(SMSG_PAGE_TEXT_QUERY_RESPONSE, 1000);
         data << pageid;
-        if(lpi)
+        if (LocalizedItemPage* lpi = (language > 0) ? sLocalizationMgr.GetLocalizedItemPage(pageid, language) : NULL)
             data << lpi->Text;
         else
             data << page->text;
@@ -315,35 +301,34 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recv_data, 4);
-    WorldPacket reply(SMSG_ITEM_NAME_QUERY_RESPONSE, 100);
+    WorldPacket data(SMSG_ITEM_NAME_QUERY_RESPONSE, 100);
     uint32 itemid;
     recv_data >> itemid;
-    reply << itemid;
+    data << itemid;
+
     ItemPrototype* proto = ItemPrototypeStorage.LookupEntry(itemid);
     ItemName* MetaName = ItemNameStorage.LookupEntry(itemid);
-    if(!proto && !MetaName)
-        reply << "Unknown Item";
+    if (!proto && !MetaName)
+        data << "Unknown Item";
     else
     {
-        if(proto)
+        if (proto)
         {
-            LocalizedItem* li = (language > 0) ? sLocalizationMgr.GetLocalizedItem(itemid, language) : NULL;
-            if(li)
-                reply << li->Name;
+            if (LocalizedItem* li = (language > 0) ? sLocalizationMgr.GetLocalizedItem(itemid, language) : NULL)
+                data << li->Name;
             else
-                reply << proto->Name1;
+                data << proto->Name1;
 
-            reply << proto->InventoryType;
+            data << proto->InventoryType;
         }
         else
         {
-            reply << MetaName->name;
-            reply << MetaName->slot;
+            data << MetaName->name;
+            data << MetaName->slot;
         }
 
     }
-
-    SendPacket(&reply);
+    SendPacket(&data);
 }
 
 void WorldSession::HandleInrangeQuestgiverQuery(WorldPacket & recv_data)
@@ -351,7 +336,6 @@ void WorldSession::HandleInrangeQuestgiverQuery(WorldPacket & recv_data)
     CHECK_INWORLD_RETURN;
 
     WorldPacket data(SMSG_QUESTGIVER_STATUS_MULTIPLE, 1000);
-    Object::InRangeSet::iterator itr;
     Creature* pCreature;
     uint32 count = 0;
     data << count;
@@ -361,7 +345,7 @@ void WorldSession::HandleInrangeQuestgiverQuery(WorldPacket & recv_data)
     //    64 guid
     //    8 status
 
-    for(itr = _player->m_objectsInRange.begin(); itr != _player->m_objectsInRange.end(); ++itr)
+    for(Object::InRangeSet::iterator itr = _player->m_objectsInRange.begin(); itr != _player->m_objectsInRange.end(); ++itr)
     {
         if(!(*itr)->IsCreature())
             continue;
