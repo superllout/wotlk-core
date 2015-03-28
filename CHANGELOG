@@ -1,0 +1,22 @@
+This changelog keeps information about most major changes in core, scripts and its content
+
+4.0.1 changes:
+* Implemented achievement_rewards
+* Implemented spell_area (by aaron02)
+* Rewrote Warsong Gulch
+* Fixed issues with playercreateinfo data usage
+* Implemented new scriptable event for creatures "OnRespawn()"
+* Updated couple of spell effects (ApplyAA, SpellEffectInstantKill)
+* Implemented quest 12593
+* Replaced tabs (size 4) with spaces (size 4)
+* Fixed void ObjectMgr::LoadSpellTargetConstraints() data load
+* Fixed some old core warnings (warnings related with c code and std=c++11)
+* Fixed possible issue where playercreateinfo_bars data load could fail on diffirent character race
+* Fixed false errors about missing trainers spells
+* Renamed couple of logon database account table fields
+* Cmake installs configs together with binaries to installation path
+* Added much debug messages on data loading
+
+and other smaller code and core performance tweaks.
+
+

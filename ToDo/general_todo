@@ -1,5 +1,8 @@
 == DO NOT ADD SPECIFIC QUESTS OR SIMILAR INGAME CONTENT
 
+== CHANGES ARE TAGGED FOR 4.1 release (sanctum32: NO MORE EDITS)
+=== minor releases will get prefix increase after every feature implementation (for example: 4.0.x, 4.0.1 and etc)
+
 * Random dungeon finder
 
 * Random battleground
@@ -90,8 +93,12 @@
 
 * Remove unused or unlogical config options
 
-* Implement spell area table which will used for spell casting on zones
+* Implement spell area table which will used for spell casting on zones - Done (by aaron2)
 
 * Rework on playercreateinfo data - use class and race cells instead of index
 
 * All queries should use proper collumn names
+
+* Update npc_gossip to npc_gossipmenu which will contain text entries for other gossip menu options
+
+* Reduce memory usage on data loads (optionable).
