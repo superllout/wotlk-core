@@ -42,5 +42,4 @@ enum RAID_MODE
     TOTAL_RAID_MODES    =   4
 };
 
-
 #endif

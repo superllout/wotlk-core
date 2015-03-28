@@ -914,7 +914,7 @@ struct SpellEntry
     uint32 GetAAEffectId()
     {
 
-        for(uint32 i = 0; i < MAX_SPELL_EFFECTS; i++)
+        for(uint8 i = 0; i < MAX_SPELL_EFFECTS; i++)
         {
 
             if(Effect[ i ] == 35 ||  // SPELL_EFFECT_APPLY_GROUP_AREA_AURA
@@ -928,6 +928,8 @@ struct SpellEntry
 
         return 0;
     }
+
+    bool CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player* player = NULL);
 
     SpellEntry()
     {

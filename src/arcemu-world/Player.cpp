@@ -992,6 +992,9 @@ void Player::Update(uint32 p_time)
         m_explorationTimer = mstime + 3000;
     }
 
+    // Autocast Spells in Area
+    CastSpellArea();
+
     if(m_pvpTimer)
     {
         if(p_time >= m_pvpTimer)
@@ -4445,10 +4448,6 @@ void Player::BuildPlayerRepop()
 
     SetMovement(MOVE_UNROOT, 1);
     SetMovement(MOVE_WATER_WALK, 1);
-
-    // Northrend (If you die here, you get an spectral gryphon to find your corps
-    if (GetMapId() == 571 && !HasAura(55164))
-        CastSpell(this, 55164, true);
 }
 
 void Player::RepopRequestedPlayer()
@@ -13324,6 +13323,17 @@ void Player::AcceptQuest(uint64 guid, uint32 quest_id)
 
     //ScriptSystem->OnQuestEvent(qst, TO< Creature* >( qst_giver ), _player, QUEST_EVENT_ON_ACCEPT);
 
+    // Some spells applied at quest activation
+    SpellAreaForQuestMapBounds saBounds = sSpellFactoryMgr.GetSpellAreaForQuestMapBounds(quest_id, true);
+    if (saBounds.first != saBounds.second)
+    {
+        for (SpellAreaForAreaMap::const_iterator itr = saBounds.first; itr != saBounds.second; ++itr)
+        {
+            if (itr->second->autocast && itr->second->IsFitToRequirements(this, GetZoneId(), GetAreaID()) && !HasAura(itr->second->spellId))
+                CastSpell(this, itr->second->spellId, true);
+        }
+    }
+
     sQuestMgr.OnQuestAccepted(this, qst, qst_giver);
 
     LOG_DEBUG("WORLD: Added new QLE.");
@@ -13695,7 +13705,8 @@ void Player::BuildPetSpellList(WorldPacket & data)
     data << uint64(0);
 }
 
-void Player::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){
+void Player::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid )
+{
     if( mountvehicleid == 0 ){
         LOG_ERROR( "Tried to add a vehicle component with 0 as vehicle id for player %u ( %s )", GetLowGUID(), GetName() );
         return;
@@ -13710,7 +13721,58 @@ void Player::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){
     vehicle->Load( this, creature_entry, vehicleid );
 }
 
-void Player::RemoveVehicleComponent(){
+void Player::RemoveVehicleComponent()
+{
     delete vehicle;
     vehicle = NULL;
+}
+
+void Player::CastSpellArea()
+{
+    if (!IsInWorld())
+        return;
+
+    if (m_position.x > _maxX || m_position.x < _minX || m_position.y > _maxY || m_position.y < _minY)
+        return;
+
+    if (GetMapMgr()->GetCellByCoords(GetPositionX(), GetPositionY()) == NULL)
+        return;
+
+    AreaTable* at = GetMapMgr()->GetArea(GetPositionX(), GetPositionY(), GetPositionZ());
+    if (at == NULL)
+        return;
+
+    uint32 AreaId = at->AreaId;
+    uint32 ZoneId = at->ZoneId;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Cheks for Casting a Spell in Specified Area / Zone :D //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Spells get Casted in specified Area
+    SpellAreaForAreaMapBounds saBounds = sSpellFactoryMgr.GetSpellAreaForAreaMapBounds(AreaId);
+    for (SpellAreaForAreaMap::const_iterator itr = saBounds.first; itr != saBounds.second; ++itr)
+    {
+        if (itr->second->autocast && itr->second->IsFitToRequirements(this, ZoneId, AreaId) && !HasAura(itr->second->spellId))
+            CastSpell(this, itr->second->spellId, true);
+    }
+
+    // Some spells applied at enter into zone (with subzones)
+    SpellAreaForAreaMapBounds szBounds = sSpellFactoryMgr.GetSpellAreaForAreaMapBounds(ZoneId);
+    for (SpellAreaForAreaMap::const_iterator itr = szBounds.first; itr != szBounds.second; ++itr)
+    {
+        if (itr->second->autocast && itr->second->IsFitToRequirements(this, ZoneId, AreaId) && !HasAura(itr->second->spellId))
+            CastSpell(this, itr->second->spellId, true);
+    }
+
+    //Remove of Spells
+    for (uint32 i = MAX_TOTAL_AURAS_START; i < MAX_TOTAL_AURAS_END; ++i)
+    {
+        if (m_auras[i] != 0 && !m_auras[i]->GetSpellProto()->CheckLocation(GetMapId(), ZoneId, AreaId, this))
+        {
+            SpellAreaMapBounds sab = sSpellFactoryMgr.GetSpellAreaMapBounds(m_auras[i]->GetSpellId());
+            if (sab.first != sab.second)
+                RemoveAura(m_auras[i]->GetSpellId());
+        }
+    }
 }

@@ -20,6 +20,9 @@
 
 #include "StdAfx.h"
 
+static const char *REQUIRED_CHAR_DB_VERSION  = "2011-11-16_22-00_saved_mail";
+static const char *REQUIRED_WORLD_DB_VERSION = "2015-03-28_01_spell_area";
+
 #define BANNER "<< ArcEmu %s %s/%s-%s-%s :: World Server >>"
 
 #ifndef WIN32
@@ -569,9 +572,6 @@ bool Master::Run(int argc, char** argv)
 
     return true;
 }
-
-static const char *REQUIRED_CHAR_DB_VERSION  = "2011-11-16_22-00_saved_mail";
-static const char *REQUIRED_WORLD_DB_VERSION = "2015-03-20_17_24_achievement_rewards";
 
 bool Master::CheckDBVersion()
 {

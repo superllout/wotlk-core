@@ -59,10 +59,19 @@ class SpeedCheatDetector;
 #define ACHIEVEMENT_SEND_DELAY 1000 //we have this delay of sending auras to other players so client will have time to create object first
 #define LOGIN_CIENT_SEND_DELAY 1000 //we have this delay of sending auras to other players so client will have time to create object first
 
-enum PlayerTeams{
+enum PlayerTeams
+{
     TEAM_ALLIANCE = 0,
     TEAM_HORDE    = 1,
     MAX_PLAYER_TEAMS
+};
+
+enum Gender
+{
+    GENDER_MALE = 0,
+    GENDER_FEMALE = 1,
+    GENDER_NONE = 2,
+    MAX_GENDER
 };
 
 //====================================================================
@@ -73,32 +82,47 @@ enum PlayerTeams{
 
 enum Classes
 {
-    WARRIOR = 1,
-    PALADIN = 2,
-    HUNTER = 3,
-    ROGUE = 4,
-    PRIEST = 5,
+    WARRIOR     = 1,
+    PALADIN     = 2,
+    HUNTER      = 3,
+    ROGUE       = 4,
+    PRIEST      = 5,
     DEATHKNIGHT = 6,
-    SHAMAN = 7,
-    MAGE = 8,
-    WARLOCK = 9,
-    DRUID = 11,
+    SHAMAN      = 7,
+    MAGE        = 8,
+    WARLOCK     = 9,
+    DRUID       = 11,
     MAX_PLAYER_CLASSES
 };
 
 enum Races
 {
-    RACE_HUMAN = 1,
-    RACE_ORC = 2,
-    RACE_DWARF = 3,
-    RACE_NIGHTELF = 4,
-    RACE_UNDEAD = 5,
-    RACE_TAUREN = 6,
-    RACE_GNOME = 7,
-    RACE_TROLL = 8,
-    RACE_BLOODELF = 10,
-    RACE_DRAENEI = 11,
+    RACE_NONE       = 0,
+    RACE_HUMAN      = 1,
+    RACE_ORC        = 2,
+    RACE_DWARF      = 3,
+    RACE_NIGHTELF   = 4,
+    RACE_UNDEAD     = 5,
+    RACE_TAUREN     = 6,
+    RACE_GNOME      = 7,
+    RACE_TROLL      = 8,
+    RACE_UNK        = 9,
+    RACE_BLOODELF   = 10,
+    RACE_DRAENEI    = 11,
+    MAX_RACES
 };
+
+#define RACEMASK_ALL_PLAYABLE \
+    ((1<<(RACE_HUMAN-1)) |(1<<(RACE_ORC-1)) |(1<<(RACE_DWARF-1)) | \
+    (1<<(RACE_NIGHTELF-1))|(1<<(RACE_UNDEAD-1))|(1<<(RACE_TAUREN-1)) | \
+    (1<<(RACE_GNOME-1)) |(1<<(RACE_TROLL-1)) |(1<<(RACE_BLOODELF-1))| \
+    (1<<(RACE_DRAENEI-1)))
+
+#define RACEMASK_ALLIANCE \
+    ((1<<(RACE_HUMAN-1)) | (1<<(RACE_DWARF-1)) | (1<<(RACE_NIGHTELF-1)) | \
+    (1<<(RACE_GNOME-1)) | (1<<(RACE_DRAENEI-1)))
+
+#define RACEMASK_HORDE RACEMASK_ALL_PLAYABLE & ~RACEMASK_ALLIANCE
 
 enum PlayerStatus
 {
@@ -2242,6 +2266,7 @@ class SERVER_DECL Player : public Unit
         void _ApplyItemMods(Item* item, int16 slot, bool apply, bool justdrokedown = false, bool skip_stat_apply = false);
         void _EventAttack(bool offhand);
         void _EventExploration();
+        void CastSpellArea();
 
         // Water level related stuff
         void SetNoseLevel();

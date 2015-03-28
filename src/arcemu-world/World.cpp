@@ -428,6 +428,7 @@ bool World::SetInitialWorldSettings()
     MAKE_TASK(ObjectMgr, StoreBroadCastGroupKey);
     MAKE_TASK(ObjectMgr, LoadVehicleAccessories);
     MAKE_TASK(ObjectMgr, LoadWorldStateTemplates);
+    MAKE_TASK(SpellFactoryMgr, LoadSpellAreas);
 
 #undef MAKE_TASK
 
