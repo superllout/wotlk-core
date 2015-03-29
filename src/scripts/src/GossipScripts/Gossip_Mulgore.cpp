@@ -23,7 +23,7 @@ class SkornWhitecloud_Gossip : public Arcemu::Gossip::Script
     public:
         void OnHello(Object* pObject, Player* plr)
         {
-            Arcemu::Gossip::Menu::SendQuickMenu(pObject->GetGUID(), 522, plr, 1, Arcemu::Gossip::ICON_CHAT, "Tell me a story, Skorn.");
+            Arcemu::Gossip::Menu::SendQuickMenu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr, 1, Arcemu::Gossip::ICON_CHAT, "Tell me a story, Skorn.");
         }
 
         void OnSelectOption(Object* pObject, Player* plr, uint32 Id, const char* Code)
@@ -32,8 +32,6 @@ class SkornWhitecloud_Gossip : public Arcemu::Gossip::Script
                 return;
             Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 523, plr);
         }
-
-        void Destroy() { delete this; }
 };
 
 void SetupMulgoreGossip(ScriptMgr* mgr)

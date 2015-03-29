@@ -23,7 +23,7 @@ class ArchmageMalin_Gossip : public Arcemu::Gossip::Script
     public:
         void OnHello(Object* pObject, Player* plr)
         {
-            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 11469);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
 
             if(plr->GetQuestLogForEntry(11223))
                 menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Can you send me to Theramore? I have an urgent message for Lady Jaina from Highlord Bolvar.", 1);
@@ -36,9 +36,6 @@ class ArchmageMalin_Gossip : public Arcemu::Gossip::Script
             TO_CREATURE(pObject)->CastSpell(plr, dbcSpell.LookupEntry(42711), true);
             Arcemu::Gossip::Menu::Complete(plr);
         }
-
-        void Destroy() { delete this; }
-
 };
 
 /*********************************************
@@ -52,7 +49,7 @@ class SWHarborFlyAround : public Arcemu::Gossip::Script
         void OnHello(Object* pObject, Player* Plr)
         {
 
-            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 13454);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Yes, please.", 1);
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, "No, thank you.", 2);
 

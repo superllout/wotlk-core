@@ -30,7 +30,7 @@ class ExarchNasuun_Gossip : public Arcemu::Gossip::Script
     public:
         void OnHello(Object* pObject, Player* plr)
         {
-            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 12227);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
 #ifdef USE_THE_STATUS
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, GOSSIP_EXARCH_NASUUN_1, 1);   // this is the status
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, GOSSIP_EXARCH_NASUUN_2, 2);
@@ -68,7 +68,7 @@ class ZephyrGossipScript : public Arcemu::Gossip::Script
     public:
         void OnHello(Object* pObject, Player* Plr)
         {
-            Arcemu::Gossip::Menu::SendQuickMenu(pObject->GetGUID(), 1, Plr, 1, Arcemu::Gossip::ICON_CHAT, "Bring me to Caverns of Time!");
+            Arcemu::Gossip::Menu::SendQuickMenu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), Plr, 1, Arcemu::Gossip::ICON_CHAT, "Bring me to Caverns of Time!");
         }
 
         void OnSelectOption(Object* pObject, Player* plr, uint32 Id, const char* EnteredCode)
@@ -88,5 +88,4 @@ void SetupShattrathGossip(ScriptMgr* mgr)
 {
     mgr->register_creature_gossip(25967, new ZephyrGossipScript);        // Zephyr
     mgr->register_creature_gossip(24932, new ExarchNasuun_Gossip); // Exarch Nasuun
-
 }

@@ -84,7 +84,7 @@ void InnkeeperGossip::OnSelectOption(Object* pObject, Player* Plr, uint32 Id, co
             break;
         case 3:     // WHAT CAN I DO ?
             // Prepare second menu
-            Arcemu::Gossip::Menu::SendQuickMenu(pCreature->GetGUID(), 1853, Plr, 2, Arcemu::Gossip::ICON_CHAT, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::INNKEEPER));
+            Arcemu::Gossip::Menu::SendQuickMenu(pCreature->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), Plr, 2, Arcemu::Gossip::ICON_CHAT, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::INNKEEPER));
             break;
         case 4:     // EVENT OF HALLOWEEN
             if(!Plr->HasAura(SPELL_TRICK_OR_TREATED))

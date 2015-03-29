@@ -34,7 +34,7 @@ class XpEliminatorGossip : public Arcemu::Gossip::Script
 
         void OnHello(Object* pObject, Player* plr)
         {
-            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 14736);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
             if(plr->CanGainXp())
                 menu.AddItem(Arcemu::Gossip::ICON_CHAT, GOSSIP_DISABLE_XP_GAIN, 1, 100000, GOSSIP_BOXMSG_DISABLE_XP_GAIN);
             else

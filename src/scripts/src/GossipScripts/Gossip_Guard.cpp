@@ -54,7 +54,7 @@ class StormwindGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 933, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "Auction House"        , 1);
             Menu->AddItem(0, "Bank of Stormwind"    , 2);
@@ -358,7 +358,7 @@ class DarnassusGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 3016, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "Auction House"      , 1);
             Menu->AddItem(0, "The Bank"           , 2);
@@ -589,7 +589,7 @@ class GoldshireGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4259, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Bank"                 , 1);
             Menu->AddItem(0, "Gryphon Master"       , 2);
             Menu->AddItem(0, "Guild Master"         , 3);
@@ -833,7 +833,7 @@ class UndercityGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 3543, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The bat handler", 2);
@@ -1091,7 +1091,7 @@ class UndercityGuardOverseer : public Arcemu::Gossip::Script
     public:
         void OnHello(Object* pObject, Player* Plr)
         {
-            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 15321);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, "The auction house", 1);
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, "The bank", 2);
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Barber", 3);
@@ -1308,7 +1308,7 @@ class TeldrassilGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4316, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "The Bank", 1);
             Menu->AddItem(0, "Rut'Theran Ferry", 2);
@@ -1501,7 +1501,7 @@ class SilvermoonGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 9316, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "Auction House"        , 1);
             Menu->AddItem(0, "The Bank"                , 2);
@@ -1825,7 +1825,7 @@ class ExodarGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 9551, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Auction House"        , 1);
             Menu->AddItem(0, "The Bank"                , 2);
             Menu->AddItem(0, "Hippogryph Master"    , 3);
@@ -2111,7 +2111,7 @@ class OrgrimmarGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2593, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The wind rider master", 2);
             Menu->AddItem(0, "The guild master", 3);
@@ -2384,7 +2384,7 @@ class ThunderbluffGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 3543, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The wind rider master", 2);
             Menu->AddItem(0, "The guild master", 3);
@@ -2621,7 +2621,7 @@ class BloodhoofGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 3543, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The wind rider master", 2);
             Menu->AddItem(0, "The inn", 3);
@@ -2805,7 +2805,7 @@ class RazorHillGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4037, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The wind rider master", 2);
             Menu->AddItem(0, "The inn", 3);
@@ -3023,7 +3023,7 @@ class BrillGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2593, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "The bank", 1);
             Menu->AddItem(0, "The bat handler", 2);
             Menu->AddItem(0, "The inn", 3);
@@ -3232,7 +3232,7 @@ class IronforgeGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2760, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Auction House"            , 1);
             Menu->AddItem(0, "Bank of Ironforge"        , 2);
             Menu->AddItem(0, "Deeprun Tram"                , 3);
@@ -3521,7 +3521,7 @@ class KharanosGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 4287, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Bank", 1);
             Menu->AddItem(0, "Gryphon Master", 2);
             Menu->AddItem(0, "Guild Master", 3);
@@ -3749,7 +3749,7 @@ class FalconwingGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 2593, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Bat Handler", 1);
             Menu->AddItem(0, "Guild Master", 2);
             Menu->AddItem(0, "The Inn", 3);
@@ -3976,7 +3976,7 @@ class AzureWatchGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 10066, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
             Menu->AddItem(0, "Bank"                    , 1);
             Menu->AddItem(0, "Hippogryph Master"    , 2);
             Menu->AddItem(0, "Guild Master"            , 3);
@@ -4220,7 +4220,7 @@ class ShattrathGuard : public GossipScript
         void GossipHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 10524, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Menu->AddItem(0, "World's End Tavern", 1);
             Menu->AddItem(0, "Bank", 2);
@@ -4551,7 +4551,7 @@ class DalaranGuard : public Arcemu::Gossip::Script
 public:
     void OnHello(Object *pObject, Player *Plr)
     {
-        Arcemu::Gossip::Menu menu(pObject->GetGUID(), 50000);
+        Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
         menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Arena"                ,1);
         menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Auction House"        ,2);
         menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Bank"                ,3);

@@ -24,7 +24,7 @@ class CassaCrimsonwing_Gossip : public Arcemu::Gossip::Script
         void OnHello(Object* pObject, Player* plr)
         {
             GossipMenu* Menu;
-            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), 11224, plr);
+            objmgr.CreateGossipMenuForPlayer(&Menu, pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()), plr);
 
             Arcemu::Gossip::Menu menu(pObject->GetGUID(), 11224);
             if(plr->GetQuestLogForEntry(11142) != NULL)
@@ -38,9 +38,6 @@ class CassaCrimsonwing_Gossip : public Arcemu::Gossip::Script
             plr->GetQuestLogForEntry(11142)->SendQuestComplete();
             plr->TaxiStart(sTaxiMgr.GetTaxiPath(724), 1147, 0);     // Gryph
         }
-
-        void Destroy() { delete this; }
-
 };
 
 class CaptainGarranVimes_Gossip : public Arcemu::Gossip::Script
@@ -63,9 +60,6 @@ class CaptainGarranVimes_Gossip : public Arcemu::Gossip::Script
         {
             Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 1794, plr);
         }
-
-        void Destroy() { delete this; }
-
 };
 
 void SetupTheramoreGossip(ScriptMgr* mgr)
