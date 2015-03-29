@@ -2479,13 +2479,11 @@ class TaintedCoreGO : public GameObjectAIScript
 
         void OnActivate(Player* pPlayer)
         {
-            Creature* Vashj = NULL;
-            Vashj = pPlayer->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(29.798161f, -923.358276f, 42.900517f, CN_LADY_VASHJ);
+            Creature* Vashj = pPlayer->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(29.798161f, -923.358276f, 42.900517f, CN_LADY_VASHJ);
             if(Vashj != NULL && TO< VashjAI* >(Vashj->GetScript())->Phase == 2)
             {
                 Vashj->ModHealth(-((Vashj->GetUInt32Value(UNIT_FIELD_MAXHEALTH) / 100) * 5));
-                Creature* channel = NULL;
-                channel = pPlayer->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), CN_SHIELD_GENERATOR_CHANNEL);
+                Creature* channel = pPlayer->GetMapMgr()->GetInterface()->GetCreatureNearestCoords(pPlayer->GetPositionX(), pPlayer->GetPositionY(), pPlayer->GetPositionZ(), CN_SHIELD_GENERATOR_CHANNEL);
                 if(channel != NULL && channel->IsInWorld())
                     channel->Despawn(0, 0);
             }

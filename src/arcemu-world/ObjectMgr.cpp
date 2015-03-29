@@ -3363,7 +3363,7 @@ void ObjectMgr::AddPlayerCache(uint32 guid, PlayerCache* cache)
 {
     m_playerCacheLock.Acquire();
     cache->AddRef();
-    PlayerCacheMap::iterator itr = m_playerCache.find(guid);
+    PlayerCacheMap2::iterator itr = m_playerCache.find(guid);
     if(itr != m_playerCache.end())
     {
         itr->second->DecRef();
@@ -3377,7 +3377,7 @@ void ObjectMgr::AddPlayerCache(uint32 guid, PlayerCache* cache)
 void ObjectMgr::RemovePlayerCache(uint32 guid)
 {
     m_playerCacheLock.Acquire();
-    PlayerCacheMap::iterator itr = m_playerCache.find(guid);
+    PlayerCacheMap2::iterator itr = m_playerCache.find(guid);
     if(itr != m_playerCache.end())
     {
         itr->second->DecRef();
@@ -3389,7 +3389,7 @@ void ObjectMgr::RemovePlayerCache(uint32 guid)
 PlayerCache* ObjectMgr::GetPlayerCache(uint32 guid)
 {
     m_playerCacheLock.Acquire();
-    PlayerCacheMap::iterator itr = m_playerCache.find(guid);
+    PlayerCacheMap2::iterator itr = m_playerCache.find(guid);
     if(itr != m_playerCache.end())
     {
         PlayerCache* ret = itr->second;
@@ -3410,7 +3410,7 @@ PlayerCache* ObjectMgr::GetPlayerCache(const char* name, bool caseSensitive /*= 
     {
         std::string strName = name;
         arcemu_TOLOWER(strName);
-        for (PlayerCacheMap::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
+        for (PlayerCacheMap2::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
         {
             std::string cachename;
             itr->second->GetStringValue(CACHE_PLAYER_NAME, cachename);
@@ -3424,7 +3424,7 @@ PlayerCache* ObjectMgr::GetPlayerCache(const char* name, bool caseSensitive /*= 
     }
     else
     {
-        for (PlayerCacheMap::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
+        for (PlayerCacheMap2::iterator itr = m_playerCache.begin(); itr != m_playerCache.end(); ++itr)
         {
             std::string cachename;
             itr->second->GetStringValue(CACHE_PLAYER_NAME, cachename);
