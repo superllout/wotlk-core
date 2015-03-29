@@ -49,32 +49,34 @@ void ApplyNormalFixes()
     Log.Success("World", "Processing %u spells...", dbcSpell.GetNumRows());
 
     //checking if the DBCs have been extracted from an english client, based on namehash of spell 4, the first with a different name in non-english DBCs
-    SpellEntry* sp = dbcSpell.LookupEntry(4);
-    if(crc32((const unsigned char*)sp->Name, (unsigned int)strlen(sp->Name)) != SPELL_HASH_WORD_OF_RECALL_OTHER)
-    {
-        Log.LargeErrorMessage("You are using DBCs extracted from an unsupported client.", "ArcEmu supports only enUS and enGB!!!");
-        abort();
+	{
+        SpellEntry* sp = dbcSpell.LookupEntry(4);
+        if(crc32((const unsigned char*)sp->Name, (unsigned int)strlen(sp->Name)) != SPELL_HASH_WORD_OF_RECALL_OTHER)
+        {
+            Log.LargeErrorMessage("You are using DBCs extracted from an unsupported client.", "ArcEmu supports only enUS and enGB!!!");
+            abort();
+        }
     }
-
-    /* uint32 result;  // unused */
 
     map<uint32, uint32> talentSpells;
 
     for(uint32 i = 0; i < dbcTalent.GetNumRows(); i++)
     {
         TalentEntry* pTalentInfo = dbcTalent.LookupRow(i);
+        if (!pTalentInfo)
+            continue;
+
         for(uint8 j = 0; j < 5; j++)
-            if (pTalentInfo && pTalentInfo->RankID[j])
+            if (pTalentInfo->RankID[j])
                 talentSpells.insert(make_pair(pTalentInfo->RankID[j], pTalentInfo->TalentTree));
     }
 
     for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // Read every SpellEntry row
-        sp = dbcSpell.LookupRow(x);
-
-        uint32 rank = 0;
-        uint32 namehash = 0;
+        SpellEntry* sp = dbcSpell.LookupRow(x);
+        if (!sp)
+            continue;
 
         sp->self_cast_only = false;
         sp->apply_on_shapeshift_change = false;
@@ -82,7 +84,7 @@ void ApplyNormalFixes()
 
         // hash the name
         //!!!!!!! representing all strings on 32 bits is dangerous. There is a chance to get same hash for a lot of strings ;)
-        namehash = crc32((const unsigned char*)sp->Name, (unsigned int)strlen(sp->Name));
+        uint32 namehash = crc32((const unsigned char*)sp->Name, (unsigned int)strlen(sp->Name));
         sp->NameHash   = namehash; //need these set before we start processing spells
 
         float radius = std::max(::GetRadius(dbcSpellRadius.LookupEntry(sp->EffectRadiusIndex[0])), ::GetRadius(dbcSpellRadius.LookupEntry(sp->EffectRadiusIndex[1])));
@@ -215,6 +217,7 @@ void ApplyNormalFixes()
             sp->talent_tree = talentSpellIterator->second;
 
         // parse rank text
+		uint32 rank = 0;
         if(sscanf(sp->Rank, "Rank %d", (unsigned int*)&rank) != 1)
             rank = 0;
 
@@ -442,9 +445,7 @@ void ApplyNormalFixes()
             if(effect == SPELL_EFFECT_APPLY_AURA)
             {
                 uint32 aura = sp->EffectApplyAuraName[y];
-                if(aura == SPELL_AURA_PROC_TRIGGER_SPELL ||
-                        aura == SPELL_AURA_PROC_TRIGGER_DAMAGE
-                  )//search for spellid in description
+                if(aura == SPELL_AURA_PROC_TRIGGER_SPELL || aura == SPELL_AURA_PROC_TRIGGER_DAMAGE)//search for spellid in description
                 {
                     const char* p = sp->Description;
                     /*
@@ -917,7 +918,9 @@ void ApplyNormalFixes()
     for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // get spellentry
-        sp = dbcSpell.LookupRow(x);
+        SpellEntry* sp = dbcSpell.LookupRow(x);
+        if (!sp)
+            continue;
 
         //Setting Cast Time Coefficient
         SpellCastTime* sd = dbcSpellCastTime.LookupEntry(sp->CastingTimeIndex);
@@ -929,7 +932,6 @@ void ApplyNormalFixes()
 
         sp->casttime_coef = castaff / 3500;
 
-        SpellEntry* spz;
         bool spcheck = false;
 
         //Flag for DoT and HoT
@@ -949,7 +951,7 @@ void ApplyNormalFixes()
         {
             if(sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_TRIGGER_SPELL && sp->EffectTriggerSpell[i])
             {
-                spz = dbcSpell.LookupEntryForced(sp->EffectTriggerSpell[i]);
+                SpellEntry* spz = dbcSpell.LookupEntryForced(sp->EffectTriggerSpell[i]);
                 if(spz &&
                         (spz->Effect[i] == SPELL_EFFECT_SCHOOL_DAMAGE ||
                          spz->Effect[i] == SPELL_EFFECT_HEAL)
@@ -1255,9 +1257,7 @@ void ApplyNormalFixes()
         }
 
         if(sp->NameHash == SPELL_HASH_HEX)
-        {
             sp->AuraInterruptFlags |= AURA_INTERRUPT_ON_UNUSED2;
-        }
 
         //////////////////////////////////////////
         // MAGE                                    //
@@ -1281,15 +1281,12 @@ void ApplyNormalFixes()
     // END OF LOOP
 
     //Settings for special cases
-    QueryResult* resultx = WorldDatabase.Query("SELECT * FROM spell_coef_override");
-    if(resultx != NULL)
+    if (QueryResult* resultx = WorldDatabase.Query("SELECT * FROM spell_coef_override"))
     {
         do
         {
-            Field* f;
-            f = resultx->Fetch();
-            sp = dbcSpell.LookupEntryForced(f[0].GetUInt32());
-            if(sp != NULL)
+            Field* f = resultx->Fetch();
+            if(SpellEntry* sp = dbcSpell.LookupEntryForced(f[0].GetUInt32()))
             {
                 sp->Dspell_coef_override = f[2].GetFloat();
                 sp->OTspell_coef_override = f[3].GetFloat();
@@ -1302,19 +1299,20 @@ void ApplyNormalFixes()
     }
 
     //Fully loaded coefficients, we must share channeled coefficient to its triggered spells
+    // TODO: move this to objectmgr
     for (uint32 x = 0; x < dbcSpell.GetNumRows(); x++)
     {
         // get spellentry
-        sp = dbcSpell.LookupRow(x);
-        SpellEntry* spz;
+        SpellEntry* sp = dbcSpell.LookupRow(x);
+        if (!sp)
+            continue;
 
         //Case SPELL_AURA_PERIODIC_TRIGGER_SPELL
         for(uint8 i = 0; i < 3; i++)
         {
             if(sp->EffectApplyAuraName[i] == SPELL_AURA_PERIODIC_TRIGGER_SPELL)
             {
-                spz = CheckAndReturnSpellEntry(sp->EffectTriggerSpell[i]);
-                if(spz != NULL)
+                if(SpellEntry* spz = CheckAndReturnSpellEntry(sp->EffectTriggerSpell[i]))
                 {
                     if(sp->Dspell_coef_override >= 0)
                         spz->Dspell_coef_override = sp->Dspell_coef_override;
@@ -1359,7 +1357,7 @@ void ApplyNormalFixes()
     const static uint32 thrown_spells[] = {SPELL_RANGED_GENERAL, SPELL_RANGED_THROW, SPELL_RANGED_WAND, 26679, 29436, 37074, 41182, 41346, 0};
     for(uint32 i = 0; thrown_spells[i] != 0; i++)
     {
-        sp = CheckAndReturnSpellEntry(thrown_spells[i]);
+        SpellEntry* sp = CheckAndReturnSpellEntry(thrown_spells[i]);
         if(sp != NULL && sp->RecoveryTime == 0 && sp->StartRecoveryTime == 0)
         {
             if(sp->Id == SPELL_RANGED_GENERAL) sp->RecoveryTime = 500;    // cebernic: hunter general with 0.5s
@@ -1367,6 +1365,7 @@ void ApplyNormalFixes()
         }
     }
 
+    SpellEntry* sp = NULL;
     /**********************************************************
      * Wands
      **********************************************************/
