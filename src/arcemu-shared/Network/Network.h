@@ -10,6 +10,10 @@
 #ifndef NETWORK_H_
 #define NETWORK_H_
 
+#ifdef WIN32
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#endif
+
 #include "../Log.h"
 #include "CircularBuffer.h"
 #include "SocketDefines.h"

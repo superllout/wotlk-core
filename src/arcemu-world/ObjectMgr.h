@@ -390,6 +390,36 @@ typedef HM_NAMESPACE::hash_map<string, PlayerInfo*> PlayerNameStringIndexMap;
 #endif
 
 class PlayerCache;
+
+// Set typedef's
+typedef HM_NAMESPACE::hash_map<uint32, Group*>                        GroupMap;
+
+// HashMap typedef's
+typedef HM_NAMESPACE::hash_map<uint64, Item*>                       ItemMap;
+typedef HM_NAMESPACE::hash_map<uint32, CorpseData*>                 CorpseCollectorMap;
+typedef HM_NAMESPACE::hash_map<uint32, PlayerInfo*>                 PlayerNameMap;
+typedef HM_NAMESPACE::hash_map<uint32, PlayerCreateInfo*>           PlayerCreateInfoMap;
+typedef HM_NAMESPACE::hash_map<uint32, Guild*>                      GuildMap;
+typedef HM_NAMESPACE::hash_map<uint32, skilllinespell*>             SLMap;
+typedef HM_NAMESPACE::hash_map<uint32, std::vector<CreatureItem>*>  VendorMap;
+typedef HM_NAMESPACE::hash_map<uint32, Transporter*>                TransportMap;
+typedef HM_NAMESPACE::hash_map<uint32, Trainer*>                    TrainerMap;
+typedef HM_NAMESPACE::hash_map<uint32, std::vector<TrainerSpell*> > TrainerSpellMap;
+typedef HM_NAMESPACE::hash_map<uint32, ReputationModifier*>         ReputationModMap;
+typedef HM_NAMESPACE::hash_map<uint32, Corpse*>                     CorpseMap;
+typedef HM_NAMESPACE::hash_map<uint32, PlayerCache*>                PlayerCacheMap2;
+
+// Map typedef's
+typedef std::map<uint32, LevelInfo*>                                LevelMap;
+typedef std::map<pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
+typedef std::map<uint32, std::list<ItemPrototype*>* >               ItemSetContentMap;
+typedef std::map<uint32, uint32>                                    NpcToGossipTextMap;
+typedef std::map<uint32, set<SpellEntry*> >                         PetDefaultSpellMap;
+typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
+typedef std::multimap <uint32, uint32>                               BCEntryStorage;
+typedef std::map< uint32, SpellTargetConstraint* >                    SpellTargetConstraintMap;
+typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
+
 class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableObject
 {
     public:
@@ -400,42 +430,11 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         void LoadCreatureTimedEmotes();
         TimedEmoteList* GetTimedEmoteList(uint32 spawnid);
 
-        // other objects
-
-        // Set typedef's
-        typedef HM_NAMESPACE::hash_map<uint32, Group*>                        GroupMap;
-
-        // HashMap typedef's
-        typedef HM_NAMESPACE::hash_map<uint64, Item*>                       ItemMap;
-        typedef HM_NAMESPACE::hash_map<uint32, CorpseData*>                 CorpseCollectorMap;
-        typedef HM_NAMESPACE::hash_map<uint32, PlayerInfo*>                 PlayerNameMap;
-        typedef HM_NAMESPACE::hash_map<uint32, PlayerCreateInfo*>           PlayerCreateInfoMap;
-        typedef HM_NAMESPACE::hash_map<uint32, Guild*>                      GuildMap;
-        typedef HM_NAMESPACE::hash_map<uint32, skilllinespell*>             SLMap;
-        typedef HM_NAMESPACE::hash_map<uint32, std::vector<CreatureItem>*>  VendorMap;
-        typedef HM_NAMESPACE::hash_map<uint32, Transporter*>                TransportMap;
-        typedef HM_NAMESPACE::hash_map<uint32, Trainer*>                    TrainerMap;
-        typedef HM_NAMESPACE::hash_map<uint32, std::vector<TrainerSpell*> > TrainerSpellMap;
-        typedef HM_NAMESPACE::hash_map<uint32, ReputationModifier*>         ReputationModMap;
-        typedef HM_NAMESPACE::hash_map<uint32, Corpse*>                     CorpseMap;
-        typedef HM_NAMESPACE::hash_map<uint32, PlayerCache*>                PlayerCacheMap;
-
-        // Map typedef's
-        typedef std::map<uint32, LevelInfo*>                                LevelMap;
-        typedef std::map<pair<uint32, uint32>, LevelMap* >                  LevelInfoMap;
-        typedef std::map<uint32, std::list<ItemPrototype*>* >               ItemSetContentMap;
-        typedef std::map<uint32, uint32>                                    NpcToGossipTextMap;
-        typedef std::map<uint32, set<SpellEntry*> >                         PetDefaultSpellMap;
-        typedef std::map<uint32, uint32>                                    PetSpellCooldownMap;
-        typedef std::multimap <uint32, uint32>                               BCEntryStorage;
-        typedef std::map< uint32, SpellTargetConstraint* >                    SpellTargetConstraintMap;
-        typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
-
         // object holders
         GmTicketList         GM_TicketList;
         OverrideIdMap        mOverrideIdMap;
         InstanceBossInfoMap* m_InstanceBossInfoMap[NUM_MAPS];
-        PlayerCacheMap m_playerCache;
+        PlayerCacheMap2 m_playerCache;
         FastMutex m_playerCacheLock;
 
         Player* GetPlayer(const char* name, bool caseSensitive = true);

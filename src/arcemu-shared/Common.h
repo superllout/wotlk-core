@@ -30,6 +30,7 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
 #pragma warning(disable:4251) // identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #endif
 
 enum TimeVariables
