@@ -182,7 +182,8 @@ void AIInterface::Init(Unit* un, AIType at, MovementType mt, Unit* owner)
 
 void AIInterface::HandleEvent(uint32 event, Unit* pUnit, uint32 misc1)
 {
-    if(m_Unit == NULL) return;
+    if(m_Unit == NULL)
+        return;
 
     // Passive NPCs (like target dummies) shouldn't do anything.
     if(m_AIType == AITYPE_PASSIVE)
@@ -194,7 +195,6 @@ void AIInterface::HandleEvent(uint32 event, Unit* pUnit, uint32 misc1)
 
 void AIInterface::Update(uint32 p_time)
 {
-    float tdist;
     if(m_AIType == AITYPE_TOTEM)
     {
         _UpdateTotem(p_time);
@@ -204,9 +204,7 @@ void AIInterface::Update(uint32 p_time)
     _UpdateTimer(p_time);
     _UpdateTargets();
 
-    if(m_Unit->isAlive() && m_AIState != STATE_IDLE
-            && m_AIState != STATE_FOLLOWING && m_AIState != STATE_FEAR
-            && m_AIState != STATE_WANDER && m_AIState != STATE_SCRIPTMOVE)
+    if(m_Unit->isAlive() && m_AIState != STATE_IDLE && m_AIState != STATE_FOLLOWING && m_AIState != STATE_FEAR && m_AIState != STATE_WANDER && m_AIState != STATE_SCRIPTMOVE)
     {
         if(m_AIType == AITYPE_PET)
         {
@@ -215,9 +213,7 @@ void AIInterface::Update(uint32 p_time)
                 Pet* pPet = TO< Pet* >(m_Unit);
 
                 if(pPet->GetPetAction() == PET_ACTION_ATTACK || pPet->GetPetState() != PET_STATE_PASSIVE)
-                {
                     _UpdateCombat(p_time);
-                }
             }
             //we just use any creature as a pet guardian
             else if(!m_Unit->IsPet())
@@ -236,7 +232,7 @@ void AIInterface::Update(uint32 p_time)
 
     if(m_AIState == STATE_EVADE)
     {
-        tdist = m_Unit->GetDistanceSq(m_returnX, m_returnY, m_returnZ);
+        float tdist = m_Unit->GetDistanceSq(m_returnX, m_returnY, m_returnZ);
         if(tdist <= 4.0f)
         {
             m_AIState = STATE_IDLE;
@@ -253,10 +249,7 @@ void AIInterface::Update(uint32 p_time)
             {
                 // return to the home
                 if(m_returnX == 0.0f && m_returnY == 0.0f)
-                {
                     SetReturnPosition();
-
-                }
 
                 MoveEvadeReturn();
             }
@@ -356,9 +349,6 @@ void AIInterface::_UpdateTargets()
     if(m_Unit->GetMapMgr() == NULL)
         return;
 
-    AssistTargetSet::iterator i, i2;
-    TargetMap::iterator itr, it2;
-
     // Find new Assist Targets and remove old ones
     if(m_AIState == STATE_FLEEING)
     {
@@ -386,13 +376,12 @@ void AIInterface::_UpdateTargets()
             for(deque<Unit*>::iterator i2 = tokill.begin(); i2 != tokill.end(); ++i2)
                 m_assistTargets.erase(*i2);*/
 
-        for(i = m_assistTargets.begin(); i != m_assistTargets.end();)
+        for (AssistTargetSet::iterator i = m_assistTargets.begin(); i != m_assistTargets.end(); ++i)
         {
-            i2 = i++;
-            if((*i2) == NULL || (*i2)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
-                    !(*i2)->isAlive() || m_Unit->GetDistanceSq((*i2)) >= 2500.0f || !(*i2)->CombatStatus.IsInCombat() || !((*i2)->m_phase & m_Unit->m_phase))
+            if((*i) == NULL || (*i)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
+                    !(*i)->isAlive() || m_Unit->GetDistanceSq((*i)) >= 2500.0f || !(*i)->CombatStatus.IsInCombat() || !((*i)->m_phase & m_Unit->m_phase))
             {
-                m_assistTargets.erase(i2);
+                m_assistTargets.erase(i);
             }
         }
     }
@@ -416,14 +405,12 @@ void AIInterface::_UpdateTargets()
 
         LockAITargets(true);
 
-        for(itr = m_aiTargets.begin(); itr != m_aiTargets.end();)
+        for (TargetMap::iterator itr = m_aiTargets.begin(); itr != m_aiTargets.end(); ++itr)
         {
-            it2 = itr++;
-
-            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(it2->first);
+            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(itr->first);
             if(ai_t == NULL)
             {
-                m_aiTargets.erase(it2);
+                m_aiTargets.erase(itr);
             }
             else
             {
@@ -437,13 +424,13 @@ void AIInterface::_UpdateTargets()
                         case INSTANCE_MULTIMODE:
                             instance = true;
                             break;
+                        default:
+                            break;
                     }
                 }
 
                 if(ai_t->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() || !ai_t->isAlive() || ((!instance && m_Unit->GetDistanceSq(ai_t) >= 6400.0f) || !(ai_t->m_phase & m_Unit->m_phase)))
-                {
-                    m_aiTargets.erase(it2);
-                }
+                    m_aiTargets.erase(itr);
             }
         }
 
@@ -452,7 +439,7 @@ void AIInterface::_UpdateTargets()
         if( disable_combat )
             return;
 
-        if(m_aiTargets.size() == 0
+        if (m_aiTargets.empty()
                 && m_AIState != STATE_IDLE && m_AIState != STATE_FOLLOWING
                 && m_AIState != STATE_EVADE && m_AIState != STATE_FEAR
                 && m_AIState != STATE_WANDER && m_AIState != STATE_SCRIPTIDLE)
@@ -490,11 +477,8 @@ void AIInterface::_UpdateTargets()
     // Find new Targets when we are ooc
     if((m_AIState == STATE_IDLE || m_AIState == STATE_SCRIPTIDLE) && m_assistTargets.empty())
     {
-        Unit* target = FindTarget();
-        if(target)
-        {
+        if (Unit* target = FindTarget())
             AttackReaction(target, 1, 0);
-        }
     }
 }
 
