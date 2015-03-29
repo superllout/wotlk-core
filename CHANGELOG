@@ -1,5 +1,8 @@
 This changelog keeps information about most major changes in core, scripts and its content
 
+4.0.2 changes
+* All items in vendors are now only shown if the Game Master has his GM flag enabled.
+
 4.0.1 changes:
 * Implemented achievement_rewards
 * Implemented spell_area (by aaron02)
