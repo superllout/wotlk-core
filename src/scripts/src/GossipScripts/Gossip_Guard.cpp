@@ -5036,13 +5036,78 @@ public:
     }
 };
 
+class DalaranUnderbellyGuard : public Arcemu::Gossip::Script
+{
+    public:
+        void OnHello(Object *pObject, Player *Plr)
+        {
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), objmgr.GetGossipTextForNpc(pObject->GetEntry()));
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Arena"      , 0);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Bank"       , 1);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Inn"        , 2);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Sewer Exits", 3);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Vendors"    , 4);
+            menu.Send(Plr);
+        }
+
+        void OnSelectOption(Object *pObject, Player *Plr, uint32 Id, const char* Code)
+        {
+            switch (Id)
+            {
+                case 0: // Arena
+                {
+                    Plr->Gossip_SendPOI(5777.62f, 604.66f, 7, 99, 0, "Dalaran: Sewer Arena");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14023, Plr);
+                }break;
+                case 1: // Bank
+                {
+                    Plr->Gossip_SendPOI(5766.77f, 733.89f, 7, 99, 0, "Dalaran: Sewer Bank");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14022, Plr);
+                }break;
+                case 2: // Inn
+                {
+                    Plr->Gossip_SendPOI(5760.82f, 715.31f, 7, 99, 0, "Dalaran: Sewer Inn");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14021, Plr);
+                }break;
+                case 3: // Sewer Exits
+                {
+                    Arcemu::Gossip::Menu menu(pObject->GetGUID(), 14026);
+                    menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Eastern Sewer Entrance", 5);
+                    menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Western Sewer Entrance", 6);
+                    menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Sewer Tunnel", 7);
+                    menu.Send(Plr);
+                }break;
+                case 4: // Vendors
+                {
+                    Plr->Gossip_SendPOI(5931.57f, 558.50f, 7, 99, 0, "Dalaran: Sewer Vendors");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14019, Plr);
+                }break;
+                case 5: // Eastern Sewer Entrance
+                {
+                    Plr->Gossip_SendPOI(5795.98f, 555.54f, 7, 99, 0, "Dalaran: Eastern Sewer Entrance");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14024, Plr);
+                }break;
+                case 6: // Western Sewer Entrance
+                {
+                    Plr->Gossip_SendPOI(5812.79f, 722.58f, 7, 99, 0, "Dalaran: Western Sewer Entrance");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14025, Plr);
+                }break;
+                case 7: // Sewer Tunnel
+                {
+                    Plr->Gossip_SendPOI(5778.03f, 743.20f, 7, 99, 0, "Dalaran: Sewer Tunnel");
+                    Arcemu::Gossip::Menu::SendSimpleMenu(pObject->GetGUID(), 14020, Plr);
+                }break;
+            }
+        }
+};
+
 void SetupGuardGossip(ScriptMgr* mgr)
 {
     /* Guard List */
     mgr->register_gossip_script(1423,  new GoldshireGuard);            // Stormwind Guard
     mgr->register_gossip_script(68,    new StormwindGuard);            // Stormwind City Guard
     mgr->register_gossip_script(1976,  new StormwindGuard);            // Stormwind City Patroller
-    mgr->register_gossip_script(29712,    new StormwindGuard);        // Stormwind Harbor Guard
+    mgr->register_gossip_script(29712, new StormwindGuard);        // Stormwind Harbor Guard
     mgr->register_gossip_script(4262,  new DarnassusGuard);            // Darnassus Sentinel
     mgr->register_gossip_script(5624,  new UndercityGuard);            // Undercity Guardian
     mgr->register_creature_gossip(36213, new UndercityGuardOverseer);    // Kor'kron Overseer
@@ -5100,4 +5165,15 @@ void SetupGuardGossip(ScriptMgr* mgr)
     mgr->register_creature_gossip(32691, DalaranGossip);
     mgr->register_creature_gossip(32692, DalaranGossip);
     mgr->register_creature_gossip(32693, DalaranGossip);
+    
+    // Dalaran underbelly guards
+    Arcemu::Gossip::Script* UnderbellyGossip = new DalaranUnderbellyGuard;
+    mgr->register_creature_gossip(32726, UnderbellyGossip);
+    mgr->register_creature_gossip(32727, UnderbellyGossip);
+    mgr->register_creature_gossip(32728, UnderbellyGossip);
+    mgr->register_creature_gossip(32729, UnderbellyGossip);
+    mgr->register_creature_gossip(32730, UnderbellyGossip);
+    mgr->register_creature_gossip(32731, UnderbellyGossip);
+    mgr->register_creature_gossip(32732, UnderbellyGossip);
+    mgr->register_creature_gossip(32733, UnderbellyGossip);
 }
