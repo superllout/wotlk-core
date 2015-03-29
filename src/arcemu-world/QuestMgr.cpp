@@ -596,12 +596,11 @@ void QuestMgr::BuildQuestComplete(Player* plr, Quest* qst)
 
 void QuestMgr::BuildQuestList(WorldPacket* data, Object* qst_giver, Player* plr, uint32 language)
 {
-    if(!plr || !plr->GetSession()) return;
-    uint32 status;
-    list<QuestRelation*>::iterator it;
+    if(!plr || !plr->GetSession())
+        return;
+
     list<QuestRelation*>::iterator st;
     list<QuestRelation*>::iterator ed;
-    map<uint32, uint8> tmp_map;
 
     data->Initialize(SMSG_QUESTGIVER_QUEST_LIST);
 
@@ -638,15 +637,15 @@ void QuestMgr::BuildQuestList(WorldPacket* data, Object* qst_giver, Player* plr,
 
     *data << uint8(sQuestMgr.ActiveQuestsCount(qst_giver, plr));
 
-    for(it = st; it != ed; ++it)
+    map<uint32, uint8> tmp_map;
+    for(list<QuestRelation*>::iterator it = st; it != ed; ++it)
     {
-        status = sQuestMgr.CalcQuestStatus(qst_giver, plr, *it);
+        uint32 status = sQuestMgr.CalcQuestStatus(qst_giver, plr, *it);
         if(status >= QMGR_QUEST_CHAT)
         {
             if(tmp_map.find((*it)->qst->id) == tmp_map.end())
             {
                 tmp_map.insert(std::map<uint32, uint8>::value_type((*it)->qst->id, 1));
-                LocalizedQuest* lq = (language > 0) ? sLocalizationMgr.GetLocalizedQuest((*it)->qst->id, language) : NULL;
 
                 *data << (*it)->qst->id;
                 /**data << sQuestMgr.CalcQuestStatus(qst_giver, plr, *it);
@@ -671,9 +670,9 @@ void QuestMgr::BuildQuestList(WorldPacket* data, Object* qst_giver, Player* plr,
                 }
                 *data << int32((*it)->qst->questlevel);
                 *data << uint32((*it)->qst->quest_flags);
-                *data << uint8(0);   // According to MANGOS: "changes icon: blue question or yellow exclamation"
+                *data << uint8((*it)->qst->is_repeatable);
 
-                if(lq)
+                if(LocalizedQuest* lq = (language > 0) ? sLocalizationMgr.GetLocalizedQuest((*it)->qst->id, language) : NULL)
                     *data << lq->Title;
                 else
                     *data << (*it)->qst->title;
