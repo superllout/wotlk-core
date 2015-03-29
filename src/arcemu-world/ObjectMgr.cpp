@@ -3486,10 +3486,10 @@ std::vector< VehicleAccessoryEntry* >* ObjectMgr::GetVehicleAccessories( uint32 
 {
     std::map< uint32, std::vector< VehicleAccessoryEntry* >* >::iterator itr = vehicle_accessories.find( creature_entry );
 
-    if( itr == vehicle_accessories.end() )
-        return NULL;
-    else
+    if (itr != vehicle_accessories.end())
         return itr->second;
+
+    return NULL;
 }
 
 void ObjectMgr::LoadWorldStateTemplates()

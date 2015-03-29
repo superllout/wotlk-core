@@ -89,7 +89,8 @@ bool Transporter::GenerateWaypoints()
     TransportPath path;
     FillPathVector(GetInfo()->SpellFocus, path);
 
-    if(path.Size() == 0) return false;
+    if(path.Size() == 0) 
+        return false;
 
     vector<keyFrame> keyFrames;
     int mapChange = 0;
@@ -365,6 +366,7 @@ void Transporter::UpdatePosition()
         }
     }
 }
+
 void Transporter::TransportGossip(uint32 route)
 {
     if(route == 241)
@@ -379,31 +381,26 @@ void Transporter::TransportGossip(uint32 route)
         }
     }
 }
+
 void Transporter::TransportPassengers(uint32 mapid, uint32 oldmap, float x, float y, float z)
 {
     sEventMgr.RemoveEvents(this, EVENT_TRANSPORTER_NEXT_WAYPOINT);
 
-    if(mPassengers.size() > 0)
+    if(!mPassengers.empty())
     {
-        PassengerIterator itr = mPassengers.begin();
-        PassengerIterator it2;
-
         WorldPacket Pending(SMSG_TRANSFER_PENDING, 12);
         Pending << mapid << GetEntry() << oldmap;
 
         WorldPacket NewWorld;
         LocationVector v;
 
-        for(; itr != mPassengers.end();)
+        for (PassengerIterator itr = mPassengers.begin(); itr != mPassengers.end(); ++itr)
         {
-            it2 = itr;
-            ++itr;
-
-            Player* plr = objmgr.GetPlayer(it2->first);
+            Player* plr = objmgr.GetPlayer(itr->first);
             if(!plr)
             {
                 // remove all non players from map
-                mPassengers.erase(it2);
+                mPassengers.erase(itr);
                 continue;
             }
             if(!plr->GetSession() || !plr->IsInWorld())
@@ -462,29 +459,30 @@ Transporter::~Transporter()
 
 void ObjectMgr::LoadTransporters()
 {
-    Log.Success("ObjectMgr", "Loading Transports...");
-    QueryResult* QR = WorldDatabase.Query("SELECT * FROM transport_data");
-    if(!QR) return;
+    Log.Debug("ObjectMgr", "Loading Transports...");
+    QueryResult* result = WorldDatabase.Query("SELECT * FROM transport_data");
+    if(!result)
+        return;
 
-    int64 total = QR->GetRowCount();
+    uint64 total = result->GetRowCount();
     TransportersCount = total;
     do
     {
-        uint32 entry = QR->Fetch()[0].GetUInt32();
-        int32 period = QR->Fetch()[2].GetInt32();
+        Field* fields = result->Fetch();
+        uint32 entry = fields[0].GetUInt32();
+        int32 period = fields[2].GetInt32();
 
         Transporter* pTransporter = new Transporter((uint64)HIGHGUID_TYPE_TRANSPORTER << 32 | entry);
         if(!pTransporter->CreateAsTransporter(entry, "", period))
         {
-            LOG_ERROR("Transporter %s failed creation for some reason.", QR->Fetch()[1].GetString());
+            Log.Error("LoadTransporters", "Transporter %s failed creation for some reason.", fields[1].GetString());
             delete pTransporter;
         }
         else
         {
             AddTransport(pTransporter);
 
-            QueryResult* result2 = WorldDatabase.Query("SELECT * FROM transport_creatures WHERE transport_entry = %u", entry);
-            if(result2)
+            if (QueryResult* result2 = WorldDatabase.Query("SELECT * FROM transport_creatures WHERE transport_entry = %u", entry))
             {
                 do
                 {
@@ -499,8 +497,9 @@ void ObjectMgr::LoadTransporters()
         }
 
     }
-    while(QR->NextRow());
-    delete QR;
+    while(result->NextRow());
+    delete result;
+    Log.Success("ObjectMgr", "Loaded data for %lu transport objects", TransportersCount);
 }
 
 void Transporter::OnPushToWorld()
@@ -553,27 +552,31 @@ uint32 Transporter::BuildCreateUpdateBlockForPlayer(ByteBuffer* data, Player* ta
     return cnt;
 }
 
-void Transporter::MovePassengers( float x, float y, float z, float o ){
-    for( TransportNPCMap::iterator itr = m_npcs.begin(); itr != m_npcs.end(); ++itr ){
-        Object *obj = itr->second;
-        
-        obj->SetPosition( x + obj->transporter_info.x, y + obj->transporter_info.y, z + obj->transporter_info.z, o + obj->transporter_info.o, false );
+void Transporter::MovePassengers( float x, float y, float z, float o )
+{
+    for(TransportNPCMap::iterator itr = m_npcs.begin(); itr != m_npcs.end(); ++itr )
+    {
+        if (Object *obj = itr->second)
+            itr->second->SetPosition(x + obj->transporter_info.x, y + obj->transporter_info.y, z + obj->transporter_info.z, o + obj->transporter_info.o, false);
     }
 
-    for( PassengerMap::iterator itr = mPassengers.begin(); itr != mPassengers.end(); ++itr ){
-        Player *p = itr->second;
-        p->SetPosition( x + p->transporter_info.x, y + p->transporter_info.y, z + p->transporter_info.z, o + p->transporter_info.o, false );
+    for( PassengerMap::iterator itr = mPassengers.begin(); itr != mPassengers.end(); ++itr )
+    {
+        if (Player *p = itr->second)
+            p->SetPosition( x + p->transporter_info.x, y + p->transporter_info.y, z + p->transporter_info.z, o + p->transporter_info.o, false );
     }
 
-    for( std::map< uint64, Object* >::iterator itr = passengers.begin(); itr != passengers.end(); ++itr ){
-        Object *obj = itr->second;
-        
-        obj->SetPosition( x + obj->transporter_info.x, y + obj->transporter_info.y, z + obj->transporter_info.z, o + obj->transporter_info.o, false );
+    for( std::map< uint64, Object* >::iterator itr = passengers.begin(); itr != passengers.end(); ++itr )
+    {
+        if (Object *obj = itr->second)
+            obj->SetPosition( x + obj->transporter_info.x, y + obj->transporter_info.y, z + obj->transporter_info.z, o + obj->transporter_info.o, false );
     }
 }
 
-void Transporter::AddPassenger( Object *o ){
-    if( o->IsPlayer() ){
+void Transporter::AddPassenger( Object *o )
+{
+    if( o->IsPlayer() )
+    {
         AddPlayer( static_cast< Player* >( o ) );
         return;
     }
@@ -581,8 +584,10 @@ void Transporter::AddPassenger( Object *o ){
     passengers[ o->GetGUID() ] = o;
 }
 
-void Transporter::RemovePassenger( Object *o ){
-    if( o->IsPlayer() ){
+void Transporter::RemovePassenger( Object *o )
+{
+    if( o->IsPlayer() )
+    {
         RemovePlayer( static_cast< Player* >( o ) );
         return;
     }
