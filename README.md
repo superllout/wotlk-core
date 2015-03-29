@@ -1,9 +1,4 @@
 # wotlk-core
-Easy wow wotlk core based on arcemu
+Easy wow wotlk core based on arcemu (http://github.com/arcemu/arcemu, http://www.arcemu.org)
 
-* Battlegrounds:
-
-1) Warsong Gulch - 99% blizzlike (flags counters, timers, all buffs).
-
-2) Arathi Basin - 0%
-
+Its licensed under GPL V2
