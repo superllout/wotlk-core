@@ -530,7 +530,7 @@ void ObjectMgr::LoadPlayerCreateInfo()
     Log.Debug("ObjectMgr", "Loading player create info");
     QueryResult* playerCreateInfoData = WorldDatabase.Query("SELECT `Index`,`race`,`factiontemplate`,`class`,`mapID`,`zoneID`,`positionX`,`positionY`,`positionZ`,`displayID`,`BaseStrength`, \
     `BaseAgility`,`BaseStamina`,`BaseIntellect`,`BaseSpirit`,`BaseHealth`,`BaseMana`,`BaseRage`,`BaseFocus`,`BaseEnergy`, \
-    attackpower`,`mindmg`,`maxdmg`,`introid`,`taximask` FROM `playercreateinfo`");
+    `attackpower`,`mindmg`,`maxdmg`,`introid`,`taximask` FROM `playercreateinfo`");
 
     if(!playerCreateInfoData)
     {
@@ -647,7 +647,7 @@ void ObjectMgr::LoadGuilds()
 {
     Log.Debug("ObjectMgr", "Loading guilds");
     QueryResult* result = CharacterDatabase.Query("SELECT `guildId`,`guildName`,`leaderGuid`,`emblemStyle`,`emblemColor`,`borderStyle`,`borderColor`,`backgroundColor`,`guildInfo`, \
-    `motd`,`createDate`,`bankBlance` FROM `guilds`");
+    `motd`,`createdate`,`bankBalance` FROM `guilds`");
 
     if(result)
     {
