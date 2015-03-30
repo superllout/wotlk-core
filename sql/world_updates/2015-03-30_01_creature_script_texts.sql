@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `creature_script_texts`
+DROP TABLE IF EXISTS `creature_script_texts`;
 CREATE TABLE `creature_script_texts` (
   `entry` int(10) unsigned NOT NULL,
   `textIndex` int(10) unsigned NOT NULL DEFAULT '0',
