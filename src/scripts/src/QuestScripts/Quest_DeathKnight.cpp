@@ -27,7 +27,7 @@ class GossipScourgeGryphon : public GossipScript
         {
             if (plr->HasQuest(12670) || plr->HasFinishedQuest(12670))
             {
-                if (TaxiPath* path = sTaxiMgr.GetTaxiPath(TO_CREATURE(pObject)->GetEntry() == 29488 ? 1053 : 1054))
+                if (TaxiPath* path = sTaxiMgr.GetTaxiPath(pObject->GetEntry() == 29488 ? 1053 : 1054))
                     plr->TaxiStart(path, 26308, 0);
             }
         }
