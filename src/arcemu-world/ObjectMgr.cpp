@@ -3540,9 +3540,9 @@ void ObjectMgr::LoadWorldStateTemplates()
     Log.Success("ObjectMgr", "Loaded %u worldstate_templates", worldstate_templates.size());
 }
 
-std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map ) const{
-    std::map< uint32, std::multimap< uint32, WorldState >* >::const_iterator itr =
-        worldstate_templates.find( map );
+std::multimap< uint32, WorldState >* ObjectMgr::GetWorldStatesForMap( uint32 map ) const
+{
+    std::map< uint32, std::multimap< uint32, WorldState >* >::const_iterator itr = worldstate_templates.find( map );
 
     if( itr == worldstate_templates.end() )
         return NULL;
@@ -3610,4 +3610,66 @@ void ObjectMgr::LoadAchievementRewards()
 AchievementReward* ObjectMgr::GetRewardForAchievementId(uint32 id)
 {
     return mAchievementRewards[id];
+}
+
+void ObjectMgr::LoadCreatureScriptTexts()
+{
+    Log.Debug("ObjectMgr", "Loading creature script texts");
+    uint32 count = 0;
+    if (QueryResult *result = WorldDatabase.Query("SELECT `entry`, `textIndex`,`text`,`textType`,`language`,`emoteId`,`emoteDelay`,`soundId` FROM `creature_script_texts`"))
+    {
+        do{
+            Field* fields = result->Fetch();
+            uint32 entry = fields[0].GetUInt32();
+            if (!CreatureNameStorage.LookupEntry(entry))
+            {
+                // There will a bit massive amount of messages if for unknown creature we will have serveral texts
+                Log.Error("LoadCreatureScriptTexts", "Tried to load script texts for non existing npc entry %u", entry);
+                continue;
+            }
+
+            uint32 indexId = fields[1].GetUInt32();
+            // Lets check for dublicate (basically it should be done by database developers by adding correct PRIMARY_KEYS but still adding it to avoid possible crashes)
+            // Some creatures plays only sound without text (it can be done in this way too)
+            if (GetCreatureScriptText(entry, indexId).text != nullptr || GetCreatureScriptText(entry, indexId).soundId != 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "Text id %u already exists for creature %u", indexId, entry);
+                continue;
+            }
+
+            CreatureScriptTextStruct textData;
+            textData.text = fields[2].GetString() ? fields[2].GetString() : "";
+
+            textData.textType = fields[3].GetUInt8();
+            textData.language = fields[4].GetUInt8();
+            textData.emoteId = fields[5].GetUInt32();
+            textData.emoteDelay = fields[6].GetUInt32();
+            textData.soundId = fields[7].GetUInt32();
+            std::multimap<uint32, CreatureScriptTextStruct>* text = {};
+            text->insert(std::make_pair(indexId, textData));
+
+            mCreatureScriptTexts.insert(CreatureScriptTextMap::value_type(entry, text));
+            ++count;
+        } while (result->NextRow());
+        delete result;
+    }
+    Log.Success("ObjectMgr", "Loaded %u script texts", count);
+}
+
+CreatureScriptTextStruct ObjectMgr::GetCreatureScriptText(uint32 entry, uint32 id) const
+{
+    // Getting texts for entry
+    CreatureScriptTextStruct text;
+    CreatureScriptTextMap::const_iterator itr1 = mCreatureScriptTexts.find(entry);
+    if (itr1 == mCreatureScriptTexts.end())
+        return text;
+
+    // getting text by id
+    for (std::multimap<uint32, CreatureScriptTextStruct>::iterator itr2 = itr1->second->begin(); itr2 != itr1->second->end(); ++itr2)
+    {
+        if (itr2->first == id)
+            return itr2->second;
+    }
+
+    return text;
 }

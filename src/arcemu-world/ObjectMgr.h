@@ -420,6 +420,28 @@ typedef std::multimap <uint32, uint32>                               BCEntryStor
 typedef std::map< uint32, SpellTargetConstraint* >                    SpellTargetConstraintMap;
 typedef std::map<uint32, AchievementReward* >         AchievementRewardsMap;
 
+struct CreatureScriptTextStruct
+{
+    const char* text;
+    uint8 textType;
+    uint8 language;
+    uint32 emoteId;
+    uint32 emoteDelay;
+    uint32 soundId;
+    CreatureScriptTextStruct()
+    {
+        text = "";
+        textType = 0;
+        language = 0;
+        emoteId = 0;
+        emoteDelay = 0;
+        soundId = 0;
+    }
+};
+
+typedef std::map<uint32 /*entry*/, std::multimap<uint32 /*text_index*/, CreatureScriptTextStruct>* > CreatureScriptTextMap;
+
+
 class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableObject
 {
     public:
@@ -683,6 +705,9 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         void LoadWorldStateTemplates();
         std::multimap< uint32, WorldState >* GetWorldStatesForMap( uint32 map ) const;
 
+        void LoadCreatureScriptTexts();
+        CreatureScriptTextStruct GetCreatureScriptText(uint32 entry, uint32 id) const;
+
     protected:
         BCEntryStorage m_BCEntryStorage; // broadcast system.
         RWLock playernamelock;
@@ -759,6 +784,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         std::map< uint32, std::vector< VehicleAccessoryEntry* >* > vehicle_accessories;
         std::map< uint32, std::multimap< uint32, WorldState >* > worldstate_templates;
         AchievementRewardsMap mAchievementRewards;
+        CreatureScriptTextMap mCreatureScriptTexts;
 };
 
 
