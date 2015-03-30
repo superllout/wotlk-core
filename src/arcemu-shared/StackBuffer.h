@@ -164,18 +164,28 @@ class SERVER_DECL StackBuffer : public StackBufferBase
         /** boolean (1-byte) read/write operators
          */
         DEFINE_FAST_WRITE_OPERATOR(bool, 1);
-        StackBuffer<Size>& operator >> (bool & dst) { dst = (Read<char>() > 0 ? true : false); return *this; }
+        StackBuffer<Size>& operator >> (bool & dst) 
+        {
+            dst = (Read<char>() > 0 ? true : false); 
+            return *this; 
+        }
 
         /** string (null-terminated) operators
          */
-        StackBuffer<Size>& operator << (std::string & value) { EnsureBufferSize(value.length() + 1); memcpy(&m_bufferPointer[m_writePos], value.c_str(), value.length() + 1); m_writePos += (value.length() + 1); return *this; }
+        StackBuffer<Size>& operator << (std::string & value)
+        {
+            EnsureBufferSize(value.length() + 1); 
+            memcpy(&m_bufferPointer[m_writePos], value.c_str(), value.length() + 1); 
+            m_writePos += (value.length() + 1); 
+            return *this;
+        }
+
         StackBuffer<Size>& operator >> (std::string & dest)
         {
             dest.clear();
-            char c;
             for(;;)
             {
-                c = Read<char>();
+                char c = Read<char>();
                 if(c == 0) break;
                 dest += c;
             }

@@ -26,11 +26,8 @@ namespace Arcemu
 
         float AtomicFloat::SetVal(float NewValue)
         {
-            unsigned long iv = 0;
-            float ret = 0.0f;
-
-            iv = *(reinterpret_cast< unsigned long* >(&NewValue));
-            ret = *(reinterpret_cast< float* >(Value.SetVal(iv)));
+            unsigned long iv = *(reinterpret_cast< unsigned long* >(&NewValue));
+            float ret = *(reinterpret_cast< float* >(Value.SetVal(iv)));
 
             return ret;
         }
@@ -38,10 +35,7 @@ namespace Arcemu
 
         float AtomicFloat::GetVal()
         {
-            float val = 0.0f;
-
-            val = *(reinterpret_cast< float* >(Value.GetVal()));
-
+            float val = *(reinterpret_cast< float* >(Value.GetVal()));
             return val;
         }
     }

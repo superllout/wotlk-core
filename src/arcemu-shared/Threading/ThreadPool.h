@@ -74,6 +74,9 @@ class ThreadController
         pthread_t handle;
         int thread_id;
     public:
+        ThreadController() {}
+        ~ThreadController() {}
+
         void Setup(pthread_t h)
         {
             handle = h;

@@ -378,10 +378,11 @@ void AIInterface::_UpdateTargets()
 
         for (AssistTargetSet::iterator i = m_assistTargets.begin(); i != m_assistTargets.end(); ++i)
         {
-            if((*i) == NULL || (*i)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
-                    !(*i)->isAlive() || m_Unit->GetDistanceSq((*i)) >= 2500.0f || !(*i)->CombatStatus.IsInCombat() || !((*i)->m_phase & m_Unit->m_phase))
+            AssistTargetSet::iterator i2 = i;
+            if((*i2) == NULL || (*i)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
+                    !(*i2)->isAlive() || m_Unit->GetDistanceSq((*i2)) >= 2500.0f || !(*i2)->CombatStatus.IsInCombat() || !((*i2)->m_phase & m_Unit->m_phase))
             {
-                m_assistTargets.erase(i);
+                m_assistTargets.erase(i2);
             }
         }
     }
@@ -407,10 +408,11 @@ void AIInterface::_UpdateTargets()
 
         for (TargetMap::iterator itr = m_aiTargets.begin(); itr != m_aiTargets.end(); ++itr)
         {
-            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(itr->first);
+            TargetMap::iterator itr2 = itr;
+            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(itr2->first);
             if(ai_t == NULL)
             {
-                m_aiTargets.erase(itr);
+                m_aiTargets.erase(itr2);
             }
             else
             {
@@ -3222,24 +3224,26 @@ void AIInterface::CheckTarget(Unit* target)
 
     LockAITargets(true);
 
-    TargetMap::iterator it2 = m_aiTargets.find(target->GetGUID());
-    if(it2 != m_aiTargets.end() || target == getNextTarget())
     {
-        target->CombatStatus.RemoveAttacker(m_Unit, m_Unit->GetGUID());
-        m_Unit->CombatStatus.RemoveAttackTarget(target);
-
-        if(it2 != m_aiTargets.end())
+        TargetMap::iterator it2 = m_aiTargets.find(target->GetGUID());
+        if(it2 != m_aiTargets.end() || target == getNextTarget())
         {
-            m_aiTargets.erase(it2);
-        }
+            target->CombatStatus.RemoveAttacker(m_Unit, m_Unit->GetGUID());
+            m_Unit->CombatStatus.RemoveAttackTarget(target);
 
-        if(target == getNextTarget())      // no need to cast on these.. mem addresses are still the same
-        {
-            resetNextTarget();
-            m_nextSpell = NULL;
+            if(it2 != m_aiTargets.end())
+            {
+                m_aiTargets.erase(it2);
+            }
 
-            // find the one with the next highest threat
-            GetMostHated();
+            if(target == getNextTarget())      // no need to cast on these.. mem addresses are still the same
+            {
+                resetNextTarget();
+                m_nextSpell = NULL;
+
+                // find the one with the next highest threat
+                GetMostHated();
+            }
         }
     }
 
@@ -3247,7 +3251,7 @@ void AIInterface::CheckTarget(Unit* target)
 
     if(target->IsCreature())
     {
-        it2 = target->GetAIInterface()->m_aiTargets.find(m_Unit->GetGUID());
+        TargetMap::iterator it2 = target->GetAIInterface()->m_aiTargets.find(m_Unit->GetGUID());
         if(it2 != target->GetAIInterface()->m_aiTargets.end())
         {
             target->GetAIInterface()->LockAITargets(true);

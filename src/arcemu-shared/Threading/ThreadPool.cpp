@@ -91,7 +91,7 @@ void CThreadPool::ExecuteTask(ThreadBase* ExecutionTarget)
     --_threadsEaten;
 
     // grab one from the pool, if we have any.
-    if(m_freeThreads.size())
+    if(!m_freeThreads.empty())
     {
         t = *m_freeThreads.begin();
         m_freeThreads.erase(m_freeThreads.begin());
@@ -233,9 +233,9 @@ void CThreadPool::Shutdown()
     for(int i = 0;; i++)
     {
         _mutex.Acquire();
-        if(m_activeThreads.size() || m_freeThreads.size())
+        if(!m_activeThreads.empty() || !m_freeThreads.empty())
         {
-            if(i != 0 && m_freeThreads.size() != 0)
+            if(i != 0 && !m_freeThreads.empty())
             {
                 /*if we are here then a thread in the free pool checked if it was being shut down just before CThreadPool::Shutdown() was called,
                 but called Suspend() just after KillFreeThreads(). All we need to do is to resume it.*/

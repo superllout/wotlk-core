@@ -66,14 +66,15 @@ void AccountMgr::ReloadAccounts(bool silent)
     // check for any purged/deleted accounts
     for(std::map<string, Account*>::iterator itr = AccountDatabase.begin(); itr != AccountDatabase.end(); ++itr)
     {
-        if(account_list.find(itr->first) == account_list.end())
+        std::map<string, Account*>::iterator itr2 = itr;
+        if(account_list.find(itr2->first) == account_list.end())
         {
-            delete itr->second;
-            AccountDatabase.erase(itr);
+            delete itr2->second;
+            AccountDatabase.erase(itr2);
         }
         else
         {
-            itr->second->UsernamePtr = (std::string*)&itr->first;
+            itr2->second->UsernamePtr = (std::string*)&itr2->first;
         }
     }
 
@@ -588,18 +589,13 @@ void InformationCore::CheckServers()
 {
     serverSocketLock.Acquire();
 
-    set<LogonCommServerSocket*>::iterator itr, it2;
-    LogonCommServerSocket* s;
-    for(itr = m_serverSockets.begin(); itr != m_serverSockets.end();)
+    for(set<LogonCommServerSocket*>::iterator itr = m_serverSockets.begin(); itr != m_serverSockets.end(); ++itr)
     {
-        s = *itr;
-        it2 = itr;
-        ++itr;
-
-        if(!IsServerAllowed(s->GetRemoteAddress().s_addr))
+        LogonCommServerSocket* pSockect = *itr;
+        if(!IsServerAllowed(pSockect->GetRemoteAddress().s_addr))
         {
-            LOG_DETAIL("Disconnecting socket: %s due to it no longer being on an allowed IP.", s->GetRemoteIP().c_str());
-            s->Disconnect();
+            LOG_DETAIL("Disconnecting socket: %s due to it no longer being on an allowed IP.", pSockect->GetRemoteIP().c_str());
+            pSockect->Disconnect();
         }
     }
 

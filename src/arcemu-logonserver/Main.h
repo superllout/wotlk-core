@@ -50,6 +50,12 @@ class LogonServer;
 class LogonServer : public Singleton< LogonServer >
 {
     public:
+        LogonServer()
+        {
+            m_stopEvent = false;
+        }
+        ~LogonServer() {}
+
         void CheckForDeadSockets();
         void Run(int argc, char** argv);
         void Stop();
