@@ -562,8 +562,7 @@ void LogonCommServerSocket::RefreshRealmsPop()
         return;
 
     WorldPacket data(RSMSG_REALM_POP_REQ, 4);
-    set<uint32>::iterator itr = server_ids.begin();
-    for(; itr != server_ids.end() ; itr++)
+    for(set<uint32>::iterator itr = server_ids.begin(); itr != server_ids.end(); ++itr)
     {
         data.clear();
         data << (*itr);

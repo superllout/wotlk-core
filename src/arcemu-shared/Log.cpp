@@ -385,13 +385,14 @@ void oLog::LargeErrorMessage(const char* source, ...)
     pointer = const_cast<char*>(source);
     lines.push_back(pointer);
 
-    size_t i, j, k;
     pointer = va_arg(ap, char*);
     while(pointer != NULL)
     {
         lines.push_back(pointer);
         pointer = va_arg(ap, char*);
     }
+
+    va_end(ap);
 
     outError("*********************************************************************");
     outError("*                        MAJOR ERROR/WARNING                        *");
@@ -400,10 +401,10 @@ void oLog::LargeErrorMessage(const char* source, ...)
     for(std::vector<char*>::iterator itr = lines.begin(); itr != lines.end(); ++itr)
     {
         stringstream sstext;
-        i = strlen(*itr);
-        j = (i <= 65) ? 65 - i : 0;
+        size_t i = strlen(*itr);
+        size_t j = (i <= 65) ? 65 - i : 0;
         sstext << "* " << *itr;
-        for(k = 0; k < j; ++k)
+        for(size_t k = 0; k < j; ++k)
         {
             sstext << " ";
         }
