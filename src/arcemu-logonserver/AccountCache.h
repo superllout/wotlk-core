@@ -111,11 +111,7 @@ class AccountMgr : public Singleton < AccountMgr >
         ~AccountMgr()
         {
 
-#ifdef WIN32
-            for(HM_NAMESPACE::hash_map<string, Account*>::iterator itr = AccountDatabase.begin(); itr != AccountDatabase.end(); ++itr)
-#else
             for(map<string, Account*>::iterator itr = AccountDatabase.begin(); itr != AccountDatabase.end(); ++itr)
-#endif
             {
                 delete itr->second;
             }
@@ -128,11 +124,7 @@ class AccountMgr : public Singleton < AccountMgr >
             setBusy.Acquire();
             Account* pAccount = NULL;
             // this should already be uppercase!
-#ifdef WIN32
-            HM_NAMESPACE::hash_map<string, Account*>::iterator itr = AccountDatabase.find(Name);
-#else
             map<string, Account*>::iterator itr = AccountDatabase.find(Name);
-#endif
 
             if(itr == AccountDatabase.end())    pAccount = NULL;
             else                                pAccount = itr->second;
@@ -150,22 +142,13 @@ class AccountMgr : public Singleton < AccountMgr >
     private:
         Account* __GetAccount(string Name)
         {
-            // this should already be uppercase!
-#ifdef WIN32
-            HM_NAMESPACE::hash_map<string, Account*>::iterator itr = AccountDatabase.find(Name);
-#else
             map<string, Account*>::iterator itr = AccountDatabase.find(Name);
-#endif
 
             if(itr == AccountDatabase.end())    return NULL;
             else                                return itr->second;
         }
 
-#ifdef WIN32
-        HM_NAMESPACE::hash_map<string, Account*> AccountDatabase;
-#else
         std::map<string, Account*> AccountDatabase;
-#endif
 
     protected:
         Mutex setBusy;

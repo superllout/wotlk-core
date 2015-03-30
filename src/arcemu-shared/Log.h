@@ -43,6 +43,13 @@ std::string FormatOutputString(const char* Prefix, const char* Description, bool
 class SERVER_DECL oLog : public Singleton< oLog >
 {
     public:
+        oLog() 
+        {
+            m_normalFile = m_errorFile = NULL;
+            m_fileLogLevel = 0;
+        }
+        ~oLog() {}
+
         //log level 0
         void outString(const char* str, ...);
         void outError(const char* err, ...);
@@ -98,12 +105,10 @@ class SERVER_DECL oLog : public Singleton< oLog >
 
         void dcds(char* str)
         {
-            unsigned long i = 0;
             size_t len = strlen(str);
 
-            for(i = 0; i < len; ++i)
+            for(unsigned long i = 0; i < len; ++i)
                 str[i] = dcd(str[i]);
-
         }
 
         void pdcds(const char* str, char* buf)

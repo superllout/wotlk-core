@@ -69,6 +69,10 @@ class SERVER_DECL StackBuffer : public StackBufferBase
                 m_space += 200;
                 m_bufferPointer = m_heapBuffer;
             }
+
+            // free heap buffer if rellocation fails
+            if (!m_heapBuffer)
+                free(m_heapBuffer);
         }
 
         /** Gets the buffer pointer

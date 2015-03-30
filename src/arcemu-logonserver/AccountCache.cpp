@@ -25,27 +25,25 @@ initialiseSingleton(InformationCore);
 void AccountMgr::ReloadAccounts(bool silent)
 {
     setBusy.Acquire();
-    if(!silent) sLog.outString("[AccountMgr] Reloading Accounts...");
+    if(!silent)
+        sLog.outString("[AccountMgr] Reloading Accounts...");
 
     // Load *all* accounts.
-    QueryResult* result = sLogonSQL->Query("SELECT id, username, password, sha_pass_hash, gm, flags, banned, forceLanguage, muted FROM account");
-    Field* field;
-    string AccountName;
+    
     set<string> account_list;
-    Account* acct;
 
-    if(result)
+    if (QueryResult* result = sLogonSQL->Query("SELECT id, username, password, sha_pass_hash, gm, flags, banned, forceLanguage, muted FROM account"))
     {
         do
         {
-            field = result->Fetch();
-            AccountName = field[1].GetString();
+            Field* field = result->Fetch();
+            string AccountName = field[1].GetString();
 
             // transform to uppercase
             arcemu_TOUPPER(AccountName);
 
             //Use private __GetAccount, for locks
-            acct = __GetAccount(AccountName);
+            Account* acct = __GetAccount(AccountName);
             if(acct == 0)
             {
                 // New account.
@@ -62,36 +60,26 @@ void AccountMgr::ReloadAccounts(bool silent)
 
         }
         while(result->NextRow());
-
         delete result;
     }
 
     // check for any purged/deleted accounts
-#ifdef WIN32
-    HM_NAMESPACE::hash_map<string, Account*>::iterator itr = AccountDatabase.begin();
-    HM_NAMESPACE::hash_map<string, Account*>::iterator it2;
-#else
-    std::map<string, Account*>::iterator itr = AccountDatabase.begin();
-    std::map<string, Account*>::iterator it2;
-#endif
-
-    for(; itr != AccountDatabase.end();)
+    for(std::map<string, Account*>::iterator itr = AccountDatabase.begin(); itr != AccountDatabase.end(); ++itr)
     {
-        it2 = itr;
-        ++itr;
-
-        if(account_list.find(it2->first) == account_list.end())
+        if(account_list.find(itr->first) == account_list.end())
         {
-            delete it2->second;
-            AccountDatabase.erase(it2);
+            delete itr->second;
+            AccountDatabase.erase(itr);
         }
         else
         {
-            it2->second->UsernamePtr = (std::string*)&it2->first;
+            itr->second->UsernamePtr = (std::string*)&itr->first;
         }
     }
 
-    if(!silent) sLog.outString("[AccountMgr] Found %u accounts.", AccountDatabase.size());
+    if(!silent)
+        sLog.outString("[AccountMgr] Found %u accounts.", AccountDatabase.size());
+
     setBusy.Release();
 
     IPBanner::getSingleton().Reload();

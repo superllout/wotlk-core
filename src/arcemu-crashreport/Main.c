@@ -62,10 +62,10 @@ void buildCrashdump(char *filename) {
     snprintf(cmd, 1024, "gdb --batch --eval-command=\"bt ful\" arcemu-world %s &> crashdump.log", filename);
     ret = system(cmd);
     if (ret == 0) {
-        char dstfile[1024];
 
         ret = sendCrashdump();
         if (ret == 0) {
+            char dstfile[1024];
             snprintf(dstfile, 1024, "sent.%s", filename);
             rename(filename, dstfile);
         }
@@ -79,11 +79,6 @@ int filter(const struct dirent *entry) {
 }
 
 int main(int argc, char *argv[]) {
-    struct dirent **list;
-    struct tm tm;
-    FILE *f;
-    time_t t;
-    int n, i;
 
     for (;;) {
         int c = getopt(argc, argv, "r:d:");
@@ -96,12 +91,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    f = fopen("arcemu.uptime", "r");
-    if (f == NULL) return 1;
+    File* f = fopen("arcemu.uptime", "r");
+    if (f == NULL)
+        return 1;
 
+    time_t t;
     fscanf(f, "%ld %lu %lu %lu", &t, &opts.online, &opts.peak, &opts.accepted);
     fclose(f);
 
+    struct tm tm;
     gmtime_r(&t, &tm);
     snprintf(opts.uptime, 256, "%u days, %u hours, %u minutes, %u seconds;", tm.tm_yday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
@@ -111,9 +109,10 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    n = scandir(".", &list, filter, NULL);
+    struct dirent **list;
+    int n = scandir(".", &list, filter, NULL);
     if (n != -1) {
-        for (i=0; i<n; i++) {
+        for (int i=0; i<n; i++) {
             buildCrashdump(list[i]->d_name);
         }
     }

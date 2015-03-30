@@ -44,8 +44,7 @@ void WorldSession::HandleUseItemOpcode(WorldPacket & recvPacket)
     recvPacket >> glyphIndex;
     recvPacket >> unk;
 
-    Item* tmpItem = NULL;
-    tmpItem = p_User->GetItemInterface()->GetInventoryItem(tmp1, slot);
+    Item* tmpItem = p_User->GetItemInterface()->GetInventoryItem(tmp1, slot);
     if(!tmpItem)
         tmpItem = p_User->GetItemInterface()->GetInventoryItem(slot);
     if(!tmpItem)
