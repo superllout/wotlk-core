@@ -3,6 +3,8 @@ This changelog keeps information about most major changes in core, scripts and i
 4.0.2 changes
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.
 * Added Dalaran underbelly guards gossip
+* Implemented creature_script_texts data load
+
 
 4.0.1 changes:
 * Implemented achievement_rewards

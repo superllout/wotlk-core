@@ -985,26 +985,19 @@ void AIInterface::AttackReaction(Unit* pUnit, uint32 damage_dealt, uint32 spellI
     if(m_AIState == STATE_EVADE || !pUnit || !pUnit->isAlive() || m_Unit->IsDead() || ( m_Unit == pUnit ) || ( m_AIType == AITYPE_PASSIVE ) || disable_combat )
         return;
 
-    if(sWorld.Collision && pUnit->IsPlayer())
+    if (sWorld.Collision && pUnit->IsPlayer() && m_Unit->GetMapMgr() != NULL && !Flying())
     {
-        if(m_Unit->GetMapMgr() != NULL)
+        float target_land_z = m_Unit->GetMapMgr()->GetLandHeight(pUnit->GetPositionX(), pUnit->GetPositionY(), pUnit->GetPositionZ());
+
+        if(fabs(pUnit->GetPositionZ() - target_land_z) > _CalcCombatRange(pUnit, false))
         {
-            if(!Flying())
+            if(!pUnit->IsPlayer() && target_land_z > m_Unit->GetMapMgr()->GetLiquidHeight(pUnit->GetPositionX(), pUnit->GetPositionY()))
+                return;
+            else if(TO< Player* >(pUnit)->GetSession() != NULL)
             {
-                float target_land_z = m_Unit->GetMapMgr()->GetLandHeight(pUnit->GetPositionX(), pUnit->GetPositionY(), pUnit->GetPositionZ());
-
-                if(fabs(pUnit->GetPositionZ() - target_land_z) > _CalcCombatRange(pUnit, false))
-                {
-                    if(!pUnit->IsPlayer() && target_land_z > m_Unit->GetMapMgr()->GetLiquidHeight(pUnit->GetPositionX(), pUnit->GetPositionY()))
-                        return;
-                    else if(TO< Player* >(pUnit)->GetSession() != NULL)
-                    {
-                        MovementInfo* mi = TO< Player* >(pUnit)->GetSession()->GetMovementInfo();
-
-                        if(mi != NULL && !(mi->flags & MOVEFLAG_FALLING) && !(mi->flags & MOVEFLAG_SWIMMING) && !(mi->flags & MOVEFLAG_LEVITATE))
-                            return;
-                    }
-                }
+                MovementInfo* mi = TO< Player* >(pUnit)->GetSession()->GetMovementInfo();
+                if(mi != NULL && !(mi->flags & MOVEFLAG_FALLING) && !(mi->flags & MOVEFLAG_SWIMMING) && !(mi->flags & MOVEFLAG_LEVITATE))
+                    return;
             }
         }
     }
