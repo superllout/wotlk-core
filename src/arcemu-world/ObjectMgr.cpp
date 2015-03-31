@@ -3616,7 +3616,7 @@ void ObjectMgr::LoadCreatureScriptTexts()
 {
     Log.Debug("ObjectMgr", "Loading creature script texts");
     uint32 count = 0;
-    if (QueryResult *result = WorldDatabase.Query("SELECT `entry`, `textIndex`,`text`,`textType`,`language`,`emoteId`,`emoteDelay`,`soundId` FROM `creature_script_texts`"))
+    if (QueryResult *result = WorldDatabase.Query("SELECT `entry`,`textIndex`,`text`,`textType`,`language`,`emoteId`,`emoteDelay`,`soundId` FROM `creature_script_texts`"))
     {
         do{
             Field* fields = result->Fetch();
