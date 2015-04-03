@@ -5474,3 +5474,61 @@ void Spell::SpellEffectSetMirrorName(uint32 i)
     data << uint64(m_caster->GetGUID());
     m_caster->SendMessageToSet(&data, true);
 }
+
+void Spell::SpellEffectJumpTarget(uint32 i)
+{
+    if (u_caster == NULL)
+        return;
+
+    if (u_caster->GetCurrentVehicle() || u_caster->isTrainingDummy())
+        return;
+
+    float x, y, z;
+    if (m_targets.m_targetMask & TARGET_FLAG_UNIT)
+    {
+        Object* uobj = m_caster->GetMapMgr()->_GetObject(m_targets.m_unitTarget);
+        if (uobj == NULL || !uobj->IsUnit())
+            return;
+
+        Unit* un = TO_UNIT(uobj);
+        float rad = unitTarget->GetBoundingRadius() - u_caster->GetBoundingRadius();
+        float dx = m_caster->GetPositionX() - unitTarget->GetPositionX();
+        float dy = m_caster->GetPositionY() - unitTarget->GetPositionY();
+
+        if (dx == 0.0f || dy == 0.0f)
+            return;
+
+        float alpha = atanf(dy / dx);
+        if (dx < 0)
+            alpha += M_PI_FLOAT;
+
+        x = rad * cosf(alpha) + unitTarget->GetPositionX();
+        y = rad * sinf(alpha) + unitTarget->GetPositionY();
+        z = unitTarget->GetPositionZ();
+    }
+    else if (m_targets.HasDstOrSrc())
+    {
+        //this can also jump to a point
+        if (m_targets.HasSrc())
+        {
+            x = m_targets.m_srcX;
+            y = m_targets.m_srcY;
+            z = m_targets.m_srcZ;
+        }
+
+        if (m_targets.HasDst())
+        {
+            x = m_targets.m_destX;
+            y = m_targets.m_destY;
+            z = m_targets.m_destZ;
+        }
+    }
+
+    float speedZ = m_spellInfo->EffectMiscValue[i] ? (float(m_spellInfo->EffectMiscValue[i]) / 10) : float(m_spellInfo->EffectMiscValueB[i]) / 10;
+    float o = unitTarget->calcRadAngle(u_caster->GetPositionX(), u_caster->GetPositionY(), x, y);
+
+    if (speedZ <= 0.0f)
+        u_caster->GetAIInterface()->MoveJump(x, y, z, o, GetProto()->Effect[i] == 145);
+    else
+        u_caster->GetAIInterface()->MoveJumpExt(x, y, z, o, speedZ, GetProto()->Effect[i] == 145);
+}
