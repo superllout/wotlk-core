@@ -25,8 +25,9 @@ git:
 # only run travis on the master branch
 
 before_install:
+ - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
  - sudo apt-get -qq update
- - sudo apt-get -qq install build-essential libtool gcc g++ make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev 
+ - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev 
 
 branches:
  only:
