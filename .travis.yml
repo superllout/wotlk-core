@@ -34,5 +34,5 @@ compiler:
 script:
  - mkdir build
  - cd build
- - cmake ../wotlk-core
+ - cmake ../wotlk-core/cmake -DCMAKE_BUILD_TYPE=release -DBUILD_LUAENGINE=1
  - make -j4
