@@ -9,7 +9,8 @@ add new features.
 This framework is ready to use under all currently popular operation systems - UNIX, OS X, Linux, Windows.
 Its free to use, fork or use core commits (with authority information) and do any other things which do not breaks GNU GPL v3 license.
 
-Main goals for this core is simplicity, performance and functionality - we and our contributors works very hard to combine all of them into modern code.
+Main goals for this core is simplicity, performance and functionality - we and our contributors work very hard to combine all of them into modern code. We, EasyWoW aim as friendly community, so feel free to give 
+questions or documentation requests (NOTE: do not forget to add correct label - "Question" or "Suggestion for wiki" ).
 
 
 
@@ -43,7 +44,7 @@ No, since Its open source.
 
 ### Generally:
 
-* Respect current developers, contributors - they do hard work and shares it.
+* Respect current developers, contributors - they do hard work and shares it for free.
 
 * Use English - we want hear you but we may won't understand your custom language.
 
@@ -52,13 +53,13 @@ No, since Its open source.
 
 ### For simple user:
 
-* Report any issues with proper information (last used core commit has, compiler, platform, mysql server version, add-ons, which script engines are enabled and similar.).
+* Report any issues with proper information (last used core commit hash, git branch, compiler, platform, mysql server version, add-ons, which script engines are enabled and similar.).
 
-* Add information how that functionality should work (for example: creature should cast XX spell XXX times) and how this works in core currently.
+* Add information when creating issue how that functionality should work (for example: creature should cast XX spell XXX times) and how this works in core currently.
 
-* Check your information before submitting.
+* Check your information and for duplicate issues before submitting.
 
-* By testing new patches (major implementation will published in branches).
+* By testing new patches (major implementation will published in branches) and reporting implementation issues.
 
 * Helping to keep it well documented.
 
@@ -67,7 +68,7 @@ No, since Its open source.
 
 ### For developer:
 
-* Improve performance where is possible (major).
+* Improve performance and compatibility where It is possible (major).
 
 * Make pull requests with code improvements. Do not make pull requests with fun content to core repository.
 
