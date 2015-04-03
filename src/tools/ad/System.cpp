@@ -181,11 +181,11 @@ void HandleArgs(int argc, char * arg[])
 uint32 ReadBuild(int locale)
 {
     // include build info file also
-    std::string filename  = std::string("component.wow-")+langs[locale]+".txt";
+    std::string filename = std::string("component.wow-")+langs[locale]+".txt";
     //printf("Read %s file... ", filename.c_str());
 
     MPQFile m(filename.c_str());
-    if(m.isEof())
+    if (m.isEof())
     {
         printf("Fatal error: Not found %s file!\n", filename.c_str());
         exit(1);
@@ -282,7 +282,7 @@ void ReadLiquidTypeTableDBC()
     LiqType = new uint16[LiqType_maxid + 1];
     memset(LiqType, 0xff, (LiqType_maxid + 1) * sizeof(uint16));
 
-    for(uint32 x = 0; x < LiqType_count; ++x)
+    for(size_t x = 0; x < LiqType_count; ++x)
         LiqType[dbc.getRecord(x).getUInt(0)] = dbc.getRecord(x).getUInt(3);
 
     printf("Done! (%i LiqTypes loaded)\n", LiqType_count);
@@ -407,9 +407,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     map.buildMagic = build;
 
     // Get area flags data
-    for (int i=0;i<ADT_CELLS_PER_GRID;i++)
+    for (uint8 i = 0; i < ADT_CELLS_PER_GRID; i++)
     {
-        for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+        for(uint8  j = 0; j < ADT_CELLS_PER_GRID; j++)
         {
             adt_MCNK * cell = cells->getMCNK(i,j);
             uint32 areaid = cell->areaid;
@@ -430,9 +430,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     //============================================
     bool fullAreaData = false;
     uint32 areaflag = area_flags[0][0];
-    for (int y=0;y<ADT_CELLS_PER_GRID;y++)
+    for (uint8 y=0;y<ADT_CELLS_PER_GRID;y++)
     {
-        for(int x=0;x<ADT_CELLS_PER_GRID;x++)
+        for(uint8 x = 0; x < ADT_CELLS_PER_GRID; x++)
         {
             if(area_flags[y][x]!=areaflag)
             {
@@ -462,9 +462,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     //
     // Get Height map from grid
     //
-    for (int i=0;i<ADT_CELLS_PER_GRID;i++)
+    for (uint8 i = 0; i < ADT_CELLS_PER_GRID; i++)
     {
-        for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+        for(uint8 j = 0; j<ADT_CELLS_PER_GRID; j++)
         {
             adt_MCNK * cell = cells->getMCNK(i,j);
             if (!cell)
@@ -486,19 +486,19 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
             // . . . . . . . .
 
             // Set map height as grid height
-            for (int y=0; y <= ADT_CELL_SIZE; y++)
+            for (uint8 y = 0; y <= ADT_CELL_SIZE; y++)
             {
                 int cy = i*ADT_CELL_SIZE + y;
-                for (int x=0; x <= ADT_CELL_SIZE; x++)
+                for (uint8 x = 0; x <= ADT_CELL_SIZE; x++)
                 {
                     int cx = j*ADT_CELL_SIZE + x;
                     V9[cy][cx]=cell->ypos;
                 }
             }
-            for (int y=0; y < ADT_CELL_SIZE; y++)
+            for (uint8 y = 0; y < ADT_CELL_SIZE; y++)
             {
                 int cy = i*ADT_CELL_SIZE + y;
-                for (int x=0; x < ADT_CELL_SIZE; x++)
+                for (uint8 x = 0; x < ADT_CELL_SIZE; x++)
                 {
                     int cx = j*ADT_CELL_SIZE + x;
                     V8[cy][cx]=cell->ypos;
@@ -509,20 +509,20 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
             if (!v)
                 continue;
             // get V9 height map
-            for (int y=0; y <= ADT_CELL_SIZE; y++)
+            for (uint8 y = 0; y <= ADT_CELL_SIZE; y++)
             {
                 int cy = i*ADT_CELL_SIZE + y;
-                for (int x=0; x <= ADT_CELL_SIZE; x++)
+                for (uint8 x = 0; x <= ADT_CELL_SIZE; x++)
                 {
                     int cx = j*ADT_CELL_SIZE + x;
                     V9[cy][cx]+=v->height_map[y*(ADT_CELL_SIZE*2+1)+x];
                 }
             }
             // get V8 height map
-            for (int y=0; y < ADT_CELL_SIZE; y++)
+            for (uint8 y = 0; y < ADT_CELL_SIZE; y++)
             {
                 int cy = i*ADT_CELL_SIZE + y;
-                for (int x=0; x < ADT_CELL_SIZE; x++)
+                for (uint8 x = 0; x < ADT_CELL_SIZE; x++)
                 {
                     int cx = j*ADT_CELL_SIZE + x;
                     V8[cy][cx]+=v->height_map[y*(ADT_CELL_SIZE*2+1)+ADT_CELL_SIZE+1+x];
@@ -535,38 +535,43 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     //============================================
     float maxHeight = -20000;
     float minHeight =  20000;
-    for (int y=0; y<ADT_GRID_SIZE; y++)
+    for (uint8 y = 0; y < ADT_GRID_SIZE; y++)
     {
-        for(int x=0;x<ADT_GRID_SIZE;x++)
+        for(uint8 x = 0; x<ADT_GRID_SIZE;x++)
         {
             float h = V8[y][x];
             if (maxHeight < h) maxHeight = h;
             if (minHeight > h) minHeight = h;
         }
     }
-    for (int y=0; y<=ADT_GRID_SIZE; y++)
+    for (uint8 y = 0; y <= ADT_GRID_SIZE; y++)
     {
-        for(int x=0;x<=ADT_GRID_SIZE;x++)
+        for(uint8 x = 0; x <= ADT_GRID_SIZE; x++)
         {
             float h = V9[y][x];
-            if (maxHeight < h) maxHeight = h;
-            if (minHeight > h) minHeight = h;
+            if (maxHeight < h) 
+                maxHeight = h;
+
+            if (minHeight > h)
+                minHeight = h;
         }
     }
 
     // Check for allow limit minimum height (not store height in deep ochean - allow save some memory)
     if (CONF_allow_height_limit && minHeight < CONF_use_minHeight)
     {
-        for (int y=0; y<ADT_GRID_SIZE; y++)
-            for(int x=0;x<ADT_GRID_SIZE;x++)
+        for (uint8 y = 0; y < ADT_GRID_SIZE; y++)
+            for(uint8 x = 0; x < ADT_GRID_SIZE; x++)
                 if (V8[y][x] < CONF_use_minHeight)
                     V8[y][x] = CONF_use_minHeight;
-        for (int y=0; y<=ADT_GRID_SIZE; y++)
-            for(int x=0;x<=ADT_GRID_SIZE;x++)
+        for (uint8 y = 0; y <= ADT_GRID_SIZE; y++)
+            for(uint8 x=0; x <= ADT_GRID_SIZE; x++)
                 if (V9[y][x] < CONF_use_minHeight)
                     V9[y][x] = CONF_use_minHeight;
+
         if (minHeight < CONF_use_minHeight)
             minHeight = CONF_use_minHeight;
+
         if (maxHeight < CONF_use_minHeight)
             maxHeight = CONF_use_minHeight;
     }
@@ -597,34 +602,34 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
             float diff = maxHeight - minHeight;
             if (diff < CONF_float_to_int8_limit)      // As uint8 (max accuracy = CONF_float_to_int8_limit/256)
             {
-                heightHeader.flags|=MAP_HEIGHT_AS_INT8;
+                heightHeader.flags |= MAP_HEIGHT_AS_INT8;
                 step = selectUInt8StepStore(diff);
             }
             else if (diff<CONF_float_to_int16_limit)  // As uint16 (max accuracy = CONF_float_to_int16_limit/65536)
             {
-                heightHeader.flags|=MAP_HEIGHT_AS_INT16;
+                heightHeader.flags |= MAP_HEIGHT_AS_INT16;
                 step = selectUInt16StepStore(diff);
             }
         }
 
         // Pack it to int values if need
-        if (heightHeader.flags&MAP_HEIGHT_AS_INT8)
+        if (heightHeader.flags & MAP_HEIGHT_AS_INT8)
         {
-            for (int y=0; y<ADT_GRID_SIZE; y++)
-                for(int x=0;x<ADT_GRID_SIZE;x++)
+            for (uint8 y = 0; y < ADT_GRID_SIZE; y++)
+                for(uint8 x = 0; x < ADT_GRID_SIZE; x++)
                     uint8_V8[y][x] = uint8((V8[y][x] - minHeight) * step + 0.5f);
-            for (int y=0; y<=ADT_GRID_SIZE; y++)
-                for(int x=0;x<=ADT_GRID_SIZE;x++)
+            for (uint8 y = 0; y <= ADT_GRID_SIZE; y++)
+                for(uint8 x = 0; x <= ADT_GRID_SIZE; x++)
                     uint8_V9[y][x] = uint8((V9[y][x] - minHeight) * step + 0.5f);
             map.heightMapSize+= sizeof(uint8_V9) + sizeof(uint8_V8);
         }
         else if (heightHeader.flags&MAP_HEIGHT_AS_INT16)
         {
-            for (int y=0; y<ADT_GRID_SIZE; y++)
-                for(int x=0;x<ADT_GRID_SIZE;x++)
+            for (uint8 y = 0; y < ADT_GRID_SIZE; y++)
+                for(uint8 x = 0; x < ADT_GRID_SIZE; x++)
                     uint16_V8[y][x] = uint16((V8[y][x] - minHeight) * step + 0.5f);
-            for (int y=0; y<=ADT_GRID_SIZE; y++)
-                for(int x=0;x<=ADT_GRID_SIZE;x++)
+            for (uint8 y = 0; y <= ADT_GRID_SIZE; y++)
+                for(uint8 x = 0; x <= ADT_GRID_SIZE; x++)
                     uint16_V9[y][x] = uint16((V9[y][x] - minHeight) * step + 0.5f);
             map.heightMapSize+= sizeof(uint16_V9) + sizeof(uint16_V8);
         }
@@ -633,23 +638,22 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     }
 
     // Get liquid map for grid (in WOTLK used MH2O chunk)
-    adt_MH2O * h2o = adt.a_grid->getMH2O();
-    if (h2o)
+    if (adt_MH2O * h2o = adt.a_grid->getMH2O())
     {
-        for (int i=0;i<ADT_CELLS_PER_GRID;i++)
+        for (uint8 i = 0; i < ADT_CELLS_PER_GRID; i++)
         {
-            for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+            for(uint8 j = 0; j < ADT_CELLS_PER_GRID; j++)
             {
-                adt_liquid_header *h = h2o->getLiquidData(i,j);
+                adt_liquid_header *h = h2o->getLiquidData(i, j);
                 if (!h)
                     continue;
 
                 int count = 0;
                 uint64 show = h2o->getLiquidShowMap(h);
-                for (int y=0; y < h->height;y++)
+                for (uint8 y = 0; y < h->height; y++)
                 {
                     int cy = i*ADT_CELL_SIZE + y + h->yOffset;
-                    for (int x=0; x < h->width; x++)
+                    for (uint8 x = 0; x < h->width; x++)
                     {
                         int cx = j*ADT_CELL_SIZE + x + h->xOffset;
                         if (show & 1)
@@ -685,10 +689,10 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
 
                 float *height = h2o->getLiquidHeightMap(h);
                 int pos = 0;
-                for (int y=0; y<=h->height;y++)
+                for (uint8 y = 0; y <= h->height; y++)
                 {
                     int cy = i*ADT_CELL_SIZE + y + h->yOffset;
-                    for (int x=0; x<= h->width; x++)
+                    for (uint8 x = 0; x <= h->width; x++)
                     {
                         int cx = j*ADT_CELL_SIZE + x + h->xOffset;
                         if (height)
@@ -704,9 +708,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     else
     {
         // Get from MCLQ chunk (old)
-        for (int i=0;i<ADT_CELLS_PER_GRID;i++)
+        for (uint8 i = 0; i < ADT_CELLS_PER_GRID; i++)
         {
-            for(int j=0;j<ADT_CELLS_PER_GRID;j++)
+            for(uint8 j = 0; j < ADT_CELLS_PER_GRID; j++)
             {
                 adt_MCNK *cell = cells->getMCNK(i, j);
                 if (!cell)
@@ -717,10 +721,10 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
                 if (!liquid || cell->sizeMCLQ <= 8)
                     continue;
 
-                for (int y=0; y < ADT_CELL_SIZE; y++)
+                for (uint8 y = 0; y < ADT_CELL_SIZE; y++)
                 {
                     int cy = i*ADT_CELL_SIZE + y;
-                    for (int x=0; x < ADT_CELL_SIZE; x++)
+                    for (uint8 x = 0; x < ADT_CELL_SIZE; x++)
                     {
                         int cx = j*ADT_CELL_SIZE + x;
                         if (liquid->flags[y][x] != 0x0F)
@@ -744,10 +748,10 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
                 if (!count && liquid_type[i][j])
                     printf("Wrong liquid detect in MCLQ chunk");
 
-                for (int y=0; y <= ADT_CELL_SIZE; y++)
+                for (uint8 y = 0; y <= ADT_CELL_SIZE; y++)
                 {
                     int cy = i*ADT_CELL_SIZE + y;
-                    for (int x=0; x<= ADT_CELL_SIZE; x++)
+                    for (uint8 x = 0; x <= ADT_CELL_SIZE; x++)
                     {
                         int cx = j*ADT_CELL_SIZE + x;
                         liquid_height[cy][cx] = liquid->liquid[y][x].height;
@@ -762,9 +766,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     //============================================
     uint8 type = liquid_type[0][0];
     bool fullType = false;
-    for (int y=0;y<ADT_CELLS_PER_GRID;y++)
+    for (uint8 y = 0; y < ADT_CELLS_PER_GRID; y++)
     {
-        for(int x=0;x<ADT_CELLS_PER_GRID;x++)
+        for(uint8 x = 0; x < ADT_CELLS_PER_GRID; x++)
         {
             if (liquid_type[y][x]!=type)
             {
@@ -790,19 +794,30 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         int maxX = 0, maxY = 0;
         maxHeight = -20000;
         minHeight = 20000;
-        for (int y=0; y<ADT_GRID_SIZE; y++)
+        for (uint8 y = 0; y < ADT_GRID_SIZE; y++)
         {
-            for(int x=0; x<ADT_GRID_SIZE; x++)
+            for(uint8 x = 0; x < ADT_GRID_SIZE; x++)
             {
                 if (liquid_show[y][x])
                 {
-                    if (minX > x) minX = x;
-                    if (maxX < x) maxX = x;
-                    if (minY > y) minY = y;
-                    if (maxY < y) maxY = y;
+                    if (minX > x)
+                        minX = x;
+
+                    if (maxX < x)
+                        maxX = x;
+
+                    if (minY > y)
+                        minY = y;
+
+                    if (maxY < y)
+                        maxY = y;
+
                     float h = liquid_height[y][x];
-                    if (maxHeight < h) maxHeight = h;
-                    if (minHeight > h) minHeight = h;
+                    if (maxHeight < h)
+                        maxHeight = h;
+
+                    if (minHeight > h)
+                        minHeight = h;
                 }
                 else
                     liquid_height[y][x] = CONF_use_minHeight;
@@ -832,7 +847,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         if (liquidHeader.flags & MAP_LIQUID_NO_TYPE)
             liquidHeader.liquidType = type;
         else
-            map.liquidMapSize+=sizeof(liquid_type);
+            map.liquidMapSize += sizeof(liquid_type);
 
         if (!(liquidHeader.flags & MAP_LIQUID_NO_HEIGHT))
             map.liquidMapSize += sizeof(float)*liquidHeader.width*liquidHeader.height;
@@ -849,9 +864,9 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
     map.holesSize = sizeof(holes);
     memset(holes, 0, map.holesSize);
 
-    for(int i = 0; i < ADT_CELLS_PER_GRID; ++i)
+    for(uint8 i = 0; i < ADT_CELLS_PER_GRID; ++i)
     {
-        for(int j = 0; j < ADT_CELLS_PER_GRID; ++j)
+        for(uint8 j = 0; j < ADT_CELLS_PER_GRID; ++j)
         {
             adt_MCNK * cell = cells->getMCNK(i,j);
             if(!cell)
@@ -902,7 +917,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
             fwrite(liquid_type, sizeof(liquid_type), 1, output);
         if (!(liquidHeader.flags&MAP_LIQUID_NO_HEIGHT))
         {
-            for (int y=0; y<liquidHeader.height;y++)
+            for (uint8 y = 0; y < liquidHeader.height; y++)
                 fwrite(&liquid_height[y+liquidHeader.offsetY][liquidHeader.offsetX], sizeof(float), liquidHeader.width, output);
         }
     }
@@ -1073,7 +1088,7 @@ int main(int argc, char * arg[])
     int FirstLocale = -1;
     uint32 build = 0;
 
-    for (int i = 0; i < LANG_COUNT; i++)
+    for (uint8 i = 0; i < LANG_COUNT; i++)
     {
         char tmp1[512];
         sprintf(tmp1, "%s/Data/%s/locale-%s.MPQ", input_path, langs[i], langs[i]);
