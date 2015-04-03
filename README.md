@@ -40,6 +40,16 @@ No, since Its open source.
 
 ## How to contribute
 
+
+### Generally:
+
+* Respect current developers, contributors - they do hard work and shares it.
+
+* Use English - we want hear you but we may won't understand your custom language.
+
+* We do not promise anything, when its done - its done.
+
+
 ### For simple user:
 
 * Report any issues with proper information (last used core commit has, compiler, platform, mysql server version, add-ons, which script engines are enabled and similar.).
@@ -59,9 +69,11 @@ No, since Its open source.
 
 * Improve performance where is possible (major).
 
-* Do not make pull requests with fun content to core repository.
+* Make pull requests with code improvements. Do not make pull requests with fun content to core repository.
 
 * Make code understandable, do not use just letters or non understandable, long variable titles, use spaces instead of tabs and try to use much latest supportable (currently c11/c++11) standards, add comments which could
  help to understand code easer
+
+* Implement features, script missing contents, improve functionality where is possible.
 
 
