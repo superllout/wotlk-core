@@ -39,5 +39,5 @@ compiler:
 script:
  - mkdir build
  - cd build
- - cmake ../cmake -DCMAKE_BUILD_TYPE=release -DBUILD_LUAENGINE=1
+ - cmake ../cmake -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=release -DBUILD_LUAENGINE=1 
  - make -j4
