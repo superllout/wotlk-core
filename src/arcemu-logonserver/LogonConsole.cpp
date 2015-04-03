@@ -66,7 +66,6 @@ bool LogonConsoleThread::run()
 
     SetThreadName("Console Interpreter");
     sLogonConsole._thread = this;
-    size_t i = 0, len = 0;
     char cmd[96];
 
 #ifndef WIN32
@@ -97,8 +96,8 @@ bool LogonConsoleThread::run()
         if(kill.GetVal())
             break;
 
-        len = strlen(cmd);
-        for(i = 0; i < len; ++i)
+        size_t len = strlen(cmd);
+        for(size_t i = 0; i < len; ++i)
         {
             if(cmd[i] == '\n' || cmd[i] == '\r')
                 cmd[i] = '\0';

@@ -1,7 +1,15 @@
-ALTER TABLE `achievement_reward` 
-    CHANGE `title` `title_A` SMALLINT(5) UNSIGNED DEFAULT 0 NOT NULL, 
-    ADD COLUMN `title_H` SMALLINT(5) UNSIGNED DEFAULT 0 NOT NULL AFTER `title_A`, 
-    CHANGE `subject` `subject` VARCHAR(255) CHARSET utf8 COLLATE utf8_general_ci DEFAULT '' NULL, 
-    ADD COLUMN `mailTemplate` SMALLINT(5) UNSIGNED DEFAULT 0 NOT NULL AFTER `text`; 
-TRUNCATE TABLE `achievement_reward`; -- removing data because it needs full reimport (db update with data will come in db repo)
+DROP TABLE IF EXISTS `achievement_reward`;
+
+CREATE TABLE `achievement_reward` (
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
+  `title_A` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `title_H` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `item` int(10) unsigned NOT NULL DEFAULT '0',
+  `sender` int(10) unsigned NOT NULL DEFAULT '0',
+  `subject` varchar(255) DEFAULT '',
+  `text` text,
+  `mailTemplate` smallint(5) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 UPDATE `world_db_version` SET `LastUpdate` = '2015-03-20_17_24_achievement_rewards' WHERE `LastUpdate` = '2015-03-06_05_11_achievement_rewards'; 

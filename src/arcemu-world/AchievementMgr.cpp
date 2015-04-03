@@ -218,9 +218,9 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
         ss.rdbuf()->str("");
 
         ss << "INSERT INTO character_achievement VALUES ";
-        bool first = true;
         for(CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         {
+            bool first = false;
             if(ss.str().length() >= 16000)
             {
                 // SQL query length is limited to 16384 characters

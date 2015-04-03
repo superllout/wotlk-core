@@ -542,23 +542,18 @@ void LogonServer::CheckForDeadSockets()
 {
     _authSocketLock.Acquire();
     time_t t = time(NULL);
-    time_t diff;
-    set<AuthSocket*>::iterator itr = _authSockets.begin();
-    set<AuthSocket*>::iterator it2;
-    AuthSocket* s;
 
-    for(itr = _authSockets.begin(); itr != _authSockets.end();)
+    for(set<AuthSocket*>::iterator itr = _authSockets.begin(); itr != _authSockets.end(); ++itr)
     {
-        it2 = itr;
-        s = (*it2);
-        ++itr;
+        set<AuthSocket*>::iterator it2 = itr;
+        AuthSocket* pSocket = (*it2);
 
-        diff = t - s->GetLastRecv();
+        time_t diff = t - pSocket->GetLastRecv();
         if(diff > 300)           // More than 5mins
         {
             _authSockets.erase(it2);
-            s->removedFromSet = true;
-            s->Disconnect();
+            pSocket->removedFromSet = true;
+            pSocket->Disconnect();
         }
     }
     _authSocketLock.Release();

@@ -1018,7 +1018,7 @@ class SERVER_DECL Unit : public Object
 
         /// State flags are server-only flags to help me know when to do stuff, like die, or attack
         void addStateFlag(uint32 f) { m_state |= f; };
-        bool hasStateFlag(uint32 f) { return (m_state & f ? true : false); }
+        bool hasStateFlag(uint32 f) { return ((m_state & f) ? true : false); }
         void clearStateFlag(uint32 f) { m_state &= ~f; };
 
         /// Stats

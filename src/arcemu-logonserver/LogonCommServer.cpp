@@ -320,9 +320,9 @@ void LogonCommServerSocket::HandleAuthChallenge(WorldPacket & recvData)
 
     std::stringstream sstext;
     sstext << "Key: ";
-    char buf[3];
     for(int i = 0; i < 20; ++i)
     {
+        char buf[3];
         snprintf(buf, 3, "%.2X", key[i]);
         sstext << buf;
     }
@@ -360,9 +360,6 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
         return;
     }
 
-    uint32 account_id;
-    uint8 number_of_characters;
-    uint32 count;
     uint32 realm_id;
     buf >> realm_id;
     Realm* realm = sInfoCore.GetRealm(realm_id);
@@ -371,14 +368,16 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 
     sInfoCore.getRealmLock().Acquire();
 
-    HM_NAMESPACE::hash_map<uint32, uint8>::iterator itr;
+    uint32 count;
     buf >> count;
     Log.Success("Realm","Got mapping packet for realm %u, total of %u entries.", (unsigned int)realm_id, (unsigned int)count);
 
     for(uint32 i = 0; i < count; ++i)
     {
+        uint32 account_id;
+        uint8 number_of_characters;
         buf >> account_id >> number_of_characters;
-        itr = realm->CharacterMap.find(account_id);
+        HM_NAMESPACE::hash_map<uint32, uint8>::iterator itr = realm->CharacterMap.find(account_id);
         if(itr != realm->CharacterMap.end())
             itr->second = number_of_characters;
         else

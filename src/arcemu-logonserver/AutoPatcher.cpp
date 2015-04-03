@@ -199,16 +199,15 @@ PatchMgr::~PatchMgr()
 Patch* PatchMgr::FindPatchForClient(uint32 Version, const char* Locality)
 {
     char tmplocality[5];
-    uint32 ulocality;
-    uint32 i;
-    vector<Patch*>::iterator itr;
     Patch* fallbackPatch = NULL;
-    for(i = 0; i < 4; ++i)
-        tmplocality[i] = static_cast<char>(tolower(Locality[i]));
-    tmplocality[4] = 0;
-    ulocality = *(uint32*)tmplocality;
 
-    for(itr = m_patches.begin(); itr != m_patches.end(); ++itr)
+    for(uint8 i = 0; i < 4; ++i)
+        tmplocality[i] = static_cast<char>(tolower(Locality[i]));
+
+    tmplocality[4] = 0;
+    uint32 ulocality = *(uint32*)tmplocality;
+
+    for(vector<Patch*>::iterator itr = m_patches.begin(); itr != m_patches.end(); ++itr)
     {
         // since localities are always 4 bytes we can do a simple int compare,
         // saving a string compare ;)
@@ -227,9 +226,7 @@ Patch* PatchMgr::FindPatchForClient(uint32 Version, const char* Locality)
 
 void PatchMgr::BeginPatchJob(Patch* pPatch, AuthSocket* pClient, uint32 Skip)
 {
-    PatchJob* pJob;
-
-    pJob = new PatchJob(pPatch, pClient, Skip);
+    PatchJob* pJob = new PatchJob(pPatch, pClient, Skip);
     pClient->m_patchJob = pJob;
     m_patchJobLock.Acquire();
     m_patchJobs.push_back(pJob);
@@ -238,12 +235,10 @@ void PatchMgr::BeginPatchJob(Patch* pPatch, AuthSocket* pClient, uint32 Skip)
 
 void PatchMgr::UpdateJobs()
 {
-    list<PatchJob*>::iterator itr, itr2;
     m_patchJobLock.Acquire();
-    for(itr = m_patchJobs.begin(); itr != m_patchJobs.end();)
+    for(list<PatchJob*>::iterator itr = m_patchJobs.begin(); itr != m_patchJobs.end(); ++itr)
     {
-        itr2 = itr;
-        ++itr;
+        list<PatchJob*>::iterator itr2 = itr;
 
         if(!(*itr2)->Update())
         {
@@ -257,9 +252,8 @@ void PatchMgr::UpdateJobs()
 
 void PatchMgr::AbortPatchJob(PatchJob* pJob)
 {
-    list<PatchJob*>::iterator itr;
     m_patchJobLock.Acquire();
-    for(itr = m_patchJobs.begin(); itr != m_patchJobs.end(); ++itr)
+    for(list<PatchJob*>::iterator itr = m_patchJobs.begin(); itr != m_patchJobs.end(); ++itr)
     {
         if((*itr) == pJob)
         {
@@ -309,12 +303,11 @@ bool PatchJob::Update()
 
     // send 1500 byte chunks
     TransferDataPacket header;
-    bool result;
     header.cmd = 0x31;
     header.chunk_size = static_cast<uint16>((m_bytesLeft > 1500) ? 1500 : m_bytesLeft);
     //Log.Debug("PatchJob", "Sending %u byte chunk", header.chunk_size);
 
-    result = m_client->BurstSend((const uint8*)&header, sizeof(TransferDataPacket));
+    bool result = m_client->BurstSend((const uint8*)&header, sizeof(TransferDataPacket));
     if(result)
     {
         result = m_client->BurstSend(m_dataPointer, header.chunk_size);
@@ -339,7 +332,6 @@ bool PatchMgr::InitiatePatch(Patch* pPatch, AuthSocket* pClient)
 {
     // send initiate packet
     TransferInitiatePacket init;
-    bool result;
 
     init.cmd = 0x30;
     init.strsize = 5;
@@ -354,7 +346,7 @@ bool PatchMgr::InitiatePatch(Patch* pPatch, AuthSocket* pClient)
 
     // send it to the client
     pClient->BurstBegin();
-    result = pClient->BurstSend((const uint8*)&init, sizeof(TransferInitiatePacket));
+    bool result = pClient->BurstSend((const uint8*)&init, sizeof(TransferInitiatePacket));
     if(result)
         pClient->BurstPush();
     pClient->BurstEnd();
