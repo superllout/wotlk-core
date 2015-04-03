@@ -37,7 +37,8 @@ Yes, It is because server core just manipulates and uses game content which was 
 
 ## Is having core sources and using compiled binaries for personal (not for public) breaks any rules?
 
-No, since Its open source and you use it only for personal.
+No, since Its open source and you use it only for personal. Personal means - you do not use server binaries for public connections (where possible players could connect to your server). 
+We do not support any public live servers.
 
 ## How to contribute
 
@@ -49,6 +50,8 @@ No, since Its open source and you use it only for personal.
 * Use English - we want hear you but we may won't understand your custom language.
 
 * We do not promise anything, when its done - its done.
+
+* Do not impale community with any products, advertisements, commercial activity or similar - do it personally, this community was not created for that purpose.
 
 
 ### For simple user:
