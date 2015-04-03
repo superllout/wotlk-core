@@ -16,6 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 
+language: cpp
 
 # reduce clone time by only getting the latest commit and not the whole history (default for travis is 100)
 
