@@ -239,7 +239,7 @@ void LogonConsole::CreateAccount(char* str)
     pass.append(password);
 
     std::stringstream query;
-    query << "INSERT INTO `account`( `user`,`password`,`sha_pass_hash`,`gm`,`banned`,`email`,`flags`,`banreason`) VALUES ( '";
+    query << "INSERT INTO `account`( `username`,`password`,`sha_pass_hash`,`gm`,`banned`,`email`,`flags`,`banreason`) VALUES ( '";
     query << name << "','',";
     query << "SHA( UPPER( '" << pass << "' ) ),'0','0','";
     query << email << "','";
