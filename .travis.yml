@@ -19,7 +19,7 @@
 language: cpp
 
 compiler:
- - gcc
+ - gcc-4.9
  
 # reduce clone time by only getting the latest commit and not the whole history (default for travis is 100)
 
@@ -34,11 +34,11 @@ branches:
 
 
 before_install:
- - echo "yes" | sudo add-apt-repository ppa:kalakris/cmake
+ - echo "yes" | sudo add-apt-repository ppa:smspillaz/cmake-2.8.12
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
  - sudo apt-get -qq update
- - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev 
-
+ - sudo apt-get -qq install build-essential libtool gcc-4.9 g++-4.9 make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev 
+ - export CXX="g++-4.9" CC="gcc-4.9"
 
 
 script:
