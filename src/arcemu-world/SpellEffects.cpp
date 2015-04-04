@@ -746,6 +746,12 @@ void Spell::SpellEffectTeleportUnits(uint32 i)    // Teleport Units
     if(unitTarget == NULL || m_caster == NULL)
         return;
 
+    if (unitTarget->GetAIInterface()->IsFlying())
+        return;
+
+    if (!m_targets.HasDst())
+        return;
+
     uint32 spellId = GetProto()->Id;
 
     // [2010-11-7 18:30] <@dfighter> a.) teleport to bindpoint
@@ -762,15 +768,15 @@ void Spell::SpellEffectTeleportUnits(uint32 i)    // Teleport Units
     // Portals
     if(m_spellInfo->HasCustomFlagForEffect(i, TELEPORT_TO_COORDINATES))
     {
-        TeleportCoords* TC = ::TeleportCoordStorage.LookupEntry(spellId);
+        TeleportCoords* mTeleportCords = ::TeleportCoordStorage.LookupEntry(spellId);
 
-        if(TC == NULL)
+        if (!mTeleportCords)
         {
             LOG_ERROR("Spell %u ( %s ) has a TELEPORT TO COORDINATES effect, but has no coordinates to teleport to. ", spellId, m_spellInfo->Name);
             return;
         }
 
-        HandleTeleport(TC->x, TC->y, TC->z, TC->mapId, unitTarget);
+        HandleTeleport(mTeleportCords->x, mTeleportCords->y, mTeleportCords->z, mTeleportCords->mapId, unitTarget);
         return;
     }
 
@@ -779,9 +785,8 @@ void Spell::SpellEffectTeleportUnits(uint32 i)    // Teleport Units
     {
         if(unitTarget->IsPlayer())
         {
-            Player* p = TO_PLAYER(unitTarget);
-
-            HandleTeleport(p->GetBindPositionX(), p->GetBindPositionY(), p->GetBindPositionZ(), p->GetBindMapId(), p);
+            Player* pPlayer = TO_PLAYER(unitTarget);
+            HandleTeleport(pPlayer->GetBindPositionX(), pPlayer->GetBindPositionY(), pPlayer->GetBindPositionZ(), pPlayer->GetBindMapId(), pPlayer);
         }
         return;
     }

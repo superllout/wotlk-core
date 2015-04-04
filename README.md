@@ -1,6 +1,6 @@
 # EasyWoW/wotlk-core 
 
-[![Build Status](https://travis-ci.org/easywow/wotlk-core.svg?branch=master)](https://travis-ci.org/easywow/wotlk-core)
+[![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/easywow/wotlk-core)
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
 
@@ -9,7 +9,7 @@ Core wiki: https://github.com/EasyWoW/wiki/wiki
 EasyWoW is World of Warcraft server engine based on arcemu (http://github.com/arcemu/arcemu, http://www.arcemu.org). This fork was made due original development has been ceased (they call it hibernation) and by wiling to 
 add new features. 
 This framework is ready to use under all currently popular operation systems - UNIX, OS X, Linux, Windows.
-Its free to use, fork or use core commits (with authority information) and do any other things which do not breaks GNU GPL v3 license.
+Its free to use, fork or use core commits (with authority information) and do any other things which do not breaks GNU AFFERO GENERAL PUBLIC LICENSE Version 3 license.
 
 Main goals for this core is simplicity, performance and functionality - we and our contributors work very hard to combine all of them into modern code. We, EasyWoW aim as friendly community, so feel free to give 
 questions or documentation requests (NOTE: do not forget to add correct label - "Question" or "Suggestion for wiki" ).
