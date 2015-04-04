@@ -18,6 +18,9 @@
 
 language: cpp
 
+compiler:
+ - gcc
+ 
 # reduce clone time by only getting the latest commit and not the whole history (default for travis is 100)
 
 git:
@@ -28,8 +31,7 @@ branches:
  only:
  - master
 
-compiler:
- - gcc
+
 
 before_install:
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
