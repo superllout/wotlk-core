@@ -1,4 +1,4 @@
-project(Arcemu)
+project(EasyWoW)
 
 cmake_minimum_required(VERSION 2.8)
 #Do system checking.
