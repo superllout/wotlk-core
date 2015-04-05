@@ -75,17 +75,16 @@ class ThreadController
         int thread_id;
     public:
         ThreadController() {}
-        ~ThreadController() {}
+        ~ThreadController()
+        {
+            sem_destroy(&sem);
+        }
 
         void Setup(pthread_t h)
         {
             handle = h;
             sem_init(&sem, PTHREAD_PROCESS_PRIVATE, 0);
             thread_id = GenerateThreadId();
-        }
-        ~ThreadController()
-        {
-            sem_destroy(&sem);
         }
 
         void Suspend()
