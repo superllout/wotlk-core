@@ -37,6 +37,7 @@ before_install:
  - echo "yes" | sudo add-apt-repository ppa:smspillaz/cmake-2.8.12
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
  - sudo apt-get -qq update
+ - sudo apt-get -qq upgrade
  - sudo apt-get -qq install build-essential libtool gcc g++ make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev
 
 
