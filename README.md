@@ -1,6 +1,6 @@
 # EasyWoW/wotlk-core 
 
-[![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/easywow/wotlk-core)
+[![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core)
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
 
