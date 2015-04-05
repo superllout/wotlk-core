@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    File* f = fopen("arcemu.uptime", "r");
+    FILE* f = fopen("arcemu.uptime", "r");
     if (f == NULL)
         return 1;
 
