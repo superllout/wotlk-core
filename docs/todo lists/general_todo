@@ -25,7 +25,7 @@
 
 * Game event system - event spawn data should be exluded from original spawns)
 
-* Creature difficulty stats
+* Creature difficulty stats - done
 
 * Weekly quests
 
@@ -55,7 +55,9 @@
 
 * Implement achievement_reward_mail table which will hold letters data with additional locales cells. - 100%.
 
-* Implement creature_script_texts (data load is implemented), gossip_options_texts data usage.
+* Implement creature_script_texts - done
+
+* Implement gossip_options_texts.
 
 * Implement spell_linked_spell table - will used for simple spells (port of trinitycore based implementation.
 

@@ -4,7 +4,14 @@ This changelog keeps information about most major changes in core, scripts and i
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.
 * Added Dalaran underbelly guards gossip
 * Implemented creature_script_texts data load
-
+* Implemented creature_difficulty_stats
+* Implemented SpellEffectJumpTarget (41) (by @DankoDJ)
+* Fix "Unknown player" bug
+* Fixed: Death knight's Death Gate and the portals (code based on @DarkAngel39)
+* Silenced many old warnings
+* Added proper readme and license
+* Updated SMSG_QUESTGIVER_QUEST_LIST packet 
+* Big code cleanup, increased logon and worldserver performance but RAM usage still is hight
 
 4.0.1 changes:
 * Implemented achievement_rewards
