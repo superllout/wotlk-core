@@ -1,7 +1,7 @@
 # EasyWoW/wotlk-core 
 
 [![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core)
-[(https://www.gnu.org/licenses/agpl-3.0.html)(https://www.gnu.org/graphics/agplv3-155x51.png "project is licensed under AGPL")
+[![License](https://www.gnu.org/graphics/agplv3-155x51.png "project is licensed under AGPL")](https://www.gnu.org/licenses/agpl-3.0.html)
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
 
