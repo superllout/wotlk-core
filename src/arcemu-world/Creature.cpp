@@ -2413,5 +2413,8 @@ uint32 Creature::GenerateDisplayId(CreatureInfo* info)
     if (displayList.empty())
         return 0;
 
+    if (displayList.size() == 1)    // We got only 1 display id
+        return displayList[0];
+
     return displayList[rand() % (displayList.size() + 1)];
 }
