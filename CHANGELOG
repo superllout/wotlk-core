@@ -9,9 +9,9 @@ This changelog keeps information about most major changes in core, scripts and i
 * Fix "Unknown player" bug
 * Fixed: Death knight's Death Gate and the portals (code based on @DarkAngel39)
 * Silenced many old warnings
-* Added proper readme and license
+* Added proper readme and license files.
 * Updated SMSG_QUESTGIVER_QUEST_LIST packet 
-* Big code cleanup, increased logon and worldserver performance but RAM usage still is hight
+* Big code clean up, increased login and world server performance but RAM usage still is hight
 
 4.0.1 changes:
 * Implemented achievement_rewards
