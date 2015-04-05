@@ -21,7 +21,7 @@
 #include "StdAfx.h"
 
 static const char *REQUIRED_CHAR_DB_VERSION  = "2011-11-16_22-00_saved_mail";
-static const char *REQUIRED_WORLD_DB_VERSION = "2015-03-30_01_creature_script_texts";
+static const char *REQUIRED_WORLD_DB_VERSION = "2015-04-05_01_creature_difficulty_stats";
 
 #define BANNER "<< ArcEmu %s %s/%s-%s-%s :: World Server >>"
 

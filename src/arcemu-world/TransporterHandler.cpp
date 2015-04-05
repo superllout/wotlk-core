@@ -521,7 +521,7 @@ void Transporter::AddNPC(uint32 Entry, float offsetX, float offsetY, float offse
         return;
 
     Creature* pCreature = new Creature((uint64)HIGHGUID_TYPE_TRANSPORTER << 32 | guid);
-    pCreature->Load(proto, m_position.x, m_position.y, m_position.z);
+    pCreature->Load(proto, GetMapMgr()->iInstanceMode, m_position.x, m_position.y, m_position.z);
     pCreature->transporter_info.x = offsetX;
     pCreature->transporter_info.y = offsetY;
     pCreature->transporter_info.z = offsetZ;

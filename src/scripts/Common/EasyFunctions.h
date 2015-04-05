@@ -124,7 +124,7 @@ class SCRIPT_DECL EasyFunctions
 
             Creature* pCreature = pThis->GetMapMgr()->CreateCreature(entry);
             pCreature->m_spawn = 0;
-            pCreature->Load(p, posX, posY, posZ);
+            pCreature->Load(p, pThis->GetMapMgr()->iInstanceMode, posX, posY, posZ);
             pCreature->SetOrientation(posO);
             pCreature->Despawn(duration, 0);
             pCreature->PushToWorld(pThis->GetMapMgr());
@@ -158,7 +158,7 @@ class SCRIPT_DECL EasyFunctions
 
             Creature* pCreature  = pThis->GetMapMgr()->CreateCreature(entry);
             pCreature->m_spawn = 0;
-            pCreature->Load(p, posX, posY, posZ);
+            pCreature->Load(p, pThis->GetMapMgr()->iInstanceMode, posX, posY, posZ);
             pCreature->SetOrientation(posO);
             pCreature->GetAIInterface()->disable_combat = dis_comb;
             pCreature->GetAIInterface()->disable_melee = dis_mel;

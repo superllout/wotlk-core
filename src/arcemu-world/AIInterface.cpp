@@ -1508,7 +1508,7 @@ bool AIInterface::FindFriends(float dist)
             }
 
             Creature* guard = m_Unit->GetMapMgr()->CreateCreature(guardid);
-            guard->Load(cp, x, y, z);
+            guard->Load(cp, m_Unit->GetMapMgr()->iInstanceMode, x, y, z);
             guard->SetZoneId(m_Unit->GetZoneId());
             guard->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PVP); /* shitty DBs */
             guard->m_noRespawn = true;

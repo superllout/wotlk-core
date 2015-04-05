@@ -256,6 +256,10 @@ ObjectMgr::~ObjectMgr()
     worldstate_templates.clear();
 
     mAchievementRewards.clear();
+
+    mCreatureScriptTexts.clear();
+
+    mCreatureDifficulty.clear();
 }
 
 //
@@ -577,7 +581,7 @@ void ObjectMgr::LoadPlayerCreateInfo()
         for(iter = tokens.begin(), index = 0; (index < 12) && (iter != tokens.end()); ++iter, ++index)
             pPlayerCreateInfo->taximask[index] = atol((*iter).c_str());
 
-        if(QueryResult* skillsData = WorldDatabase.Query("SELECT `skillid`,`level` FROM `playercreateinfo_skills` WHERE `indexid` = %u", pPlayerCreateInfo->index))
+        if(QueryResult* skillsData = WorldDatabase.Query("SELECT `skillid`,`level`,`maxlevel` FROM `playercreateinfo_skills` WHERE `indexid` = %u", pPlayerCreateInfo->index))
         {
             do
             {
@@ -3645,7 +3649,7 @@ void ObjectMgr::LoadCreatureScriptTexts()
             textData.emoteId = fields[5].GetUInt32();
             textData.emoteDelay = fields[6].GetUInt32();
             textData.soundId = fields[7].GetUInt32();
-            std::multimap<uint32, CreatureScriptTextStruct>* text = {};
+            std::map<uint32, CreatureScriptTextStruct>* text = {};
             text->insert(std::make_pair(indexId, textData));
 
             mCreatureScriptTexts.insert(CreatureScriptTextMap::value_type(entry, text));
@@ -3665,11 +3669,150 @@ CreatureScriptTextStruct ObjectMgr::GetCreatureScriptText(uint32 entry, uint32 i
         return text;
 
     // getting text by id
-    for (std::multimap<uint32, CreatureScriptTextStruct>::iterator itr2 = itr1->second->begin(); itr2 != itr1->second->end(); ++itr2)
+    for (std::map<uint32, CreatureScriptTextStruct>::iterator itr2 = itr1->second->begin(); itr2 != itr1->second->end(); ++itr2)
     {
         if (itr2->first == id)
             return itr2->second;
     }
 
     return text;
+}
+
+void ObjectMgr::LoadCreatureDifficultyStats()
+{
+    Log.Debug("ObjectMgr", "Loading creature difficulty stats");
+    uint32 count = 0;
+    std::list<uint32> entryList;
+    if (QueryResult *result = WorldDatabase.Query("SELECT `entry`,`difficulty`,`minLevel`,`maxLevel`,`minHealth`,`maxHealth`,`mana`,`minDamage`,`maxDamage`,`minRangedDamage`,`maxRangedDamage`, \
+        `armor`,`holy_resistance`,`fire_resistance`,`nature_resistance`,`frost_resistance`,`shadow_resistance`,`arcane_resistance`,`immuneMask` FROM `creature_difficulty_stats`"))
+    {
+        do{
+            Field* pFields = result->Fetch();
+            uint32 entry = pFields[0].GetUInt32();
+            if (!CreatureNameStorage.LookupEntry(entry))
+            {
+                Log.Error("LoadCreatureScriptTexts", "Tried to load data for non existing creature entry %u", entry);
+                continue;
+            }
+            uint8 difficulty = pFields[1].GetUInt8();
+            if (difficulty == MODE_NORMAL)
+            {
+                Log.Error("LoadCreatureScriptTexts", "Tried to load data for creature %u with \"NORMAL MODE\"", entry);
+                continue;
+            }
+            if (difficulty >= TOTAL_RAID_MODES)
+            {
+                Log.Error("LoadCreatureScriptTexts", "Tried to load data for creature %u for invalid dungeon difficulty %u", entry, difficulty);
+                continue;
+            }
+
+            // Basically table primary keys should not allow dublicates but still checking for it to avoid possible crashes
+            if (GetCreatureDifficultyStats(entry, difficulty).minHealth > 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "Dublicate entry for creature %u and difficulty %u. Using first gathered data entry", entry, difficulty);
+                continue;
+            }
+
+            CreatureDiffStatsStruct mCreatureStats;
+            mCreatureStats.minLevel = pFields[2].GetUInt8();
+            mCreatureStats.maxLevel = pFields[3].GetUInt8();
+
+            if (mCreatureStats.minLevel > mCreatureStats.maxLevel)
+            {
+                Log.Error("LoadCreatureScriptTexts", "min level is higher than max level for creature %u and difficulty %u. Min level will setted to equal to max level", entry, difficulty);
+                mCreatureStats.minLevel = mCreatureStats.maxLevel;
+            }
+            mCreatureStats.minHealth = pFields[4].GetUInt8();
+            if (mCreatureStats.minHealth == 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid min health info", entry, difficulty);
+                continue;
+            }
+            
+            mCreatureStats.maxHealth = pFields[5].GetUInt8();
+            if (mCreatureStats.maxHealth == 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid min health info", entry, difficulty);
+                continue;
+            }
+
+            if (mCreatureStats.minHealth > mCreatureStats.maxHealth)
+            {
+                Log.Error("LoadCreatureScriptTexts", "min health is higher than max health for creature %u and difficulty %u", entry, difficulty);
+                mCreatureStats.minHealth = mCreatureStats.maxHealth;
+            }
+
+            mCreatureStats.mana = pFields[6].GetUInt32();
+
+            mCreatureStats.minDamage = pFields[7].GetUInt32();
+            if (mCreatureStats.minDamage == 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid min damage info", entry, difficulty);
+                continue;
+            }
+
+            mCreatureStats.maxDamage = pFields[8].GetUInt32();
+            if (mCreatureStats.maxDamage == 0)
+            {
+                Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid max damage info", entry, difficulty);
+                continue;
+            }
+
+            mCreatureStats.minRangedDamage = pFields[9].GetUInt32();
+            mCreatureStats.maxRangedDamage = pFields[10].GetUInt32();
+
+            for (uint8 i = 0; i < SCHOOL_COUNT; i++)
+            {
+                if (i == 0 && pFields[11 + i].GetUInt32() == 0)
+                {
+                    Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid armor info");
+                    continue;
+                }
+                mCreatureStats.resistence[i] = pFields[11 + i].GetUInt32();
+            }
+            mCreatureStats.immuneMask = pFields[18].GetUInt32();
+            // mCreatureStats.unitFlags = pFields[16].GetUInt16();
+
+            std::map<uint8, CreatureDiffStatsStruct>* mDifficulty = {};
+            mDifficulty->insert(std::make_pair(difficulty, mCreatureStats));
+
+            mCreatureDifficulty.insert(CreatureDifficultyMap::value_type(entry, mDifficulty));
+            // Check do we have existing entry, if not then insert
+            bool found = false;
+            for (std::list<uint32>::iterator itr = entryList.begin(); itr != entryList.end(); ++itr)
+            {
+                if ((*itr) == entry)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+                entryList.push_back(entry);
+
+        } while (result->NextRow());
+        delete result;
+    }
+    Log.Success("ObjectMgr", "Loaded creature difficulty stats for %u creatures", entryList.size());
+
+    if (!entryList.empty())
+        entryList.clear();
+}
+
+CreatureDiffStatsStruct ObjectMgr::GetCreatureDifficultyStats(uint32 entry, uint8 difficulty) const
+{
+    CreatureDiffStatsStruct stats;
+    CreatureDifficultyMap::const_iterator itr1 = mCreatureDifficulty.find(entry);
+    if (itr1 == mCreatureDifficulty.end())
+        return stats;
+
+    // getting text by id
+    for (std::map<uint8, CreatureDiffStatsStruct>::iterator itr2 = itr1->second->begin(); itr2 != itr1->second->end(); ++itr2)
+    {
+        if (itr2->first == difficulty)
+            return itr2->second;
+    }
+
+    return stats;
 }

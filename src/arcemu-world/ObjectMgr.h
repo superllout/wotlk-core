@@ -41,7 +41,8 @@ struct WorldState
     uint32 field;
     uint32 value;
 
-    WorldState(){
+    WorldState()
+    {
         field = 0;
         value = 0;
     }
@@ -439,8 +440,40 @@ struct CreatureScriptTextStruct
     }
 };
 
-typedef std::map<uint32 /*entry*/, std::multimap<uint32 /*text_index*/, CreatureScriptTextStruct>* > CreatureScriptTextMap;
+typedef std::map<uint32 /*entry*/, std::map<uint32 /*text_index*/, CreatureScriptTextStruct>* > CreatureScriptTextMap;
 
+struct CreatureDiffStatsStruct
+{
+    uint8 minLevel;
+    uint8 maxLevel;
+    uint32 minHealth;
+    uint32 maxHealth;
+    uint32 mana;
+    uint32 minDamage;
+    uint32 maxDamage;
+    uint32 minRangedDamage;
+    uint32 maxRangedDamage;
+    uint32 resistence[SCHOOL_COUNT];
+    uint32 immuneMask;
+    //uint32 unitFlags;
+    CreatureDiffStatsStruct()
+    {
+        minLevel = 0;
+        maxLevel = 0;
+        minHealth = 0;
+        maxHealth = 0;
+        mana = 0;
+        minDamage = 0;
+        maxDamage = 0;
+        minRangedDamage = 0;
+        maxRangedDamage = 0;
+        for (uint8 i = 0; i < SCHOOL_COUNT; i++)
+            resistence[i] = 0;
+        immuneMask = 0;
+    }
+};
+
+typedef std::map<uint32 /*entry*/, std::map<uint8 /*difficulty_id*/, CreatureDiffStatsStruct>* > CreatureDifficultyMap;
 
 class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableObject
 {
@@ -708,6 +741,9 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         void LoadCreatureScriptTexts();
         CreatureScriptTextStruct GetCreatureScriptText(uint32 entry, uint32 id) const;
 
+        void LoadCreatureDifficultyStats();
+        CreatureDiffStatsStruct GetCreatureDifficultyStats(uint32 entry, uint8 difficulty) const;
+
     protected:
         BCEntryStorage m_BCEntryStorage; // broadcast system.
         RWLock playernamelock;
@@ -785,6 +821,7 @@ class SERVER_DECL ObjectMgr : public Singleton < ObjectMgr >, public EventableOb
         std::map< uint32, std::multimap< uint32, WorldState >* > worldstate_templates;
         AchievementRewardsMap mAchievementRewards;
         CreatureScriptTextMap mCreatureScriptTexts;
+        CreatureDifficultyMap mCreatureDifficulty;
 };
 
 

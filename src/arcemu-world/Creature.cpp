@@ -20,103 +20,6 @@
 
 #include "StdAfx.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// float CalcHPCoefficient( MapInfo *mi, uint32 mode, bool boss )
-//  Returns the HP coefficient that is suited for the map, mode, and creature
-//
-// Parameters:
-//  MapInfo *mi        -        pointer to the mapinfo structure
-//    uint32  mode    -        numeric representation of the version of the map (normal, heroic, 10-25 men, etc )
-//    bool    boss    -        true if the creature is a boss, false if not
-//
-// Return Values:
-//    Returns the hp coefficient in a float
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-float CalcHPCoefficient(MapInfo* mi, uint32 mode, bool boss)
-{
-    float coeff = 1.0f;
-
-    if(mi == NULL)
-        return 1.0f;
-
-    // This calculation is purely speculation as we have no way of finding out how Blizzard generates these values
-    // These cases are based on simple observation of trash/boss hp values for different modes
-    // If you know they are wrong AND you know a better calculation formula then DO change it.
-
-    // raid
-    if(mi->type == INSTANCE_RAID)
-    {
-        bool hasheroic = false;
-
-        // check if we have heroic mode avaiable
-        if(mi->HasFlag(WMI_INSTANCE_HAS_HEROIC_10MEN) && mi->HasFlag(WMI_INSTANCE_HAS_HEROIC_25MEN))
-            hasheroic = true;
-
-        // boss hp coeff calculations
-        if(boss == true)
-        {
-
-            switch(mode)
-            {
-                case MODE_NORMAL_10MEN:
-                    coeff = 1.0f;
-                    break;
-
-                case MODE_HEROIC_10MEN:
-                    coeff = 1.25f;
-                    break;
-
-                case MODE_NORMAL_25MEN:
-                    if(hasheroic)
-                        coeff = 5.0f;
-                    else
-                        coeff = 3.0f;
-                    break;
-
-                case MODE_HEROIC_25MEN:
-                    coeff = 5.0f * 1.25f;
-            }
-
-            // trash hp coeff calculation
-        }
-        else
-        {
-            switch(mode)
-            {
-                case MODE_NORMAL_10MEN:
-                    coeff = 1.0f;
-                    break;
-
-                case MODE_HEROIC_10MEN:
-                    coeff = 1.5f;
-                    break;
-
-                case MODE_NORMAL_25MEN:
-                    coeff = 2.0f;
-                    break;
-
-                case MODE_HEROIC_25MEN:
-                    coeff = 2.5f;
-                    break;
-            }
-        }
-    }
-
-    // heroic dungeon
-    if(mi->type == INSTANCE_MULTIMODE)
-    {
-
-        if(mode > 0)
-            coeff = 1.5f;
-        else
-            coeff = 1.0f;
-    }
-
-    return coeff;
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // float CalcDMGCoefficient( MapInfo *mi, uint32 mode )
 //  Calculates the creature damage coefficient that is suitable for the map type and difficulty
@@ -1171,7 +1074,7 @@ uint8 get_byte(uint32 buffer, uint32 index)
     return (uint8)buffer;
 }
 
-bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
+bool Creature::Load(CreatureSpawn* spawn, uint8 mode, MapInfo* info)
 {
     m_spawn = spawn;
     proto = CreatureProtoStorage.LookupEntry(spawn->entry);
@@ -1192,34 +1095,36 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
     SetEntry(proto->Id);
     SetScale(proto->Scale);
 
-    //SetHealth( (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
-    //SetBaseHealth((mode ? long2int32(proto->Health * 1.5)  : proto->Health));
-    //SetMaxHealth( (mode ? long2int32(proto->Health * 1.5)  : proto->Health));
     if(proto->MinHealth > proto->MaxHealth)
     {
         proto->MaxHealth = proto->MinHealth + 1;
         SaveToDB();
     }
 
-    uint32 health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
+    uint8 mLevelDiff = proto->MaxLevel - proto->MinLevel;
+    uint8 SelectedLevel = proto->MinLevel + (mLevelDiff != 0 ? (rand() % (mLevelDiff + 1)) : 0);
+    uint32 health = GenerateDiffHealthRate(proto->MinLevel, proto->MaxLevel, SelectedLevel, proto->MinHealth, proto->MaxHealth);
 
-    // difficutly coefficient
-    float diff_coeff = 1.0f;
-
-    if(creature_info->Rank == ELITE_WORLDBOSS)
-        diff_coeff = CalcHPCoefficient(info, mode, true);
-    else if(creature_info->Type != UNIT_TYPE_CRITTER)
-        diff_coeff = CalcHPCoefficient(info, mode, false);
-
-    health = static_cast< uint32 >(health * diff_coeff);
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).minLevel > 0)
+    {
+        CreatureDiffStatsStruct data = objmgr.GetCreatureDifficultyStats(spawn->entry, mode);
+        mLevelDiff = data.maxLevel - data.minLevel;
+        SelectedLevel = data.minLevel + (mLevelDiff != 0 ? (rand() % (mLevelDiff + 1)) : 0);
+        health = GenerateDiffHealthRate(data.minLevel, data.maxLevel, SelectedLevel, data.minHealth, data.maxHealth);
+    }
 
     SetHealth(health);
     SetMaxHealth(health);
     SetBaseHealth(health);
 
-    SetMaxPower(POWER_TYPE_MANA, proto->Mana);
-    SetBaseMana(proto->Mana);
-    SetPower(POWER_TYPE_MANA, proto->Mana);
+    uint32 mana = proto->Mana;
+
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).mana > 0)
+        mana = objmgr.GetCreatureDifficultyStats(spawn->entry, mode).mana;
+
+    SetMaxPower(POWER_TYPE_MANA, mana);
+    SetBaseMana(mana);
+    SetPower(POWER_TYPE_MANA, mana);
 
     // Whee, thank you blizz, I love patch 2.2! Later on, we can randomize male/female mobs! xD
     // Determine gender (for voices)
@@ -1230,36 +1135,64 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
     // uint32 gender = creature_info->GenerateModelId(&model);
     // setGender(gender);
 
-    SetDisplayId(spawn->displayid);
-    SetNativeDisplayId(spawn->displayid);
-    SetMount(spawn->MountedDisplayID);
+    {
+        uint32 displayId = spawn->displayid != 0 ? spawn->displayid : GenerateDisplayId(CreatureNameStorage.LookupEntry(spawn->entry));
+        SetDisplayId(displayId);
+        SetNativeDisplayId(displayId);
+        SetMount(spawn->MountedDisplayID);
+    }
 
     EventModelChange();
 
-    setLevel(proto->MinLevel + (RandomUInt(proto->MaxLevel - proto->MinLevel)));
+    setLevel(SelectedLevel);
 
-    if(mode && info)
+/*    if(mode && info)
         modLevel(min(73 - getLevel(), info->lvl_mod_a));
-
-    for(uint32 i = 0; i < 7; ++i)
-        SetResistance(i, proto->Resistances[i]);
+*/
+    for (uint8 i = 0; i < SCHOOL_COUNT; ++i)
+    {
+        if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).resistence[i] > 0)
+            SetResistance(i, objmgr.GetCreatureDifficultyStats(spawn->entry, mode).resistence[i]);
+        else
+            SetResistance(i, proto->Resistances[i]);
+    }
 
     SetBaseAttackTime(MELEE, proto->AttackTime);
+    uint32 minDamage = proto->MinDamage;
+    uint32 maxDamage = proto->MaxDamage;
 
-    float dmg_coeff = CalcDMGCoefficient(info, mode);
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).minDamage > 0)
+        minDamage = objmgr.GetCreatureDifficultyStats(spawn->entry, mode).minDamage;
 
-    SetMinDamage((mode ? proto->MinDamage * dmg_coeff  : proto->MinDamage));
-    SetMaxDamage((mode ? proto->MaxDamage * dmg_coeff  : proto->MaxDamage));
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).maxDamage > 0)
+        maxDamage = objmgr.GetCreatureDifficultyStats(spawn->entry, mode).maxDamage;
+
+    SetMinDamage(minDamage);
+    SetMaxDamage(maxDamage);
 
     SetBaseAttackTime(RANGED, proto->RangedAttackTime);
-    SetMinRangedDamage(proto->RangedMinDamage);
-    SetMaxRangedDamage(proto->RangedMaxDamage);
+
+    uint32 rangedMinDamage = proto->RangedMinDamage;
+    uint32 rangedMaxDamage = proto->RangedMaxDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).minRangedDamage > 0)
+        rangedMinDamage = objmgr.GetCreatureDifficultyStats(spawn->entry, mode).minRangedDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).maxRangedDamage > 0)
+        rangedMaxDamage = objmgr.GetCreatureDifficultyStats(spawn->entry, mode).maxRangedDamage;
+
+    SetMinRangedDamage(rangedMinDamage);
+    SetMaxRangedDamage(rangedMaxDamage);
 
     SetEquippedItem(MELEE, spawn->Item1SlotDisplay);
     SetEquippedItem(OFFHAND, spawn->Item2SlotDisplay);
     SetEquippedItem(RANGED, spawn->Item3SlotDisplay);
 
     SetFaction(spawn->factionid);
+    /*
+    if (objmgr.GetCreatureDifficultyStats(spawn->entry, mode).unitFlags > 0)
+        SetUInt32Value(UNIT_FIELD_FLAGS, objmgr.GetCreatureDifficultyStats(spawn->entry, mode).unitFlags);
+    else */
     SetUInt32Value(UNIT_FIELD_FLAGS, spawn->flags);
     SetEmoteState(spawn->emote_state);
     SetBoundingRadius(proto->BoundingRadius);
@@ -1301,17 +1234,19 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
         auctionHouse = sAuctionMgr.GetAuctionHouse(GetEntry());
 
     //load resistances
-    for(uint8 x = 0; x < 7; x++)
+    for (uint8 x = 0; x < SCHOOL_COUNT; x++)
         BaseResistance[x] = GetResistance(x);
+
     for(uint8 x = 0; x < 5; x++)
         BaseStats[x] = GetStat(x);
 
-    BaseDamage[0] = GetMinDamage();
-    BaseDamage[1] = GetMaxDamage();
-    BaseOffhandDamage[0] = GetMinOffhandDamage();
-    BaseOffhandDamage[1] = GetMaxOffhandDamage();
-    BaseRangedDamage[0] = GetMinRangedDamage();
-    BaseRangedDamage[1] = GetMaxRangedDamage();
+    for (uint8 x = 0; x < 2; x++)
+    {
+        BaseDamage[x] = (x == 0) ? GetMinDamage() : GetMaxDamage();
+        BaseOffhandDamage[x] = (x == 0) ? GetMinOffhandDamage() : GetMaxOffhandDamage();
+        BaseRangedDamage[x] = (x == 0) ? GetMinRangedDamage() : GetMaxRangedDamage();
+    }
+
     BaseAttackType = proto->AttackType;
 
     SetCastSpeedMod(1.0f);   // better set this one
@@ -1321,7 +1256,6 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
 
 ////////////AI
 
-    // kek
     for(list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
     {
         // Load all spells that are not bound to a specific difficulty, OR mathces this maps' difficulty
@@ -1367,13 +1301,8 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
 
 
 //HACK!
-    if(m_uint32Values[UNIT_FIELD_DISPLAYID] == 17743 ||
-            m_uint32Values[UNIT_FIELD_DISPLAYID] == 20242 ||
-            m_uint32Values[UNIT_FIELD_DISPLAYID] == 15435 ||
-            (creature_info->Family == UNIT_TYPE_MISC))
-    {
+    if(m_uint32Values[UNIT_FIELD_DISPLAYID] == 17743 || m_uint32Values[UNIT_FIELD_DISPLAYID] == 20242 || m_uint32Values[UNIT_FIELD_DISPLAYID] == 15435 || (creature_info->Family == UNIT_TYPE_MISC))
         m_useAI = false;
-    }
 
     if(spawn->CanFly == 1)
         GetAIInterface()->SetFly();
@@ -1430,11 +1359,14 @@ bool Creature::Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info)
     if( proto->rooted != 0 )
         Root();
 
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).immuneMask > 0)
+        proto->modImmunities = objmgr.GetCreatureDifficultyStats(proto->Id, mode).immuneMask;
+
     return true;
 }
 
 
-void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
+void Creature::Load(CreatureProto* proto_, uint8 mode, float x, float y, float z, float o)
 {
     proto = proto_;
 
@@ -1442,11 +1374,7 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
     if(!creature_info)
         return;
 
-    if(proto_->isTrainingDummy == 0 && !IsVehicle() )
-    {
-        GetAIInterface()->SetAllowedToEnterCombat(true);
-    }
-    else
+    if(proto->isTrainingDummy == 1)
     {
         GetAIInterface()->SetAllowedToEnterCombat(false);
         GetAIInterface()->SetAIType(AITYPE_PASSIVE);
@@ -1459,15 +1387,30 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
     SetEntry(proto->Id);
     SetScale(proto->Scale);
 
-    uint32 health = proto->MinHealth + RandomUInt(proto->MaxHealth - proto->MinHealth);
+    uint8 mLevelDiff = proto->MaxLevel - proto->MinLevel;
+    uint8 SelectedLevel = proto->MinLevel + (mLevelDiff != 0 ? (rand() % (mLevelDiff + 1)) : 0);
+    uint32 health = GenerateDiffHealthRate(proto->MinLevel, proto->MaxLevel, SelectedLevel, proto->MinHealth, proto->MaxHealth);
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).minLevel > 0)
+    {
+        CreatureDiffStatsStruct data = objmgr.GetCreatureDifficultyStats(proto->Id, mode);
+        mLevelDiff = data.maxLevel - data.minLevel;
+        SelectedLevel = data.minLevel + (mLevelDiff != 0 ? (rand() % (mLevelDiff + 1)) : 0);
+        health = GenerateDiffHealthRate(data.minLevel, data.maxLevel, SelectedLevel, data.minHealth, data.maxHealth);
+    }
 
     SetHealth(health);
     SetMaxHealth(health);
     SetBaseHealth(health);
 
-    SetMaxPower(POWER_TYPE_MANA, proto->Mana);
-    SetBaseMana(proto->Mana);
-    SetPower(POWER_TYPE_MANA, proto->Mana);
+    uint32 mana = proto->Mana;
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).mana > 0)
+        mana = objmgr.GetCreatureDifficultyStats(proto->Id, mode).mana;
+
+    SetMaxPower(POWER_TYPE_MANA, mana);
+    SetBaseMana(mana);
+    SetPower(POWER_TYPE_MANA, mana);
 
     uint32 model = 0;
     uint8 gender = creature_info->GenerateModelId(&model);
@@ -1479,21 +1422,47 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
 
     EventModelChange();
 
-    //setLevel((mode ? proto->Level + (info ? info->lvl_mod_a : 0) : proto->Level));
-    setLevel(proto->MinLevel + (RandomUInt(proto->MaxLevel - proto->MinLevel)));
+    setLevel(SelectedLevel);
 
-    for(uint32 i = 0; i < 7; ++i)
-        SetResistance(i, proto->Resistances[i]);
+    for (uint8 i = 0; i < SCHOOL_COUNT; ++i)
+    {
+        if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).resistence[i] > 0)
+            SetResistance(i, objmgr.GetCreatureDifficultyStats(proto->Id, mode).resistence[i]);
+        else
+            SetResistance(i, proto->Resistances[i]);
+    }
 
     SetBaseAttackTime(MELEE, proto->AttackTime);
-    SetMinDamage(proto->MinDamage);
-    SetMaxDamage(proto->MaxDamage);
+    uint32 minDamage = proto->MinDamage;
+    uint32 maxDamage = proto->MaxDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).minDamage > 0)
+        minDamage = objmgr.GetCreatureDifficultyStats(proto->Id, mode).minDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).maxDamage > 0)
+        maxDamage = objmgr.GetCreatureDifficultyStats(proto->Id, mode).maxDamage;
+
+    SetBaseAttackTime(MELEE, proto->AttackTime);
+    SetMinDamage(minDamage);
+    SetMaxDamage(maxDamage);
 
 // m_spawn is invalid here - don't use it!
 // this is loading a CreatureProto, which doesn't have ItemSlotDisplays
 //    SetEquippedItem(MELEE,m_spawn->Item1SlotDisplay);
 //    SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID_1, m_spawn->Item2SlotDisplay);
 //    SetUInt32Value(UNIT_VIRTUAL_ITEM_SLOT_ID_2, m_spawn->Item3SlotDisplay);
+
+    uint32 rangedMinDamage = proto->RangedMinDamage;
+    uint32 rangedMaxDamage = proto->RangedMaxDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).minRangedDamage > 0)
+        rangedMinDamage = objmgr.GetCreatureDifficultyStats(proto->Id, mode).minRangedDamage;
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).maxRangedDamage > 0)
+        rangedMaxDamage = objmgr.GetCreatureDifficultyStats(proto->Id, mode).maxRangedDamage;
+
+    SetMinRangedDamage(rangedMinDamage);
+    SetMaxRangedDamage(rangedMaxDamage);
 
     SetFaction(proto->Faction);
     SetBoundingRadius(proto->BoundingRadius);
@@ -1532,24 +1501,23 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
         auctionHouse = sAuctionMgr.GetAuctionHouse(GetEntry());
 
     //load resistances
-    for(uint32 j = 0; j < 7; j++)
+    for(uint8 j = 0; j < SCHOOL_COUNT; j++)
         BaseResistance[j] = GetResistance(j);
-    for(uint32 j = 0; j < 5; j++)
+
+    for(uint8 j = 0; j < 5; j++)
         BaseStats[j] = GetStat(j);
 
-    BaseDamage[0] = GetMinDamage();
-    BaseDamage[1] = GetMaxDamage();
-    BaseOffhandDamage[0] = GetMinOffhandDamage();
-    BaseOffhandDamage[1] = GetMaxOffhandDamage();
-    BaseRangedDamage[0] = GetMinRangedDamage();
-    BaseRangedDamage[1] = GetMaxRangedDamage();
+    for (uint8 x = 0; x < 2; x++)
+    {
+        BaseDamage[x] = (x == 0) ? GetMinDamage() : GetMaxDamage();
+        BaseOffhandDamage[x] = (x == 0) ? GetMinOffhandDamage() : GetMaxOffhandDamage();
+        BaseRangedDamage[x] = (x == 0) ? GetMinRangedDamage() : GetMaxRangedDamage();
+    }
     BaseAttackType = proto->AttackType;
 
     SetCastSpeedMod(1.0f);   // better set this one
 
     ////////////AI
-
-    // kek
     for(list<AI_Spell*>::iterator itr = proto->spells.begin(); itr != proto->spells.end(); ++itr)
     {
         // Load all spell that are not set for a specific difficulty
@@ -1576,10 +1544,7 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
 
 
     //HACK!
-    if(m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 17743 ||
-            m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 20242 ||
-            m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 15435 ||
-            creature_info->Type == UNIT_TYPE_MISC)
+    if(m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 17743 || m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 20242 || m_uint32Values[ UNIT_FIELD_DISPLAYID ] == 15435 || creature_info->Type == UNIT_TYPE_MISC)
     {
         m_useAI = false;
     }
@@ -1610,6 +1575,9 @@ void Creature::Load(CreatureProto* proto_, float x, float y, float z, float o)
 
     if( proto->rooted != 0 )
         Root();
+
+    if (objmgr.GetCreatureDifficultyStats(proto->Id, mode).immuneMask > 0)
+        proto->modImmunities = objmgr.GetCreatureDifficultyStats(proto->Id, mode).immuneMask;
 }
 
 void Creature::OnPushToWorld()
@@ -1633,12 +1601,11 @@ void Creature::OnPushToWorld()
 #endif
     }
 
-    set<uint32>::iterator itr = proto->start_auras.begin();
-    SpellEntry* sp;
-    for(; itr != proto->start_auras.end(); ++itr)
+    for (set<uint32>::iterator itr = proto->start_auras.begin(); itr != proto->start_auras.end(); ++itr)
     {
-        sp = dbcSpell.LookupEntryForced((*itr));
-        if(sp == NULL) continue;
+        SpellEntry* sp = dbcSpell.LookupEntryForced((*itr));
+        if(sp == NULL)
+            continue;
 
         CastSpell(this, sp, 0);
     }
@@ -2371,4 +2338,80 @@ void Creature::AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){
 void Creature::RemoveVehicleComponent(){
     delete vehicle;
     vehicle = NULL;
+}
+
+uint32 Creature::GenerateDiffHealthRate(uint8 minLevel, uint8 maxLevel, uint8 staticLevel, uint32 minHealth, uint32 maxHealth)
+{
+    uint8 levelDiff = maxLevel - minLevel;
+
+    if (levelDiff == 0)
+        return maxHealth;
+
+    if (staticLevel == maxLevel)
+        return maxHealth;
+
+    if (staticLevel == minLevel)
+        return minHealth;
+
+    if (minLevel == maxLevel)
+        return maxHealth;
+
+    if (minHealth == maxHealth)
+        return maxHealth;
+
+    uint32 health = minHealth;
+    if (levelDiff == 1) // If levelDiff is 1 - we do not need to do devide
+    {
+        health = rand() % 2 ? minHealth : maxHealth;
+    }
+    else
+    {
+
+        uint32 healthLevels[sizeof(uint8)];
+        uint32 healthDiff = maxHealth - minHealth;
+        for (uint8 i = 0; i <= levelDiff; i++)
+            healthLevels[i] = healthDiff / (i + 1);   // health difference is devided, note: do not use zero pointer
+
+        /* Example:
+            minHealth = 1000;
+            maxHealth = 1300;
+            minLevel = 1;
+            maxLevel = 3;
+
+            after this loop
+            healthLevel[0] = 300;
+            healthLevel[1] = 150;
+            healthLevel[2] = 0;
+        */
+
+        // Generate health for specific level
+        if (healthLevels[(maxLevel - staticLevel) - 1] > 0)
+            health += healthLevels[(maxLevel - staticLevel) - 1];
+    }
+    return health;
+}
+
+uint32 Creature::GenerateDisplayId(CreatureInfo* info)
+{
+    if (info == NULL)
+        return 0;
+
+    std::vector<uint32> displayList;
+
+    if (info->Male_DisplayID != 0)
+        displayList.push_back(info->Male_DisplayID);
+
+    if (info->Male_DisplayID2 != 0)
+        displayList.push_back(info->Male_DisplayID);
+
+    if (info->Female_DisplayID != 0)
+        displayList.push_back(info->Female_DisplayID);
+
+    if (info->Female_DisplayID2 != 0)
+        displayList.push_back(info->Female_DisplayID2);
+
+    if (displayList.empty())
+        return 0;
+
+    return displayList[rand() % (displayList.size() + 1)];
 }

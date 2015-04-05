@@ -499,7 +499,7 @@ bool SummonSuccubusQuest(uint32 i, Spell* s)
         return false;
 
     Creature* pCreature = s->p_caster->GetMapMgr()->CreateCreature(cp->Id);
-    pCreature->Load(cp, s->p_caster->GetPositionX(), s->p_caster->GetPositionY(), s->p_caster->GetPositionZ());
+    pCreature->Load(cp, s->p_caster->GetMapMgr()->iInstanceMode, s->p_caster->GetPositionX(), s->p_caster->GetPositionY(), s->p_caster->GetPositionZ());
     pCreature->GetAIInterface()->Init(pCreature, AITYPE_AGRO, MOVEMENTTYPE_NONE);
     pCreature->GetAIInterface()->taunt(s->p_caster, true);
     pCreature->PushToWorld(s->p_caster->GetMapMgr());
@@ -519,7 +519,7 @@ bool SummonVoidWalkerQuest(uint32 i, Spell* s)
         return false;
 
     Creature* pCreature = p_caster->GetMapMgr()->CreateCreature(cp->Id);
-    pCreature->Load(cp, p_caster->GetPositionX(), p_caster->GetPositionY(), p_caster->GetPositionZ());
+    pCreature->Load(cp, p_caster->GetMapMgr()->iInstanceMode, p_caster->GetPositionX(), p_caster->GetPositionY(), p_caster->GetPositionZ());
     pCreature->GetAIInterface()->Init(pCreature, AITYPE_AGRO, MOVEMENTTYPE_NONE);
     pCreature->GetAIInterface()->taunt(p_caster, true);
     pCreature->PushToWorld(p_caster->GetMapMgr());
@@ -538,7 +538,7 @@ bool SummonFelHunterQuest(uint32 i, Spell* s)
         return false;
 
     Creature* pCreature = p_caster->GetMapMgr()->CreateCreature(cp->Id);
-    pCreature->Load(cp, p_caster->GetPositionX(), p_caster->GetPositionY(), p_caster->GetPositionZ());
+    pCreature->Load(cp, p_caster->GetMapMgr()->iInstanceMode, p_caster->GetPositionX(), p_caster->GetPositionY(), p_caster->GetPositionZ());
     pCreature->GetAIInterface()->Init(pCreature, AITYPE_AGRO, MOVEMENTTYPE_NONE);
     pCreature->GetAIInterface()->taunt(p_caster, true);
     pCreature->PushToWorld(p_caster->GetMapMgr());

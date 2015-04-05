@@ -430,6 +430,7 @@ bool World::SetInitialWorldSettings()
     MAKE_TASK(ObjectMgr, LoadWorldStateTemplates);
     MAKE_TASK(SpellFactoryMgr, LoadSpellAreas);
     MAKE_TASK(ObjectMgr, LoadCreatureScriptTexts);
+    MAKE_TASK(ObjectMgr, LoadCreatureDifficultyStats);
 
 #undef MAKE_TASK
 

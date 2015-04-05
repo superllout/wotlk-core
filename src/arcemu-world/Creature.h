@@ -75,10 +75,10 @@ struct NpcMonsterSay
 
 enum MONSTER_SAY_EVENTS
 {
-    MONSTER_SAY_EVENT_ENTER_COMBAT        = 0,
+    MONSTER_SAY_EVENT_ENTER_COMBAT       = 0,
     MONSTER_SAY_EVENT_RANDOM_WAYPOINT    = 1,
-    MONSTER_SAY_EVENT_CALL_HELP            = 2,
-    MONSTER_SAY_EVENT_ON_COMBAT_STOP    = 3,
+    MONSTER_SAY_EVENT_CALL_HELP          = 2,
+    MONSTER_SAY_EVENT_ON_COMBAT_STOP     = 3,
     MONSTER_SAY_EVENT_ON_DAMAGE_TAKEN    = 4,
     MONSTER_SAY_EVENT_ON_DIED            = 5,
     NUM_MONSTER_SAY_EVENTS,
@@ -356,8 +356,8 @@ class SERVER_DECL Creature : public Unit
         void AddVehicleComponent( uint32 creature_entry, uint32 vehicleid );
         void RemoveVehicleComponent();
 
-        bool Load(CreatureSpawn* spawn, uint32 mode, MapInfo* info);
-        void Load(CreatureProto* proto_, float x, float y, float z, float o = 0);
+        bool Load(CreatureSpawn* spawn, uint8 mode, MapInfo* info);
+        void Load(CreatureProto* proto_, uint8 mode, float x, float y, float z, float o = 0);
 
         void AddToWorld();
         void AddToWorld(MapMgr* pMapMgr);
@@ -721,6 +721,25 @@ class SERVER_DECL Creature : public Unit
         uint32 GetType() { return m_Creature_type; }
         void SetType(uint32 t) { m_Creature_type = t; }
 
+        /*
+            name: GenerateDiffHealthRate(uint8 minLevel, uint8 maxLevel, uint8 staticLevel, uint32 minHealth, uint32 maxHealth);
+            describtion: returns generated health rate for specific level
+            options:
+                uint8 minLevel - min creature level
+                uint8 maxLevel - max creature level
+                uint8 staticLevel - level for which hp rate will generated
+                uint32 minHealth - creature minimum health
+                uitn32 maxHealth - creature maximum health
+        */
+        uint32 GenerateDiffHealthRate(uint8 minLevel, uint8 maxLevel, uint8 staticLevel, uint32 minHealth, uint32 maxHealth);
+
+        /*
+            name: GenerateDisplayId(CreatureInfo* info)
+            describtion: used when spawns have zero display id in database. Generates random display id from creature name data
+            options:
+                CreatureInfo* info - creature name storage data
+        */
+        uint32 GenerateDisplayId(CreatureInfo* info);
     protected:
         CreatureAIScript* _myScriptClass;
         bool m_limbostate;
