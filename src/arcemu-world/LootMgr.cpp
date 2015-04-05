@@ -139,29 +139,24 @@ ItemRandomSuffixEntry* LootMgr::GetRandomSuffix(ItemPrototype* proto)
 
 void LootMgr::LoadLootProp()
 {
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM item_randomprop_groups");
-    uint32 id, eid;
-    RandomProps* rp;
-    ItemRandomSuffixEntry* rs;
-    float ch;
-
-    if(result)
+    uint32 count = 0;
+    if (QueryResult* result = WorldDatabase.Query("SELECT * FROM item_randomprop_groups"))
     {
-        map<uint32, RandomPropertyVector>::iterator itr;
+        count = result->GetRowCount();
         do
         {
-            id = result->Fetch()[0].GetUInt32();
-            eid = result->Fetch()[1].GetUInt32();
-            ch = result->Fetch()[2].GetFloat();
+            uint32 id = result->Fetch()[0].GetUInt32();
+            uint32 eid = result->Fetch()[1].GetUInt32();
+            float ch = result->Fetch()[2].GetFloat();
 
-            rp = dbcRandomProps.LookupEntryForced(eid);
+            RandomProps* rp = dbcRandomProps.LookupEntryForced(eid);
             if(rp == NULL)
             {
                 sLog.Error("LoadLootProp", "RandomProp group %u references non-existent randomprop %u.", id, eid);
                 continue;
             }
 
-            itr = _randomprops.find(id);
+            map<uint32, RandomPropertyVector>::iterator itr = _randomprops.find(id);
             if(itr == _randomprops.end())
             {
                 RandomPropertyVector v;
@@ -176,25 +171,27 @@ void LootMgr::LoadLootProp()
         while(result->NextRow());
         delete result;
     }
+    Log.Success("LootMgr", "Loaded %u item randomprop groups", count);
 
-    result = WorldDatabase.Query("SELECT * FROM item_randomsuffix_groups");
-    if(result)
+    count = 0;
+
+    if (QueryResult* result = WorldDatabase.Query("SELECT * FROM item_randomsuffix_groups"))
     {
-        map<uint32, RandomSuffixVector>::iterator itr;
+        count = result->GetRowCount();
         do
         {
-            id = result->Fetch()[0].GetUInt32();
-            eid = result->Fetch()[1].GetUInt32();
-            ch = result->Fetch()[2].GetFloat();
+            uint32 id = result->Fetch()[0].GetUInt32();
+            uint32 eid = result->Fetch()[1].GetUInt32();
+            uint32 ch = result->Fetch()[2].GetFloat();
 
-            rs = dbcItemRandomSuffix.LookupEntryForced(eid);
+            ItemRandomSuffixEntry* rs = dbcItemRandomSuffix.LookupEntryForced(eid);
             if(rs == NULL)
             {
                 sLog.Error("LoadLootProp", "RandomSuffix group %u references non-existent randomsuffix %u.", id, eid);
                 continue;
             }
 
-            itr = _randomsuffix.find(id);
+            map<uint32, RandomSuffixVector>::iterator itr = _randomsuffix.find(id);
             if(itr == _randomsuffix.end())
             {
                 RandomSuffixVector v;
@@ -209,6 +206,7 @@ void LootMgr::LoadLootProp()
         while(result->NextRow());
         delete result;
     }
+    Log.Success("LootMgr", "Loaded %u item randomsuffix group", count);
 }
 
 LootMgr::~LootMgr()
