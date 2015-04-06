@@ -491,19 +491,6 @@ bool World::SetInitialWorldSettings()
     sAuctionMgr.LoadAuctionHouses();
 
     m_queueUpdateTimer = mQueueUpdateInterval;
-    if(Config.MainConfig.GetBoolDefault("Startup", "BackgroundLootLoading", true))
-    {
-        Log.Notice("World", "Backgrounding loot loading...");
-
-        // loot background loading in a lower priority thread.
-        ThreadPool.ExecuteTask(new BasicTaskExecutor(new CallbackP0<LootMgr>(LootMgr::getSingletonPtr(), &LootMgr::LoadLoot),
-                               BTE_PRIORITY_LOW));
-    }
-    else
-    {
-        Log.Notice("World", "Loading loot in foreground...");
-        lootmgr.LoadLoot();
-    }
 
     Channel::LoadConfSettings();
     Log.Success("BattlegroundManager", "Starting...");
