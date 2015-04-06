@@ -373,26 +373,6 @@ bool Dummy_Solarian_WrathOfTheAstromancer(uint32 pEffectIndex, Spell* pSpell)
     return true;
 }
 
-bool PreparationForBattle(uint32 i, Spell* pSpell)
-{
-    if(pSpell->p_caster == NULL)
-        return true;
-
-    Player* pPlayer = pSpell->p_caster;
-    QuestLogEntry* pQuest = pPlayer->GetQuestLogForEntry(12842);
-    if(pQuest != NULL)
-    {
-        if(pQuest->GetMobCount(0) < pQuest->GetQuest()->required_mobcount[0])
-        {
-            pQuest->SetMobCount(0, pQuest->GetMobCount(0) + 1);
-            pQuest->SendUpdateAddKill(0);
-            pQuest->UpdatePlayerFields();
-            pQuest->SendQuestComplete();
-        }
-    }
-    return true;
-};
-
 #define CN_CRYSTAL_SPIKE            27099
 #define CRYSTAL_SPIKES                47958
 #define CRYSTAL_SPIKES_H            57082
@@ -656,9 +636,6 @@ void SetupMiscSpellhandlers(ScriptMgr* mgr)
     mgr->register_dummy_spell(37674, &ChaosBlast);
 
     mgr->register_dummy_spell(42783, &Dummy_Solarian_WrathOfTheAstromancer);
-
-    mgr->register_dummy_spell(53341, &PreparationForBattle);
-    mgr->register_dummy_spell(53343, &PreparationForBattle);
 
     mgr->register_script_effect(CRYSTAL_SPIKES, &CrystalSpikes);
     mgr->register_script_effect(CRYSTAL_SPIKES_H, &CrystalSpikes);
