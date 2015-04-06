@@ -1,4 +1,4 @@
-PROJECT(ad CXX)
+PROJECT(map_extractor CXX)
 SET( prefix ${ROOT_PATH}/src/tools/map_extractor)
 SET( sources
 	System.cpp
