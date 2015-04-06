@@ -277,6 +277,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
         last_entry = entry_id;
     }
     while(result->NextRow());
+    delete result;
 
     //last list was not pushed in
     if(last_entry != 0 && ttab.size())
@@ -341,7 +342,6 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
     }
 
     sLog.outString("  %d loot templates loaded from %s", db_cache.size(), szTableName);
-    delete result;
     db_cache.clear();
 }
 
