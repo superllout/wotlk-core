@@ -215,7 +215,8 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
         else
             buf->AddQueryNA(ss.str().c_str());
 
-        ss.rdbuf()->str("");
+        ss.str("");
+        ss.clear();
 
         for(CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         {
@@ -241,9 +242,8 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
         else
             buf->AddQueryNA(ss.str().c_str());
 
-        ss.rdbuf()->str("");
-
-        ss << "INSERT INTO character_achievement_progress VALUES ";
+        ss.str("");
+        ss.clear();
 
         for(CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         {
