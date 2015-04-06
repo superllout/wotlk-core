@@ -2366,11 +2366,10 @@ uint32 Creature::GenerateDiffHealthRate(uint8 minLevel, uint8 maxLevel, uint8 st
     }
     else
     {
-
-        uint32 healthLevels[sizeof(uint8)];
+        std::vector<uint32> healthLevels;
         uint32 healthDiff = maxHealth - minHealth;
         for (uint8 i = 0; i <= levelDiff; i++)
-            healthLevels[i] = healthDiff / (i + 1);   // health difference is devided, note: do not use zero pointer
+            healthLevels.push_back(healthDiff / (i + 1));   // health difference is devided, note: do not use zero pointer
 
         /* Example:
             minHealth = 1000;

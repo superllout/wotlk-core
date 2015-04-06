@@ -376,14 +376,15 @@ void AIInterface::_UpdateTargets()
             for(deque<Unit*>::iterator i2 = tokill.begin(); i2 != tokill.end(); ++i2)
                 m_assistTargets.erase(*i2);*/
 
-        for (AssistTargetSet::iterator i = m_assistTargets.begin(); i != m_assistTargets.end(); ++i)
+        for (auto itr = m_assistTargets.begin(); itr != m_assistTargets.end();)
         {
-            AssistTargetSet::iterator i2 = i;
-            if((*i2) == NULL || (*i)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
-                    !(*i2)->isAlive() || m_Unit->GetDistanceSq((*i2)) >= 2500.0f || !(*i2)->CombatStatus.IsInCombat() || !((*i2)->m_phase & m_Unit->m_phase))
+            if ((*itr) == NULL || (*itr)->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() ||
+                !(*itr)->isAlive() || m_Unit->GetDistanceSq((*itr)) >= 2500.0f || !(*itr)->CombatStatus.IsInCombat() || !((*itr)->m_phase & m_Unit->m_phase))
             {
-                m_assistTargets.erase(i2);
+                m_assistTargets.erase(itr++);
+                continue;
             }
+            ++itr;
         }
     }
 
@@ -406,13 +407,13 @@ void AIInterface::_UpdateTargets()
 
         LockAITargets(true);
 
-        for (TargetMap::iterator itr = m_aiTargets.begin(); itr != m_aiTargets.end(); ++itr)
+        for (auto itr = m_aiTargets.begin(); itr != m_aiTargets.end();)
         {
-            TargetMap::iterator itr2 = itr;
-            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(itr2->first);
+            Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(itr->first);
             if(ai_t == NULL)
             {
-                m_aiTargets.erase(itr2);
+                m_aiTargets.erase(itr++);
+                continue;
             }
             else
             {
@@ -431,9 +432,13 @@ void AIInterface::_UpdateTargets()
                     }
                 }
 
-                if(ai_t->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() || !ai_t->isAlive() || ((!instance && m_Unit->GetDistanceSq(ai_t) >= 6400.0f) || !(ai_t->m_phase & m_Unit->m_phase)))
-                    m_aiTargets.erase(itr);
+                if (ai_t->event_GetCurrentInstanceId() != m_Unit->event_GetCurrentInstanceId() || !ai_t->isAlive() || ((!instance && m_Unit->GetDistanceSq(ai_t) >= 6400.0f) || !(ai_t->m_phase & m_Unit->m_phase)))
+                {
+                    m_aiTargets.erase(itr++);
+                    continue;
+                }
             }
+            ++itr;
         }
 
         LockAITargets(false);

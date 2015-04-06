@@ -5,7 +5,7 @@ endif(NOT BUILD_GOSSIPSCRIPTS)
 
 PROJECT(gossipScripts)
 
-SET( prefix ${SCRIPTS_PATH}/GossipScripts )
+SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 
 #SRCS - contains the source files that compose this project.
 

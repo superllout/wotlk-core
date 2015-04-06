@@ -1735,7 +1735,7 @@ void ObjectMgr::CreateGossipMenuForPlayer(GossipMenu** Location, uint64 Guid, ui
     {
         //TextID = 0 will not show the gossip to the player. Using "2" since it's the default value in GossipScript::GossipHello()
         LOG_ERROR("Object with GUID " I64FMT " is trying to create a GossipMenu with TextID == 0", Guid);
-        TextID = 2;
+        TextID = 1;
     }
 
     GossipMenu* Menu = new GossipMenu(Guid, TextID);
@@ -1798,7 +1798,7 @@ void ObjectMgr::LoadTrainers()
         tr->Can_Train_Gossip_TextId = fields[9].GetUInt32();
         tr->Cannot_Train_GossipTextId = fields[10].GetUInt32();
 
-        if (!NpcTextStorage.LookupEntry(tr->Can_Train_Gossip_TextId))
+        if (!NpcTextStorage.LookupEntry(tr->Can_Train_Gossip_TextId) && tr->TrainerType != TRAINER_TYPE_PET)
         {
             Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can train gossip textid\" is incorrect, overriting to 1");
             tr->Can_Train_Gossip_TextId = 1;

@@ -218,30 +218,11 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
         ss.rdbuf()->str("");
 
         ss << "INSERT INTO character_achievement VALUES ";
+        
         for(CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         {
-            bool first = false;
-            if(ss.str().length() >= 16000)
-            {
-                // SQL query length is limited to 16384 characters
-                if(buf == NULL)
-                    CharacterDatabase.ExecuteNA(ss.str().c_str());
-                else
-                    buf->AddQueryNA(ss.str().c_str());
-                ss.str("");
-                ss << "INSERT INTO character_achievement VALUES ";
-                first = true;
-            }
-
-            if(!first)
-            {
-                ss << ", ";
-            }
-            else
-            {
-                first = false;
-            }
-            ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second << ")";
+            ss << "INSERT INTO character_achievement VALUES ";
+            ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second << "); ";
         }
         if(buf == NULL)
             CharacterDatabase.ExecuteNA(ss.str().c_str());
