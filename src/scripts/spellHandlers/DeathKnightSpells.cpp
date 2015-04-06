@@ -362,6 +362,20 @@ bool WillOfTheNecropolis(uint32 i, Spell* spell)
     return true;
 }
 
+// Spell is related to death knight zone quest entry 12842
+#define QUEST_PREPERATION_FOR_BATTLE 12842
+#define SPELL_PREPERATION_FOR_BATTLE_CREDIT 54586
+
+bool DKRuneCastQuestCredit(uint32 i, Spell* spell)
+{
+    if (i == 1)
+    {
+        if (spell->p_caster && spell->p_caster->IsInWorld() && spell->p_caster->isAlive() && spell->p_caster->HasQuest(QUEST_PREPERATION_FOR_BATTLE) && !spell->p_caster->HasFinishedQuest(QUEST_PREPERATION_FOR_BATTLE))
+           spell->p_caster->CastSpell(spell->p_caster, SPELL_PREPERATION_FOR_BATTLE_CREDIT, true);  // Quest credit
+    }
+    return true;
+}
+
 void SetupDeathKnightSpells(ScriptMgr* mgr)
 {
     mgr->register_dummy_spell(50842, &Pestilence);
@@ -422,4 +436,7 @@ void SetupDeathKnightSpells(ScriptMgr* mgr)
     mgr->register_dummy_spell(49189, &WillOfTheNecropolis);   // Rank 1
     mgr->register_dummy_spell(50149, &WillOfTheNecropolis);   // Rank 2
     mgr->register_dummy_spell(50150, &WillOfTheNecropolis);   // Rank 3
+
+    mgr->register_dummy_spell(53341, &DKRuneCastQuestCredit);   // Rune of Cinderglacier
+    mgr->register_dummy_spell(53343, &DKRuneCastQuestCredit);   // Rune of Razorice
 }
