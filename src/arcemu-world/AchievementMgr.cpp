@@ -204,61 +204,54 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
 {
     if(!m_completedAchievements.empty())
     {
-        std::ostringstream ss;
+        {
+            char query[200];
+            sprintf(query, "DELETE FROM `character_achievement` WHERE `guid` = %u", m_player->GetLowGUID());
 
-        ss << "DELETE FROM character_achievement WHERE guid = ";
-        ss << m_player->GetLowGUID();
-        ss << ";";
-
-        if(buf == NULL)
-            CharacterDatabase.ExecuteNA(ss.str().c_str());
-        else
-            buf->AddQueryNA(ss.str().c_str());
-
-        ss.str("");
-        ss.clear();
+            if (buf == NULL)
+                CharacterDatabase.ExecuteNA(query);
+            else
+                buf->AddQueryNA(query);
+        }
 
         for(CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         {
-            ss << "INSERT INTO character_achievement VALUES ";
-            ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second << "); ";
+            char query[250];
+            sprintf(query, "INSERT INTO `character_achievement` VALUES (%u, %u, %lu)", m_player->GetLowGUID(), iter->first, iter->second);
+
+            if (buf == NULL)
+                CharacterDatabase.ExecuteNA(query);
+            else
+                buf->AddQueryNA(query);
         }
-        if(buf == NULL)
-            CharacterDatabase.ExecuteNA(ss.str().c_str());
-        else
-            buf->AddQueryNA(ss.str().c_str());
     }
 
     if(!m_criteriaProgress.empty())
     {
-        std::ostringstream ss;
-
-        ss << "DELETE FROM character_achievement_progress WHERE guid = ";
-        ss << m_player->GetLowGUID();
-        ss << ";";
-
-        if(buf == NULL)
-            CharacterDatabase.ExecuteNA(ss.str().c_str());
-        else
-            buf->AddQueryNA(ss.str().c_str());
-
-        ss.str("");
-        ss.clear();
-
-        for(CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         {
-            if(SaveAchievementProgressToDB(iter->second))
-            {
-                ss << "INSERT INTO character_achievement_progress VALUES ";
-                ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second->counter << ", " << iter->second->date << ");";
-            }
+            char query[200];
+            sprintf(query, "DELETE FROM `character_achievement_progress` WHERE `guid` = %u", m_player->GetLowGUID());
+
+            if (buf == NULL)
+                CharacterDatabase.ExecuteNA(query);
+            else
+                buf->AddQueryNA(query);
         }
 
-        // don't execute query if there's no entries to save
-        if(buf == NULL)
-            CharacterDatabase.ExecuteNA(ss.str().c_str());
-        else
-            buf->AddQueryNA(ss.str().c_str());
+
+        for (CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
+        {
+            if (SaveAchievementProgressToDB(iter->second))
+            {
+                char query[250];
+                sprintf(query, "INSERT INTO `character_achievement_progress` VALUES (%u, %u, %i, %lu)", m_player->GetLowGUID(), iter->first, iter->second->counter, iter->second->date);
+
+                if (buf == NULL)
+                    CharacterDatabase.ExecuteNA(query);
+                else
+                    buf->AddQueryNA(query);
+            }
+        }
     }
 }
 
