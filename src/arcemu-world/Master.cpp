@@ -361,7 +361,7 @@ bool Master::Run(int argc, char** argv)
 
 
     /* write pid file */
-    FILE* fPid = fopen("arcemu.pid", "w");
+    FILE* fPid = fopen("world.pid", "w");
     if(fPid)
     {
         uint32 pid;
