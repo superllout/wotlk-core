@@ -3,7 +3,7 @@ if(NOT BUILD_EXTRASCRIPTS )
   return()
 endif(NOT BUILD_EXTRASCRIPTS)
 
-project(ExtraScripts)
+project(extraScripts)
 
 SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 #SRCS - contains the source files that compose this project.

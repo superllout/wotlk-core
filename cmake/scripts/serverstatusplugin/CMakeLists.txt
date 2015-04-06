@@ -3,7 +3,7 @@ if(NOT BUILD_SERVERSTATUSPLUGIN )
   return()
 endif(NOT BUILD_SERVERSTATUSPLUGIN)
 
-PROJECT(ServerStatusPlugin)
+PROJECT(serverStatusPlugin)
 
 SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 

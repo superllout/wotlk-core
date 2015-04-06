@@ -1,4 +1,4 @@
-PROJECT(Battlegrounds)
+PROJECT(battlegrounds)
 
 SET( prefix ${ROOT_PATH}/src/scripts/${PROJECT_NAME} )
 

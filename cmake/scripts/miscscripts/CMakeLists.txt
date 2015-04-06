@@ -3,7 +3,7 @@ if(NOT BUILD_MISCSCRIPTS )
   return()
 endif(NOT BUILD_MISCSCRIPTS)
 
-PROJECT(MiscScripts)
+PROJECT(miscScripts)
 
 SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 

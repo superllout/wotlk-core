@@ -1,4 +1,4 @@
-PROJECT(SpellHandlers)
+PROJECT(spellHandlers)
 
 SET( prefix ${ROOT_PATH}/src/scripts/${PROJECT_NAME} )
 

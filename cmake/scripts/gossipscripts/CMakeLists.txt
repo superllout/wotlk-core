@@ -3,7 +3,7 @@ if(NOT BUILD_GOSSIPSCRIPTS )
   return()
 endif(NOT BUILD_GOSSIPSCRIPTS)
 
-PROJECT(GossipScripts)
+PROJECT(gossipScripts)
 
 SET( prefix ${SCRIPTS_PATH}/GossipScripts )
 

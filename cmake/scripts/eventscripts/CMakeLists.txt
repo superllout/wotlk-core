@@ -4,7 +4,7 @@ if(NOT BUILD_EVENTSCRIPTS )
   return()
 endif(NOT BUILD_EVENTSCRIPTS)
 
-PROJECT(EventScripts)
+PROJECT(eventScripts)
 
 SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 

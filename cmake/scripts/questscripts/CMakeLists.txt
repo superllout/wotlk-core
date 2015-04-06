@@ -3,7 +3,7 @@ if(NOT BUILD_QUESTSCRIPTS )
   return()
 endif(NOT BUILD_QUESTSCRIPTS)
 
-PROJECT(QuestScripts)
+PROJECT(questScripts)
 
 SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 

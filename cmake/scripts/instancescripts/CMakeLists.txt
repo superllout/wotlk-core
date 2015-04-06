@@ -3,7 +3,7 @@ if(NOT BUILD_INSTANCESCRIPTS )
   return()
 endif(NOT BUILD_INSTANCESCRIPTS)
 
-PROJECT(InstanceScripts)
+PROJECT(instanceScripts)
 
 SET( prefix ${SCRIPTS_PATH}/InstanceScripts )
 
