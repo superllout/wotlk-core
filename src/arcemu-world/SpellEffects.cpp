@@ -738,7 +738,8 @@ void Spell::SpellEffectDummy(uint32 i) // Dummy(Scripted events)
     if(sScriptMgr.CallScriptedDummySpell(m_spellInfo->Id, i, this))
         return;
 
-    LOG_ERROR("Spell ID: %u ( %s ) has a dummy effect ( %u ) but no handler for it.", m_spellInfo->Id, m_spellInfo->Name, i);
+    if (Config.MainConfig.GetBoolDefault("Log", "DummySpells", false))
+        LOG_ERROR("Spell ID: %u ( %s ) has a dummy effect ( %u ) but no handler for it.", m_spellInfo->Id, m_spellInfo->Name, i);
 }
 
 void Spell::SpellEffectTeleportUnits(uint32 i)    // Teleport Units

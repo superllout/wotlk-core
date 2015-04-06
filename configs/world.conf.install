@@ -365,9 +365,16 @@
 *    TimeStamp:
 *        Enables timestamps in logs.
 *
+*    DummySpells:
+*        Enables/disables reporting about unimplemented dummy spells
+*
 ******************************************************/
 
-<Log Cheaters="0" GMCommands="0" TimeStamp="0">
+<Log 
+    Cheaters = "0"
+    GMCommands = "0" 
+    TimeStamp = "0" 
+    DummySpells = "0">
 
 /******************************************************
 * Mail System Setup
