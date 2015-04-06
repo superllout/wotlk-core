@@ -10,7 +10,7 @@ add_subdirectory( loadlib )
 
 IF( BUILD_TOOLS_MAPS )
 	add_subdirectory( map_extractor )
-ENDIF()
+ENDIF(BUILD_TOOLS_MAPS)
 
 IF( BUILD_TOOLS_CREATUREDATA )
 	add_subdirectory( creature_data )
