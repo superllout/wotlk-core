@@ -481,7 +481,7 @@ void MoonInstanceScript::BuildEncounterMap()
 {
     if(mInstance->pInstance == NULL)
         return;
-
+    mInstance->GetBaseMap()->GetSpawnsList();
     QueryResult* KillResult = WorldDatabase.Query("SELECT id, entry FROM creature_spawns WHERE map = %u AND entry IN ( SELECT entry FROM creature_names WHERE rank = 3 )", mInstance->GetMapId());
     if(KillResult != NULL)
     {
@@ -568,28 +568,23 @@ void MoonInstanceScript::BuildEncounterMapWithEntries(IdVector pEntries)
 void MoonInstanceScript::BuildEncounterMapWithIds(IdVector pIds)
 {
     // Won't work with spawns that are not in world - would work well with instance fully loaded
-    if(mInstance->pInstance == NULL || pIds.size() == 0)
+    if(mInstance->pInstance == NULL || pIds.empty())
         return;
 
-    uint32 CurrentId = 0;
-    EncounterState State = State_NotStarted;
-    Creature* Boss = NULL;
-    set< uint32 >::iterator Iter;
-    EncounterMap::iterator EncounterIter;
-    for(size_t i = 0; i < pIds.size(); ++i)
+    for (size_t i = 0; i < pIds.size(); ++i)
     {
-        CurrentId = pIds[ i ];
+        uint32 CurrentId = pIds[ i ];
         if(CurrentId == 0)
             continue;
 
-        Iter = mInstance->pInstance->m_killedNpcs.find(CurrentId);
+        set< uint32 >::iterator Iter = mInstance->pInstance->m_killedNpcs.find(CurrentId);
+        EncounterState State = State_NotStarted;
         if(Iter != mInstance->pInstance->m_killedNpcs.end())
             State = State_Finished;
 
-        Boss = mInstance->GetCreature(CurrentId);
-        if(Boss != NULL)
+        if (Creature* Boss = mInstance->GetCreature(CurrentId))
         {
-            EncounterIter = mEncounters.find(Boss->GetEntry());
+            EncounterMap::iterator EncounterIter = mEncounters.find(Boss->GetEntry());
             if(EncounterIter != mEncounters.end())
                 continue;
 
