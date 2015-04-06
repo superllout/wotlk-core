@@ -343,7 +343,6 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
     sLog.outString("  %d loot templates loaded from %s", db_cache.size(), szTableName);
     delete result;
     db_cache.clear();
-
 }
 
 void LootMgr::PushLoot(StoreLootList* list, Loot* loot, uint32 type)

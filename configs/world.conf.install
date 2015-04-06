@@ -469,7 +469,6 @@
 ******************************************************/
 
 <Startup Preloading = "0"
-         BackgroundLootLoading = "1"
          EnableMultithreadedLoading = "1"
          EnableSpellIDDump = "0"
          LoadAdditionalTables="">
