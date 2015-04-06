@@ -3506,8 +3506,8 @@ void Spell::SpellEffectSendEvent(uint32 i) //Send Event
     if(sScriptMgr.HandleScriptedSpellEffect(m_spellInfo->Id, i, this))
         return;
 
-    LOG_ERROR("Spell ID: %u ( %s ) has a scripted effect ( %u ) but no handler for it.", m_spellInfo->Id, m_spellInfo->Name, i);
-
+    if (Config.MainConfig.GetBoolDefault("Log", "SpellEffects", false))
+        LOG_ERROR("Spell ID: %u ( %s ) has a scripted effect ( %u ) but no handler for it.", m_spellInfo->Id, m_spellInfo->Name, i);
 }
 
 void Spell::SpellEffectPowerBurn(uint32 i) // power burn

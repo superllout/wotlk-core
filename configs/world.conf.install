@@ -368,13 +368,21 @@
 *    DummySpells:
 *        Enables/disables reporting about unimplemented dummy spells
 *
+*    DummyAuras
+*        Enables/disables reporting about unimplemented dummy auras
+*
+*    SpellEffects
+*        Enables/disables reporting about unimplemented scripted effects
+*
 ******************************************************/
 
 <Log 
     Cheaters = "0"
     GMCommands = "0" 
     TimeStamp = "0" 
-    DummySpells = "0">
+    DummySpells = "0"
+    DummyAuras = "0"
+    SpellEffects = "0">
 
 /******************************************************
 * Mail System Setup
