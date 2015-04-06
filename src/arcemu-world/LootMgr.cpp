@@ -182,7 +182,7 @@ void LootMgr::LoadLootProp()
         {
             uint32 id = result->Fetch()[0].GetUInt32();
             uint32 eid = result->Fetch()[1].GetUInt32();
-            uint32 ch = result->Fetch()[2].GetFloat();
+            float ch = result->Fetch()[2].GetFloat();
 
             ItemRandomSuffixEntry* rs = dbcItemRandomSuffix.LookupEntryForced(eid);
             if(rs == NULL)
