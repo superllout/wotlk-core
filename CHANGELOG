@@ -1,5 +1,14 @@
 This changelog keeps information about most major changes in core, scripts and its content
 
+4.0.3 changes
+* Fixed possible assertations/crashes
+* Removed background loot tables load
+* Added options to disable error logging about unimplemented spells
+* Added spells 53341 and 53343 dummy effects
+* Changed cases of script projects folders
+* Renamed ad project to map_extractor for correctness
+* Fixed and improved speed of achievements data saving
+
 4.0.2 changes
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.
 * Added Dalaran underbelly guards gossip
