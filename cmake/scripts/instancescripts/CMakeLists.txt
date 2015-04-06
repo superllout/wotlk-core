@@ -5,7 +5,7 @@ endif(NOT BUILD_INSTANCESCRIPTS)
 
 PROJECT(instanceScripts)
 
-SET( prefix ${SCRIPTS_PATH}/InstanceScripts )
+SET( prefix ${SCRIPTS_PATH}/${PROJECT_NAME} )
 
 set(sources
 Instance_Arcatraz.cpp 
