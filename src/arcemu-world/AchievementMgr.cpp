@@ -217,8 +217,6 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
 
         ss.rdbuf()->str("");
 
-        ss << "INSERT INTO character_achievement VALUES ";
-        
         for(CompletedAchievementMap::iterator iter = m_completedAchievements.begin(); iter != m_completedAchievements.end(); ++iter)
         {
             ss << "INSERT INTO character_achievement VALUES ";
@@ -246,42 +244,21 @@ void AchievementMgr::SaveToDB(QueryBuffer* buf)
         ss.rdbuf()->str("");
 
         ss << "INSERT INTO character_achievement_progress VALUES ";
-        bool first = true;
+
         for(CriteriaProgressMap::iterator iter = m_criteriaProgress.begin(); iter != m_criteriaProgress.end(); ++iter)
         {
             if(SaveAchievementProgressToDB(iter->second))
             {
-                // only save some progresses, others will be updated when character logs in
-                if(ss.str().length() >= 16000)
-                {
-                    // SQL query length is limited to 16384 characters
-                    if(buf == NULL)
-                        CharacterDatabase.ExecuteNA(ss.str().c_str());
-                    else
-                        buf->AddQueryNA(ss.str().c_str());
-                    ss.str("");
-                    ss << "INSERT INTO character_achievement_progress VALUES ";
-                    first = true;
-                }
-                if(!first)
-                {
-                    ss << ", ";
-                }
-                else
-                {
-                    first = false;
-                }
-                ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second->counter << ", " << iter->second->date << ")";
+                ss << "INSERT INTO character_achievement_progress VALUES ";
+                ss << "(" << m_player->GetLowGUID() << ", " << iter->first << ", " << iter->second->counter << ", " << iter->second->date << ");";
             }
         }
-        if(!first)
-        {
-            // don't execute query if there's no entries to save
-            if(buf == NULL)
-                CharacterDatabase.ExecuteNA(ss.str().c_str());
-            else
-                buf->AddQueryNA(ss.str().c_str());
-        }
+
+        // don't execute query if there's no entries to save
+        if(buf == NULL)
+            CharacterDatabase.ExecuteNA(ss.str().c_str());
+        else
+            buf->AddQueryNA(ss.str().c_str());
     }
 }
 
