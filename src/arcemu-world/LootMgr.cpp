@@ -235,26 +235,21 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
 {
 
     vector< pair< uint32, vector< tempy > > > db_cache;
-    vector< pair< uint32, vector< tempy > > >::iterator itr;
-    db_cache.reserve(10000);
-    LootStore::iterator tab;
     QueryResult* result = WorldDatabase.Query("SELECT * FROM %s ORDER BY entryid ASC", szTableName);
     if(!result)
     {
         sLog.Error("LootMgr", "Loading loot from table %s failed.", szTableName);
         return;
     }
-    uint32 entry_id = 0;
     uint32 last_entry = 0;
 
     uint32 total = (uint32) result->GetRowCount();
-    int pos = 0;
     vector< tempy > ttab;
-    tempy t;
+
     do
     {
         Field* fields = result->Fetch();
-        entry_id = fields[ 0 ].GetUInt32();
+        uint32 entry_id = fields[ 0 ].GetUInt32();
         if(entry_id < last_entry)
         {
             sLog.Error("LootMgr", "WARNING: Out of order loot table being loaded.");
@@ -266,7 +261,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
                 db_cache.push_back(make_pair(last_entry, ttab));
             ttab.clear();
         }
-
+        tempy t;
         t.itemid = fields[ 1 ].GetUInt32();
         t.chance = fields[ 2 ].GetFloat();
         t.chance_2 = fields[ 3 ].GetFloat();
@@ -287,14 +282,14 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
     if(last_entry != 0 && ttab.size())
         db_cache.push_back(make_pair(last_entry, ttab));
 
-    pos = 0;
-    total = (uint32)db_cache.size();
-    ItemPrototype* proto;
-    uint32 itemid;
+    ttab.clear();
 
-    for(itr = db_cache.begin(); itr != db_cache.end(); ++itr)
+    int pos = 0;
+    total = (uint32)db_cache.size();
+
+    for (vector< pair< uint32, vector< tempy > > >::iterator itr = db_cache.begin(); itr != db_cache.end(); ++itr)
     {
-        entry_id = (*itr).first;
+        uint32 entry_id = (*itr).first;
         if(LootTable->end() == LootTable->find(entry_id))
         {
             StoreLootList list;
@@ -307,8 +302,8 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
             for(vector< tempy >::iterator itr2 = itr->second.begin(); itr2 != itr->second.end(); ++itr2)
             {
                 //Omit items that are not in db to prevent future bugs
-                itemid = itr2->itemid;
-                proto = ItemPrototypeStorage.LookupEntry(itemid);
+                uint32 itemid = itr2->itemid;
+                ItemPrototype* proto = ItemPrototypeStorage.LookupEntry(itemid);
                 if(!proto)
                 {
                     list.items[ind].item.itemproto = NULL;
@@ -339,7 +334,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
                         }
                     }
                 }
-                ind++;
+                ++ind;
             }
             (*LootTable)[entry_id] = list;
         }
@@ -347,11 +342,12 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
 
     sLog.outString("  %d loot templates loaded from %s", db_cache.size(), szTableName);
     delete result;
+    db_cache.clear();
+
 }
 
 void LootMgr::PushLoot(StoreLootList* list, Loot* loot, uint32 type)
 {
-    uint32 i;
     uint32 count;
 
     if(type >= NUM_LOOT_TYPES)
@@ -393,7 +389,7 @@ void LootMgr::PushLoot(StoreLootList* list, Loot* loot, uint32 type)
                     count = list->items[x].maxcount;
                 else
                     count = RandomUInt(list->items[x].maxcount - list->items[x].mincount) + list->items[x].mincount;
-
+                uint32 i = 0;
                 for(i = 0; i < loot->items.size(); ++i)
                 {
                     //itemid rand match a already placed item, if item is stackable and unique(stack), increment it, otherwise skips
