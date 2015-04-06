@@ -3706,13 +3706,6 @@ void ObjectMgr::LoadCreatureDifficultyStats()
                 continue;
             }
 
-            // Basically table primary keys should not allow dublicates but still checking for it to avoid possible crashes
-            if (GetCreatureDifficultyStats(entry, difficulty).minHealth > 0)
-            {
-                Log.Error("LoadCreatureScriptTexts", "Dublicate entry for creature %u and difficulty %u. Using first gathered data entry", entry, difficulty);
-                continue;
-            }
-
             CreatureDiffStatsStruct mCreatureStats;
             mCreatureStats.minLevel = pFields[2].GetUInt8();
             mCreatureStats.maxLevel = pFields[3].GetUInt8();
@@ -3773,10 +3766,37 @@ void ObjectMgr::LoadCreatureDifficultyStats()
             mCreatureStats.immuneMask = pFields[18].GetUInt32();
             // mCreatureStats.unitFlags = pFields[16].GetUInt16();
 
-            std::map<uint8, CreatureDiffStatsStruct>* mDifficulty = {};
-            mDifficulty->insert(std::make_pair(difficulty, mCreatureStats));
+            // To avoid dublication and assertation errors insert it with checking for poluted data
+            CreatureDifficultyMap::const_iterator itr1 = mCreatureDifficulty.find(entry);
+            if (itr1 != mCreatureDifficulty.end())
+            {
+                bool found = false;
 
-            mCreatureDifficulty.insert(CreatureDifficultyMap::value_type(entry, mDifficulty));
+                // getting text by id
+                for (std::map<uint8, CreatureDiffStatsStruct>::iterator itr2 = itr1->second->begin(); itr2 != itr1->second->end(); ++itr2)
+                {
+                    if (itr2->first == difficulty)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                {
+                    Log.Error("LoadCreatureDifficultyStats", "Tried to load dublicate data for creature %u and difficulty %u. Using perviously loaded data", entry, difficulty);
+                    continue;
+                }
+                else
+                    mCreatureDifficulty.find(entry)->second->insert(std::make_pair(difficulty, mCreatureStats));
+            }
+            else
+            {
+                std::map<uint8, CreatureDiffStatsStruct>* mDifficulty = {};
+                mDifficulty->insert(std::make_pair(difficulty, mCreatureStats));
+                mCreatureDifficulty.insert(CreatureDifficultyMap::value_type(entry, mDifficulty));
+            }
+
             // Check do we have existing entry, if not then insert
             bool found = false;
             for (std::list<uint32>::iterator itr = entryList.begin(); itr != entryList.end(); ++itr)
