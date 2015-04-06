@@ -3633,13 +3633,6 @@ void ObjectMgr::LoadCreatureScriptTexts()
             }
 
             uint32 indexId = fields[1].GetUInt32();
-            // Lets check for dublicate (basically it should be done by database developers by adding correct PRIMARY_KEYS but still adding it to avoid possible crashes)
-            // Some creatures plays only sound without text (it can be done in this way too)
-            if (GetCreatureScriptText(entry, indexId).text != nullptr || GetCreatureScriptText(entry, indexId).soundId != 0)
-            {
-                Log.Error("LoadCreatureScriptTexts", "Text id %u already exists for creature %u", indexId, entry);
-                continue;
-            }
 
             CreatureScriptTextStruct textData;
             textData.text = fields[2].GetString() ? fields[2].GetString() : "";
@@ -3649,10 +3642,35 @@ void ObjectMgr::LoadCreatureScriptTexts()
             textData.emoteId = fields[5].GetUInt32();
             textData.emoteDelay = fields[6].GetUInt32();
             textData.soundId = fields[7].GetUInt32();
-            std::map<uint32, CreatureScriptTextStruct>* text = {};
-            text->insert(std::make_pair(indexId, textData));
 
-            mCreatureScriptTexts.insert(CreatureScriptTextMap::value_type(entry, text));
+            CreatureScriptTextMap::const_iterator itr = mCreatureScriptTexts.find(entry);
+            // checking to avoid possible crashes, assertation errors
+            if (itr != mCreatureScriptTexts.end())
+            {
+                bool found = false;
+                for (std::map<uint32, CreatureScriptTextStruct>::iterator itr2 = itr->second->begin(); itr2 != itr->second->end(); ++itr)
+                {
+                    if (itr2->first == indexId)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (found)
+                {
+                    Log.Error("LoadCreatureScriptTexts", "Text id %u already exists for creature %u. Will use perviously loaded data", indexId, entry);
+                    continue;
+                }
+                mCreatureScriptTexts.find(entry)->second->insert(std::make_pair(indexId, textData));
+            }
+            else
+            {
+                std::map<uint32, CreatureScriptTextStruct>* text = {};
+                text->insert(std::make_pair(indexId, textData));
+
+                mCreatureScriptTexts.insert(CreatureScriptTextMap::value_type(entry, text));
+            }
             ++count;
         } while (result->NextRow());
         delete result;
