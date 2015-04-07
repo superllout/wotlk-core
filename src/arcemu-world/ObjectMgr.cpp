@@ -1800,13 +1800,13 @@ void ObjectMgr::LoadTrainers()
 
         if (!NpcTextStorage.LookupEntry(tr->Can_Train_Gossip_TextId) && tr->TrainerType != TRAINER_TYPE_PET)
         {
-            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can train gossip textid\" is incorrect, overriting to 1");
+            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can train gossip textid\" is incorrect, overriting to 1", entry);
             tr->Can_Train_Gossip_TextId = 1;
         }
 
         if (!NpcTextStorage.LookupEntry(tr->Cannot_Train_GossipTextId) && (tr->TrainerType != TRAINER_TYPE_TRADESKILLS || tr->TrainerType != TRAINER_TYPE_PET))
         {
-            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can not train gossip textid\" is incorrect, overriting to 1");
+            Log.Error("ObjectMgr", "Tried to load trainer_defs for npc %u but \"can not train gossip textid\" is incorrect, overriting to 1", entry);
             tr->Cannot_Train_GossipTextId = 1;
         }
 
