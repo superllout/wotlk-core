@@ -293,8 +293,7 @@ bool Container::SafeFullRemoveItemFromSlot(int16 slot)
 
 bool Container::AddItemToFreeSlot(Item* pItem, uint32* r_slot)
 {
-    uint32 slot;
-    for(slot = 0; slot < GetProto()->ContainerSlots; slot++)
+    for(uint32 slot = 0; slot < GetProto()->ContainerSlots; slot++)
     {
         if(!m_Slot[slot])
         {

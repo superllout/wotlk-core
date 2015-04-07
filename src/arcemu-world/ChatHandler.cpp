@@ -123,7 +123,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
             break;
     }
 
-    std::string msg, to = "", channel = "", tmp;
+    std::string msg, to = "", channel = "";
     msg.reserve(256);
 
     // Process packet
@@ -178,7 +178,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
     if(pMsg && !sHookInterface.OnChat(_player, type, lang, pMsg, pMisc))
         return;
 
-    Channel* chn = NULL;
     // Main chat message processing
     switch(type)
     {
@@ -476,7 +475,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
                 if(sChatHandler.ParseCommands(msg.c_str(), this) > 0)
                     break;
 
-                chn = channelmgr.GetChannel(channel.c_str(), GetPlayer());
+                Channel* chn = channelmgr.GetChannel(channel.c_str(), GetPlayer());
                 if(chn)
                 {
                     //g_chatFilter->ParseEscapeCodes((char*)pMsg, (chn->m_flags & CHANNEL_PACKET_ALLOWLINKS)>0 );

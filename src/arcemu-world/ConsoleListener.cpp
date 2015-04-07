@@ -191,8 +191,6 @@ void TestConsoleLogin(string & username, string & password, uint32 requestid);
 void ConsoleSocket::OnRead()
 {
     uint32 readlen = (uint32)readBuffer.GetSize();
-    uint32 len;
-    char* p;
     if((readlen + m_pBufferPos) >= m_pBufferLen)
     {
         Disconnect();
@@ -203,11 +201,11 @@ void ConsoleSocket::OnRead()
     m_pBufferPos += readlen;
 
     // let's look for any newline bytes.
-    p = strchr(m_pBuffer, '\n');
+    char* p = strchr(m_pBuffer, '\n');
     while(p != NULL)
     {
         // windows is stupid. :P
-        len = (uint32)((p + 1) - m_pBuffer);
+        uint32 len = (uint32)((p + 1) - m_pBuffer);
         if(*(p - 1) == '\r')
             *(p - 1) = '\0';
 

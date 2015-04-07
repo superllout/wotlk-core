@@ -123,13 +123,6 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
     uint32 start_time = getMSTime();
 
     player_item items[23];
-    int8 slot;
-    uint32 i;
-    ItemPrototype* proto;
-    QueryResult* res;
-    CreatureInfo* info = NULL;
-    uint8 race;
-    has_dk = false;
     _side = -1; // side should be set on every enumeration for safety
 
     uint32 numchar;
@@ -148,22 +141,16 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
 
     if(result)
     {
-        uint64 guid;
-        uint8 Class;
-        uint32 bytes2;
-        uint32 flags;
-        uint32 banned;
-        Field* fields;
-        uint32 petLevel = 0;
+        bool has_dk = false;
         do
         {
-            fields = result->Fetch();
+            Field* fields = result->Fetch();
 
-            guid = fields[0].GetUInt64();
-            bytes2 = fields[6].GetUInt32();
-            Class = fields[3].GetUInt8();
-            flags = fields[17].GetUInt32();
-            race = fields[2].GetUInt8();
+            uint64 guid = fields[0].GetUInt64();
+            uint32 bytes2 = fields[6].GetUInt32();
+            uint8 Class = fields[3].GetUInt8();
+            uint32 flags = fields[17].GetUInt32();
+            uint8 race = fields[2].GetUInt8();
 
             if(_side < 0)
             {
@@ -194,7 +181,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
             data << float(fields[10].GetFloat());        //Z
             data << uint32(fields[18].GetUInt32());        //GuildID
 
-            banned = fields[13].GetUInt32();
+            uint32 banned = fields[13].GetUInt32();
             uint32 char_flags = 0;
 
             if(banned && (banned < 10 || banned > (uint32)UNIXTIME))
@@ -212,11 +199,11 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
             data << uint32(0);                //Character recustomization flags
             data << uint8(0);                //Unknown 3.2.0
 
+            CreatureInfo* info = NULL;
+            uint32 petLevel = 0;
             if(Class == WARLOCK || Class == HUNTER)
             {
-                res = CharacterDatabase.Query("SELECT entry, level FROM playerpets WHERE ownerguid = %u AND MOD( active, 10 ) = 1 AND alive = TRUE;", Arcemu::Util::GUID_LOPART(guid));
-
-                if(res)
+                if(QueryResult* res = CharacterDatabase.Query("SELECT entry, level FROM playerpets WHERE ownerguid = %u AND MOD( active, 10 ) = 1 AND alive = TRUE;", Arcemu::Util::GUID_LOPART(guid)))
                 {
                     petLevel = res->Fetch()[1].GetUInt32();
                     info = CreatureNameStorage.LookupEntry(res->Fetch()[0].GetUInt32());
@@ -241,18 +228,14 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
                 data << uint32(0);
             }
 
-            res = CharacterDatabase.Query("SELECT slot, entry, enchantments FROM playeritems WHERE ownerguid=%u AND containerslot = '-1' AND slot BETWEEN '0' AND '22'", Arcemu::Util::GUID_LOPART(guid));
-
             memset(items, 0, sizeof(player_item) * 23);
             uint32 enchantid;
-            EnchantEntry* enc;
-            if(res)
+            if(QueryResult* res = CharacterDatabase.Query("SELECT slot, entry, enchantments FROM playeritems WHERE ownerguid=%u AND containerslot = '-1' AND slot BETWEEN '0' AND '22'", Arcemu::Util::GUID_LOPART(guid)))
             {
                 do
                 {
-                    slot = res->Fetch()[0].GetInt8();
-                    proto = ItemPrototypeStorage.LookupEntry(res->Fetch()[1].GetUInt32());
-                    if(proto)
+                    int8 slot = res->Fetch()[0].GetInt8();
+                    if(ItemPrototype* proto = ItemPrototypeStorage.LookupEntry(res->Fetch()[1].GetUInt32()))
                     {
                         items[slot].displayid = proto->DisplayInfoID;
                         items[slot].invtype = static_cast<uint8>(proto->InventoryType);
@@ -264,8 +247,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
                             const char* enchant_field = res->Fetch()[2].GetString();
                             if(sscanf(enchant_field , "%u,0,0;" , (unsigned int*)&enchantid) == 1 && enchantid > 0)
                             {
-                                enc = dbcEnchant.LookupEntryForced(enchantid);
-                                if(enc != NULL)
+                                if(EnchantEntry* enc = dbcEnchant.LookupEntryForced(enchantid))
                                     items[slot].enchantment = enc->visual;
                             }
                         }
@@ -275,7 +257,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
                 delete res;
             }
 
-            for(i = 0; i < INVENTORY_SLOT_BAG_END; ++i)
+            for(uint32 i = 0; i < INVENTORY_SLOT_BAG_END; ++i)
             {
                 data << uint32(items[i].displayid);
                 data << uint8(items[i].invtype);

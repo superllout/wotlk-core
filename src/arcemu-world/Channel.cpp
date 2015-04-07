@@ -743,14 +743,13 @@ void Channel::List(Player* plr)
         return;
     }
 
-    uint8 flags;
     data << uint8(1) << m_name;
     data << uint8(m_flags);
     data << uint32(m_members.size());
     for(itr = m_members.begin(); itr != m_members.end(); ++itr)
     {
         data << itr->first->GetGUID();
-        flags = 0;
+        uint8 flags = 0;
         if(!(itr->second & CHANNEL_FLAG_MUTED))
             flags |= 0x04;        // voice flag
 
