@@ -201,11 +201,9 @@ class SERVER_DECL InstanceMgr
                 return NULL;
             if(mapid == NUM_MAPS)
             {
-                Instance* in;
                 for(uint32 i = 0; i < NUM_MAPS; ++i)
                 {
-                    in = GetInstanceByIds(i, instanceId);
-                    if(in != NULL)
+                    if (Instance* in = GetInstanceByIds(i, instanceId))
                         return in;
                 }
                 return NULL;

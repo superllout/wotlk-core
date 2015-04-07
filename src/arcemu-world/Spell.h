@@ -2002,14 +2002,14 @@ class SERVER_DECL Spell : public EventableObject
         }
         uint32 GetDuration()
         {
-            if(bDurSet)return Dur;
+            if (bDurSet)
+                return Dur;
             bDurSet = true;
-            int32 c_dur = 0;
 
             if(GetProto()->DurationIndex)
             {
-                SpellDuration* sd = dbcSpellDuration.LookupEntryForced(GetProto()->DurationIndex);
-                if(sd)
+                int32 c_dur = 0;
+                if(SpellDuration* sd = dbcSpellDuration.LookupEntryForced(GetProto()->DurationIndex))
                 {
                     //check for negative and 0 durations.
                     //duration affected by level

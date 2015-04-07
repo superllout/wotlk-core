@@ -254,9 +254,7 @@ void oLog::logError(const char* file, int line, const char* fncname, const char*
     char buf[ 32768 ];
     char message[ 32768 ];
 
-    snprintf(message, 32768, "[ERR] %s %s", fncname, msg);
-    // snprintf(message, 32768, " [ERR] %s:%d %s %s", file, line, fncname, msg);
-    snprintf(message, 32768, " [ERR] %s:%d %s %s", file, line, fncname, msg);
+    snprintf(message, 32768, " [ERR] %s:%i %s %s", file, line, fncname, msg);
     va_list ap;
 
     va_start(ap, msg);

@@ -280,7 +280,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
     delete result;
 
     //last list was not pushed in
-    if(last_entry != 0 && ttab.size())
+    if(last_entry != 0 && !ttab.empty())
         db_cache.push_back(make_pair(last_entry, ttab));
 
     ttab.clear();
@@ -341,7 +341,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
         }
     }
 
-    sLog.outString("  %d loot templates loaded from %s", db_cache.size(), szTableName);
+    Log.Success("LootMgr", "Loaded %u loot templates from %s", db_cache.size(), szTableName);
     db_cache.clear();
 }
 
@@ -462,18 +462,17 @@ void LootMgr::PushLoot(StoreLootList* list, Loot* loot, uint32 type)
 
 void LootMgr::AddLoot(Loot* loot, uint32 itemid, uint32 mincount, uint32 maxcount)
 {
-    uint32 i;
-    uint32 count;
     ItemPrototype* itemproto = ItemPrototypeStorage.LookupEntry(itemid);
 
     if(itemproto)  // this check is needed until loot DB is fixed
     {
+        uint32 count = 0;
         if(mincount == maxcount)
             count = maxcount;
         else
             count = RandomUInt(maxcount - mincount) + mincount;
-
-        for(i = 0; i < loot->items.size(); ++i)
+        uint32 i = 0;
+        for(; i < loot->items.size(); ++i)
         {
             //itemid rand match a already placed item, if item is stackable and unique(stack), increment it, otherwise skips
             if((loot->items[i].item.itemproto == itemproto) && itemproto->MaxCount && ((loot->items[i].iItemsCount + count) < itemproto->MaxCount))
@@ -527,16 +526,12 @@ void LootMgr::AddLoot(Loot* loot, uint32 itemid, uint32 mincount, uint32 maxcoun
     }
     if(loot->items.size() > 16)
     {
-        std::vector<__LootItem>::iterator item_to_remove;
-        std::vector<__LootItem>::iterator itr;
-        uint32 item_quality;
-        bool quest_item;
         while(loot->items.size() > 16)
         {
-            item_to_remove = loot->items.begin();
-            item_quality = 0;
-            quest_item = false;
-            for(itr = loot->items.begin(); itr != loot->items.end(); ++itr)
+            std::vector<__LootItem>::iterator item_to_remove = loot->items.begin();
+            uint32 item_quality = 0;
+            bool quest_item = false;
+            for (std::vector<__LootItem>::iterator itr = loot->items.begin(); itr != loot->items.end(); ++itr)
             {
                 item_quality = (*itr).item.itemproto->Quality;
                 quest_item = (*itr).item.itemproto->Class == ITEM_CLASS_QUEST;
@@ -639,16 +634,20 @@ bool LootMgr::CanGODrop(uint32 LootId, uint32 itemid)
 bool LootMgr::IsPickpocketable(uint32 creatureId)
 {
     LootStore::iterator tab = PickpocketingLoot.find(creatureId);
-    if(PickpocketingLoot.end() == tab)return false;
-    else return true;
+    if(PickpocketingLoot.end() == tab)
+        return false;
+    else
+        return true;
 }
 
 //THIS should be cached
 bool LootMgr::IsSkinnable(uint32 creatureId)
 {
     LootStore::iterator tab = SkinningLoot.find(creatureId);
-    if(SkinningLoot.end() == tab)return false;
-    else return true;
+    if(SkinningLoot.end() == tab)
+        return false;
+    else
+        return true;
 }
 
 //THIS should be cached
@@ -753,13 +752,13 @@ void LootRoll::Finalize()
     uint32 guidtype = GET_TYPE_FROM_GUID(_guid);
     if(guidtype == HIGHGUID_TYPE_UNIT)
     {
-        Creature* pc = _mgr->GetCreature(GET_LOWGUID_PART(_guid));
-        if(pc) pLoot = &pc->loot;
+        if (Creature* pc = _mgr->GetCreature(GET_LOWGUID_PART(_guid)))
+            pLoot = &pc->loot;
     }
     else if(guidtype == HIGHGUID_TYPE_GAMEOBJECT)
     {
-        GameObject* go = _mgr->GetGameObject(GET_LOWGUID_PART(_guid));
-        if(go) pLoot = &go->loot;
+        if (GameObject* go = _mgr->GetGameObject(GET_LOWGUID_PART(_guid)))
+            pLoot = &go->loot;
     }
 
     if(!pLoot)

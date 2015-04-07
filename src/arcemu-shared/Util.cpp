@@ -173,19 +173,19 @@ void MakeIntString(char* buf, int num)
     {
         buf[0] = '0';
         //itoa(num, &buf[1], 10);
-        sprintf(&buf[1], "%u", num);
+        sprintf(&buf[1], "%i", num);
     }
     else
     {
         //itoa(num,buf,10);
-        sprintf(buf, "%u", num);
+        sprintf(buf, "%i", num);
     }
 }
 
 void MakeIntStringNoZero(char* buf, int num)
 {
     //itoa(num,buf,10);
-    sprintf(buf, "%u", num);
+    sprintf(buf, "%i", num);
 }
 
 string ConvertTimeStampToString(uint32 timestamp)

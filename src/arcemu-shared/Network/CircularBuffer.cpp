@@ -51,7 +51,7 @@ bool CircularBuffer::Read(void* destination, size_t bytes)
 
     // copy as much out of region a
     size_t cnt = bytes;
-    size_t aRead = 0, bRead = 0;
+    size_t aRead = 0;
     if((m_regionASize + m_regionBSize) < bytes)
         return false;
 
@@ -69,7 +69,7 @@ bool CircularBuffer::Read(void* destination, size_t bytes)
     // Data left over? read the data from buffer B
     if(cnt > 0 && m_regionBSize > 0)
     {
-        bRead = (cnt > m_regionBSize) ? m_regionBSize : cnt;
+        size_t bRead = (cnt > m_regionBSize) ? m_regionBSize : cnt;
         memcpy((char*)destination + aRead, m_regionBPointer, bRead);
         m_regionBSize -= bRead;
         m_regionBPointer += bRead;
@@ -196,13 +196,12 @@ void CircularBuffer::Remove(size_t len)
 {
     // remove from A first before we remove from b
     size_t cnt = len;
-    size_t aRem, bRem;
 
     // If we have both region A and region B, always "finish" off region A first, as
     // this will contain the "oldest" data
     if(m_regionASize > 0)
     {
-        aRem = (cnt > m_regionASize) ? m_regionASize : cnt;
+        size_t aRem = (cnt > m_regionASize) ? m_regionASize : cnt;
         m_regionASize -= aRem;
         m_regionAPointer += aRem;
         cnt -= aRem;
@@ -211,7 +210,7 @@ void CircularBuffer::Remove(size_t len)
     // Data left over? cut the data from buffer B
     if(cnt > 0 && m_regionBSize > 0)
     {
-        bRem = (cnt > m_regionBSize) ? m_regionBSize : cnt;
+        size_t bRem = (cnt > m_regionBSize) ? m_regionBSize : cnt;
         m_regionBSize -= bRem;
         m_regionBPointer += bRem;
         cnt -= bRem;

@@ -137,7 +137,7 @@ class SERVER_DECL ArrayStorageContainer
                 return;        // no need to realloc
 
             T** a = new T*[Max];
-            memset(a, 0, sizeof(T*)*Max);
+
             memcpy(a, _array, sizeof(T*) * _max);
             delete [] _array;
             _array = a;

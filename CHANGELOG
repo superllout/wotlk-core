@@ -8,6 +8,7 @@ This changelog keeps information about most major changes in core, scripts and i
 * Changed cases of script projects folders
 * Renamed ad project to map_extractor for correctness
 * Fixed and improved speed of achievements data saving
+* Added proper support for GameObjects gossips - allows easer gossip scripting for GameObjects
 
 4.0.2 changes
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.

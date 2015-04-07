@@ -153,14 +153,9 @@ class CCollideInterface
             if(!mgr->getAreaInfo(mapId, x, y, z, flags, adtid, rootid, groupid))
                 return true;
 
-            WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid);
-            AreaTable* area = NULL;
-
-            if(wmoArea != NULL)
+            if (WMOAreaTableEntry* wmoArea = sWorld.GetWMOAreaData(rootid, adtid, groupid))
             {
-                area = dbcArea.LookupEntryForced(wmoArea->areaId);
-
-                if(area != NULL)
+                if(AreaTable* area = dbcArea.LookupEntryForced(wmoArea->areaId))
                 {
                     if(area->AreaFlags & 0x04000000)  //outdoor
                         return true;

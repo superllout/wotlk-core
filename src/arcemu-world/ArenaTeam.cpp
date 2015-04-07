@@ -61,9 +61,7 @@ ArenaTeam::ArenaTeam(uint32 Type, uint32 Id)
 
 ArenaTeam::ArenaTeam(Field* f)
 {
-    uint32 z = 0, i, guid;
-    const char* data;
-    int ret;
+    uint32 z = 0, guid;
 
     m_id = f[z++].GetUInt32();
     m_type = f[z++].GetUInt32();
@@ -84,10 +82,10 @@ ArenaTeam::ArenaTeam(Field* f)
     sscanf(f[z++].GetString(), "%u %u %u %u", &m_stat_gamesplayedweek, &m_stat_gameswonweek, &m_stat_gamesplayedseason, &m_stat_gameswonseason);
 
     m_stat_ranking = f[z++].GetUInt32();
-    for(i = 0; i < m_slots; ++i)
+    for(uint32 i = 0; i < m_slots; ++i)
     {
-        data = f[z++].GetString();
-        ret = sscanf(data, "%u %u %u %u %u %u", &guid, &m_members[i].Played_ThisWeek, &m_members[i].Won_ThisWeek,
+        const char* data = f[z++].GetString();
+        int ret = sscanf(data, "%u %u %u %u %u %u", &guid, &m_members[i].Played_ThisWeek, &m_members[i].Won_ThisWeek,
                      &m_members[i].Played_ThisSeason, &m_members[i].Won_ThisSeason, &m_members[i].PersonalRating);
         if(ret >= 5)
         {
@@ -107,10 +105,9 @@ ArenaTeam::ArenaTeam(Field* f)
 
 void ArenaTeam::SendPacket(WorldPacket* data)
 {
-    PlayerInfo* info;
     for(uint32 i = 0; i < m_memberCount; ++i)
     {
-        info = m_members[i].Info;
+        PlayerInfo* info = m_members[i].Info;
         if(info && info->m_loggedInPlayer)
             info->m_loggedInPlayer->GetSession()->SendPacket(data);
     }
@@ -121,14 +118,13 @@ void ArenaTeam::Destroy()
     char buffer[1024];
     WorldPacket* data;
     vector<PlayerInfo*> tokill;
-    uint32 i;
     tokill.reserve(m_memberCount);
     snprintf(buffer, 1024, "The arena team, '%s', disbanded.", m_name.c_str());
     data = sChatHandler.FillSystemMessageData(buffer);
     SendPacket(data);
     delete data;
 
-    for(i = 0; i < m_memberCount; ++i)
+    for(uint32 i = 0; i < m_memberCount; ++i)
     {
         if(m_members[i].Info)
             tokill.push_back(m_members[i].Info);
@@ -145,7 +141,6 @@ void ArenaTeam::Destroy()
 
 bool ArenaTeam::AddMember(PlayerInfo* info)
 {
-    uint32 base_field;
     Player* plr = info->m_loggedInPlayer;
     if(m_memberCount >= m_slots)
         return false;
@@ -157,7 +152,7 @@ bool ArenaTeam::AddMember(PlayerInfo* info)
 
     if(plr)
     {
-        base_field = (m_type * 7) + PLAYER_FIELD_ARENA_TEAM_INFO_1_1;
+        uint32 base_field = (m_type * 7) + PLAYER_FIELD_ARENA_TEAM_INFO_1_1;
         plr->SetUInt32Value(base_field, m_id);
         plr->SetUInt32Value(base_field + 1, m_leader);
 

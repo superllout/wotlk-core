@@ -74,15 +74,12 @@ void SocketMgr::CloseAll()
 
 void SocketMgr::SpawnWorkerThreads()
 {
-    uint32 count = 1;
-    for(uint32 i = 0; i < count; ++i)
-        ThreadPool.ExecuteTask(new SocketWorkerThread());
+    ThreadPool.ExecuteTask(new SocketWorkerThread());
 }
 
 bool SocketWorkerThread::run()
 {
     //printf("Worker thread started.\n");
-    int fd_count;
     running = true;
     Socket* ptr;
     int i;
@@ -97,7 +94,7 @@ bool SocketWorkerThread::run()
 
     while(running)
     {
-        fd_count = kevent(kq, NULL, 0, &events[0], THREAD_EVENT_SIZE, &ts);
+        int fd_count = kevent(kq, NULL, 0, &events[0], THREAD_EVENT_SIZE, &ts);
         for(i = 0; i < fd_count; ++i)
         {
             if(events[i].ident >= SOCKET_HOLDER_SIZE)

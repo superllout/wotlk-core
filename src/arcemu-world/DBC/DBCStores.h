@@ -1742,7 +1742,6 @@ class SERVER_DECL DBCStorage
 
         bool Load(const char* filename, const char* format, bool load_indexed, bool load_strings)
         {
-            uint32 i;
             uint32 string_length;
             long pos;
 
@@ -1773,7 +1772,7 @@ class SERVER_DECL DBCStorage
             ASSERT(m_heapBlock);
 
             /* read the data for each row */
-            for(i = 0; i < rows; ++i)
+            for(uint32 i = 0; i < rows; ++i)
             {
                 memset(&m_heapBlock[i], 0, sizeof(T));
                 ReadEntry(f, &m_heapBlock[i], format, cols, filename);
@@ -1792,7 +1791,7 @@ class SERVER_DECL DBCStorage
                 ASSERT(m_entries);
 
                 memset(m_entries, 0, (sizeof(T*) * (m_max + 1)));
-                for(i = 0; i < rows; ++i)
+                for(uint32 i = 0; i < rows; ++i)
                 {
                     if(m_firstEntry == NULL)
                         m_firstEntry = &m_heapBlock[i];

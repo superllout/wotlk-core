@@ -122,10 +122,9 @@ void CThreadPool::ExecuteTask(ThreadBase* ExecutionTarget)
 
 void CThreadPool::Startup()
 {
-    int i;
     int tcount = THREAD_RESERVE;
 
-    for(i = 0; i < tcount; ++i)
+    for(int i = 0; i < tcount; ++i)
         StartThread(NULL);
 
     Log.Debug("ThreadPool", "Startup, launched %u threads.", tcount);
@@ -196,12 +195,11 @@ void CThreadPool::KillFreeThreads(uint32 count)
 {
     Log.Debug("ThreadPool", "Killing %u excess threads.", count);
     _mutex.Acquire();
-    Thread* t;
     ThreadSet::iterator itr;
     uint32 i;
     for(i = 0, itr = m_freeThreads.begin(); i < count && itr != m_freeThreads.end(); ++i, ++itr)
     {
-        t = *itr;
+        Thread* t = *itr;
         t->ExecutionTarget = NULL;
         t->DeleteAfterExit = true;
         ++_threadsToExit;
@@ -239,11 +237,10 @@ void CThreadPool::Shutdown()
             {
                 /*if we are here then a thread in the free pool checked if it was being shut down just before CThreadPool::Shutdown() was called,
                 but called Suspend() just after KillFreeThreads(). All we need to do is to resume it.*/
-                Thread* t;
                 ThreadSet::iterator itr;
                 for(itr = m_freeThreads.begin(); itr != m_freeThreads.end(); ++itr)
                 {
-                    t = *itr;
+                    Thread* t = *itr;
                     t->ControlInterface.Resume();
                 }
             }

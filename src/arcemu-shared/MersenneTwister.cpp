@@ -61,14 +61,12 @@ void CleanupRandomNumberGenerators()
 
 double RandomDouble()
 {
-    double ret;
-    uint32 c;
     for(;;)
     {
-        c = counter.GetVal() % NUMBER_OF_GENERATORS;
+        uint32 c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if(m_locks[c]->AttemptAcquire())
         {
-            ret = m_generators[c]->Random();
+            double ret = m_generators[c]->Random();
             m_locks[c]->Release();
             return ret;
         }
@@ -79,14 +77,12 @@ double RandomDouble()
 
 uint32 RandomUInt(uint32 n)
 {
-    uint32 ret;
-    uint32 c;
     for(;;)
     {
-        c = counter.GetVal() % NUMBER_OF_GENERATORS;
+        uint32 c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if(m_locks[c]->AttemptAcquire())
         {
-            ret = m_generators[c]->IRandom(0, n);
+            uint32 ret = m_generators[c]->IRandom(0, n);
             m_locks[c]->Release();
             return ret;
         }
@@ -112,14 +108,12 @@ float RandomFloat()
 
 uint32 RandomUInt()
 {
-    uint32 ret;
-    uint32 c;
     for(;;)
     {
-        c = counter.GetVal() % NUMBER_OF_GENERATORS;
+        uint32 c = counter.GetVal() % NUMBER_OF_GENERATORS;
         if(m_locks[c]->AttemptAcquire())
         {
-            ret = m_generators[c]->IRandom(0, RAND_MAX);
+            uint32 ret = m_generators[c]->IRandom(0, RAND_MAX);
             m_locks[c]->Release();
             return ret;
         }
@@ -299,7 +293,6 @@ int CRandomMersenne::IRandomX(int min, int max)
 
     // 64 bit integers available. Use multiply and shift method
     uint32 interval;                    // Length of interval
-    uint64 longran;                     // Random bits * interval
     uint32 iran;                        // Longran / 2^32
     uint32 remainder;                   // Longran % 2^32
 
@@ -314,7 +307,7 @@ int CRandomMersenne::IRandomX(int min, int max)
     }
     do   // Rejection loop
     {
-        longran  = (uint64)BRandom() * interval;
+        uint64 longran  = (uint64)BRandom() * interval; // Random bits * interval
         iran = (uint32)(longran >> 32);
         remainder = (uint32)longran;
     }

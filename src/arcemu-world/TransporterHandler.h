@@ -43,12 +43,12 @@ class TransportPath
         ARCEMU_INLINE PathNode* GetNodes(void) { return TO< PathNode* >(&i_nodes[0]); }
         float GetTotalLength(void)
         {
-            float len = 0, xd, yd, zd;
+            float len = 0;
             for(unsigned int idx = 1; idx < i_nodes.size(); ++idx)
             {
-                xd = i_nodes[ idx ].x - i_nodes[ idx - 1 ].x;
-                yd = i_nodes[ idx ].y - i_nodes[ idx - 1 ].y;
-                zd = i_nodes[ idx ].z - i_nodes[ idx - 1 ].z;
+                float xd = i_nodes[ idx ].x - i_nodes[ idx - 1 ].x;
+                float yd = i_nodes[ idx ].y - i_nodes[ idx - 1 ].y;
+                float zd = i_nodes[ idx ].z - i_nodes[ idx - 1 ].z;
                 len += (float)sqrt(xd * xd + yd * yd + zd * zd);
             }
             return len;

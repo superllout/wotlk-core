@@ -50,10 +50,6 @@ void MySQLDatabase::_EndTransaction(DatabaseConnection* conn)
 
 bool MySQLDatabase::Initialize(const char* Hostname, unsigned int port, const char* Username, const char* Password, const char* DatabaseName, uint32 ConnectionCount, uint32 BufferSize)
 {
-    uint32 i;
-    MYSQL* temp = NULL;
-    MYSQL* temp2 = NULL;
-    MySQLDatabaseConnection** conns;
     my_bool my_true = true;
 
     mHostname = string(Hostname);
@@ -64,11 +60,11 @@ bool MySQLDatabase::Initialize(const char* Hostname, unsigned int port, const ch
 
     Log.Notice("MySQLDatabase", "Connecting to `%s`, database `%s`...", Hostname, DatabaseName);
 
-    conns = new MySQLDatabaseConnection*[ConnectionCount];
+    MySQLDatabaseConnection** conns = new MySQLDatabaseConnection*[ConnectionCount];
     Connections = ((DatabaseConnection**)conns);
-    for(i = 0; i < ConnectionCount; ++i)
+    for(uint32 i = 0; i < ConnectionCount; ++i)
     {
-        temp = mysql_init(NULL);
+        MYSQL* temp = mysql_init(NULL);
         if(temp == NULL)
             continue;
 
@@ -78,7 +74,7 @@ bool MySQLDatabase::Initialize(const char* Hostname, unsigned int port, const ch
         if(mysql_options(temp, MYSQL_OPT_RECONNECT, &my_true))
             Log.Error("MySQLDatabase", "MYSQL_OPT_RECONNECT could not be set, connection drops may occur but will be counteracted.");
 
-        temp2 = mysql_real_connect(temp, Hostname, Username, Password, DatabaseName, port, NULL, 0);
+        MYSQL* temp2 = mysql_real_connect(temp, Hostname, Username, Password, DatabaseName, port, NULL, 0);
         if(temp2 == NULL)
         {
             Log.Error("MySQLDatabase", "Connection failed due to: `%s`", mysql_error(temp));

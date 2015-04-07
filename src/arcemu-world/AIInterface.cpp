@@ -1171,10 +1171,9 @@ Unit* AIInterface::FindTarget()
     // Start of neutralguard snippet
     if(m_isNeutralGuard)
     {
-        Player* tmpPlr;
         for(std::set< Object*>::iterator itrPlr = m_Unit->GetInRangePlayerSetBegin(); itrPlr != m_Unit->GetInRangePlayerSetEnd(); ++itrPlr)
         {
-            tmpPlr = TO< Player* >(*itrPlr);
+            Player* tmpPlr = TO< Player* >(*itrPlr);
 
             if(tmpPlr == NULL)
                 continue;
@@ -1396,17 +1395,13 @@ bool AIInterface::FindFriends(float dist)
         return false;
 
     bool result = false;
-    TargetMap::iterator it;
-
-    ;
-    Unit* pUnit;
 
     for(std::set<Object*>::iterator itr = m_Unit->GetInRangeSetBegin(); itr != m_Unit->GetInRangeSetEnd(); ++itr)
     {
         if(!(*itr)->IsUnit())
             continue;
 
-        pUnit = TO< Unit* >(*itr);
+        Unit* pUnit = TO< Unit* >(*itr);
         if(!pUnit->isAlive())
             continue;
 
@@ -1434,7 +1429,7 @@ bool AIInterface::FindFriends(float dist)
 
                 LockAITargets(true);
 
-                for(it = m_aiTargets.begin(); it != m_aiTargets.end(); ++it)
+                for(TargetMap::iterator it = m_aiTargets.begin(); it != m_aiTargets.end(); ++it)
                 {
                     Unit* ai_t = m_Unit->GetMapMgr()->GetUnit(it->first);
                     if(ai_t && pUnit->GetAIInterface() && isHostile(ai_t, pUnit))
@@ -2027,7 +2022,6 @@ void AIInterface::deleteWayPoint(uint32 wpid)
         return; //not valid id
 
     WayPointMap new_waypoints;
-    uint32 newpid = 1;
     for(WayPointMap::iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if((*itr) == NULL || (*itr)->id == wpid)
@@ -2043,6 +2037,7 @@ void AIInterface::deleteWayPoint(uint32 wpid)
 
     m_waypoints->clear();
     m_waypoints->push_back((WayPoint*)NULL);        // waypoint 0
+    uint32 newpid = 1;
     for(WayPointMap::iterator itr = new_waypoints.begin(); itr != new_waypoints.end(); ++itr)
     {
         (*itr)->id = newpid++;
@@ -2064,12 +2059,11 @@ bool AIInterface::showWayPoints(Player* pPlayer, bool Backwards)
 
     m_WayPointsShowing = true;
 
-    WayPoint* wp = NULL;
     for(itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if((*itr) != NULL)
         {
-            wp = *itr;
+            WayPoint* wp = *itr;
             Creature* c = TO_CREATURE(GetUnit());    // yes this is terrible
 
             //Create
@@ -2124,17 +2118,13 @@ bool AIInterface::hideWayPoints(Player* pPlayer)
     //wpid of 0 == all
     if(m_WayPointsShowing != true) return false;
     m_WayPointsShowing = false;
-    WayPointMap::const_iterator itr;
 
-    // slightly better way to do this
-    uint64 guid;
-
-    for(itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
+    for(WayPointMap::const_iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if((*itr) != NULL)
         {
             // avoid C4293
-            guid = ((uint64)HIGHGUID_TYPE_WAYPOINT << 32) | (*itr)->id;
+            uint64 guid = ((uint64)HIGHGUID_TYPE_WAYPOINT << 32) | (*itr)->id;
             WoWGuid wowguid(guid);
             pPlayer->PushOutOfRange(wowguid);
         }
@@ -2150,18 +2140,15 @@ bool AIInterface::saveWayPoints()
     if(!GetUnit()->IsCreature()) return false;
 
     WorldDatabase.Execute("DELETE FROM creature_waypoints WHERE spawnid = %u", TO_CREATURE(GetUnit())->GetSQL_id());
-    WayPointMap::const_iterator itr;
-    WayPoint* wp = NULL;
-    std::stringstream ss;
 
-    for(itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
+    for(WayPointMap::const_iterator itr = m_waypoints->begin(); itr != m_waypoints->end(); ++itr)
     {
         if((*itr) == NULL)
             continue;
 
-        wp = (*itr);
+        WayPoint* wp = (*itr);
 
-        //Save
+        std::stringstream ss;
         ss.rdbuf()->str("");
 
         ss << "INSERT INTO creature_waypoints ";
@@ -2223,13 +2210,13 @@ void AIInterface::_UpdateMovement(uint32 p_time)
     if(m_Unit->GetCurrentSpell() != NULL)
         return;
 
-    uint32 timediff = 0;
+    // uint32 timediff = 0;
 
     if(m_moveTimer > 0)
     {
         if(p_time >= m_moveTimer)
         {
-            timediff = p_time - m_moveTimer;
+            // timediff = p_time - m_moveTimer;
             m_moveTimer = 0;
         }
         else
@@ -2340,9 +2327,6 @@ void AIInterface::_UpdateMovement(uint32 p_time)
         }
         if(getUnitToFollow() == NULL)
         {
-            // no formation, use waypoints
-            int destpoint = -1;
-
             // If creature has no waypoints just wander aimlessly around spawnpoint
             if(GetWayPointsCount() == 0) //no waypoints
             {
@@ -2371,6 +2355,7 @@ void AIInterface::_UpdateMovement(uint32 p_time)
             }
             else //we do have waypoints
             {
+                int destpoint = -1;
                 if(m_moveType == MOVEMENTTYPE_RANDOMWP) //is random move on if so move to a random waypoint
                 {
                     if(GetWayPointsCount() > 1)
@@ -3985,18 +3970,14 @@ void AIInterface::EventEnterCombat(Unit* pUnit, uint32 misc1)
         m_Unit->GetAIInterface()->modThreatByPtr(pUnit, 1);
         Group* pGroup = TO< Player* >(pUnit)->GetGroup();
 
-        Player* pGroupGuy;
-        GroupMembersSet::iterator itr;
         pGroup->Lock();
         for(uint32 i = 0; i < pGroup->GetSubGroupCount(); i++)
         {
-            for(itr = pGroup->GetSubGroup(i)->GetGroupMembersBegin(); itr != pGroup->GetSubGroup(i)->GetGroupMembersEnd(); ++itr)
+            for(GroupMembersSet::iterator itr = pGroup->GetSubGroup(i)->GetGroupMembersBegin(); itr != pGroup->GetSubGroup(i)->GetGroupMembersEnd(); ++itr)
             {
-                pGroupGuy = (*itr)->m_loggedInPlayer;
+                Player* pGroupGuy = (*itr)->m_loggedInPlayer;
                 if(pGroupGuy && pGroupGuy->isAlive() && m_Unit->GetMapMgr() == pGroupGuy->GetMapMgr() && pGroupGuy->GetDistanceSq(pUnit) <= 40 * 40) //50 yards for now. lets see if it works
-                {
                     m_Unit->GetAIInterface()->AttackReaction(pGroupGuy, 1, 0);
-                }
             }
         }
         pGroup->Unlock();
@@ -4019,9 +4000,10 @@ void AIInterface::EventLeaveCombat(Unit* pUnit, uint32 misc1)
             pUnit->RemoveNegativeAuras();
     }
 
-    Unit* target = NULL;
+
     if(m_Unit->GetMapMgr() && m_Unit->GetMapMgr()->GetMapInfo())
     {
+        Unit* target = NULL;
         switch(m_Unit->GetMapMgr()->GetMapInfo()->type)
         {
             case INSTANCE_NULL:
@@ -4429,7 +4411,7 @@ void AIInterface::MoveKnockback(float x, float y, float z, float horizontal, flo
 
 void AIInterface::OnMoveCompleted()
 {
-    uint32 splineflags = m_splineFlags;
+    // uint32 splineflags = m_splineFlags;
 
     //remove flags that are temporary
     RemoveSplineFlag(SPLINEFLAG_DONE | SPLINEFLAG_TRAJECTORY | SPLINEFLAG_KNOCKBACK);
