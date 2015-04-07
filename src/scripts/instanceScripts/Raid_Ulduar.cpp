@@ -33,43 +33,24 @@ static float UlduarTeleCoords[ 9 ][ 4 ] =
     { 1854.82f,    -11.5608f, 334.175f, 0.0f }
 };
 
-class UlduarTeleporterAI : public GameObjectAIScript
+class UlduarTeleporterGossip : public Arcemu::Gossip::Script
 {
     public:
 
-        UlduarTeleporterAI(GameObject* go) : GameObjectAIScript(go)
+        void OnHello(Object* pObject, Player* plr)
         {
-        }
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), 1);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Expedition Base Camp.", 0);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Formation Grounds", 1);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Colossal Forge", 2);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Scrapyard", 3);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Antechamber of Ulduar", 4);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Shattered Walkway", 5);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Conservatory of Life", 6);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Spark of Imagination", 7);
+            menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Prison of Yogg-Saron", 8);
 
-        ~UlduarTeleporterAI() {}
-
-        static GameObjectAIScript* Create(GameObject* go) { return new UlduarTeleporterAI(go); }
-
-        void OnActivate(Player* player)
-        {
-            GossipMenu* menu = NULL;
-            objmgr.CreateGossipMenuForPlayer(&menu, _gameobject->GetGUID(), 0, player);
-
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Expedition Base Camp.", 0);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Formation Grounds", 1);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Colossal Forge", 2);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Scrapyard", 3);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Antechamber of Ulduar", 4);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Shattered Walkway", 5);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Conservatory of Life", 6);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Spark of Imagination", 7);
-            menu->AddItem(Arcemu::Gossip::ICON_CHAT, "Prison of Yogg-Saron", 8);
-
-            menu->SendTo(player);
-        }
-};
-
-class UlduarTeleporterGossip : public GossipScript
-{
-    public:
-
-        UlduarTeleporterGossip() : GossipScript()
-        {
+            menu.Send(plr);
         }
 
         void OnSelectOption(Object* object, Player* player, uint32 Id, const char* enteredcode)
@@ -85,6 +66,5 @@ class UlduarTeleporterGossip : public GossipScript
 
 void SetupUlduar(ScriptMgr* mgr)
 {
-    mgr->register_gameobject_script(194569, &UlduarTeleporterAI::Create);
-    mgr->register_go_gossip_script(194569, new UlduarTeleporterGossip());
-};
+    mgr->register_go_gossip(194569, new UlduarTeleporterGossip);
+}
