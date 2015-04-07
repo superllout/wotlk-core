@@ -1048,6 +1048,7 @@ void ChatHandler::SystemMessage(WorldSession* m_session, const char* message, ..
     if(!message) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     WorldPacket* data = FillSystemMessageData(msg1);
@@ -1061,6 +1062,7 @@ void ChatHandler::ColorSystemMessage(WorldSession* m_session, const char* colorc
     if(!message) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     char msg[1024];
@@ -1076,6 +1078,7 @@ void ChatHandler::RedSystemMessage(WorldSession* m_session, const char* message,
     if(!message) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     char msg[1024];
@@ -1091,6 +1094,7 @@ void ChatHandler::GreenSystemMessage(WorldSession* m_session, const char* messag
     if(!message) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     char msg[1024];
@@ -1106,6 +1110,7 @@ void ChatHandler::BlueSystemMessage(WorldSession* m_session, const char* message
     if(!message) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     char msg[1024];
@@ -1121,6 +1126,7 @@ void ChatHandler::RedSystemMessageToPlr(Player* plr, const char* message, ...)
     if(!message || !plr || !plr->GetSession()) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     RedSystemMessage(plr->GetSession(), (const char*)msg1);
@@ -1131,6 +1137,7 @@ void ChatHandler::GreenSystemMessageToPlr(Player* plr, const char* message, ...)
     if(!message || !plr || !plr->GetSession()) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     GreenSystemMessage(plr->GetSession(), (const char*)msg1);
@@ -1141,6 +1148,7 @@ void ChatHandler::BlueSystemMessageToPlr(Player* plr, const char* message, ...)
     if(!message || !plr || !plr->GetSession()) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     BlueSystemMessage(plr->GetSession(), (const char*)msg1);
@@ -1151,6 +1159,7 @@ void ChatHandler::SystemMessageToPlr(Player* plr, const char* message, ...)
     if(!message || !plr || !plr->GetSession()) return;
     va_list ap;
     va_start(ap, message);
+    va_end(ap);
     char msg1[1024];
     vsnprintf(msg1, 1024, message, ap);
     SystemMessage(plr->GetSession(), msg1);

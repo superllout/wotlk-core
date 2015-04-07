@@ -781,7 +781,7 @@ void CBattlegroundManager::EventQueueUpdate(bool forceStart)
                 }
             }
 
-            if(possibleGroups.size() > 0)
+            if(!possibleGroups.empty())
             {
                 n = RandomUInt((uint32)possibleGroups.size()) - 1;
                 for(itz = possibleGroups.begin(); itz != possibleGroups.end() && n > 0; ++itz)

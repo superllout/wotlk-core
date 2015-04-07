@@ -403,8 +403,7 @@ void Arena::Finish()
     for(int i = 0; i < 2; i++)
     {
         bool victorious = (i == m_winningteam);
-        set<Player*>::iterator itr = m_players[i].begin();
-        for(; itr != m_players[i].end(); itr++)
+        for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
             Player* plr = (Player*)(*itr);
             if(plr != NULL)

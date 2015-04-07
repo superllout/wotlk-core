@@ -3569,14 +3569,14 @@ void ObjectMgr::LoadAchievementRewards()
             }
             AchievementReward* reward = new AchievementReward;
             reward->title[TEAM_ALLIANCE] = fields[1].GetUInt16();
-            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
+            if (reward->title[TEAM_ALLIANCE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_A %u", id, reward->title[TEAM_ALLIANCE]);
                 continue;
             }
 
             reward->title[TEAM_HORDE] = fields[2].GetUInt16();
-            if (!dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_HORDE]))
+            if (reward->title[TEAM_HORDE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_HORDE]))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_H %u", id, reward->title[TEAM_HORDE]);
                 continue;
