@@ -103,24 +103,21 @@ void oLog::Time(char* buffer)
 
 void oLog::outString(const char* str, ...)
 {
-    if(m_normalFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
     va_start(ap, str);
     vsnprintf(buf, 32768, str, ap);
     va_end(ap);
-
-    outFile(m_normalFile, buf);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::outError(const char* err, ...)
 {
-    if(m_errorFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
@@ -128,15 +125,16 @@ void oLog::outError(const char* err, ...)
     vsnprintf(buf, 32768, err, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 /// Writes into the error log without giving console output. Used for the startup banner.
 void oLog::outErrorSilent(const char* err, ...)
 {
-    if(m_errorFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
@@ -144,14 +142,15 @@ void oLog::outErrorSilent(const char* err, ...)
     vsnprintf(buf, 32768, err, ap);
     va_end(ap);
 
-    outFileSilent(m_errorFile, buf); // This uses a function that won't give console output.
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFileSilent(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::outBasic(const char* str, ...)
 {
-    if(m_normalFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
@@ -159,12 +158,16 @@ void oLog::outBasic(const char* str, ...)
     vsnprintf(buf, 32768, str, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::outDetail(const char* str, ...)
 {
-    if(m_fileLogLevel < 1 || m_normalFile == NULL)
+    if(m_fileLogLevel < 1)
         return;
 
     char buf[32768];
@@ -174,12 +177,16 @@ void oLog::outDetail(const char* str, ...)
     vsnprintf(buf, 32768, str, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::outDebug(const char* str, ...)
 {
-    if(m_fileLogLevel < 2 || m_errorFile == NULL)
+    if(m_fileLogLevel < 2)
         return;
 
     char buf[32768];
@@ -189,12 +196,16 @@ void oLog::outDebug(const char* str, ...)
     vsnprintf(buf, 32768, str, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::outMap(const char* str, ...)
 {
-    if (m_fileLogLevel < 3 || m_errorFile == NULL)
+    if (m_fileLogLevel < 3)
         return;
 
     char buf[32768];
@@ -204,14 +215,15 @@ void oLog::outMap(const char* str, ...)
     vsnprintf(buf, 32768, str, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::logBasic(const char* file, int line, const char* fncname, const char* msg, ...)
 {
-    if(m_normalFile == NULL)
-        return;
-
     char buf[ 32768 ];
     char message[ 32768 ];
 
@@ -224,12 +236,16 @@ void oLog::logBasic(const char* file, int line, const char* fncname, const char*
     vsnprintf(buf, 32768, message, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::logDetail(const char* file, int line, const char* fncname, const char* msg, ...)
 {
-    if((m_fileLogLevel < 1) || (m_normalFile == NULL))
+    if(m_fileLogLevel < 1)
         return;
 
     char buf[ 32768 ];
@@ -243,14 +259,15 @@ void oLog::logDetail(const char* file, int line, const char* fncname, const char
     vsnprintf(buf, 32768, message, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::logError(const char* file, int line, const char* fncname, const char* msg, ...)
 {
-    if(m_errorFile == NULL)
-        return;
-
     char buf[ 32768 ];
     char message[ 32768 ];
 
@@ -261,12 +278,16 @@ void oLog::logError(const char* file, int line, const char* fncname, const char*
     vsnprintf(buf, 32768, message, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::logDebug(const char* file, int line, const char* fncname, const char* msg, ...)
 {
-    if((m_fileLogLevel < 2) || (m_errorFile == NULL))
+    if (m_fileLogLevel < 2)
         return;
 
     char buf[ 32768 ];
@@ -280,13 +301,17 @@ void oLog::logDebug(const char* file, int line, const char* fncname, const char*
     vsnprintf(buf, 32768, message, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 //old NGLog.h methods
 void oLog::Notice(const char* source, const char* format, ...)
 {
-    if(m_fileLogLevel < 1 || m_normalFile == NULL)
+    if(m_fileLogLevel < 1)
         return;
 
     char buf[32768];
@@ -296,12 +321,16 @@ void oLog::Notice(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf, source);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf);
+        fclose(loglFile);
+    }
 }
 
 void oLog::Warning(const char* source, const char* format, ...)
 {
-    if(m_fileLogLevel < 1 || m_normalFile == NULL)
+    if(m_fileLogLevel < 1)
         return;
 
     char buf[32768];
@@ -311,14 +340,15 @@ void oLog::Warning(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf, source);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf, source);
+        fclose(loglFile);
+    }
 }
 
 void oLog::Success(const char* source, const char* format, ...)
 {
-    if(m_normalFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
@@ -326,14 +356,15 @@ void oLog::Success(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_normalFile, buf, source);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf, source);
+        fclose(loglFile);
+    }
 }
 
 void oLog::Error(const char* source, const char* format, ...)
 {
-    if(m_errorFile == NULL)
-        return;
-
     char buf[32768];
     va_list ap;
 
@@ -341,12 +372,16 @@ void oLog::Error(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf, source);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf, source);
+        fclose(loglFile);
+    }
 }
 
 void oLog::Debug(const char* source, const char* format, ...)
 {
-    if(m_fileLogLevel < 2 || m_errorFile == NULL)
+    if(m_fileLogLevel < 2)
         return;
 
     char buf[32768];
@@ -356,12 +391,16 @@ void oLog::Debug(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf, source);
+    if (FILE* loglFile = fopen(logNormalFilename, "a"))
+    {
+        outFile(loglFile, buf, source);
+        fclose(loglFile);
+    }
 }
 
 void oLog::Map(const char* source, const char* format, ...)
 {
-    if (m_fileLogLevel < 3 || m_errorFile == NULL)
+    if (m_fileLogLevel < 3)
         return;
 
     char buf[32768];
@@ -370,7 +409,11 @@ void oLog::Map(const char* source, const char* format, ...)
     vsnprintf(buf, 32768, format, ap);
     va_end(ap);
 
-    outFile(m_errorFile, buf, source);
+    if (FILE* loglFile = fopen(logErrorFilename, "a"))
+    {
+        outFile(loglFile, buf, source);
+        fclose(loglFile);
+    }
 }
 
 void oLog::LargeErrorMessage(const char* source, ...)
@@ -418,7 +461,6 @@ void oLog::Init(int32 fileLogLevel, LogType logType)
 {
     SetFileLoggingLevel(fileLogLevel);
 
-    const char* logNormalFilename = NULL, *logErrorFilename = NULL;
     switch(logType)
     {
         case LOGON_LOG:
@@ -433,42 +475,6 @@ void oLog::Init(int32 fileLogLevel, LogType logType)
                 logErrorFilename = "world-error.log";
                 break;
             }
-    }
-
-    m_normalFile = fopen(logNormalFilename, "w");
-    if(m_normalFile == NULL)
-        fprintf(stderr, "%s: Error opening '%s': %s\n", __FUNCTION__, logNormalFilename, strerror(errno));
-    else
-    {
-        tm* aTm = localtime(&UNIXTIME);
-        outBasic("[%-4d-%02d-%02d %02d:%02d:%02d] ", aTm->tm_year + 1900, aTm->tm_mon + 1, aTm->tm_mday, aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
-    }
-
-    m_errorFile = fopen(logErrorFilename, "a");
-    if(m_errorFile == NULL)
-        fprintf(stderr, "%s: Error opening '%s': %s\n", __FUNCTION__, logErrorFilename, strerror(errno));
-    else
-    {
-        tm* aTm = localtime(&UNIXTIME);
-        // We don't echo time and date again because outBasic above just echoed them.
-        outErrorSilent("===============[%-4d-%02d-%02d]============[%02d:%02d:%02d]===============", aTm->tm_year + 1900, aTm->tm_mon + 1, aTm->tm_mday, aTm->tm_hour, aTm->tm_min, aTm->tm_sec);
-    }
-}
-
-void oLog::Close()
-{
-    if(m_normalFile != NULL)
-    {
-        fflush(m_normalFile);
-        fclose(m_normalFile);
-        m_normalFile = NULL;
-    }
-
-    if(m_errorFile != NULL)
-    {
-        fflush(m_errorFile);
-        fclose(m_errorFile);
-        m_errorFile = NULL;
     }
 }
 

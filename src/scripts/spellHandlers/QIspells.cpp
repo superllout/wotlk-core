@@ -3306,7 +3306,7 @@ bool ProtectingOurOwn(uint32 i, Spell* pSpell)
 
 void SetupQuestItems(ScriptMgr* mgr)
 {
-    mgr->register_dummy_spell(3607, &YennikuRelease);
+    //mgr->register_dummy_spell(3607, &YennikuRelease);
     mgr->register_dummy_spell(4141, &ScrollOfMyzrael);
     mgr->register_dummy_spell(8606, &SummonCyclonian);
 
@@ -3330,7 +3330,7 @@ void SetupQuestItems(ScriptMgr* mgr)
     mgr->register_script_effect(34992, &SummonEkkorash);
     mgr->register_dummy_spell(35113, &MeasuringWarpEnergies);
     mgr->register_script_effect(35413, &NaturalRemedies);
-    mgr->register_dummy_spell(35460, &FuryoftheDreghoodElders);
+    //mgr->register_dummy_spell(35460, &FuryoftheDreghoodElders);
     mgr->register_dummy_spell(37573, &TemporalPhaseModulator);
     mgr->register_dummy_spell(35772, &FloraoftheEcoDomes);
     mgr->register_script_effect(36310, &ADireSituation);
@@ -3394,7 +3394,7 @@ void SetupQuestItems(ScriptMgr* mgr)
 
     mgr->register_dummy_aura(49590, &ArcaneDisruption);
 
-    mgr->register_dummy_aura(37097, &ToLegionHold);
+    //mgr->register_dummy_aura(37097, &ToLegionHold);
 
     mgr->register_script_effect(19138, &CenarionLunardust);
     mgr->register_script_effect(18974, &CenarionMoondust);
@@ -3415,7 +3415,7 @@ void SetupQuestItems(ScriptMgr* mgr)
     // Leading the Ancestors Home
     mgr->register_dummy_spell(45536, &CompleteAncestorRitual);
 
-    mgr->register_dummy_spell(28247, &PoweringOurDefenses); // need to script event
+    //mgr->register_dummy_spell(28247, &PoweringOurDefenses); // need to script event
 
     mgr->register_dummy_spell(34665, &TestingTheAntidote);
     mgr->register_dummy_spell(35724, &ZethGorMustBurnHorde);

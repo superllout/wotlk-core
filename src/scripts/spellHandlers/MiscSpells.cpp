@@ -586,14 +586,14 @@ void SetupMiscSpellhandlers(ScriptMgr* mgr)
 {
     mgr->register_dummy_spell( 54640, &SOTATeleporter );
 
-    mgr->register_dummy_spell( 66550, &IOCTeleporterOut );
-    mgr->register_dummy_spell( 66551, &IOCTeleporterIn );
+    //mgr->register_dummy_spell( 66550, &IOCTeleporterOut );
+    //mgr->register_dummy_spell( 66551, &IOCTeleporterIn );
 
     mgr->register_dummy_spell(11189, &FrostWarding);
     mgr->register_dummy_spell(28332, &FrostWarding);
 
     mgr->register_dummy_spell(11094, &MoltenShields);
-    mgr->register_dummy_spell(13043, &MoltenShields);
+    //mgr->register_dummy_spell(13043, &MoltenShields);
 
     mgr->register_dummy_spell(20577, &Cannibalize);
 

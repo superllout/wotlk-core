@@ -325,12 +325,6 @@ void LogonServer::Run(int argc, char** argv)
     sLog.outErrorSilent(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
     sLog.outErrorSilent("================================================================");
 
-    if(do_version)
-    {
-        sLog.Close();
-        return;
-    }
-
     if(do_check_conf)
     {
         Log.Success("Checking config file: %s", config_file);
@@ -345,7 +339,6 @@ void LogonServer::Run(int argc, char** argv)
         if(Config.MainConfig.GetString("die", "msg", &die) || Config.MainConfig.GetString("die2", "msg", &die))
             printf("Die directive received: %s", die.c_str());
         */
-        sLog.Close();
         return;
     }
 
@@ -359,7 +352,6 @@ void LogonServer::Run(int argc, char** argv)
     Log.Success("Config", "Loading Config Files...");
     if(!Rehash())
     {
-        sLog.Close();
         return;
     }
 
@@ -369,10 +361,7 @@ void LogonServer::Run(int argc, char** argv)
     ThreadPool.Startup();
 
     if(!startdb())
-    {
-        sLog.Close();
         return;
-    }
 
     Log.Success("AccountMgr", "Starting...");
     new AccountMgr;
@@ -530,7 +519,6 @@ void LogonServer::Run(int argc, char** argv)
     delete cl;
     delete sl;
     Log.Success("Server","Shutdown complete.");
-    sLog.Close();
 }
 
 void OnCrash(bool Terminate)

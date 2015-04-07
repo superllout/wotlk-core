@@ -45,8 +45,8 @@ class SERVER_DECL oLog : public Singleton< oLog >
     public:
         oLog() 
         {
-            m_normalFile = m_errorFile = NULL;
             m_fileLogLevel = 0;
+            logNormalFilename = logErrorFilename = NULL;
         }
         ~oLog() {}
 
@@ -86,12 +86,10 @@ class SERVER_DECL oLog : public Singleton< oLog >
         void Init(int32 fileLogLevel, LogType logType);
         void SetFileLoggingLevel(int32 level);
 
-        void Close();
-
         int32 m_fileLogLevel;
 
     private:
-        FILE* m_normalFile, *m_errorFile;
+        const char* logNormalFilename, *logErrorFilename;
         void outFile(FILE* file, char* msg, const char* source = NULL);
         void outFileSilent(FILE* file, char* msg, const char* source = NULL); // Prints text to file without showing it to the user. Used for the startup banner.
         void Time(char* buffer);

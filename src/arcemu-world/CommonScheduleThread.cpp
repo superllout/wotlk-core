@@ -111,10 +111,10 @@ void CommonScheduleThread::BroadCastExec()
                 if(itOrderMSGEntry ==  objmgr.GetBCTotalItemEnd()) itOrderMSGEntry = objmgr.GetBCTotalItemBegin();
                 sWorld.SendBCMessageByID((uint32)itOrderMSGEntry->second);
                 //printf("serial entry: %u\n",(uint32)itOrderMSGEntry->second);
-                itOrderMSGEntry++;
+                ++itOrderMSGEntry;
             }
             break;
         default:
-            return;
+            break;
     }
 }

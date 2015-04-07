@@ -153,7 +153,6 @@ bool Master::Run(int argc, char** argv)
             default:
                 sLog.Init(0, WORLD_LOG);
                 printf("Usage: %s [--checkconf] [--fileloglevel <level>] [--conf <filename>] [--realmconf <filename>] [--version] [--databasecleanup] [--cheatercheck]\n", argv[0]);
-                sLog.Close();
                 return true;
         }
     }
@@ -170,10 +169,7 @@ bool Master::Run(int argc, char** argv)
     sLog.outErrorSilent("================================================================");
 
     if(do_version)
-    {
-        sLog.Close();
         return true;
-    }
 
     if(do_check_conf)
     {
@@ -195,7 +191,6 @@ bool Master::Run(int argc, char** argv)
         else
             Log.Error("Config", "Encountered one or more errors.");
 
-        sLog.Close();
         return true;
     }
 
@@ -219,7 +214,6 @@ bool Master::Run(int argc, char** argv)
     else
     {
         sLog.Error("Config", ">> error occurred loading " CONFDIR "/world.conf");
-        sLog.Close();
         return false;
     }
 
@@ -228,7 +222,6 @@ bool Master::Run(int argc, char** argv)
     else
     {
         sLog.Error("Config", ">> error occurred loading " CONFDIR "/optional.conf");
-        sLog.Close();
         return false;
     }
 
@@ -237,7 +230,6 @@ bool Master::Run(int argc, char** argv)
     else
     {
         sLog.Error("Config", ">> error occurred loading " CONFDIR "/realms.conf");
-        sLog.Close();
         return false;
     }
 
@@ -256,16 +248,12 @@ bool Master::Run(int argc, char** argv)
     if(!_StartDB())
     {
         Database::CleanupLibs();
-        sLog.Close();
         return false;
     }
 
     // Checking the DB version. If it's wrong or can't be validated we exit.
     if(!CheckDBVersion())
-    {
-        sLog.Close();
         return false;
-    }
 
     if(do_database_clean)
     {
@@ -305,7 +293,6 @@ bool Master::Run(int argc, char** argv)
     if(!sWorld.SetInitialWorldSettings())
     {
         Log.Error("Server", "SetInitialWorldSettings() failed. Something went wrong? Exiting.");
-        sLog.Close();
         return false;
     }
 
@@ -555,10 +542,9 @@ bool Master::Run(int argc, char** argv)
     delete Player_Log;
 
     // remove pid
-    remove("arcemu.pid");
+    remove("world.pid");
 
     Log.Success("Shutdown", "Shutdown complete.");
-    Log.Close();
 
 #ifdef WIN32
     WSACleanup();

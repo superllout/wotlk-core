@@ -110,7 +110,7 @@ void SetupShamanSpells(ScriptMgr* mgr)
     uint32 FlametongueWeaponPassiveIds[] = { 10400, 15567, 15568, 15569, 16311, 16312, 16313, 58784, 58791, 58792, 0 };
     mgr->register_dummy_aura(FlametongueWeaponPassiveIds, &FlametongueWeaponPassive);
 
-    mgr->register_dummy_spell(38443, &SkyShatterRegalia);
+    //mgr->register_dummy_spell(38443, &SkyShatterRegalia);
 
     mgr->register_dummy_spell(39610, &ManaTide);
 
