@@ -725,8 +725,8 @@ void Guild::AddGuildMember(PlayerInfo* pMember, WorldSession* pClient, int32 For
         return;
 
     m_lock.Acquire();
-    GuildRank* r;
-    if(m_members.size())
+    GuildRank* r = NULL;
+    if(!m_members.empty())
     {
         if(ForcedRank > 0) r = m_ranks[ForcedRank];
         else if(ForcedRank == -2) r = FindHighestRank();

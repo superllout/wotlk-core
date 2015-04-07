@@ -2210,8 +2210,6 @@ void Creature::HandleMonsterSayEvent(MONSTER_SAY_EVENTS Event)
         // check for special variables $N=name $C=class $R=race $G=gender
         // $G is followed by male_string:female_string;
         string newText = text;
-        static const char* races[12] = {"None", "Human", "Orc", "Dwarf", "Night Elf", "Undead", "Tauren", "Gnome", "Troll", "None", "Blood Elf", "Draenei"};
-        static const char* classes[12] = {"None", "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "None", "Druid"};
         char* test = strstr((char*)text, "$R");
         if(test == NULL)
             test = strstr((char*)text, "$r");
@@ -2222,6 +2220,8 @@ void Creature::HandleMonsterSayEvent(MONSTER_SAY_EVENTS Event)
             if(CurrentTarget)
             {
                 ptrdiff_t testOfs = test - text;
+                // TODO: this should be moved to worldstrings
+                static const char* races[12] = { "None", "Human", "Orc", "Dwarf", "Night Elf", "Undead", "Tauren", "Gnome", "Troll", "None", "Blood Elf", "Draenei" };
                 newText.replace(testOfs, 2, races[CurrentTarget->getRace()]);
             }
         }
@@ -2248,6 +2248,8 @@ void Creature::HandleMonsterSayEvent(MONSTER_SAY_EVENTS Event)
             if(CurrentTarget)
             {
                 ptrdiff_t testOfs = test - text;
+                // TODO: this should be moved to worldstrings
+                static const char* classes[12] = {"None", "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Death Knight", "Shaman", "Mage", "Warlock", "None", "Druid"};
                 newText.replace(testOfs, 2, classes[CurrentTarget->getClass()]);
             }
         }

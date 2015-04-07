@@ -179,13 +179,12 @@ void DayWatcherThread::update_daily()
 void DayWatcherThread::update_arena()
 {
     Log.Notice("DayWatcherThread", "Running Weekly Arena Point Maintenance...");
-    QueryResult* result = CharacterDatabase.Query("SELECT guid, arenaPoints FROM characters");        /* this one is a little more intensive. */
     Player* plr;
     uint32 guid, arenapoints, orig_arenapoints;
     ArenaTeam* team;
     uint32 arenapointsPerTeam[3] = {0};
     double X, Y;
-    if(result)
+    if(QueryResult* result = CharacterDatabase.Query("SELECT guid, arenaPoints FROM characters"))
     {
         do
         {

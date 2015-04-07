@@ -377,7 +377,7 @@ void Item::SaveToDB(int8 containerslot, int8 slot, bool firstsave, QueryBuffer* 
     ss << static_cast<int>(slot) << ",'";
 
     // Pack together enchantment fields
-    if(Enchantments.size() > 0)
+    if(!Enchantments.empty())
     {
         EnchantmentMap::iterator itr = Enchantments.begin();
         for(; itr != Enchantments.end(); ++itr)
@@ -1023,7 +1023,7 @@ void Item::RemoveRelatedEnchants(EnchantEntry* newEnchant)
 void Item::RemoveProfessionEnchant()
 {
     EnchantmentMap::iterator itr;
-    for(itr = Enchantments.begin(); itr != Enchantments.end(); itr++)
+    for(itr = Enchantments.begin(); itr != Enchantments.end(); ++itr)
     {
         if(itr->second.Duration != 0)  // not perm
             continue;
@@ -1037,9 +1037,7 @@ void Item::RemoveProfessionEnchant()
 
 void Item::RemoveSocketBonusEnchant()
 {
-    EnchantmentMap::iterator itr;
-
-    for(itr = Enchantments.begin(); itr != Enchantments.end(); itr++)
+    for(EnchantmentMap::iterator itr = Enchantments.begin(); itr != Enchantments.end(); ++itr)
     {
         if(itr->second.Enchantment->Id == GetProto()->SocketBonus)
         {

@@ -126,7 +126,7 @@ void EventableObject::event_RemoveByPointer(TimedEvent* ev)
 void EventableObject::event_RemoveEvents(uint32 EventType)
 {
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return;
@@ -172,7 +172,7 @@ void EventableObject::event_RemoveEvents()
 void EventableObject::event_ModifyTimeLeft(uint32 EventType, time_t TimeLeft, bool unconditioned)
 {
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return;
@@ -197,7 +197,7 @@ void EventableObject::event_ModifyTimeLeft(uint32 EventType, time_t TimeLeft, bo
 bool EventableObject::event_GetTimeLeft(uint32 EventType, time_t* Time)
 {
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return false;
@@ -229,7 +229,7 @@ bool EventableObject::event_GetTimeLeft(uint32 EventType, time_t* Time)
 void EventableObject::event_ModifyTime(uint32 EventType, time_t Time)
 {
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return;
@@ -252,7 +252,7 @@ void EventableObject::event_ModifyTime(uint32 EventType, time_t Time)
 void EventableObject::event_ModifyTimeAndTimeLeft(uint32 EventType, time_t Time)
 {
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return;
@@ -277,7 +277,7 @@ bool EventableObject::event_HasEvent(uint32 EventType)
 {
     bool ret = false;
     m_lock.Acquire();
-    if(!m_events.size())
+    if(m_events.empty())
     {
         m_lock.Release();
         return false;
