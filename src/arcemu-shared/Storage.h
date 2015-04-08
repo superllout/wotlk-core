@@ -551,9 +551,8 @@ class SERVER_DECL Storage
          */
         void FreeBlock(T* Allocated)
         {
-            char* p = _formatString;
             char* structpointer = (char*)Allocated;
-            for(; *p != 0; ++p)
+            for(char* p = _formatString; *p != 0; ++p)
             {
                 switch(*p)
                 {
@@ -648,12 +647,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
         {
             //printf("Loading database cache from `%s`...\n", IndexName);
             Storage<T, StorageType>::Load(IndexName, FormatString);
-            QueryResult* result;
             if(Storage<T, StorageType>::_storage.NeedsMax())
             {
-                result = WorldDatabase.Query("SELECT MAX(entry) FROM %s", IndexName);
                 uint32 Max = STORAGE_ARRAY_MAX;
-                if(result)
+                if(QueryResult* result = WorldDatabase.Query("SELECT MAX(entry) FROM %s", IndexName))
                 {
                     Max = result->Fetch()[0].GetUInt32() + 1;
                     if(Max > STORAGE_ARRAY_MAX)
@@ -670,9 +667,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
             }
 
             size_t cols = strlen(FormatString);
-            result = WorldDatabase.Query("SELECT * FROM %s", IndexName);
+            QueryResult* result = WorldDatabase.Query("SELECT * FROM %s", IndexName);
             if(!result)
                 return;
+
             Field* fields = result->Fetch();
 
             if(result->GetFieldCount() != cols)
@@ -711,12 +709,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
         void LoadAdditionalData(const char* IndexName, const char* FormatString)
         {
             Storage<T, StorageType>::Load(IndexName, FormatString);
-            QueryResult* result;
             if(Storage<T, StorageType>::_storage.NeedsMax())
             {
-                result = WorldDatabase.Query("SELECT MAX(entry) FROM %s", IndexName);
                 uint32 Max = STORAGE_ARRAY_MAX;
-                if(result)
+                if(QueryResult* result = WorldDatabase.Query("SELECT MAX(entry) FROM %s", IndexName))
                 {
                     Max = result->Fetch()[0].GetUInt32() + 1;
                     if(Max > STORAGE_ARRAY_MAX)
@@ -733,9 +729,10 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
             }
 
             size_t cols = strlen(FormatString);
-            result = WorldDatabase.Query("SELECT * FROM %s", IndexName);
+            QueryResult* result = WorldDatabase.Query("SELECT * FROM %s", IndexName);
             if(!result)
                 return;
+
             Field* fields = result->Fetch();
 
             if(result->GetFieldCount() != cols)
@@ -772,12 +769,12 @@ class SERVER_DECL SQLStorage : public Storage<T, StorageType>
         {
             Log.Notice("Storage", "Reloading database cache from `%s`...", Storage<T, StorageType>::_indexName);
             QueryResult* result = WorldDatabase.Query("SELECT MAX(entry) FROM %s", Storage<T, StorageType>::_indexName);
-            if(result == 0)
+            if(!result)
                 return;
 
             uint32 Max = result->Fetch()[0].GetUInt32();
             delete result;
-            if(!Max)
+            if(Max == 0)
                 return;
 
             if(Storage<T, StorageType>::_storage.NeedsMax())
