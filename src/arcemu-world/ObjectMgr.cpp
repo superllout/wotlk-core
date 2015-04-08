@@ -1072,7 +1072,7 @@ void ObjectMgr::ProcessGameobjectQuests()
                 Log.Error("ObjectMgr", "Tried to load gameobject_quest_pickup_binding data with non existing quest %u for object entry %u", fields[0].GetUInt32());
                 continue;
             }
-            
+
             pGameObject->goMap.insert(make_pair(pQuest, fields[2].GetUInt32()));
             ++count;
         }
@@ -2358,7 +2358,7 @@ void ObjectMgr::LoadCreatureTimedEmotes()
             te->msg = new char[ len + 1 ];
             memcpy(te->msg, str, len + 1);
         }
-        else 
+        else
             te->msg = NULL;
         te->msg_type = static_cast<uint8>(fields[5].GetUInt32());
         te->msg_lang = static_cast<uint8>(fields[6].GetUInt32());
@@ -2389,7 +2389,7 @@ TimedEmoteList* ObjectMgr::GetTimedEmoteList(uint32 spawnid)
         TimedEmoteList* m = i->second;
         return m;
     }
-    else 
+    else
         return NULL;
 }
 
@@ -3594,8 +3594,8 @@ void ObjectMgr::LoadAchievementRewards()
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
                 continue;
             }
-            reward->subject = fields[5].GetString() ? fields[4].GetString() : "";
-            reward->text = fields[6].GetString() ? fields[5].GetString() : "";
+            reward->subject = fields[5].GetString() ? fields[5].GetString() : "";
+            reward->text = fields[6].GetString() ? fields[6].GetString() : "";
 
             reward->mailTemplate = fields[7].GetUInt32();
             if (reward->mailTemplate != 0 && dbcMailTemplateEntry.LookupEntryForced(reward->mailTemplate))
@@ -3739,7 +3739,7 @@ void ObjectMgr::LoadCreatureDifficultyStats()
                 Log.Error("LoadCreatureScriptTexts", "data for creature %u and difficulty %u has invalid min health info", entry, difficulty);
                 continue;
             }
-            
+
             mCreatureStats.maxHealth = pFields[5].GetUInt8();
             if (mCreatureStats.maxHealth == 0)
             {

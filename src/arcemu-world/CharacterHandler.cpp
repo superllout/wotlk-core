@@ -126,6 +126,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
     _side = -1; // side should be set on every enumeration for safety
 
     uint32 numchar;
+    has_dk = false;
 
     if(result)
         numchar = result->GetRowCount();
@@ -141,7 +142,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
 
     if(result)
     {
-        bool has_dk = false;
+        
         do
         {
             Field* fields = result->Fetch();
@@ -163,7 +164,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
             // Note: To change what level is required to make a dk change the >= 55 to something.
             // For example >=80 would require a level 80 to create a DK
             has_level_55_char = has_level_55_char || (fields[1].GetUInt8() >= 55);
-            has_dk = has_dk || (Class == 6);
+            has_dk = has_dk || (Class == DEATHKNIGHT);
 
             /* build character enum, w0000t :p */
             data << uint64(guid);                        //guid
