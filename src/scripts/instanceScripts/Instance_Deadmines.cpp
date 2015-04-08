@@ -22,23 +22,23 @@
 #include "Setup.h"
 
 enum DeadMinesGOIDs{
-    GO_FACTORY_DOOR            = 13965,
+    GO_FACTORY_DOOR         = 13965,
     GO_IRONCLAD_DOOR        = 16397,
     GO_DEFIAS_CANNON        = 16398,
-    GO_HEAVY_DOOR            = 17153,
-    GO_FACTORY_DOOR_LEVER    = 101831,
-    GO_SNEED_DOOR_LEVER        = 101832,
-    GO_IRONCLAD_LEVER        = 101833,
+    GO_HEAVY_DOOR           = 17153,
+    GO_FACTORY_DOOR_LEVER   = 101831,
+    GO_SNEED_DOOR_LEVER     = 101832,
+    GO_IRONCLAD_LEVER       = 101833,
     GO_GILNID_DOOR_LEVER    = 101834,
-    GO_MR_SMITE_CHEST        = 144111
+    GO_MR_SMITE_CHEST       = 144111
 };
 
 enum DeadMinesNPCIDs{
     NPC_EDWIN_VANCLEEF    = 639,
-    NPC_SNEEDS_SHREDDER    = 642,
-    NPC_SNEED            = 643,
-    NPC_RHAHK_ZOR        = 644,
-    NPC_MR_SMITE        = 646,
+    NPC_SNEEDS_SHREDDER   = 642,
+    NPC_SNEED             = 643,
+    NPC_RHAHK_ZOR         = 644,
+    NPC_MR_SMITE          = 646,
     NPC_GUARD1            = 657,    //Pirate
     NPC_GILNID            = 1763,
     NPC_GUARD2            = 3450    //Parrot
@@ -96,12 +96,13 @@ public:
             {
                 GameObject* pDoor4 = GetGameObjectByGuid(mIronCladDoor_GUID);
                 if(pDoor4!=NULL && pDoor4->GetState()!=2)
+                {
                     pDoor4->SetState(2);
+                }
             }break;
         case GO_FACTORY_DOOR_LEVER:
             {
-                GameObject* pDoor5 = GetGameObjectByGuid(mFactoryDoor_GUID);
-                if(pDoor5!=NULL)
+                if (GameObject* pDoor5 = GetGameObjectByGuid(mFactoryDoor_GUID))
                     pDoor5->SetState(pDoor5->GetState()==State_Inactive ? State_Active : State_Inactive);
             }break;
         case GO_IRONCLAD_LEVER:
@@ -113,14 +114,12 @@ public:
             }break;
         case GO_SNEED_DOOR_LEVER:
             {
-                GameObject* pDoor7 = FindClosestGameObjectOnMap(GO_HEAVY_DOOR, Doors[1].x, Doors[1].y, Doors[1].z);
-                if(pDoor7!=NULL)
+                if (GameObject* pDoor7 = FindClosestGameObjectOnMap(GO_HEAVY_DOOR, Doors[1].x, Doors[1].y, Doors[1].z))
                     pDoor7->SetState(pDoor7->GetState() == State_Inactive ? State_Active : State_Inactive);
             }break;
         case GO_GILNID_DOOR_LEVER:
             {
-                GameObject* pDoor8 = FindClosestGameObjectOnMap(GO_HEAVY_DOOR, Doors[0].x, Doors[0].y, Doors[0].z);
-                if(pDoor8!=NULL)
+                if (GameObject* pDoor8 = FindClosestGameObjectOnMap(GO_HEAVY_DOOR, Doors[0].x, Doors[0].y, Doors[0].z))
                     pDoor8->SetState(pDoor8->GetState() == State_Inactive ? State_Active : State_Inactive);
             }break;
         default:
@@ -140,7 +139,7 @@ public:
                     pDoor1->SetState(State_Active);
             }break;
         case NPC_SNEEDS_SHREDDER:
-            SpawnCreature(NPC_SNEED, pCreature->GetPositionX(), pCreature->GetPositionY(), pCreature->GetPositionZ(), pCreature->GetOrientation());
+            SpawnCreature(NPC_SNEED, pCreature->GetPositionX()+rand()%5, pCreature->GetPositionY()+rand()%5, pCreature->GetPositionZ(), pCreature->GetOrientation());
             break;
         case NPC_GILNID:
             {
