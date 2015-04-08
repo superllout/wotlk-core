@@ -524,8 +524,8 @@ class SERVER_DECL Storage
          */
         virtual void Load(const char* IndexName, const char* FormatString)
         {
-            _indexName = strdup(IndexName);
-            _formatString = strdup(FormatString);
+             strcpy(_indexName, IndexName);
+             strcpy(_formatString, FormatString);
         }
 
         /** Frees the duplicated strings and all entries inside the storage container

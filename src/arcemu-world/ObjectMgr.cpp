@@ -418,7 +418,7 @@ void ObjectMgr::LoadPlayersInfo()
             Field* fields = result->Fetch();
             PlayerInfo* pn = new PlayerInfo;
             pn->guid = fields[0].GetUInt32();
-            pn->name = strdup(fields[1].GetString());
+            strcpy(pn->name, fields[1].GetString());
             pn->race = fields[2].GetUInt8();
             pn->cl = fields[3].GetUInt8();
             pn->lastLevel = fields[4].GetUInt32();
