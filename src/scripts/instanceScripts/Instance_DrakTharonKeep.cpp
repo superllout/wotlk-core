@@ -135,7 +135,7 @@ class TROLLGORE_AI : public CreatureAIScript
                         if(c)
                         {
                             //position is guessed
-                            c->Load(cp, -259.532f, -618.976f, 26.669f, 0.0f);
+                            c->Load(cp, _unit->GetMapMgr()->iInstanceMode, -259.532f, -618.976f, 26.669f, 0.0f);
                             c->PushToWorld(_unit->GetMapMgr());
                             //path finding would be usefull :)
                             //c->GetAIInterface()->SetRun();
@@ -458,7 +458,7 @@ class NOVOS_THE_SUMMONER_AI : public CreatureAIScript
                     if(c)
                     {
                         //position is guessed
-                        c->Load(cp, -379.101227f, -824.835449f, 60.0f, 0.0f);
+                        c->Load(cp, _unit->GetMapMgr()->iInstanceMode, -379.101227f, -824.835449f, 60.0f, 0.0f);
                         c->PushToWorld(_unit->GetMapMgr());
                         c->SetSummonedByGUID(_unit->GetGUID());
                         //path finding would be usefull :)
@@ -492,7 +492,7 @@ class NOVOS_THE_SUMMONER_AI : public CreatureAIScript
                         if(c)
                         {
                             //position is guessed
-                            c->Load(cp, -379.101227f, -824.835449f, 60.0f, 0.0f);
+                            c->Load(cp, _unit->GetMapMgr()->iInstanceMode, -379.101227f, -824.835449f, 60.0f, 0.0f);
                             c->PushToWorld(_unit->GetMapMgr());
                             //path finding would be usefull :)
                             Player* p_target = GetRandomPlayerTarget();

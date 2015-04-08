@@ -1212,7 +1212,7 @@ class ARTHAS_AI : public CreatureAIScript
                             if(c)
                             {
                                 //position is guessed
-                                c->Load(cp, 2113.52f, 1288.01f, 136.382f, 2.30383f);
+                                c->Load(cp, _unit->GetMapMgr()->iInstanceMode, 2113.52f, 1288.01f, 136.382f, 2.30383f);
                                 c->PushToWorld(_unit->GetMapMgr());
                             }
                         }
