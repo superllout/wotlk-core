@@ -355,7 +355,7 @@ const char* SpellEffectNames[TOTAL_SPELL_EFFECTS] =
 
 void Spell::ApplyAA(uint32 i)   // Apply Area Aura
 {
-    if(!unitTarget || !unitTarget->isAlive()) 
+    if(!unitTarget || !unitTarget->isAlive())
         return;
 
     if(u_caster != unitTarget)
@@ -1343,9 +1343,10 @@ void Spell::SpellEffectBind(uint32 i)
 
 void Spell::SpellEffectQuestComplete(uint32 i) // Quest Complete
 {
-    if(!p_caster) return;
-    QuestLogEntry* en = p_caster->GetQuestLogForEntry(GetProto()->EffectMiscValue[i]);
-    if(en)
+    if(!p_caster)
+        return;
+
+    if(QuestLogEntry* en = p_caster->GetQuestLogForEntry(GetProto()->EffectMiscValue[i]))
     {
         en->Complete();
         en->UpdatePlayerFields();

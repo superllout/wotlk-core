@@ -77,7 +77,7 @@ enum Opcodes
     SMSG_DEBUG_AISTATE                              = 0x02F,    // development client only
     CMSG_DISABLE_PVP_CHEAT                          = 0x030,    // GM client only
     CMSG_ADVANCE_SPAWN_TIME                         = 0x031,    // GM client only
-    SMSG_DESTRUCTIBLE_BUILDING_DAMAGE               = 0x032,    /// TODO: implement
+    SMSG_DESTRUCTIBLE_BUILDING_DAMAGE               = 0x032,    // Implemented
     CMSG_AUTH_SRP6_BEGIN                            = 0x033,    // not used in client, really?
     CMSG_AUTH_SRP6_PROOF                            = 0x034,    // not used in client, really?
     CMSG_AUTH_SRP6_RECODE                           = 0x035,    // not used in client, really?

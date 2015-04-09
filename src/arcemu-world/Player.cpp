@@ -6552,19 +6552,15 @@ void Player::UpdateNearbyGameObjects()
             GameObjectInfo* info = go->GetInfo();
 
             bool deactivate = false;
-            if(info &&
-                    (info->goMap.size() || info->itemMap.size()))
+            if(info && (!info->goMap.empty() || !info->itemMap.empty()))
             {
-                for(GameObjectGOMap::iterator GOitr = go->GetInfo()->goMap.begin();
-                        GOitr != go->GetInfo()->goMap.end();
-                        ++GOitr)
+                for(GameObjectGOMap::iterator GOitr = go->GetInfo()->goMap.begin(); GOitr != go->GetInfo()->goMap.end(); ++GOitr)
                 {
                     if((qle = GetQuestLogForEntry(GOitr->first->id)) != 0)
                     {
                         for(uint32 i = 0; i < qle->GetQuest()->count_required_mob; ++i)
                         {
-                            if(qle->GetQuest()->required_mob[i] == static_cast<int32>(go->GetEntry()) &&
-                                    qle->GetMobCount(i) < qle->GetQuest()->required_mobcount[i])
+                            if(qle->GetQuest()->required_mob[i] == static_cast<int32>(go->GetEntry()) && qle->GetMobCount(i) < qle->GetQuest()->required_mobcount[i])
                             {
                                 activate_quest_object = true;
                                 break;

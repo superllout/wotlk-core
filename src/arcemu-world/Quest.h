@@ -82,8 +82,8 @@ enum QUEST_FLAG
     QUEST_FLAGS_UNK4              = 0x00004000,                // ? Membership Card Renewal
     QUEST_FLAGS_WEEKLY            = 0x00008000,                // Weekly quest. Can be done once a week. Quests reset at regular intervals for all players.
     QUEST_FLAGS_AUTOCOMPLETE      = 0x00010000,                // auto complete
-    QUEST_FLAGS_UNK5              = 0x00020000,                // has something to do with ReqItemId and SrcItemId
-    QUEST_FLAGS_UNK6              = 0x00040000,                // use Objective text as Complete text
+    QUEST_FLAGS_DISPLAY_ITEM_IN_TRACKER = 0x00020000,          // Displays usable item
+    QUEST_FLAGS_OBJ_TEXT          = 0x00040000,                // use Objective text as Complete text
     QUEST_FLAGS_AUTO_ACCEPT       = 0x00080000,                // quests in starting areas
 
 };
@@ -256,13 +256,21 @@ struct Quest
     //  Returns false if the quest doesn't have this flag.
     //
     ///////////////////////////////////////////////////////////////////
-    bool HasFlag(uint32 flag)
-    {
-        if((quest_flags & flag) != 0)
-            return true;
-        else
-            return false;
-    }
+    bool HasFlag(uint32 flag) { return (quest_flags & flag) != 0 ? true : false; }
+
+    ///////////////////////////////////////////////////////////////////
+    //bool isWeekly()
+    //  Tells if the quest has a specific flag.
+    //
+    //
+    //Parameters:
+    //  none
+    //
+    //Return Value
+    //  Returns true if the quest has weekly flag else returns false.
+    //
+    ///////////////////////////////////////////////////////////////////
+    bool isWeekly() { return HasFlag(QUEST_FLAGS_WEEKLY); }
 };
 #pragma pack(pop)
 
