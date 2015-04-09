@@ -139,7 +139,8 @@ ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	ELSE()
 		SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
 	ENDIF()
-		
+
+    SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
 ENDIF()
 
 #Pass our configurable variables to the C++ preprocessor.
