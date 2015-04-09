@@ -22,6 +22,7 @@
 #define DALARAN_SEWERS_H
 
 #include "StdAfx.h"
+#define MAP_DALARAN_SEWERS 617
 
 class DalaranSewers : public Arena{
 public:
