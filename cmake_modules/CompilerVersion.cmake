@@ -9,6 +9,8 @@ macro( GetCompilerVersion out_version)
 		SET( ${out_version} ${tmp_version} )
 	ELSEIF( MSVC )
 		SET( ${out_version} ${MSVC_VERSION} )
+	ELSE IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	    SET( ${out_version} ${CMAKE_C_COMPILER_VERSION VERSION_GREATER}
 	ELSE()
 		message(FATAL_ERROR "This function does not support the current compiler!")
 	ENDIF()
