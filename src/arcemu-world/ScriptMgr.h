@@ -351,7 +351,7 @@ class SERVER_DECL CreatureAIScript
         void LinkedCreatureDeleted();
 
         //////////////////////////////////////// Vehicle passenger hooks /////////////////////////////////////
-        
+
         ////////////////////////////////////////////////
         //void OnEnterVehicle()
         //  Called when this passenger enters a vehicle
@@ -380,10 +380,10 @@ class SERVER_DECL CreatureAIScript
         //
         ////////////////////////////////////////////////
         virtual void OnExitVehicle(){}
-        
+
 
         /////////////////////////////////////////// Vehicle Hooks ////////////////////////////////////////////
-        
+
         /////////////////////////////////////////////////////
         //void OnFirstPassengerEntered()
         //  Called when the first passenger enters

@@ -575,12 +575,12 @@ void Arcemu::Gossip::TabardDesigner::OnHello(Object* pObject, Player* Plr)
     uint32 Text = objmgr.GetGossipTextForNpc(chartergiver->GetEntry());
     if(NpcTextStorage.LookupEntry(Text) == NULL)
         Text = Gossip::DEFAULT_TXTINDEX;
-    
+
     Gossip::Menu menu(chartergiver->GetGUID(), Text, Plr->GetSession()->language);
     menu.AddItem( Gossip::ICON_TABARD, Plr->GetSession()->LocalizedWorldSrv(Gossip::TABARD), 1 );
     if( chartergiver->isCharterGiver() )
         menu.AddItem( Gossip::ICON_CHAT, "How do I create a guild?", 2 );
-    
+
     if(chartergiver->isVendor())
     {
         VendorRestrictionEntry* vendor = VendorRestrictionEntryStorage.LookupEntry(chartergiver->GetProto()->Id);
@@ -773,11 +773,10 @@ void Arcemu::Gossip::ClassTrainer::OnSelectOption(Object* pObject, Player* Plr, 
                 Gossip::Menu::Complete(Plr);
                 Plr->ModGold(-10000000);
                 Plr->m_talentSpecsCount = 2;
-                Plr->Reset_Talents();
                 Plr->CastSpell(Plr, 63624, true); // Show activate spec buttons
                 Plr->CastSpell(Plr, 63706, true); // Allow primary spec to be activated
                 Plr->CastSpell(Plr, 63707, true); // Allow secondary spec to be activated
-                Plr->SaveToDB(false); // hai gm i bought dual spec but no werk plis gief mi 1000g back - GTFO you never bought anything
+                Plr->SaveToDB(false);
             }
     }
 }

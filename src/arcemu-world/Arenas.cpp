@@ -27,9 +27,7 @@
 
 Arena::Arena(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t, uint32 players_per_side) : CBattleground(mgr, id, lgroup, t)
 {
-    int i;
-
-    for(i = 0; i < 2; i++)
+    for(uint8 i = 0; i < 2; i++)
     {
         m_players[i].clear();
         m_pendPlayers[i].clear();
@@ -90,9 +88,7 @@ Arena::Arena(MapMgr* mgr, uint32 id, uint32 lgroup, uint32 t, uint32 players_per
 
 Arena::~Arena()
 {
-    int i;
-
-    for(i = 0; i < 2; ++i)
+    for(uint8 i = 0; i < 2; ++i)
     {
         // buffs may not be spawned, so delete them if they're not
         if(m_buffs[i] && m_buffs[i]->IsInWorld() == false)
@@ -108,7 +104,6 @@ Arena::~Arena()
                 delete(*itr);
         }
     }
-
 }
 
 void Arena::OnAddPlayer(Player* plr)
@@ -126,9 +121,7 @@ void Arena::OnAddPlayer(Player* plr)
             if(plr->m_auras[x] && !plr->m_auras[x]->GetSpellProto()->DurationIndex && plr->m_auras[x]->GetSpellProto()->AttributesExC & CAN_PERSIST_AND_CASTED_WHILE_DEAD)
                 continue;
             else
-            {
                 plr->m_auras[x]->Remove();
-            }
         }
     }
     // On arena start all conjured items are removed
@@ -208,7 +201,8 @@ void Arena::HookOnPlayerDeath(Player* plr)
 {
     ARCEMU_ASSERT(plr != NULL);
 
-    if(plr->m_isGmInvisible == true) return;
+    if(plr->m_isGmInvisible == true)
+        return;
 
     if(m_playersAlive.find(plr->GetLowGUID()) != m_playersAlive.end())
     {
@@ -231,10 +225,8 @@ void Arena::HookOnShadowSight()
 
 void Arena::OnStart()
 {
-    int i;
-
     /* remove arena readiness buff */
-    for(i = 0; i < 2; ++i)
+    for(uint8 i = 0; i < 2; ++i)
     {
         for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
@@ -256,9 +248,10 @@ void Arena::OnStart()
         }
     }
 
-    for(i = 0; i < 2; i++)
+    for(uint8 i = 0; i < 2; i++)
     {
-        if(m_teams[i] == NULL) continue;
+        if(m_teams[i] == NULL)
+            continue;
 
         m_teams[i]->m_stat_gamesplayedseason++;
         m_teams[i]->m_stat_gamesplayedweek++;
@@ -288,7 +281,7 @@ void Arena::UpdatePlayerCounts()
 {
     if(m_ended)
         return;
-    
+
     SetWorldState(WORLDSTATE_ARENA__GREEN_PLAYER_COUNT, m_playersCount[0]);
     SetWorldState(WORLDSTATE_ARENA__GOLD_PLAYER_COUNT, m_playersCount[1]);
 
@@ -346,10 +339,10 @@ void Arena::Finish()
     if(rated_match)
     {
         m_deltaRating[0] = m_deltaRating[1] = 0;
-        for(uint32 i = 0; i < 2; ++i)
+        for(uint8 i = 0; i < 2; ++i)
         {
-            uint32 j = i ? 0 : 1; // opposing side
-            bool outcome;
+            uint8 j = i ? 0 : 1; // opposing side
+            bool outcome = false;
 
             if(m_teams[i] == NULL || m_teams[j] == NULL)
                 continue;
@@ -363,16 +356,14 @@ void Arena::Finish()
 
             m_deltaRating[i] = CalcDeltaRating(m_teams[i]->m_stat_rating, m_teams[j]->m_stat_rating, outcome);
             m_teams[i]->m_stat_rating += m_deltaRating[i];
-            if(static_cast<int32>(m_teams[i]->m_stat_rating) < 0) m_teams[i]->m_stat_rating = 0;
+            if(static_cast<int32>(m_teams[i]->m_stat_rating) < 0)
+                m_teams[i]->m_stat_rating = 0;
 
             for(set<uint32>::iterator itr = m_players2[i].begin(); itr != m_players2[i].end(); ++itr)
             {
-                PlayerInfo* info = objmgr.GetPlayerInfo(*itr);
-                if(info)
+                if(PlayerInfo* info = objmgr.GetPlayerInfo(*itr))
                 {
-                    ArenaTeamMember* tp = m_teams[i]->GetMember(info);
-
-                    if(tp != NULL)
+                    if(ArenaTeamMember* tp = m_teams[i]->GetMember(info))
                     {
                         tp->PersonalRating += CalcDeltaRating(tp->PersonalRating, m_teams[j]->m_stat_rating, outcome);
                         if(static_cast<int32>(tp->PersonalRating) < 0)
@@ -400,13 +391,12 @@ void Arena::Finish()
     sEventMgr.RemoveEvents(this, EVENT_BATTLEGROUND_CLOSE);
     sEventMgr.AddEvent(TO< CBattleground* >(this), &CBattleground::Close, EVENT_BATTLEGROUND_CLOSE, 120000, 1, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
 
-    for(int i = 0; i < 2; i++)
+    for(uint8 i = 0; i < 2; i++)
     {
         bool victorious = (i == m_winningteam);
         for(set<Player*>::iterator itr = m_players[i].begin(); itr != m_players[i].end(); ++itr)
         {
-            Player* plr = (Player*)(*itr);
-            if(plr != NULL)
+            if (Player* plr = (Player*)(*itr))
             {
                 sHookInterface.OnArenaFinish(plr, plr->m_arenaTeams[m_arenateamtype], victorious, rated_match);
                 plr->ResetAllCooldowns();
@@ -452,10 +442,7 @@ void Arena::HookOnAreaTrigger(Player* plr, uint32 id)
             /* apply the buff */
             SpellEntry* sp = dbcSpell.LookupEntryForced(m_buffs[buffslot]->GetInfo()->sound3);
             ARCEMU_ASSERT(sp != NULL);
-
-            Spell* s = sSpellFactoryMgr.NewSpell(plr, sp, true, 0);
-            SpellCastTargets targets(plr->GetGUID());
-            s->prepare(&targets);
+            plr->CastSpell(plr, sp, true);
 
             /* despawn the gameobject (not delete!) */
             m_buffs[buffslot]->Despawn(0, 30*1000 /*BUFF_RESPAWN_TIME*/);
