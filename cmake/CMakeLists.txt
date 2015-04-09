@@ -104,14 +104,17 @@ if( CMAKE_GENERATOR MATCHES Unix* )
 	IF( DEFINED gcc_version AND NOT APPLE )
 	    add_definitions(-DHAS_CXX0X)
 	    # Enabling c++0x
-	    IF ((${gcc_version} VERSION_EQUAL "4.3") OR (${gcc_version} LESS "4.7")) 
-		    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+	    IF (${gcc_version} EQUAL "4.3" OR ${gcc_version} LESS "4.7") 
+            SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
             SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  
- 
-            # Enabling c++11
-        ELSEIF(DEFINED gcc_version AND ( ${gcc_version} VERSION_GREATER "4.6") AND NOT APPLE )
+        # Enabling c++11
+        ELSEIF(${gcc_version} GREATER "4.6" AND NOT APPLE )
 		    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
             SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+            IF(gcc_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
+                SET(CMAKE_CXX_FLAGS "${CMAKE_CSS_FLAGS} -fdiagnostics-color=auto ")
+                SET(CMAKE_C_FLAGS "$CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
+            ENDIF()
 	    ENDIF()
 	ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	    add_definitions(-DHAS_CXX0X)
