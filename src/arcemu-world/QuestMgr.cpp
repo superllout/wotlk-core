@@ -1065,14 +1065,13 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         return;
     }
 
-    QuestLogEntry* qle = NULL;
-    qle = plr->GetQuestLogForEntry(qst->id);
+    QuestLogEntry* qle = plr->GetQuestLogForEntry(qst->id);
     if(!qle)
         return;
 
     BuildQuestComplete(plr, qst);
     CALL_QUESTSCRIPT_EVENT(qle, OnQuestComplete)(plr, qle);
-    for(uint32 x = 0; x < 4; x++)
+    for(uint8 x = 0; x < 4; x++)
     {
         if(qst->required_spell[x] != 0)
         {
@@ -1105,7 +1104,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         // Reputation reward
         GiveQuestRewardReputation(plr, qst, qst_giver);
         // Static Item reward
-        for(uint32 i = 0; i < 4; ++i)
+        for(uint8 i = 0; i < 4; ++i)
         {
             if(qst->reward_item[i])
             {
@@ -1116,12 +1115,10 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
                 }
                 else
                 {
-                    Item* add;
-                    SlotResult slotresult;
-                    add = plr->GetItemInterface()->FindItemLessMax(qst->reward_item[i], qst->reward_itemcount[i], false);
+                    Item* add = plr->GetItemInterface()->FindItemLessMax(qst->reward_item[i], qst->reward_itemcount[i], false);
                     if(!add)
                     {
-                        slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
+                        SlotResult slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
                         if(!slotresult.Result)
                         {
                             plr->GetItemInterface()->BuildInventoryChangeError(NULL, NULL, INV_ERR_INVENTORY_FULL);
@@ -1156,12 +1153,10 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
             }
             else
             {
-                Item* add;
-                SlotResult slotresult;
-                add = plr->GetItemInterface()->FindItemLessMax(qst->reward_choiceitem[reward_slot], qst->reward_choiceitemcount[reward_slot], false);
+                Item* add = plr->GetItemInterface()->FindItemLessMax(qst->reward_choiceitem[reward_slot], qst->reward_choiceitemcount[reward_slot], false);
                 if(!add)
                 {
-                    slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
+                    SlotResult slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
                     if(!slotresult.Result)
                     {
                         plr->GetItemInterface()->BuildInventoryChangeError(NULL, NULL, INV_ERR_INVENTORY_FULL);
@@ -1187,9 +1182,10 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         }
 
         // Remove items
-        for(uint32 i = 0; i < MAX_REQUIRED_QUEST_ITEM; ++i)
+        for(uint8 i = 0; i < MAX_REQUIRED_QUEST_ITEM; ++i)
         {
-            if(qst->required_item[i]) plr->GetItemInterface()->RemoveItemAmt(qst->required_item[i], qst->required_itemcount[i]);
+            if(qst->required_item[i])
+                plr->GetItemInterface()->RemoveItemAmt(qst->required_item[i], qst->required_itemcount[i]);
         }
 
         // Remove srcitem
@@ -1199,20 +1195,14 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         // cast Effect Spell
         if(qst->effect_on_player)
         {
-            SpellEntry*   inf = dbcSpell.LookupEntryForced(qst->effect_on_player);
-            if(inf)
-            {
-                Spell* spe = sSpellFactoryMgr.NewSpell(plr, inf, true, NULL);
-                SpellCastTargets tgt;
-                tgt.m_unitTarget = plr->GetGUID();
-                spe->prepare(&tgt);
-            }
+            if(SpellEntry* pSpell = dbcSpell.LookupEntryForced(qst->effect_on_player))
+                plr->CastSpell(plr, pSpell, true);
         }
 
         plr->ModGold(GenerateRewardMoney(plr, qst));
 
         // if daily then append to finished dailies
-        if(qst->is_repeatable == arcemu_QUEST_REPEATABLE_DAILY)
+        if(qst->isDaily())
             plr->PushToFinishedDailies(qst->id);
     }
     else
@@ -1222,7 +1212,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         // Reputation reward
         GiveQuestRewardReputation(plr, qst, qst_giver);
         // Static Item reward
-        for(uint32 i = 0; i < 4; ++i)
+        for(uint8 i = 0; i < 4; ++i)
         {
             if(qst->reward_item[i])
             {
@@ -1233,12 +1223,10 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
                 }
                 else
                 {
-                    Item* add;
-                    SlotResult slotresult;
-                    add = plr->GetItemInterface()->FindItemLessMax(qst->reward_item[i], qst->reward_itemcount[i], false);
+                    Item* add = plr->GetItemInterface()->FindItemLessMax(qst->reward_item[i], qst->reward_itemcount[i], false);
                     if(!add)
                     {
-                        slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
+                        SlotResult slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
                         if(!slotresult.Result)
                         {
                             plr->GetItemInterface()->BuildInventoryChangeError(NULL, NULL, INV_ERR_INVENTORY_FULL);
@@ -1273,12 +1261,10 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
             }
             else
             {
-                Item* add;
-                SlotResult slotresult;
-                add = plr->GetItemInterface()->FindItemLessMax(qst->reward_choiceitem[reward_slot], qst->reward_choiceitemcount[reward_slot], false);
+                Item* add = plr->GetItemInterface()->FindItemLessMax(qst->reward_choiceitem[reward_slot], qst->reward_choiceitemcount[reward_slot], false);
                 if(!add)
                 {
-                    slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
+                    SlotResult slotresult = plr->GetItemInterface()->FindFreeInventorySlot(proto);
                     if(!slotresult.Result)
                     {
                         plr->GetItemInterface()->BuildInventoryChangeError(NULL, NULL, INV_ERR_INVENTORY_FULL);
@@ -1305,7 +1291,8 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         // Remove items
         for(uint32 i = 0; i < MAX_REQUIRED_QUEST_ITEM; ++i)
         {
-            if(qst->required_item[i]) plr->GetItemInterface()->RemoveItemAmt(qst->required_item[i], qst->required_itemcount[i]);
+            if(qst->required_item[i])
+                plr->GetItemInterface()->RemoveItemAmt(qst->required_item[i], qst->required_itemcount[i]);
         }
 
         // Remove srcitem
@@ -1347,14 +1334,8 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         // cast Effect Spell
         if(qst->effect_on_player)
         {
-            SpellEntry*   inf = dbcSpell.LookupEntryForced(qst->effect_on_player);
-            if(inf)
-            {
-                Spell* spe = sSpellFactoryMgr.NewSpell(plr, inf, true, NULL);
-                SpellCastTargets tgt;
-                tgt.m_unitTarget = plr->GetGUID();
-                spe->prepare(&tgt);
-            }
+            if(SpellEntry* pSpell = dbcSpell.LookupEntryForced(qst->effect_on_player))
+                plr->CastSpell(plr, pSpell, true);
         }
 
         //Add to finished quests
@@ -1372,8 +1353,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
         plr->GetAchievementMgr().UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_COMPLETE_QUEST, qst->id, 0, 0);
 
         // Remove quests that are listed to be removed on quest complete.
-        set<uint32>::iterator iter = qst->remove_quest_list.begin();
-        for(; iter != qst->remove_quest_list.end(); ++iter)
+        for(set<uint32>::iterator iter = qst->remove_quest_list.begin(); iter != qst->remove_quest_list.end(); ++iter)
         {
             if(!plr->HasFinishedQuest((*iter)))
                 plr->AddToFinishedQuests((*iter));
@@ -1382,8 +1362,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
 
     if( qst->MailTemplateId != 0 )
     {
-        MailTemplateEntry * mail = dbcMailTemplateEntry.LookupEntryForced( qst->MailTemplateId );
-        if( mail != NULL )
+        if(MailTemplateEntry * mail = dbcMailTemplateEntry.LookupEntryForced( qst->MailTemplateId ))
         {
             int mailType = NORMAL;
             uint64 itemGuid = 0;
@@ -1395,8 +1374,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
             if( qst->MailSendItem != 0 )
             {
                 // the way it's done in World::PollMailboxInsertQueue
-                Item * pItem = objmgr.CreateItem(qst->MailSendItem, NULL);
-                if(pItem != NULL)
+                if(Item* pItem = objmgr.CreateItem(qst->MailSendItem, NULL))
                 {
                     pItem->SetStackCount(1);
                     pItem->SaveToDB(0, 0, true, NULL);
@@ -1404,8 +1382,7 @@ void QuestMgr::OnQuestFinished(Player* plr, Quest* qst, Object* qst_giver, uint3
                     pItem->DeleteMe();
                 }
             }
-
-            sMailSystem.SendAutomatedMessage( mailType, qst_giver->GetGUID(), plr->GetGUID(), mail->subject, mail->content, 0, 0, itemGuid, MAIL_STATIONERY_TEST1, MAIL_CHECK_MASK_HAS_BODY, qst->MailDelaySecs);
+            sMailSystem.SendAutomatedMessage( mailType, qst_giver->GetEntry(), plr->GetGUID(), mail->subject, mail->content, 0, 0, itemGuid, MAIL_STATIONERY_TEST1, MAIL_CHECK_MASK_HAS_BODY, qst->MailDelaySecs);
         }
     }
 }
@@ -1722,16 +1699,15 @@ void QuestMgr::SetGameObjectLootQuest(uint32 GO_Entry, uint32 Item_Entry)
 
     // Find the quest that has that item
     uint32 QuestID = 0;
-    uint32 i;
     StorageContainerIterator<Quest> * itr = QuestStorage.MakeIterator();
     while(!itr->AtEnd())
     {
         Quest* qst = itr->Get();
-        for(i = 0; i < MAX_REQUIRED_QUEST_ITEM; ++i)
+        for(uint8 i = 0; i < MAX_REQUIRED_QUEST_ITEM; ++i)
         {
             if(qst->required_item[i] == Item_Entry)
             {
-                QuestID = qst->id;
+                uint32 QuestID = qst->id;
                 m_ObjectLootQuestList[GO_Entry] = QuestID;
                 itr->Destruct();
                 return;

@@ -721,7 +721,7 @@ enum PlayerCheats
     PLAYER_CHEAT_AURASTACK  = 0x20,
     PLAYER_CHEAT_ITEMSTACK  = 0x40,
     PLAYER_CHEAT_TRIGGERPASS = 0x80
-}
+};
 
 struct PlayerSkill
 {

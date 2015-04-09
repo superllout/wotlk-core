@@ -260,7 +260,7 @@ struct Quest
 
     ///////////////////////////////////////////////////////////////////
     //bool isWeekly()
-    //  Tells if the quest has a specific flag.
+    //  Tells if the quest has a weekly flag.
     //
     //
     //Parameters:
@@ -270,7 +270,21 @@ struct Quest
     //  Returns true if the quest has weekly flag else returns false.
     //
     ///////////////////////////////////////////////////////////////////
-    bool isWeekly() { return HasFlag(QUEST_FLAGS_WEEKLY); }
+    bool isWeekly() const { return HasFlag(QUEST_FLAGS_WEEKLY); }
+
+    ///////////////////////////////////////////////////////////////////
+    //bool isDaily()
+    //  Tells if the quest has a dialy flag.
+    //
+    //
+    //Parameters:
+    //  none
+    //
+    //Return Value
+    //  Returns true if the quest has dialy flag else returns false.
+    //
+    ///////////////////////////////////////////////////////////////////
+    bool isDaily() const { return HasFlag(QUEST_FLAGS_DAILY); }
 };
 #pragma pack(pop)
 
