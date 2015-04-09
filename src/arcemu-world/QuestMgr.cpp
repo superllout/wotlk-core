@@ -1698,7 +1698,6 @@ void QuestMgr::SetGameObjectLootQuest(uint32 GO_Entry, uint32 Item_Entry)
     }
 
     // Find the quest that has that item
-    uint32 QuestID = 0;
     StorageContainerIterator<Quest> * itr = QuestStorage.MakeIterator();
     while(!itr->AtEnd())
     {
@@ -1707,8 +1706,7 @@ void QuestMgr::SetGameObjectLootQuest(uint32 GO_Entry, uint32 Item_Entry)
         {
             if(qst->required_item[i] == Item_Entry)
             {
-                uint32 QuestID = qst->id;
-                m_ObjectLootQuestList[GO_Entry] = QuestID;
+                m_ObjectLootQuestList[GO_Entry] = qst->id;
                 itr->Destruct();
                 return;
             }
