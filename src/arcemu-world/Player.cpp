@@ -763,7 +763,7 @@ bool Player::Create(WorldPacket & data)
         SetPower(POWER_TYPE_RUNIC_POWER, 0);
     }
     /*
-    else if (class_ == HUNTER) // Hunters got focus power on cataclysm 
+    else if (class_ == HUNTER) // Hunters got focus power on cataclysm
     {
         SetPower(POWER_TYPE_FOCUS, info->focus); // focus
         SetMaxPower(POWER_TYPE_FOCUS, info->focus);
@@ -2274,21 +2274,28 @@ void Player::SaveToDB(bool bNewCharacter /* =false */)
     // active cheats
     uint32 active_cheats = 0;
     if(CooldownCheat)
-        active_cheats |= 0x01;
+        active_cheats |= PLAYER_CHEAT_COOLDOWN;
+
     if(CastTimeCheat)
-        active_cheats |= 0x02;
+        active_cheats |= PLAYER_CHEAT_CASTTIME;
+
     if(GodModeCheat)
-        active_cheats |= 0x04;
+        active_cheats |= PLAYER_CHEAT_GOD;
+
     if(PowerCheat)
-        active_cheats |= 0x08;
+        active_cheats |= PLAYER_CHEAT_POWER;
+
     if(FlyCheat)
-        active_cheats |= 0x10;
+        active_cheats |= PLAYER_CHEAT_FLY;
+
     if(AuraStackCheat)
-        active_cheats |= 0x20;
+        active_cheats |= PLAYER_CHEAT_AURASTACK;
+
     if(ItemStackCheat)
-        active_cheats |= 0x40;
+        active_cheats |= PLAYER_CHEAT_ITEMSTACK;
+
     if(TriggerpassCheat)
-        active_cheats |= 0x80;
+        active_cheats |= PLAYER_CHEAT_TRIGGERPASS;
 
     std::stringstream ss;
 

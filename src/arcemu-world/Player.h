@@ -711,6 +711,18 @@ enum DUEL_WINNER
 #define PLAYER_ATTACK_TIMEOUT_INTERVAL    5000
 #define PLAYER_FORCED_RESURRECT_INTERVAL    360000 // 1000*60*6= 6 minutes
 
+enum PlayerCheats
+{
+    PLAYER_CHEAT_COOLDOWN   = 0x01,
+    PLAYER_CHEAT_CASTTIME   = 0x02,
+    PLAYER_CHEAT_GOD        = 0x04,
+    PLAYER_CHEAT_POWER      = 0x08,
+    PLAYER_CHEAT_FLY        = 0x10,
+    PLAYER_CHEAT_AURASTACK  = 0x20,
+    PLAYER_CHEAT_ITEMSTACK  = 0x40,
+    PLAYER_CHEAT_TRIGGERPASS = 0x80
+}
+
 struct PlayerSkill
 {
     skilllineentry* Skill;
