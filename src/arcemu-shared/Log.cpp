@@ -222,7 +222,7 @@ void oLog::outMap(const char* str, ...)
     }
 }
 
-void oLog::logBasic(const char* file, int line, const char* fncname, const char* msg, ...)
+void oLog::logBasic(const char* /*file*/, int /*line*/, const char* fncname, const char* msg, ...)
 {
     char buf[ 32768 ];
     char message[ 32768 ];
@@ -243,7 +243,7 @@ void oLog::logBasic(const char* file, int line, const char* fncname, const char*
     }
 }
 
-void oLog::logDetail(const char* file, int line, const char* fncname, const char* msg, ...)
+void oLog::logDetail(const char* /*file*/, int /*line*/, const char* fncname, const char* msg, ...)
 {
     if(m_fileLogLevel < 1)
         return;
@@ -309,7 +309,7 @@ void oLog::logDebug(const char* file, int line, const char* fncname, const char*
 }
 
 //old NGLog.h methods
-void oLog::Notice(const char* source, const char* format, ...)
+void oLog::Notice(const char* /*source*/, const char* format, ...)
 {
     if(m_fileLogLevel < 1)
         return;

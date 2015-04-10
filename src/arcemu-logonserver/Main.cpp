@@ -319,7 +319,7 @@ void LogonServer::Run(int argc, char** argv)
     }
 
     sLog.Init(0, LOGON_LOG);
-    
+
     sLog.outBasic(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH);
 	sLog.outBasic("================================================================");
     sLog.outErrorSilent(BANNER, BUILD_TAG, BUILD_HASH_STR, CONFIG, PLATFORM_TEXT, ARCH); // Echo off.
@@ -521,7 +521,7 @@ void LogonServer::Run(int argc, char** argv)
     Log.Success("Server","Shutdown complete.");
 }
 
-void OnCrash(bool Terminate)
+void OnCrash(bool /*Terminate*/)
 {
 
 }

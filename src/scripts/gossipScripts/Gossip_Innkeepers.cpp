@@ -32,7 +32,7 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
         void OnHello(Object* pObject, Player* Plr)
         {
             uint32 TextID = 820;
-            uint32 Text = objmgr.GetGossipTextForNpc(pCreature->GetEntry());
+            uint32 Text = objmgr.GetGossipTextForNpc(pObject->GetEntry());
             if(Text != 0)
             {
                 GossipText* text = NpcTextStorage.LookupEntry(Text);

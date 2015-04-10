@@ -2244,7 +2244,7 @@ class SERVER_DECL Spell : public EventableObject
         SpellTargetConstraint* m_target_constraint;
 
         virtual int32 DoCalculateEffect(uint32 i, Unit* target, int32 value);
-        virtual void DoAfterHandleEffect(Unit* target, uint32 i) {}
+        virtual void DoAfterHandleEffect(Unit* /*target*/, uint32 /*i*/) {}
 
     public: //Modified by LUAppArc private->public
         float m_missilePitch;

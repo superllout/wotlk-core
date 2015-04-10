@@ -274,12 +274,12 @@ class SERVER_DECL HashMapStorageContainer
 
         /** Creates the array with specified maximum
          */
-        void Setup(uint32 Max)
+        void Setup(uint32 /*Max*/)
         {
 
         }
 
-        void Resetup(uint32 Max)
+        void Resetup(uint32 /*Max*/)
         {
 
         }

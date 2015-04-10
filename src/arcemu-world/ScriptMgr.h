@@ -396,7 +396,7 @@ class SERVER_DECL CreatureAIScript
         //
         //
         /////////////////////////////////////////////////////
-        virtual void OnFirstPassengerEntered( Unit *passenger ){}
+        virtual void OnFirstPassengerEntered( Unit */*passenger*/ ){}
 
         ////////////////////////////////////////////////////
         //void OnVehicleFull()
@@ -425,7 +425,7 @@ class SERVER_DECL CreatureAIScript
         //
         //
         ////////////////////////////////////////////////////
-        virtual void OnLastPassengerLeft( Unit *passenger ){}
+        virtual void OnLastPassengerLeft( Unit */*passenger*/ ){}
 
 
     protected:
@@ -515,7 +515,7 @@ class SERVER_DECL InstanceScript
         virtual void                OnZoneChange(Player* /*pPlayer*/, uint32 /*pNewZone*/, uint32 /*pOldZone*/) {};
 
         // Data get / set - idea taken from ScriptDev2
-        virtual void                SetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/, uint32 pData) {};
+        virtual void                SetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/, uint32 /*pData*/) {};
         virtual uint32                GetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/) { return 0; };
 
         // Creature / GameObject - part of it is simple reimplementation for easier use Creature / GO < --- > Script
