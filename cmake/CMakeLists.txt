@@ -91,6 +91,7 @@ SET(ARCEMU_SCRIPTLIB_PATH "modules" CACHE PATH "The directory which contains the
 SET(BUILD_ARCEMUSCRIPTS TRUE CACHE BOOL "Set to false to NOT build script libraries." )
 SET(BUILD_TOOLS TRUE CACHE BOOL "Build Arcemu tools" )
 SET(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
+SET(OPTIMIZED_BUILD FALSE CACHE BOOL "Set to true for optimized compilation - will take more time" )
 
 include(CompilerVersion)
 if( CMAKE_GENERATOR MATCHES Unix* )
@@ -130,7 +131,10 @@ if( CMAKE_GENERATOR MATCHES Unix* )
     ENDIF()
 	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra")
 	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra ")
-
+	IF (OPTIMIZED_BUILD)
+	    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3)
+	    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3)
+	ENDIF()
 ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	#Extract revision
 	execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
@@ -160,6 +164,10 @@ ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
     SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
+	IF (OPTIMIZED_BUILD)
+	    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2)
+	    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2)
+	ENDIF()
 ENDIF()
 
 #Pass our configurable variables to the C++ preprocessor.
