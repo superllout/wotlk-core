@@ -444,9 +444,9 @@ class SERVER_DECL GameObjectAIScript
         virtual void OnCreate() {}
         virtual void OnSpawn() {}
         virtual void OnDespawn() {}
-        virtual void OnLootTaken(Player* pLooter, ItemPrototype* pItemInfo) {}
-        virtual void OnActivate(Player* pPlayer) {}
-        virtual void OnDamaged( uint32 damage ){}
+        virtual void OnLootTaken(Player* /*pLooter*/, ItemPrototype* /*pItemInfo*/) {}
+        virtual void OnActivate(Player* /*pPlayer*/) {}
+        virtual void OnDamaged( uint32 /*damage*/ ){}
         virtual void OnDestroyed(){}
         virtual void AIUpdate() {}
         virtual void Destroy() { delete this; }
@@ -465,9 +465,9 @@ class SERVER_DECL GossipScript : public Arcemu::Gossip::Script
         GossipScript() {}
         virtual ~GossipScript() {}
 
-        virtual void GossipHello(Object* pObject, Player* plr) {}
-        virtual void GossipSelectOption(Object* pObject, Player* Plr, uint32 Id, uint32 IntId, const char* EnteredCode) {}
-        virtual void GossipEnd(Object* pObject, Player* Plr) {}
+        virtual void GossipHello(Object* /*pObject*/, Player* /*plr*/) {}
+        virtual void GossipSelectOption(Object* /*pObject*/, Player* /*Plr*/, uint32 /*Id*/, uint32 /*IntId*/, const char* /*EnteredCode*/) {}
+        virtual void GossipEnd(Object* /*pObject*/, Player* /*Plr*/) {}
 
         //support for Gossip scripts added before r4106
         virtual void OnHello(Object* pObject, Player* Plr);
@@ -481,13 +481,13 @@ class SERVER_DECL QuestScript
         QuestScript() {};
         virtual ~QuestScript() {};
 
-        virtual void OnQuestStart(Player* mTarget, QuestLogEntry* qLogEntry) {}
-        virtual void OnQuestComplete(Player* mTarget, QuestLogEntry* qLogEntry) {}
-        virtual void OnQuestCancel(Player* mTarget) {}
-        virtual void OnGameObjectActivate(uint32 entry, Player* mTarget, QuestLogEntry* qLogEntry) {}
-        virtual void OnCreatureKill(uint32 entry, Player* mTarget, QuestLogEntry* qLogEntry) {}
-        virtual void OnExploreArea(uint32 areaId, Player* mTarget, QuestLogEntry* qLogEntry) {}
-        virtual void OnPlayerItemPickup(uint32 itemId, uint32 totalCount, Player* mTarget, QuestLogEntry* qLogEntry) {}
+        virtual void OnQuestStart(Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
+        virtual void OnQuestComplete(Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
+        virtual void OnQuestCancel(Player* /*mTarget*/) {}
+        virtual void OnGameObjectActivate(uint32 /*entry*/, Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
+        virtual void OnCreatureKill(uint32 /*entry*/, Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
+        virtual void OnExploreArea(uint32 /*areaId*/, Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
+        virtual void OnPlayerItemPickup(uint32 /*itemId*/, uint32 /*totalCount*/, Player* /*mTarget*/, QuestLogEntry* /*qLogEntry*/) {}
 };
 
 /* * Class InstanceScript
@@ -502,27 +502,27 @@ class SERVER_DECL InstanceScript
         virtual ~InstanceScript() {};
 
         // Procedures that had been here before
-        virtual GameObject*    GetObjectForOpenLock(Player* pCaster, Spell* pSpell, SpellEntry* pSpellEntry) { return NULL; };
-        virtual void                SetLockOptions(uint32 pEntryId, GameObject* pGameObject) {};
-        virtual uint32                GetRespawnTimeForCreature(uint32 pEntryId, Creature* pCreature) { return 240000; };
+        virtual GameObject*    GetObjectForOpenLock(Player* /*pCaster*/, Spell* /*pSpell*/, SpellEntry* /*pSpellEntry*/) { return NULL; };
+        virtual void                SetLockOptions(uint32 /*pEntryId*/, GameObject* /*pGameObject*/) {};
+        virtual uint32                GetRespawnTimeForCreature(uint32 /*pEntryId*/, Creature* /*pCreature*/) { return 240000; };
 
         // Player
-        virtual void                OnPlayerDeath(Player* pVictim, Unit* pKiller) {};
+        virtual void                OnPlayerDeath(Player* /*pVictim*/, Unit* /*pKiller*/) {};
 
         // Area and AreaTrigger
-        virtual void                OnPlayerEnter(Player* pPlayer) {};
-        virtual void                OnAreaTrigger(Player* pPlayer, uint32 pAreaId) {};
-        virtual void                OnZoneChange(Player* pPlayer, uint32 pNewZone, uint32 pOldZone) {};
+        virtual void                OnPlayerEnter(Player* /*pPlayer*/) {};
+        virtual void                OnAreaTrigger(Player* /*pPlayer*/, uint32 /*pAreaId*/) {};
+        virtual void                OnZoneChange(Player* /*pPlayer*/, uint32 /*pNewZone*/, uint32 /*pOldZone*/) {};
 
         // Data get / set - idea taken from ScriptDev2
-        virtual void                SetInstanceData(uint32 pType, uint32 pIndex, uint32 pData) {};
-        virtual uint32                GetInstanceData(uint32 pType, uint32 pIndex) { return 0; };
+        virtual void                SetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/, uint32 pData) {};
+        virtual uint32                GetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/) { return 0; };
 
         // Creature / GameObject - part of it is simple reimplementation for easier use Creature / GO < --- > Script
-        virtual void                OnCreatureDeath(Creature* pVictim, Unit* pKiller) {};
-        virtual void                OnCreaturePushToWorld(Creature* pCreature) {};
-        virtual void                OnGameObjectActivate(GameObject* pGameObject, Player* pPlayer) {};
-        virtual void                OnGameObjectPushToWorld(GameObject* pGameObject) {};
+        virtual void                OnCreatureDeath(Creature* /*pVictim*/, Unit* /*pKiller*/) {};
+        virtual void                OnCreaturePushToWorld(Creature* /*pCreature*/) {};
+        virtual void                OnGameObjectActivate(GameObject* /*pGameObject*/, Player* /*pPlayer*/) {};
+        virtual void                OnGameObjectPushToWorld(GameObject* /*pGameObject*/) {};
 
         // Standard virtual methods
         virtual void                OnLoad() {};
@@ -530,8 +530,8 @@ class SERVER_DECL InstanceScript
         virtual void                Destroy() {};
 
         // UpdateEvent
-        void                        RegisterUpdateEvent(uint32 pFrequency);
-        void                        ModifyUpdateEvent(uint32 pNewFrequency);
+        void                        RegisterUpdateEvent(uint32 /*pFrequency*/);
+        void                        ModifyUpdateEvent(uint32 /*pNewFrequency*/);
         void                        RemoveUpdateEvent();
 
         // Something to return Instance's MapMgr
