@@ -344,7 +344,7 @@ namespace VMAP
 	{
 		GModelRayCallback(const std::vector<MeshTriangle> &tris, const std::vector<G3D::Vector3> &vert):
 			vertices(vert.begin()), triangles(tris.begin()), hit(false) {}
-		bool operator()(const G3D::Ray & ray, G3D::uint32 entry, float & distance, bool pStopAtFirstHit)
+		bool operator()(const G3D::Ray & ray, G3D::uint32 entry, float & distance, bool /*pStopAtFirstHit*/)
 		{
 			bool result = IntersectTriangle(triangles[entry], vertices, ray, distance);
 			if(result)  hit = true;
@@ -538,7 +538,7 @@ namespace VMAP
 			return false;
 
 		bool result = true;
-		G3D::uint32 chunkSize, count;
+		G3D::uint32 chunkSize = 0, _count = 0;
 		char chunk[8];                          // Ignore the added magic header
 		if(!readChunk(rf, chunk, VMAP_MAGIC, 8)) result = false;
 
@@ -551,10 +551,10 @@ namespace VMAP
 		{
 			//if (fread(&chunkSize, sizeof(G3D::uint32), 1, rf) != 1) result = false;
 
-			if(result && fread(&count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
-			if(result) groupModels.resize(count);
+			if(result && fread(&_count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
+			if(result) groupModels.resize(_count);
 			//if (result && fread(&groupModels[0], sizeof(GroupModel), count, rf) != count) result = false;
-			for(G3D::uint32 i = 0; i < count && result; ++i)
+			for(G3D::uint32 i = 0; i < _count && result; ++i)
 				result = groupModels[i].readFromFile(rf);
 
 			// read group BIH
