@@ -1,16 +1,14 @@
 
 macro( GetCompilerVersion out_version)
 	#Test for gnu compilers
-	IF(CMAKE_COMPILER_IS_GNUCXX )
+	IF(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 		EXECUTE_PROCESS( COMMAND ${CMAKE_CXX_COMPILER} -dumpversion OUTPUT_VARIABLE tmp_version )
 		SET( ${out_version} ${tmp_version} )
-	ELSEIF( CMAKE_COMPILER_IS_GNUC)
+	ELSEIF( CMAKE_COMPILER_IS_GNUC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 		EXECUTE_PROCESS( COMMAND ${CMAKE_C_COMPILER} -dumpversion OUTPUT_VARIABLE tmp_version)
 		SET( ${out_version} ${tmp_version} )
 	ELSEIF( MSVC )
 		SET( ${out_version} ${MSVC_VERSION} )
-	ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-	    SET( ${out_version} ${CMAKE_C_COMPILER_VERSION} )
 	ELSE()
 		message(FATAL_ERROR "This function does not support the current compiler!")
 	ENDIF()
