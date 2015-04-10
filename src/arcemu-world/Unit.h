@@ -25,8 +25,8 @@ class AIInterface;
 class DynamicObject;
 
 //these refer to visibility ranges. We need to store each stack of the aura and not just visible count.
-#define MAX_POSITIVE_VISUAL_AURAS_START 0 // 
-#define MAX_POSITIVE_VISUAL_AURAS_END 40 // 
+#define MAX_POSITIVE_VISUAL_AURAS_START 0 //
+#define MAX_POSITIVE_VISUAL_AURAS_END 40 //
 #define MAX_NEGATIVE_VISUAL_AURAS_START MAX_POSITIVE_VISUAL_AURAS_END // 40 buff slots, 16 debuff slots.
 #define MAX_NEGATIVE_VISUAL_AURAS_END ( MAX_POSITIVE_VISUAL_AURAS_END + 16 ) // 40 buff slots, 16 debuff slots.
 //you hardly get to this but since i was testing i got to it :) : 20 items * 11 (enchants) + 61 talents
@@ -69,7 +69,7 @@ typedef HM_NAMESPACE::hash_map<uint32, uint64> UniqueAuraTargetMap;
 ////////////////////////////////////////////////////////////////
 class SERVER_DECL AuraCondition{
 public:
-    virtual bool operator()( Aura *aura ){
+    virtual bool operator()( Aura* /*aura*/ ){
         return true;
     }
 };
@@ -82,7 +82,7 @@ public:
 ///////////////////////////////////////////////////////////////
 class SERVER_DECL AuraAction{
 public:
-    virtual void operator()( Aura *aura ){}
+    virtual void operator()( Aura* /*aura*/ ){}
 };
 
 
@@ -1302,8 +1302,8 @@ class SERVER_DECL Unit : public Object
         uint32 SchoolCastPrevent[SCHOOL_COUNT];
         int32 MechanicDurationPctMod[28];
 
-        virtual int32 GetDamageDoneMod(uint32 school) { return 0; }
-        virtual float GetDamageDonePctMod(uint32 school) { return 0; }
+        virtual int32 GetDamageDoneMod(uint32 /*school*/) { return 0; }
+        virtual float GetDamageDonePctMod(uint32 /*school*/) { return 0; }
 
         int32 DamageTakenMod[SCHOOL_COUNT];
         float DamageTakenPctMod[SCHOOL_COUNT];
@@ -1566,7 +1566,7 @@ class SERVER_DECL Unit : public Object
         bool GetSpeedDecrease();
         int32 m_mountedspeedModifier;
         int32 m_flyspeedModifier;
-        virtual void SetSpeeds( uint8 type, float speed ){}
+        virtual void SetSpeeds( uint8 /*type*/, float /*speed*/ ){}
         void UpdateSpeed();
         void EnableFlight();
         void DisableFlight();
@@ -1975,7 +1975,7 @@ class SERVER_DECL Unit : public Object
         void EnterVehicle( uint64 guid, uint32 delay );
         Vehicle* GetCurrentVehicle(){ return currentvehicle; }
         Vehicle* GetVehicleComponent(){ return vehicle; }
-        virtual void AddVehicleComponent( uint32 creature_entry, uint32 vehicleid ){}
+        virtual void AddVehicleComponent( uint32 /*creature_entry*/, uint32 /*vehicleid*/ ){}
         virtual void RemoveVehicleComponent(){}
 
         void SendHopOnVehicle( Unit *vehicleowner, uint32 seat );
@@ -1991,7 +1991,7 @@ class SERVER_DECL Unit : public Object
         bool m_noFallDamage;
         float z_axisposition;
         int32 m_safeFall;
-        
+
         void SendEnvironmentalDamageLog( uint64 guid, uint8 type, uint32 damage );
 };
 

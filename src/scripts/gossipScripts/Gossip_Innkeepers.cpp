@@ -135,14 +135,6 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
         void Destroy() { delete this; }
 };
 
-//#define SendQuickMenu(textid) objmgr.CreateGossipMenuForPlayer(&Menu, pCreature->GetGUID(), textid, Plr); \
-//    Menu->SendTo(Plr);
-
-void InnkeeperGossip::OnSelectOption(Object* pObject, Player* Plr, uint32 Id, const char* Code)
-{
-
-}
-
 void SetupInnkeepers(ScriptMgr* mgr)
 {
     Arcemu::Gossip::Script* gs = new InnkeeperGossip();
