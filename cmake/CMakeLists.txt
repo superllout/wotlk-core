@@ -128,7 +128,8 @@ if( CMAKE_GENERATOR MATCHES Unix* )
 	        ENDIF()
         ENDIF()
     ENDIF()
-	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
+	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra")
+	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra ")
 
 ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	#Extract revision
@@ -158,6 +159,7 @@ ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	ENDIF()
 
     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
+    SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
 ENDIF()
 
 #Pass our configurable variables to the C++ preprocessor.
