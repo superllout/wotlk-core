@@ -302,7 +302,7 @@ namespace VMAP
 	{
 		char chunk[8];
 		bool result = true;
-		G3D::uint32 chunkSize, count;
+		G3D::uint32 chunkSize = 0, _count = 0;
 		triangles.clear();
 		vertices.clear();
 		delete iLiquid;
@@ -315,18 +315,18 @@ namespace VMAP
 		// read vertices
 		if(result && !readChunk(rf, chunk, "VERT", 4)) result = false;
 		if(result && fread(&chunkSize, sizeof(G3D::uint32), 1, rf) != 1) result = false;
-		if(result && fread(&count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
-		if(!count)  // models without (collision) geometry end here, unsure if they are useful
+		if(result && fread(&_count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
+		if(!_count)  // models without (collision) geometry end here, unsure if they are useful
 			return result;
-		if(result) vertices.resize(count);
-		if(result && fread(&vertices[0], sizeof(G3D::Vector3), count, rf) != count) result = false;
+		if(result) vertices.resize(_count);
+		if(result && fread(&vertices[0], sizeof(G3D::Vector3), _count, rf) != _count) result = false;
 
 		// read triangle mesh
 		if(result && !readChunk(rf, chunk, "TRIM", 4)) result = false;
 		if(result && fread(&chunkSize, sizeof(G3D::uint32), 1, rf) != 1) result = false;
-		if(result && fread(&count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
-		if(result) triangles.resize(count);
-		if(result && fread(&triangles[0], sizeof(MeshTriangle), count, rf) != count) result = false;
+		if(result && fread(&_count, sizeof(G3D::uint32), 1, rf) != 1) result = false;
+		if(result) triangles.resize(_count);
+		if(result && fread(&triangles[0], sizeof(MeshTriangle), _count, rf) != _count) result = false;
 
 		// read mesh BIH
 		if(result && !readChunk(rf, chunk, "MBIH", 4)) result = false;
