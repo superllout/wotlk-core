@@ -9,6 +9,9 @@ This changelog keeps information about most major changes in core, scripts and i
 * Renamed ad project to map_extractor for correctness
 * Fixed and improved speed of achievements data saving
 * Added proper support for GameObjects gossips - allows easer gossip scripting for GameObjects
+* Added new option OPTIMIZED_BUILD to optimize builds for speed
+* Added Clang support
+* Added SHOW_ALL_WARNINGS for windows build (option will show entirelly all possible code warnings)
 
 4.0.2 changes
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.

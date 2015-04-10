@@ -25,11 +25,11 @@ questions or documentation requests (NOTE: do not forget to add correct label - 
 
 * Compiler:
 
-    Linux/UNIX: GCC ( 4.7 or later) and Clang ( 3.6 or later)
+    Linux/UNIX: GCC ( 4.6 or later) and Clang ( 3.2 or later)
 
     Windows: Visual Studio (Community 2013 or later), mingw currently has no support.
 
-* data server (Mysql 5.4 or later, PostgreSQL will supported in near future).
+* data server (MySQL 5.4 or later, PostgreSQL will supported in near future).
 
 * Git (source control)
 
