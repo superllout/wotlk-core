@@ -39,9 +39,9 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
                 if(text != 0)
                     TextID = Text;
             }
-            Arcemu::Gossip::Menu menu(pCreature->GetGUID(), TextID, 0);
+            Arcemu::Gossip::Menu menu(pObject->GetGUID(), TextID, 0);
 
-            if(TO_CREATURE(pCreature)->isVendor())
+            if(TO_CREATURE(pObject)->isVendor())
                 menu.AddItem(Arcemu::Gossip::ICON_VENDOR, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::VENDOR), 1);
 
             menu.AddItem(Arcemu::Gossip::ICON_CHAT, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::INNKEEPER), 2);
@@ -52,7 +52,7 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
                 menu.AddItem(Arcemu::Gossip::ICON_CHAT, "Trick or Treat!", 4);
         #endif
 
-            sQuestMgr.FillQuestMenu(TO_CREATURE(pCreature), Plr, menu);
+            sQuestMgr.FillQuestMenu(TO_CREATURE(pObject), Plr, menu);
             menu.Send(Plr);
         }
 
@@ -61,19 +61,19 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
             switch(Id)
             {
                 case 1:     // VENDOR
-                    Plr->GetSession()->SendInventoryList(pCreature);
+                    Plr->GetSession()->SendInventoryList(TO_CREATURE(pObject));
                     break;
                 case 2:     // BINDER
-                    Plr->GetSession()->SendInnkeeperBind(pCreature);
+                    Plr->GetSession()->SendInnkeeperBind(TO_CREATURE(pObject));
                     break;
                 case 3:     // WHAT CAN I DO ?
                     // Prepare second menu
-                    Arcemu::Gossip::Menu::SendQuickMenu(pCreature->GetGUID(), 1853, Plr, 2, Arcemu::Gossip::ICON_CHAT, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::INNKEEPER));
+                    Arcemu::Gossip::Menu::SendQuickMenu(pObject->GetGUID(), 1853, Plr, 2, Arcemu::Gossip::ICON_CHAT, Plr->GetSession()->LocalizedWorldSrv(Arcemu::Gossip::INNKEEPER));
                     break;
                 case 4:     // EVENT OF HALLOWEEN
                     if(!Plr->HasAura(SPELL_TRICK_OR_TREATED))
                     {
-                        TO_CREATURE(pCreature)->CastSpell(Plr, SPELL_TRICK_OR_TREATED, true);
+                        TO_CREATURE(pObject)->CastSpell(Plr, SPELL_TRICK_OR_TREATED, true);
 
                         // either trick or treat, 50% chance
                         if(rand() % 2)
@@ -125,7 +125,7 @@ class InnkeeperGossip : public Arcemu::Gossip::Script
                                     trickspell = 24723;                     // skeleton costume
                                     break;
                             }
-                            pCreature->CastSpell(Plr, trickspell, true);
+                            TO_CREATURE(pObject)->CastSpell(Plr, trickspell, true);
                         }
                     }
                     Arcemu::Gossip::Menu::Complete(Plr);

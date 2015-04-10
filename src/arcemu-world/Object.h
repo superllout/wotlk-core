@@ -164,7 +164,7 @@ class SERVER_DECL Object : public EventableObject
 
         virtual ~Object();
 
-        virtual void Update(uint32 time) { }
+        virtual void Update(uint32 /*time*/) { }
 
         //! True if object exists in world, else false
         bool IsInWorld() { return m_mapMgr != NULL; }
@@ -252,7 +252,7 @@ class SERVER_DECL Object : public EventableObject
 
         const uint32 GetTypeFromGUID() const { return (m_uint32Values[ HIGHGUID ] & HIGHGUID_TYPE_MASK); }
         const uint32 GetUIdFromGUID() const { return (m_uint32Values[ LOWGUID ] & LOWGUID_ENTRY_MASK); }
-        
+
         // type
         const uint8 & GetTypeId() const { return m_objectTypeId; }
         bool IsUnit()    { return (m_objectTypeId == TYPEID_UNIT || m_objectTypeId == TYPEID_PLAYER); }
@@ -571,7 +571,7 @@ class SERVER_DECL Object : public EventableObject
         //  none
         //
         //////////////////////////////////////////////////////////////////////////
-        virtual void OutPacket(uint16 opcode, uint16 len, const void* data) {};
+        virtual void OutPacket(uint16 /*opcode*/, uint16 /*len*/, const void* /*data*/) {};
 
 
 
@@ -587,7 +587,7 @@ class SERVER_DECL Object : public EventableObject
         //  none
         //
         ////////////////////////////////////////////////////////////////////////
-        virtual void SendPacket(WorldPacket* packet) {};
+        virtual void SendPacket(WorldPacket* /*packet*/) {};
 
         virtual void SendMessageToSet(WorldPacket* data, bool self, bool myteam_only = false);
         void SendMessageToSet(StackBufferBase* data, bool self) { OutPacketToSet(data->GetOpcode(), static_cast<uint16>(data->GetSize()), data->GetBufferPointer(), self); }
