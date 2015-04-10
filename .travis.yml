@@ -20,6 +20,7 @@ language: cpp
 
 compiler:
  - gcc
+ - clang
  
 # reduce clone time by only getting the latest commit and not the whole history (default for travis is 100)
 
