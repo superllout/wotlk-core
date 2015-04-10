@@ -125,6 +125,7 @@ enum MsTimeVariables
 #define COMPILER_MICROSOFT 0
 #define COMPILER_GNU       1
 #define COMPILER_BORLAND   2
+#define COMPILER_CLANG     3
 
 #ifdef _MSC_VER
 #  define COMPILER COMPILER_MICROSOFT
@@ -132,6 +133,8 @@ enum MsTimeVariables
 #  define COMPILER COMPILER_BORLAND
 #elif defined( __GNUC__ )
 #  define COMPILER COMPILER_GNU
+#elif defined( __clang__ )
+#  define COMPILER COMPILER_CLANG
 #else
 #  pragma error "FATAL ERROR: Unknown compiler."
 #endif
@@ -204,7 +207,7 @@ enum MsTimeVariables
 #include <cstdlib>
 //#include <iostream>
 
-#if defined ( __GNUC__ )
+#if defined ( __GNUC__ ) || defined ( __clang__ )
 #    define LIKELY( _x ) \
         __builtin_expect( ( _x ), 1 )
 #    define UNLIKELY( _x ) \
@@ -226,7 +229,7 @@ enum MsTimeVariables
 #ifndef WIN32
 #ifndef X64
 #  if defined (__GNUC__)
-#    if GCC_VERSION >= 30400
+#    if __GCC_MAJOR__ >= 4
 #         ifdef HAVE_DARWIN
 #          define __fastcall
 #         else
@@ -235,6 +238,14 @@ enum MsTimeVariables
 #    else
 #      define __fastcall __attribute__((__regparm__(3)))
 #    endif
+#  elif defined(__clang__)
+#    if __clang_major__ >= 3
+#         ifdef HAVE_DARWIN
+#          define __fastcall
+#         else
+#              define __fastcall __attribute__((__fastcall__))
+#         endif
+#     endif
 #  else
 #    define __fastcall __attribute__((__fastcall__))
 #  endif
@@ -254,7 +265,7 @@ enum MsTimeVariables
 #define hash_multimap unordered_multimap
 #define hash_set unordered_set
 #define hash_multiset tr1::unordered_multiset
-#elif COMPILER == COMPILER_GNU && __GNUC__ >= 3
+#elif (COMPILER == COMPILER_GNU && __GNUC__ >= 3) || (COMPILER == COMPILER_CLANG && __clang_major__ >= 3)
 #include <ext/hash_map>
 #include <ext/hash_set>
 #define HM_NAMESPACE __gnu_cxx
@@ -321,7 +332,7 @@ using std::hash_set;
 #define hash_set std::tr1::unordered_set
 /*using std::unordered_map;
 using std::unordered_set;/
-#elif COMPILER == COMPILER_GNU && __GNUC__ >= 3
+#elif (COMPILER == COMPILER_GNU && __GNUC__ >= 3) || (COMPILER == COMPILER_CLANG && __clang_major__ >= 3)
 #define HM_NAMESPACE __gnu_cxx
 using __gnu_cxx::hash_map;
 using __gnu_cxx::hash_set;*/
@@ -364,7 +375,7 @@ Scripting system exports/imports
 #define SCRIPT_DECL __declspec(dllexport)
 #endif
 #define DECL_LOCAL
-#elif defined __GNUC__ && __GNUC__ >= 4
+#elif (defined(__GNUC__) && __GNUC__ >= 4) && (defined(__clang__) && __clang_major__ >= 3)
 #define SERVER_DECL __attribute__((visibility ("default")))
 #define SCRIPT_DECL __attribute__((visibility ("default")))
 #define DECL_LOCAL __attribute__((visibility ("hidden")))

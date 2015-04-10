@@ -22,7 +22,7 @@
  */
 
 #ifndef _NETLIB_CIRCULARBUFFER_H
-#define _NETLIB_CIRCUALRBUFFER_H
+#define _NETLIB_CIRCULARBUFFER_H
 
 class CircularBuffer
 {

@@ -2413,7 +2413,7 @@ bool Spell::HasPower()
     if(p_caster && p_caster->HasAura(32727))
         return true;
 
-    switch(GetProto()->powerType)
+    switch(int32(GetProto()->powerType))
     {
         case POWER_TYPE_HEALTH:
             {    powerField = UNIT_FIELD_HEALTH;                        }
@@ -2553,7 +2553,7 @@ bool Spell::TakePower()
     if(p_caster && p_caster->HasAura(32727))
         return true;
 
-    switch(GetProto()->powerType)
+    switch(int32(GetProto()->powerType))
     {
         case POWER_TYPE_HEALTH:
             {    powerField = UNIT_FIELD_HEALTH;                        }

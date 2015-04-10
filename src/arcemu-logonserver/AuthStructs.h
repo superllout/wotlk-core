@@ -20,7 +20,7 @@
 #ifndef AUTHSTRUCTS_H
 #define AUTHSTRUCTS_H
 
-#if __GNUC__ && (GCC_MAJOR < 4 || GCC_MAJOR == 4 && GCC_MINOR < 1)
+#if (__GNUC__ && (GCC_MAJOR < 4 || GCC_MAJOR == 4 && GCC_MINOR > 1)) || (__clang__ && (__clang_major__ > 3 || __clang_major__ == 3 && __clang_minor_ > 1))
 #pragma pack(1)
 #else
 #pragma pack(push,1)
@@ -90,7 +90,7 @@ typedef struct
 } sAuthLogonProof_S;
 
 
-#if __GNUC__ && (GCC_MAJOR < 4 || GCC_MAJOR == 4 && GCC_MINOR < 1)
+#if (__GNUC__ && (GCC_MAJOR < 4 || GCC_MAJOR == 4 && GCC_MINOR > 1)) || (__clang__ && (__clang_major__ > 3 || __clang_major__ == 3 && __clang_minor_ > 1))
 #pragma pack()
 #else
 #pragma pack(pop)

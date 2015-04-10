@@ -18,7 +18,7 @@
 #include "wdt.h"
 #include <fcntl.h>
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) || defined ( __clang__ )
     #include <unistd.h>
     #define _open   open
     #define _close close
@@ -549,7 +549,7 @@ bool ConvertADT(char *filename, char *filename2, int cell_y, int cell_x, uint32 
         for(uint8 x = 0; x <= ADT_GRID_SIZE; x++)
         {
             float h = V9[y][x];
-            if (maxHeight < h) 
+            if (maxHeight < h)
                 maxHeight = h;
 
             if (minHeight > h)
