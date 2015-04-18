@@ -6,8 +6,9 @@ Core wiki: https://github.com/EasyWoW/wiki/wiki
 
 ## Build Status:
 
+|-----------|------------------|
 | GCC/Clang | [![GCC/Clang build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) |
-| MSVC 2015 | [![MSVC 2015 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
+| MSVC 2015 | [![MSVC 2013 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
 | Static code analysis | [![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872) |
 
 
