@@ -47,7 +47,7 @@ before_install:
 script:
  - mkdir build
  - cd build
- - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w" -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -w" 
+ - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -w" 
  - make -j 4
 
 addons:
@@ -55,6 +55,6 @@ addons:
     project:
       name: "EasyWoW/wotlk-core"
       description: "Build submitted via Travis CI"
-    build_command_prepend: "make clean"
+    build_command_prepend: "cmake ../cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_LUAENGINE=1 && make clean"
     build_command:   "make -j 4"
     branch_pattern: coverity_scan
