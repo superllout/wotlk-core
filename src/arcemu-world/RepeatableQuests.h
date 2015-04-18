@@ -15,11 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- 
-#define MAX_TBC_NORMAL_DAILY_QUESTS 8
-// Only one quest giver gives these quests
-#define TBC_NORMAL_DAILY_QUEST_GIVER 24370  // Nether-Stalker Mah'duun
-static uint32 TBC_normal_daily_quests[MAX_TBC_NORMAL_DAILY_QUESTS]=
+
+/*
+    This header contains quest entries groups. 
+    In each group system should select only one quest.
+    
+    DO NOT define other simple repeatable daily quests which shouldn't be pushed randomly.
+    sanctum32: this header is just for basic implementation, that will replaced by database data in future for faster modifications
+*/
+
+#define MAX_TBC_NORMAL_DAILIES 8
+static uint32 TBC_normal_daily_quests[MAX_TBC_NORMAL_DAILIES]=
 {
     11389,  // Wanted: Arcatraz Sentinels
     11371,  // Wanted: Coilfang Myrmidons
@@ -31,7 +37,8 @@ static uint32 TBC_normal_daily_quests[MAX_TBC_NORMAL_DAILY_QUESTS]=
     11387   // Wanted: Tempest-Forge Destroyers
 };
 
-static uint32 TBC_heroic_daily_quests[]=
+#define MAX_TBC_HEROIC_DAILIES 15
+static uint32 TBC_heroic_daily_quests[MAX_TBC_HEROIC_DAILIES]=
 {
     11354,  // Wanted: Nazan's Riding Crop
     11362,  // Wanted: Keli'dan's Feathered Stave
@@ -48,4 +55,23 @@ static uint32 TBC_heroic_daily_quests[]=
     11386,  // Wanted: Pathaleon's Projector
     11388,  // Wanted: The Scroll of Skyriss
     11499   // Wanted: The Signet Ring of Prince Kael'thas
+};
+
+#define MAX_TBC_COOKING_DAILIES 4
+static uint32 TBC_cooking_daily_quests[MAX_TBC_COOKING_DAILIES]=
+{
+    11380,  // Manalicious
+    11377,  // Revenge is Tasty
+    11381,  // Soup for the Soul
+    11379,  // Super Hot Stew
+};
+
+#define MAX_TBC_FISHING_DAILIES 5
+static uint32 TBC_fishing_daily_quests[]=
+{
+    11668,  // Shrimpin' Ain't Easy
+    11666,  // Bait Bandits
+    11667,  // The One That Got Away
+    11669,  // Felblood Fillet
+    11665   // Crocolisks in the City
 };
