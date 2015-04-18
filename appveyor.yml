@@ -10,6 +10,7 @@ init:
 - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" %platform%
 
 build_script:
+    - cd ..
     - mkdir build
     - cd build
     - cmake ../wotlk-core/cmake
