@@ -38,13 +38,3 @@ questions or documentation requests (NOTE: do not forget to add correct label - 
 * Git (source control)
 
 * computer with 2-3 GB RAM minimally and also which CPU supports SSE2 technology.
-
-
-## Is having WoW (World of Warcraft) server illegal?
-
-Yes, It is because server core just manipulates and uses game content which was gathered from official this game servers and game client and also it breaks some WoW authorised EULA license paragraphs. 
-
-## Is having core sources and using compiled binaries for personal (not for public) breaks any rules?
-
-No, since Its open source and you use it only for personal. Personal means - you do not use server binaries for public connections (where possible players could connect to your server). 
-We do not support any public live servers.
