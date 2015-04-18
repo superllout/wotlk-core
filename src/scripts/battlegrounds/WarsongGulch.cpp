@@ -488,18 +488,18 @@ void WarsongGulch::DespawnGates(uint32 delay)
 
 GameObject* WarsongGulch::SpawnBgGameObject(wsgObjectLocation objectLocation)
 {
-    GameObject* pObject = NULL;
     if (GameObjectInfo* pInfo = GameObjectNameStorage.LookupEntry(objectLocation.entry))
     {
-        if (pObject = SpawnGameObject(objectLocation.entry, MAP_WARSONG_GULCH, objectLocation.x, objectLocation.y, objectLocation.z, objectLocation.orientation, objectLocation.flags, objectLocation.faction, pInfo->Size))
+        if (GameObject* pObject = SpawnGameObject(objectLocation.entry, MAP_WARSONG_GULCH, objectLocation.x, objectLocation.y, objectLocation.z, objectLocation.orientation, objectLocation.flags, objectLocation.faction, pInfo->Size))
         {
             for (uint8 i = 0; i < 4; i++)
                 pObject->SetParentRotation(i, objectLocation.rotation[i]);
             pObject->SetByte(GAMEOBJECT_BYTES_1, 3, 100);
             pObject->SetState(GAMEOBJECT_STATE_CLOSED);
+            return pObject;
         }
     }
-    return pObject;
+    return NULL;
 }
 
 void WarsongGulch::rewardObjectBuff(uint32 areaId, Player* plr)

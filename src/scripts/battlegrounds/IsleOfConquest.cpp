@@ -979,6 +979,8 @@ void IsleOfConquest::BuildWorkshopVehicle( uint32 delay ){
             workshopvehicle[ TEAM_HORDE ].baselocation = LocationVector( 773.72f, -884.15f, 16.727f, 1.553f );
             workshopvehicle[ TEAM_HORDE ].c = SpawnCreature( 35069, workshopvehicle[ TEAM_HORDE ].baselocation, 2 );
             break;
+        default:
+            break;
     }
 }
 
@@ -995,6 +997,8 @@ void IsleOfConquest::EventRefineryCaptured(){
         case IOC_SPAWN_TYPE_HORDE_CONTROLLED:
             newteam = TEAM_HORDE;
             oldteam = TEAM_ALLIANCE;
+            break;
+        default:
             break;
     }
 
@@ -1015,6 +1019,8 @@ void IsleOfConquest::EventQuarryCaptured(){
         case IOC_SPAWN_TYPE_HORDE_CONTROLLED:
             newteam = TEAM_HORDE;
             oldteam = TEAM_ALLIANCE;
+            break;
+        default:
             break;
     }
 
@@ -1056,6 +1062,8 @@ void IsleOfConquest::EventDocksCaptured(){
                 dockvehicle[ TEAM_HORDE ][ i ].baselocation = DockVehicleLocations[ i ];
                 dockvehicle[ TEAM_HORDE ][ i ].c = SpawnCreature( 34793, DockVehicleLocations[ i ], 2 );
             }
+            break;
+        default:
             break;
     }
 
@@ -1101,7 +1109,6 @@ void IsleOfConquest::EventWorkshopCaptured(){
 
         default:
             return;
-            break;
     }
 
     BuildWorkshopVehicle( 3 * 60 * 1000 );

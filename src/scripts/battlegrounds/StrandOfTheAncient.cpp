@@ -709,11 +709,12 @@ void StrandOfTheAncient::CaptureControlPoint( SOTAControlPoints point ){
             PlaySoundToAll( SOUND_HORDE_CAPTURE );
             SendChatMessage( CHAT_MSG_BG_EVENT_HORDE, 0, "The horde has captured the %s!", ControlPointNames[ point ] );
             break;
-
         case SOTA_CP_STATE_HORDE_CONTROL:
             SpawnControlPoint( point, SOTA_CP_STATE_ALLY_CONTROL );
             PlaySoundToAll( SOUND_ALLIANCE_CAPTURE );
             SendChatMessage( CHAT_MSG_BG_EVENT_ALLIANCE, 0, "The alliance has captured the %s!", ControlPointNames[ point ] );
+            break;
+        default:
             break;
     }
 
@@ -726,6 +727,8 @@ void StrandOfTheAncient::CaptureControlPoint( SOTAControlPoints point ){
             break;
         case SOTA_CONTROL_POINT_WEST_GY:
             demolisher[ SOTA_WEST_WS_DEMOLISHER_INDEX ] = SpawnCreature( 28781, DemolisherLocations[ SOTA_WEST_WS_DEMOLISHER_INDEX ], TeamFactions[ Attackers ] );
+            break;
+        default:
             break;
     }
 }

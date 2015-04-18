@@ -17,7 +17,7 @@
  */
 
 /*
-    This header contains quest entries groups. 
+    This header contains daily quest entries groups. 
     In each group system should select only one quest.
     
     DO NOT define other simple repeatable daily quests which shouldn't be pushed randomly.

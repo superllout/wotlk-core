@@ -98,7 +98,7 @@ bool Transporter::GenerateWaypoints()
     {
         if(mapChange == 0)
         {
-            if((path[i].mapid == path[i + 1].mapid))
+            if(path[i].mapid == path[i + 1].mapid)
             {
                 keyFrame k(path[i].x, path[i].y, path[i].z, path[i].mapid, path[i].actionFlag, path[i].delay);
                 keyFrames.push_back(k);

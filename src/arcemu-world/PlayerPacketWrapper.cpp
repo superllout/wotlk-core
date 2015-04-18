@@ -329,21 +329,21 @@ void Player::SendLoot(uint64 guid, uint8 loot_type, uint32 mapid)
         pLoot = &pGO->loot;
         m_currentLoot = pGO->GetGUID();
     }
-    else if((guidtype == HIGHGUID_TYPE_PLAYER))
+    else if(guidtype == HIGHGUID_TYPE_PLAYER)
     {
         Player* p = GetMapMgr()->GetPlayer((uint32)guid);
         if(!p)return;
         pLoot = &p->loot;
         m_currentLoot = p->GetGUID();
     }
-    else if((guidtype == HIGHGUID_TYPE_CORPSE))
+    else if(guidtype == HIGHGUID_TYPE_CORPSE)
     {
         Corpse* pCorpse = objmgr.GetCorpse((uint32)guid);
         if(!pCorpse)return;
         pLoot = &pCorpse->loot;
         m_currentLoot = pCorpse->GetGUID();
     }
-    else if((guidtype == HIGHGUID_TYPE_ITEM))
+    else if(guidtype == HIGHGUID_TYPE_ITEM)
     {
         Item* pItem = GetItemInterface()->GetItemByGUID(guid);
         if(!pItem)
