@@ -1,11 +1,17 @@
-# EasyWoW/wotlk-core ![alt text](https://www.gnu.org/graphics/agplv3-88x31.png "AGPL v3 license") [![GCC/Clang build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) [![MSVC 2015 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) [![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
+# EasyWoW/wotlk-core ![alt text](https://www.gnu.org/graphics/agplv3-88x31.png "AGPL v3 license")
 
-[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
-
-
-[![License](https://www.gnu.org/graphics/agplv3-155x51.png "project is licensed under AGPL")](https://www.gnu.org/licenses/agpl-3.0.html)
+## Important links:
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
+
+## Build Status:
+
+| GCC/Clang | [![GCC/Clang build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) |
+| MSVC 2015 | [![MSVC 2015 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
+| Static code analysis | [![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872) |
+
+
+[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
 
 ## What is EasyWoW
 
@@ -16,8 +22,6 @@ Its free to use, fork or use core commits (with authority information) and do an
 
 Main goals for this core is simplicity, performance and functionality - we and our contributors work very hard to combine all of them into modern code. We, EasyWoW aim as friendly community, so feel free to give 
 questions or documentation requests (NOTE: do not forget to add correct label - "Question" or "Suggestion for wiki" ).
-
-
 
 ## Required tools to run this server
 
