@@ -14,4 +14,4 @@ build_script:
     - mkdir build
     - cd build
     - cmake ../wotlk-core/cmake -DBUILD_LUAENGINE=1 
-    - msbuild EasyWoW.sln
+    - msbuild EasyWoW.sln /p:Configuration=Release /p:Platform="$env:Platform"
