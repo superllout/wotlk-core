@@ -1,8 +1,6 @@
 # EasyWoW/wotlk-core 
 
-[![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core)
-
-[![Build Status](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
+[![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) [![Coverity Scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
 
 [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
 
