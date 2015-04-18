@@ -396,7 +396,7 @@ class SERVER_DECL CreatureAIScript
         //
         //
         /////////////////////////////////////////////////////
-        virtual void OnFirstPassengerEntered( Unit */*passenger*/ ){}
+        virtual void OnFirstPassengerEntered( Unit* /*passenger*/ ){}
 
         ////////////////////////////////////////////////////
         //void OnVehicleFull()
@@ -425,7 +425,7 @@ class SERVER_DECL CreatureAIScript
         //
         //
         ////////////////////////////////////////////////////
-        virtual void OnLastPassengerLeft( Unit */*passenger*/ ){}
+        virtual void OnLastPassengerLeft( Unit* /*passenger*/ ){}
 
 
     protected:

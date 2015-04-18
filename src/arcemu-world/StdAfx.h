@@ -156,6 +156,7 @@ extern SERVER_DECL SessionLogWriter* Player_Log;
 #include "Chat.h"
 #include "Corpse.h"
 #include "Quest.h"
+#include "RepeatableQuests.h"
 #include "QuestMgr.h"
 #include "Creature.h"
 #include "Entities/Summons/Summon.h"
