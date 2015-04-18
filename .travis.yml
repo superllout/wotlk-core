@@ -26,13 +26,17 @@ compiler:
 
 git:
  depth: 1
-# only run travis on the master branch
 
 branches:
  only:
  - master
+ - coverity_scan
 
-
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "dlHBlpNsS7CJ+BCn5aRXqjX1Puiyw5nbhzDEAV1PbUBqNvmUM2v+qSJLY9i6BuNeWuuhUqQPuFQ/npMPNOMSbvcclldfjvpHnYeLSS3QPw5YczH9pE2QL0JbeLkOoIMbGyOCTiUclbO05yVhdeMfj6276kmLoR18g/mbsuBdwcI="
 
 before_install:
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -44,4 +48,13 @@ script:
  - mkdir build
  - cd build
  - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w" -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -w" 
- - make -j4
+ - make -j 4
+
+addons:
+  coverity_scan:
+    project:
+      name: "EasyWoW/wotlk-core"
+      description: "Build submitted via Travis CI"
+    build_command_prepend: "make clean"
+    build_command:   "make -j 4"
+    branch_pattern: coverity_scan
