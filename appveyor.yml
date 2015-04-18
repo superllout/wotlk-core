@@ -13,5 +13,5 @@ build_script:
     - cd ..
     - mkdir build
     - cd build
-    - cmake ../wotlk-core/cmake
-    - nmake EasyWoW.sln
+    - cmake ../wotlk-core/cmake -DBUILD_LUAENGINE=1 
+    - msbuild EasyWoW.sln
