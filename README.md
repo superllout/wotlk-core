@@ -1,6 +1,7 @@
-# EasyWoW/wotlk-core [![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) [![Coverity Scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
+# EasyWoW/wotlk-core https://www.gnu.org/graphics/agplv3-88x31.png [![Build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) [![Coverity Scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
 
 [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
+
 
 [![License](https://www.gnu.org/graphics/agplv3-155x51.png "project is licensed under AGPL")](https://www.gnu.org/licenses/agpl-3.0.html)
 
