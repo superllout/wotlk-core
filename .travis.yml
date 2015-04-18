@@ -36,7 +36,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure: "dlHBlpNsS7CJ+BCn5aRXqjX1Puiyw5nbhzDEAV1PbUBqNvmUM2v+qSJLY9i6BuNeWuuhUqQPuFQ/npMPNOMSbvcclldfjvpHnYeLSS3QPw5YczH9pE2QL0JbeLkOoIMbGyOCTiUclbO05yVhdeMfj6276kmLoR18g/mbsuBdwcI="
+   - secure: "94hswkB1R68s-ZzUCxTiWA"
 
 before_install:
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test

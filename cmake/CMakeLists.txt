@@ -105,8 +105,8 @@ if( CMAKE_GENERATOR MATCHES Unix* )
 	
 	#Check support for unordered_map/set
 	GetCompilerVersion(compiler_version)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_GLAGS} -lpthread")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_GLAGS} -lpthread")
+    #SET(CMAKE_C_FLAGS "${CMAKE_C_GLAGS} -lpthread")
+    #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_GLAGS} -lpthread")
 	IF( DEFINED compiler_version AND NOT APPLE )
 	    add_definitions(-DHAS_CXX0X)
 	    # Enabling c++0x
