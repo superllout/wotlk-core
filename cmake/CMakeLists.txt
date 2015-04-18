@@ -1,4 +1,4 @@
-project(EasyWoW CXX)
+project(EasyWoW C CXX)
 
 cmake_minimum_required(VERSION 2.8)
 #Do system checking.
