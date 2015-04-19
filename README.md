@@ -3,16 +3,17 @@
 ## Important links:
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
+[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
 
 ## Build Status:
-
+| Compiler | Status |
 |-----------|------------------|
 | GCC/Clang | [![GCC/Clang build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) |
-| MSVC 2015 | [![MSVC 2013 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
-| Static code analysis | [![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872) |
+| MSVC 2013 | [![MSVC 2013 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
+
+[![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872) |
 
 
-[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
 
 ## What is EasyWoW
 
@@ -26,16 +27,10 @@ questions or documentation requests (NOTE: do not forget to add correct label - 
 
 ## Required tools to run this server
 
-* Game client (this repository supports only 3.3.5a 12340 build).
-
-* Compiler:
-
-    Linux/UNIX: GCC ( 4.6 or later) and Clang ( 3.2 or later)
-
-    Windows: Visual Studio (Community 2013 or later), mingw currently has no support.
-
-* data server (MySQL 5.4 or later, PostgreSQL will supported in near future).
-
-* Git (source control)
-
-* computer with 2-3 GB RAM minimally and also which CPU supports SSE2 technology.
++ Game client (this repository supports only 3.3.5a 12340 build).
++ Compiler:
+    + Linux/UNIX: GCC ( 4.6 or later) and Clang ( 3.2 or later)
+    + Windows: Visual Studio (Community 2013 or later), mingw currently has no support.
++ SQL data server (MySQL 5.4 or later, PostgreSQL will supported in near future).
++ Git (source control)
++ Computer with 2-3 GB RAM minimally and also which CPU supports SSE2 technology.
