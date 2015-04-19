@@ -4,6 +4,8 @@ branches:
 
 os: Windows Server 2012
 
+clone_folder: c:\projects\EasyWoW
+
 platform:
     - x86
     - x64
@@ -12,12 +14,12 @@ configuration:
     - Debug
     - Release
 
-init:
-    - call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\Tools\VsDevCmd.bat"
-
-build_script:
-    - cd ..
+before_build:
     - mkdir build
     - cd build
-    - cmake ../wotlk-core/cmake -DBUILD_LUAENGINE=1 
-    - msbuild EasyWoW.sln /p:Configuration=%CONFIGURATION% /p:Platform=%PLATFORM%
+    - cmake --version
+    - if %PLATFORM% == x86 cmake ../cmake -DBUILD_LUAENGINE=1 
+    - if %PLATFORM% == x64 cmake -G "Visual Studio 12 2013 Win64" -DBUILD_LUAENGINE=1
+
+build:
+    project: c:\projects\EasyWoW\build\EasyWoW.sln
