@@ -6,6 +6,9 @@ os: Windows Server 2012
 
 clone_folder: c:\projects\EasyWoW
 
+matrix:
+  fast_finish: true
+
 platform:
     - x86
     - x64
@@ -18,8 +21,9 @@ before_build:
     - mkdir build
     - cd build
     - cmake --version
-    - if %PLATFORM% == x86 cmake ../cmake -DBUILD_LUAENGINE=1 
-    - if %PLATFORM% == x64 cmake -G "Visual Studio 12 2013 Win64" -DBUILD_LUAENGINE=1
+    - if %PLATFORM% == x86 cmake ../cmake -DBUILD_LUAENGINE=1 -DCMAKE_BUILD_TYPE=%CONFIGURATION%
+    - if %PLATFORM% == x64 cmake -G "Visual Studio 12 2013 Win64" -DBUILD_LUAENGINE=1 -DCMAKE_BUILD_TYPE=%CONFIGURATION%
 
 build:
+    parallel: true
     project: c:\projects\EasyWoW\build\EasyWoW.sln
