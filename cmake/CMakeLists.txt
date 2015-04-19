@@ -149,8 +149,8 @@ ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
 	execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
 
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /bigobj")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /bigobj /wd4669")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj /wd4669")
 
 	#Check support for unordered_map/set
 	GetCompilerVersion( msvc_version)
