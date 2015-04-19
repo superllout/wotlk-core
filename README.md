@@ -1,9 +1,11 @@
 # EasyWoW/wotlk-core ![alt text](https://www.gnu.org/graphics/agplv3-88x31.png "AGPL v3 license")
 
+[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
+
 ## Important links:
 
 Core wiki: https://github.com/EasyWoW/wiki/wiki
-[![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/pr)](http://www.issuestats.com/github/EasyWoW/wotlk-core) [![Issue Stats](http://www.issuestats.com/github/EasyWoW/wotlk-core/badge/issue)](http://www.issuestats.com/github/EasyWoW/wotlk-core)
+
 
 ## Build Status:
 | Compiler | Status |
@@ -11,7 +13,7 @@ Core wiki: https://github.com/EasyWoW/wiki/wiki
 | GCC/Clang | [![GCC/Clang build Status](https://travis-ci.org/EasyWoW/wotlk-core.svg?branch=master)](https://travis-ci.org/EasyWoW/wotlk-core) |
 | MSVC 2013 | [![MSVC 2013 build status](https://ci.appveyor.com/api/projects/status/c3529dgugyyqildt?svg=true)](https://ci.appveyor.com/project/sanctum32/wotlk-core) |
 
-[![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872) |
+[![Coverity static code analysis scan](https://scan.coverity.com/projects/4872/badge.svg)](https://scan.coverity.com/projects/4872)
 
 
 
