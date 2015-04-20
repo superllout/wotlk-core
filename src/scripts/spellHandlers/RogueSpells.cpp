@@ -21,7 +21,7 @@
 
 //Alice : Correct formula for Rogue - Preparation
 
-bool Preparation(uint32 i, Spell* pSpell)
+bool Preparation(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -44,7 +44,7 @@ bool Preparation(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool Shiv(uint32 i, Spell* pSpell)
+bool Shiv(uint32 /*i*/, Spell* pSpell)
 {
     Unit* pTarget = pSpell->GetUnitTarget();
     if(!pSpell->p_caster || !pTarget) return true;
@@ -90,7 +90,7 @@ bool ImprovedSprint(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool CutToTheChase(uint32 i, Aura* pAura, bool apply)
+bool CutToTheChase(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -105,7 +105,7 @@ bool CutToTheChase(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool DeadlyBrew(uint32 i, Aura* pAura, bool apply)
+bool DeadlyBrew(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -120,7 +120,7 @@ bool DeadlyBrew(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool CloakOfShadows(uint32 i, Spell* s)
+bool CloakOfShadows(uint32 /*i*/, Spell* s)
 {
     Unit* unitTarget = s->GetUnitTarget();
 

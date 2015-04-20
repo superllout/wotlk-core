@@ -56,7 +56,7 @@ bool Pestilence(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool DeathStrike(uint32 i, Spell* pSpell)
+bool DeathStrike(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL || pSpell->GetUnitTarget() == NULL)
         return true;
@@ -89,7 +89,7 @@ bool DeathStrike(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool Strangulate(uint32 i, Aura* pAura, bool apply)
+bool Strangulate(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!apply)
         return true;
@@ -105,7 +105,7 @@ bool Strangulate(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool RaiseDead(uint32 i, Spell* s)
+bool RaiseDead(uint32 /*i*/, Spell* s)
 {
     if(s->p_caster == NULL)
         return false;
@@ -119,7 +119,7 @@ bool RaiseDead(uint32 i, Spell* s)
     // Master of Ghouls
     if(!s->p_caster->HasAura(52143))
     {
-        Corpse* corpseTarget = s->GetCorpseTarget();
+        //Corpse* corpseTarget = s->GetCorpseTarget();
 
         // We need a corpse for this spell
         // Doesn't seem to be supported yet, so let's comment this for now
@@ -147,7 +147,7 @@ bool RaiseDead(uint32 i, Spell* s)
     return true;
 }
 
-bool DeathGrip(uint32 i, Spell* s)
+bool DeathGrip(uint32 /*i*/, Spell* s)
 {
     Unit* unitTarget = s->GetUnitTarget();
 
@@ -163,7 +163,7 @@ bool DeathGrip(uint32 i, Spell* s)
     return true;
 }
 
-bool DeathCoil(uint32 i, Spell* s)
+bool DeathCoil(uint32 /*i*/, Spell* s)
 {
     Unit* unitTarget = s->GetUnitTarget();
 
@@ -185,7 +185,7 @@ bool DeathCoil(uint32 i, Spell* s)
     return true;
 }
 
-bool BladedArmor(uint32 i, Spell* s)
+bool BladedArmor(uint32 /*i*/, Spell* /*s*/)
 {
     /*
      * SPELL_EFFECT_DUMMY is used in this spell, in DBC, only to store data for in-game tooltip output.
@@ -217,7 +217,7 @@ bool DeathAndDecay(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool Butchery(uint32 i, Aura* pAura, bool apply)
+bool Butchery(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -229,7 +229,7 @@ bool Butchery(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool DeathRuneMastery(uint32 i, Aura* pAura, bool apply)
+bool DeathRuneMastery(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -244,7 +244,7 @@ bool DeathRuneMastery(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool MarkOfBlood(uint32 i, Aura* pAura, bool apply)
+bool MarkOfBlood(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 

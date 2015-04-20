@@ -19,7 +19,7 @@
 
 #include "Setup.h"
 
-bool Penance(uint32 i, Spell* pSpell)
+bool Penance(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster || !pSpell->p_caster->isAlive() ||
             !pSpell->GetUnitTarget() || !pSpell->GetUnitTarget()->isAlive())
@@ -78,7 +78,7 @@ bool Penance(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool DivineAegis(uint32 i, Aura* pAura, bool apply)
+bool DivineAegis(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -90,7 +90,7 @@ bool DivineAegis(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool ImprovedDevouringPlague(uint32 i, Aura* pAura, bool apply)
+bool ImprovedDevouringPlague(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -105,7 +105,7 @@ bool ImprovedDevouringPlague(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool VampiricEmbrace(uint32 i, Aura* pAura, bool apply)
+bool VampiricEmbrace(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -141,7 +141,7 @@ bool VampiricTouch(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool EmpoweredRenew(uint32 i, Aura* pAura, bool apply)
+bool EmpoweredRenew(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -156,7 +156,7 @@ bool EmpoweredRenew(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool ImprovedMindBlast(uint32 i, Aura* pAura, bool apply)
+bool ImprovedMindBlast(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -171,7 +171,7 @@ bool ImprovedMindBlast(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool PainAndSufferingAura(uint32 i, Aura* pAura, bool apply)
+bool PainAndSufferingAura(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -186,7 +186,7 @@ bool PainAndSufferingAura(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool PainAndSufferingProc(uint32 i, Spell* pSpell)
+bool PainAndSufferingProc(uint32 /*i*/, Spell* pSpell)
 {
     Player* caster = pSpell->p_caster;
     if(caster == NULL)

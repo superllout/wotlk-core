@@ -32,7 +32,7 @@
 
 // *****************************************************************************
 
-bool GnomishTransporter(uint32 i, Spell* pSpell)
+bool GnomishTransporter(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -43,7 +43,7 @@ bool GnomishTransporter(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool NoggenFoggerElixr(uint32 i, Spell* pSpell)
+bool NoggenFoggerElixr(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -66,7 +66,7 @@ bool NoggenFoggerElixr(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool HallowsEndCandy(uint32 i, Spell* pSpell)
+bool HallowsEndCandy(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -81,7 +81,7 @@ bool HallowsEndCandy(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool DeviateFish(uint32 i, Spell* pSpell)
+bool DeviateFish(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -96,7 +96,7 @@ bool DeviateFish(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool CookedDeviateFish(uint32 i, Spell* pSpell)
+bool CookedDeviateFish(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -151,7 +151,7 @@ bool HolidayCheer(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool NetOMatic(uint32 i, Spell* pSpell)
+bool NetOMatic(uint32 /*i*/, Spell* pSpell)
 {
     Unit* target = pSpell->GetUnitTarget();
     if(!pSpell->p_caster || !target) return true;
@@ -177,7 +177,7 @@ bool NetOMatic(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool BanishExile(uint32 i, Spell* pSpell)
+bool BanishExile(uint32 /*i*/, Spell* pSpell)
 {
     Unit*   target = pSpell->GetUnitTarget();
     if(!pSpell->p_caster || !target) return true;
@@ -188,7 +188,7 @@ bool BanishExile(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool ForemansBlackjack(uint32 i, Spell* pSpell)
+bool ForemansBlackjack(uint32 /*i*/, Spell* pSpell)
 {
     Unit* target = pSpell->GetUnitTarget();
     if(!pSpell->p_caster || !target || !target->IsCreature())
@@ -226,7 +226,7 @@ bool ForemansBlackjack(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool NetherWraithBeacon(uint32 i, Spell* pSpell)
+bool NetherWraithBeacon(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -241,7 +241,7 @@ bool NetherWraithBeacon(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool NighInvulnBelt(uint32 i, Spell* pSpell)
+bool NighInvulnBelt(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -257,7 +257,7 @@ bool NighInvulnBelt(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool ReindeerTransformation(uint32 i, Spell* pSpell)
+bool ReindeerTransformation(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -273,7 +273,7 @@ bool ReindeerTransformation(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool WinterWondervolt(uint32 i, Spell* pSpell)
+bool WinterWondervolt(uint32 /*i*/, Spell* pSpell)
 {
     Unit*   target = pSpell->GetUnitTarget();
 
@@ -305,7 +305,7 @@ bool WinterWondervolt(uint32 i, Spell* pSpell)
 
 // -----------------------------------------------------------------------------
 
-bool ScryingCrystal(uint32 i, Spell* pSpell)
+bool ScryingCrystal(uint32 /*i*/, Spell* pSpell)
 {
     QuestLogEntry* en = pSpell->p_caster->GetQuestLogForEntry(9824);
     if(pSpell->p_caster->GetMapMgr()->GetInterface()->GetGameObjectNearestCoords(pSpell->p_caster->GetPositionX(),
@@ -334,7 +334,7 @@ bool ScryingCrystal(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool MinionsOfGurok(uint32 i, Spell* pSpell)
+bool MinionsOfGurok(uint32 /*i*/, Spell* pSpell)
 {
     Unit*   target = pSpell->GetUnitTarget();
     if(!pSpell->p_caster || !target || !target->IsCreature() || target->GetEntry() != 17157) return true;
@@ -353,7 +353,7 @@ bool MinionsOfGurok(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool PurifyBoarMeat(uint32 i, Spell* pSpell)
+bool PurifyBoarMeat(uint32 /*i*/, Spell* pSpell)
 {
     uint32 bormeat = RandomUInt(2);
     switch(bormeat)
@@ -373,7 +373,7 @@ bool PurifyBoarMeat(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool WarpRiftGenerator(uint32 i, Spell* pSpell)
+bool WarpRiftGenerator(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -387,7 +387,7 @@ bool WarpRiftGenerator(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool OrbOfTheSindorei(uint32 i, Aura* pAura, bool apply)
+bool OrbOfTheSindorei(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
     if(!target->IsPlayer())
@@ -407,7 +407,7 @@ bool OrbOfTheSindorei(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool BigBlizzardBear(uint32 i, Aura* pAura, bool apply)
+bool BigBlizzardBear(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -428,7 +428,7 @@ bool BigBlizzardBear(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool WingedSteed(uint32 i, Aura* pAura, bool apply)
+bool WingedSteed(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -449,7 +449,7 @@ bool WingedSteed(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool HeadlessHorsemanMount(uint32 i, Aura* pAura, bool apply)
+bool HeadlessHorsemanMount(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -480,7 +480,7 @@ bool HeadlessHorsemanMount(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool MagicBroomMount(uint32 i, Aura* pAura, bool apply)
+bool MagicBroomMount(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -511,7 +511,7 @@ bool MagicBroomMount(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool MagicRoosterMount(uint32 i, Aura* pAura, bool apply)
+bool MagicRoosterMount(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -524,7 +524,7 @@ bool MagicRoosterMount(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool Invincible(uint32 i, Aura* pAura, bool apply)
+bool Invincible(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!pAura->GetTarget()->IsPlayer())
         return true;
@@ -559,7 +559,7 @@ bool Invincible(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool Poultryizer(uint32 i, Spell* s)
+bool Poultryizer(uint32 /*i*/, Spell* s)
 {
     Unit* unitTarget = s->GetUnitTarget();
 
@@ -571,7 +571,7 @@ bool Poultryizer(uint32 i, Spell* s)
     return true;
 }
 
-bool SixDemonBag(uint32 i, Spell* s)
+bool SixDemonBag(uint32 /*i*/, Spell* s)
 {
     Unit* unitTarget = s->GetUnitTarget();
 
@@ -587,7 +587,7 @@ bool SixDemonBag(uint32 i, Spell* s)
     return true;
 }
 
-bool ExtractGas(uint32 i, Spell* s)
+bool ExtractGas(uint32 /*i*/, Spell* s)
 {
     bool check = false;
     uint32 cloudtype = 0;
@@ -637,7 +637,7 @@ bool ExtractGas(uint32 i, Spell* s)
     return true;
 }
 
-bool BrittleArmor(uint32 i, Spell* s)
+bool BrittleArmor(uint32 /*i*/, Spell* s)
 {
     if(s->u_caster == NULL)
         return false;
@@ -648,7 +648,7 @@ bool BrittleArmor(uint32 i, Spell* s)
     return true;
 }
 
-bool RequiresNoAmmo(uint32 i, Aura* a, bool apply)
+bool RequiresNoAmmo(uint32 /*i*/, Aura* a, bool apply)
 {
 
     a->SpellAuraConsumeNoAmmo(apply);
@@ -667,7 +667,7 @@ bool RequiresNoAmmo(uint32 i, Aura* a, bool apply)
 //  Casts another spell that increases run speed for 5 seconds
 //
 ////////////////////////////////////////////////////////////////////////
-bool NitroBoosts(uint32 i, Spell* s)
+bool NitroBoosts(uint32 /*i*/, Spell* s)
 {
     if(s->p_caster == NULL)
         return true;
@@ -696,7 +696,7 @@ bool NitroBoosts(uint32 i, Spell* s)
 //
 //
 //////////////////////////////////////////////////////////////////////
-bool ShrinkRay(uint32 i, Spell* s)
+bool ShrinkRay(uint32 /*i*/, Spell* s)
 {
     if(s->p_caster == NULL)
         return true;
@@ -807,7 +807,7 @@ bool ShrinkRay(uint32 i, Spell* s)
 //  in lvl80 dungeons, heroics and raids.
 //
 ////////////////////////////////////////////////////////////////////////
-bool ChampioningTabards(uint32 i, Aura* a, bool apply)
+bool ChampioningTabards(uint32 /*i*/, Aura* a, bool apply)
 {
     Player* p_caster = a->GetPlayerCaster();
 
@@ -836,7 +836,7 @@ bool ChampioningTabards(uint32 i, Aura* a, bool apply)
 //
 //
 ///////////////////////////////////////////////////////////////
-bool Spinning(uint32 i, Spell* s)
+bool Spinning(uint32 /*i*/, Spell* s)
 {
     Player* p_caster = s->p_caster;
 
@@ -868,7 +868,7 @@ bool Spinning(uint32 i, Spell* s)
 //
 //
 /////////////////////////////////////////////////////////////////
-bool ListeningToMusic(uint32 i, Aura* a, bool apply)
+bool ListeningToMusic(uint32 /*i*/, Aura* a, bool apply)
 {
     Unit* m_target = a->GetTarget();
     Player* p_target = NULL;
@@ -903,7 +903,7 @@ bool ListeningToMusic(uint32 i, Aura* a, bool apply)
 //
 //
 //////////////////////////////////////////////////////////////////
-bool DrinkDummyAura(uint32 i, Aura* a, bool apply)
+bool DrinkDummyAura(uint32 /*i*/, Aura* a, bool apply)
 {
     if(!apply)
         return true;
@@ -916,7 +916,7 @@ bool DrinkDummyAura(uint32 i, Aura* a, bool apply)
     return true;
 }
 
-bool X53Mount( uint32 i, Aura *a, bool apply ){
+bool X53Mount( uint32 /*i*/, Aura *a, bool apply ){
     if( a->GetTarget() == NULL )
         return true;
 

@@ -19,7 +19,7 @@
 #include "Setup.h"
 #include "../Common/EasyFunctions.h"
 
-bool CleansingVial(uint32 i, Spell* pSpell)
+bool CleansingVial(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -38,7 +38,7 @@ bool CleansingVial(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool SummonCyclonian(uint32 i, Spell* pSpell)
+bool SummonCyclonian(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->u_caster == NULL)
         return true;
@@ -53,7 +53,7 @@ bool SummonCyclonian(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool ElementalPowerExtractor(uint32 i, Spell* pSpell)
+bool ElementalPowerExtractor(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -72,7 +72,7 @@ bool ElementalPowerExtractor(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool SummonEkkorash(uint32 i, Spell* pSpell)
+bool SummonEkkorash(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -85,7 +85,7 @@ bool SummonEkkorash(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool CallRexxar(uint32 i, Spell* pSpell)
+bool CallRexxar(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -100,7 +100,7 @@ bool CallRexxar(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool LayWreath(uint32 i, Spell* pSpell)  //Peace at Last quest
+bool LayWreath(uint32 /*i*/, Spell* pSpell)  //Peace at Last quest
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -122,7 +122,7 @@ bool LayWreath(uint32 i, Spell* pSpell)  //Peace at Last quest
     return true;
 }
 
-bool ScrapReaver(uint32 i, Spell* pSpell)
+bool ScrapReaver(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -137,7 +137,7 @@ bool ScrapReaver(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool RuuanokClaw(uint32 i, Spell* pSpell)
+bool RuuanokClaw(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster)
         return true;
@@ -146,7 +146,7 @@ bool RuuanokClaw(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool KarangsBanner(uint32 i, Spell* pSpell)
+bool KarangsBanner(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster) return true;
 
@@ -163,7 +163,7 @@ bool KarangsBanner(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool ADireSituation(uint32 i, Spell* pSpell)
+bool ADireSituation(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster != NULL)
         pSpell->p_caster->AddQuestKill(10506, 0);
@@ -171,7 +171,7 @@ bool ADireSituation(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool FuryoftheDreghoodElders(uint32 i, Spell* pSpell)
+bool FuryoftheDreghoodElders(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -192,7 +192,7 @@ bool FuryoftheDreghoodElders(uint32 i, Spell* pSpell)
 
 }
 
-bool ASpiritAlly(uint32 i, Spell* pSpell)
+bool ASpiritAlly(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -206,7 +206,7 @@ bool ASpiritAlly(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool BalanceMustBePreserved(uint32 i, Aura* pAura, bool apply)
+bool BalanceMustBePreserved(uint32 /*i*/, Aura* pAura, bool apply)
 {
     if(!apply)
         return true;
@@ -266,7 +266,7 @@ bool BalanceMustBePreserved(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool BlessingofIncineratus(uint32 i, Spell* pSpell)
+bool BlessingofIncineratus(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -324,7 +324,7 @@ bool BlessingofIncineratus(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool TagMurloc(uint32 i, Aura* pAura, bool apply)
+bool TagMurloc(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Object* Caster = pAura->GetCaster();
 
@@ -361,7 +361,7 @@ bool TagMurloc(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool CookingPot(uint32 i, Spell* pSpell)
+bool CookingPot(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -377,7 +377,7 @@ bool CookingPot(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool EvilDrawsNear(uint32 i, Spell* pSpell)
+bool EvilDrawsNear(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -391,7 +391,7 @@ bool EvilDrawsNear(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool UnyieldingBattleHorn(uint32 i, Spell* pSpell)
+bool UnyieldingBattleHorn(uint32 /*i*/, Spell* pSpell)
 {
     if(pSpell->p_caster == NULL)
         return true;
@@ -402,7 +402,7 @@ bool UnyieldingBattleHorn(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool MeasuringWarpEnergies(uint32 i, Spell* pSpell)
+bool MeasuringWarpEnergies(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -460,7 +460,7 @@ bool MeasuringWarpEnergies(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool YennikuRelease(uint32 i, Spell* pSpell)
+bool YennikuRelease(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -481,7 +481,7 @@ bool YennikuRelease(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool ScrollOfMyzrael(uint32 i, Spell* pSpell)
+bool ScrollOfMyzrael(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -506,7 +506,7 @@ bool ScrollOfMyzrael(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool Showdown(uint32 i, Spell* pSpell)
+bool Showdown(uint32 /*i*/, Spell* pSpell)
 {
     Player* p_caster = pSpell->p_caster;
     if(!p_caster)
@@ -522,7 +522,7 @@ bool Showdown(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool TheBaitforLarkorwi1(uint32 i, Spell* pSpell)
+bool TheBaitforLarkorwi1(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -540,7 +540,7 @@ bool TheBaitforLarkorwi1(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool TheBaitforLarkorwi2(uint32 i, Spell* pSpell)
+bool TheBaitforLarkorwi2(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -555,7 +555,7 @@ bool TheBaitforLarkorwi2(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool Fumping(uint32 i, Spell* pSpell)
+bool Fumping(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -586,7 +586,7 @@ bool Fumping(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool TheBigBoneWorm(uint32 i, Spell* pSpell)
+bool TheBigBoneWorm(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -601,7 +601,7 @@ bool TheBigBoneWorm(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool Torgos(uint32 i, Spell* pSpell)
+bool Torgos(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -618,7 +618,7 @@ bool Torgos(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool WelcomingtheWolfSpirit(uint32 i, Spell* pSpell)
+bool WelcomingtheWolfSpirit(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -640,7 +640,7 @@ bool WelcomingtheWolfSpirit(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool NaturalRemedies(uint32 i, Spell* pSpell)
+bool NaturalRemedies(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)
@@ -656,7 +656,7 @@ bool NaturalRemedies(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool FloraoftheEcoDomes(uint32 i, Spell* pSpell)
+bool FloraoftheEcoDomes(uint32 /*i*/, Spell* pSpell)
 {
     if(!pSpell->p_caster || !pSpell->GetUnitTarget() || !pSpell->GetUnitTarget()->IsCreature())
         return true;
@@ -686,7 +686,7 @@ bool FloraoftheEcoDomes(uint32 i, Spell* pSpell)
 
 }
 
-bool TheCleansingMustBeStopped(uint32 i, Spell* pSpell)
+bool TheCleansingMustBeStopped(uint32 /*i*/, Spell* pSpell)
 {
     Player* pPlayer = pSpell->p_caster;
     if(!pPlayer)

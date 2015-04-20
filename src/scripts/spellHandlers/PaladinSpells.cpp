@@ -19,7 +19,7 @@
 
 #include "Setup.h"
 
-bool EyeForAnEye(uint32 i, Aura* pAura, bool apply)
+bool EyeForAnEye(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* target = pAura->GetTarget();
 
@@ -31,7 +31,7 @@ bool EyeForAnEye(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool HolyShock(uint32 i, Spell* pSpell)
+bool HolyShock(uint32 /*i*/, Spell* pSpell)
 {
     Unit* target = pSpell->GetUnitTarget();
     if(target == NULL)
@@ -157,7 +157,7 @@ bool SealOfVengeance(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool JudgementLightWisdomJustice(uint32 i, Spell* pSpell)
+bool JudgementLightWisdomJustice(uint32 /*i*/, Spell* pSpell)
 {
     Unit* target = pSpell->GetUnitTarget();
     if(target == NULL)
@@ -240,7 +240,7 @@ bool JudgementLightWisdomJustice(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool JudgementOfLight(uint32 i, Aura* pAura, bool apply)
+bool JudgementOfLight(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* caster = pAura->GetUnitCaster();
     if(caster == NULL)
@@ -254,7 +254,7 @@ bool JudgementOfLight(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool JudgementOfWisdom(uint32 i, Aura* pAura, bool apply)
+bool JudgementOfWisdom(uint32 /*i*/, Aura* pAura, bool apply)
 {
     Unit* caster = pAura->GetUnitCaster();
     if(caster == NULL)
@@ -268,7 +268,7 @@ bool JudgementOfWisdom(uint32 i, Aura* pAura, bool apply)
     return true;
 }
 
-bool RighteousDefense(uint32 i, Spell* s)
+bool RighteousDefense(uint32 /*i*/, Spell* s)
 {
     //we will try to lure 3 enemies from our target
 
@@ -312,7 +312,7 @@ bool RighteousDefense(uint32 i, Spell* s)
     return true;
 }
 
-bool Illumination(uint32 i, Spell* s)
+bool Illumination(uint32 /*i*/, Spell* s)
 {
     switch(s->m_triggeredByAura == NULL ? s->GetProto()->Id : s->m_triggeredByAura->GetSpellId())
     {
@@ -334,7 +334,7 @@ bool Illumination(uint32 i, Spell* s)
     return true;
 }
 
-bool JudgementOfTheWise(uint32 i, Spell* s)
+bool JudgementOfTheWise(uint32 /*i*/, Spell* s)
 {
     if(!s->p_caster)
         return false;

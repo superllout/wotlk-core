@@ -580,12 +580,6 @@ bool DemonicKnowledge(uint32 i, Aura* a, bool apply)
 
 bool EyeOfKilrog(uint32 i, Aura* a, bool apply)
 {
-    Unit* m_target = a->GetTarget();
-
-    if(!apply)
-    {
-    }
-
     return true;
 }
 

@@ -546,12 +546,12 @@ void ArathiBasin::HookOnPlayerDeath(Player* plr)
     UpdatePvPData();
 }
 
-void ArathiBasin::HookOnMount(Player* plr)
+void ArathiBasin::HookOnMount(Player* /*plr*/)
 {
     // nothing in this BG
 }
 
-void ArathiBasin::HookOnPlayerKill(Player* plr, Player* pVictim)
+void ArathiBasin::HookOnPlayerKill(Player* plr, Player* /*pVictim*/)
 {
     plr->m_bgScore.KillingBlows++;
     UpdatePvPData();
@@ -579,14 +579,12 @@ void ArathiBasin::OnRemovePlayer(Player* plr)
     plr->RemoveAura(BG_PREPARATION);
 }
 
-void ArathiBasin::HookFlagDrop(Player* plr, GameObject* obj)
+void ArathiBasin::HookFlagDrop(Player* /*plr*/, GameObject* /*obj*/)
 {
-    // nothing?
 }
 
-void ArathiBasin::HookFlagStand(Player* plr, GameObject* obj)
+void ArathiBasin::HookFlagStand(Player* /*plr*/, GameObject* /*obj*/)
 {
-    // nothing?
 }
 
 LocationVector ArathiBasin::GetStartingCoords(uint8 Team)
@@ -992,7 +990,7 @@ void ArathiBasin::AssaultControlPoint(Player* pPlayer, uint32 Id)
     }
 }
 
-bool ArathiBasin::HookSlowLockOpen(GameObject* pGo, Player* pPlayer, Spell* pSpell)
+bool ArathiBasin::HookSlowLockOpen(GameObject* pGo, Player* pPlayer, Spell* /*pSpell*/)
 {
     // burlex todo: find a cleaner way to do this that doesn't waste memory.
     if(pGo->bannerslot >= 0 && pGo->bannerslot < AB_NUM_CONTROL_POINTS)
@@ -1012,15 +1010,15 @@ bool ArathiBasin::HookSlowLockOpen(GameObject* pGo, Player* pPlayer, Spell* pSpe
 void ArathiBasin::HookOnShadowSight()
 {
 }
-void ArathiBasin::HookGenerateLoot(Player* plr, Object* pOCorpse)
+void ArathiBasin::HookGenerateLoot(Player* /*plr*/, Object* /*pOCorpse*/)
 {
 }
 
-void ArathiBasin::HookOnUnitKill(Player* plr, Unit* pVictim)
+void ArathiBasin::HookOnUnitKill(Player* /*plr*/, Unit* /*pVictim*/)
 {
 }
 
-void ArathiBasin::HookOnFlagDrop(Player* plr)
+void ArathiBasin::HookOnFlagDrop(Player* /*plr*/)
 {
 }
 

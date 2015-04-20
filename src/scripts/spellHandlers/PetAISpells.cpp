@@ -196,16 +196,19 @@ class DancingRuneWeaponAI : public CreatureAIScript
             }
         }
 
-        void OnDied(Unit* mKiller) { RemoveAIUpdateEvent(); }
+        void OnDied(Unit* /*mKiller*/)
+        {
+            RemoveAIUpdateEvent();
+        }
 
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
             dpsCycle = 0;
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             RemoveAIUpdateEvent();
             dpsCycle = 0;
@@ -258,7 +261,7 @@ class DancingRuneWeaponAI : public CreatureAIScript
             }
         }
 
-        void OnHit(Unit* mTarget, float fAmount)
+        void OnHit(Unit* mTarget, float /*fAmount*/)
         {
             for(int p = 0; p < 5; p++)
             {

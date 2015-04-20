@@ -667,7 +667,7 @@ void IsleOfConquest::Finish( uint32 losingTeam ){
         UpdatePvPData();
 }
 
-void IsleOfConquest::HookOnAreaTrigger(Player* plr, uint32 id)
+void IsleOfConquest::HookOnAreaTrigger(Player* /*plr*/, uint32 /*id*/)
 {
 }
 
@@ -696,7 +696,7 @@ void IsleOfConquest::HookOnPlayerResurrect( Player *player ){
     }
 }
 
-bool IsleOfConquest::HookSlowLockOpen(GameObject* pGo, Player* pPlayer, Spell* pSpell)
+bool IsleOfConquest::HookSlowLockOpen(GameObject* pGo, Player* pPlayer, Spell* /*pSpell*/)
 {
         if(pGo->bannerslot >= 0 && pGo->bannerslot < IOC_NUM_CONTROL_POINTS)
         {
@@ -738,11 +738,11 @@ void IsleOfConquest::HookOnShadowSight()
 {
 }
 
-void IsleOfConquest::SetIsWeekend(bool isweekend) 
+void IsleOfConquest::SetIsWeekend(bool /*isweekend*/) 
 {
 }
 
-void IsleOfConquest::HookOnUnitKill( Player* plr, Unit* pVictim ){
+void IsleOfConquest::HookOnUnitKill( Player* /*plr*/, Unit* /*pVictim*/ ){
 }
 
 void IsleOfConquest::HookOnUnitDied( Unit *victim ){

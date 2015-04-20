@@ -143,7 +143,7 @@ bool LifeBloom(uint32 i, Aura* a, bool apply)
     return true;
 }
 
-bool LeaderOfThePack(uint32 i, Aura* a, bool apply)
+bool LeaderOfThePack(uint32 /*i*/, Aura* a, bool apply)
 {
     Unit* u_target = a->GetTarget();
 
