@@ -48,7 +48,6 @@ env:
 
 before_install:
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
- - echo "yes" | sudo add-apt-repository ppa:kubuntu-ppa/backports
  - sudo apt-get -qq update
  - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev
 
