@@ -607,7 +607,7 @@ void Item::SetOwner(Player* owner)
 }
 
 
-int32 Item::AddEnchantment(EnchantEntry* Enchantment, uint32 Duration, bool Perm /* = false */, bool apply /* = true */, bool RemoveAtLogout /* = false */, uint32 Slot_, uint32 RandomSuffix)
+int32 Item::AddEnchantment(EnchantEntry* Enchantment, uint32 Duration, bool /*Perm  = false */, bool apply /* = true */, bool RemoveAtLogout /* = false */, uint32 Slot_, uint32 RandomSuffix)
 {
     int32 Slot = Slot_;
     m_isDirty = true;
@@ -902,7 +902,7 @@ void Item::EventRemoveEnchantment(uint32 Slot)
     RemoveEnchantment(Slot);
 }
 
-int32 Item::FindFreeEnchantSlot(EnchantEntry* Enchantment, uint32 random_type)
+int32 Item::FindFreeEnchantSlot(EnchantEntry* /*Enchantment*/, uint32 random_type)
 {
     uint32 GemSlotsReserve = GetSocketsCount();
     if(GetProto()->SocketBonus)

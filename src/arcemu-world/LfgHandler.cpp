@@ -31,7 +31,7 @@ void WorldSession::HandleSetLookingForGroupComment(WorldPacket & recvPacket)
     GetPlayer()->Lfgcomment = comment;
 }
 
-void WorldSession::HandleEnableAutoJoin(WorldPacket & recvPacket)
+void WorldSession::HandleEnableAutoJoin(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -62,7 +62,7 @@ void WorldSession::HandleEnableAutoJoin(WorldPacket & recvPacket)
     }
 }
 
-void WorldSession::HandleDisableAutoJoin(WorldPacket & recvPacket)
+void WorldSession::HandleDisableAutoJoin(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -79,23 +79,20 @@ void WorldSession::HandleDisableAutoJoin(WorldPacket & recvPacket)
     }
 }
 
-void WorldSession::HandleEnableAutoAddMembers(WorldPacket & recvPacket)
+void WorldSession::HandleEnableAutoAddMembers(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
-    uint32 i;
     _player->m_AutoAddMem = true;
 
-    for(i = 0; i < MAX_LFG_QUEUE_ID; ++i)
+    for(uint8 i = 0; i < MAX_LFG_QUEUE_ID; ++i)
     {
         if(_player->LfgDungeonId[i] != 0)
-        {
             sLfgMgr.UpdateLfgQueue(_player->LfgDungeonId[i]);
-        }
     }
 }
 
-void WorldSession::HandleDisableAutoAddMembers(WorldPacket & recvPacket)
+void WorldSession::HandleDisableAutoAddMembers(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -181,21 +178,21 @@ void WorldSession::HandleSetLookingForMore(WorldPacket & recvPacket)
         sLfgMgr.SetPlayerInLfmList(_player, LfgDungeonId);
 }
 
-void WorldSession::HandleLfgClear(WorldPacket & recvPacket)
+void WorldSession::HandleLfgClear(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
     sLfgMgr.RemovePlayerFromLfgQueues(_player);
 }
 
-void WorldSession::HandleMeetingStoneInfo(WorldPacket & recvPacket)
+void WorldSession::HandleMeetingStoneInfo(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 
     _player->SendMeetingStoneQueue(0, 6); //values drawn from packet logs, don't appear to change
 }
 
-void WorldSession::HandleLfgInviteAccept(WorldPacket & recvPacket)
+void WorldSession::HandleLfgInviteAccept(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN;
 

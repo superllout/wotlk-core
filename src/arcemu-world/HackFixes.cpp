@@ -447,7 +447,7 @@ void ApplyNormalFixes()
                 uint32 aura = sp->EffectApplyAuraName[y];
                 if(aura == SPELL_AURA_PROC_TRIGGER_SPELL || aura == SPELL_AURA_PROC_TRIGGER_DAMAGE)//search for spellid in description
                 {
-                    const char* p = sp->Description;
+                    //const char* p = sp->Description;
                     /*
                     while((p = strstr(p, "$")) != 0)
                     {

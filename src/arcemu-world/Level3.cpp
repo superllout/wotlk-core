@@ -150,7 +150,7 @@ bool ChatHandler::HandlePortToGameObjectSpawnCommand(const char* args, WorldSess
     return true;
 }
 
-bool ChatHandler::HandleClearCooldownsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleClearCooldownsCommand(const char* /*args*/, WorldSession* m_session)
 {
     uint32 guid = (uint32)m_session->GetPlayer()->GetSelection();
     Player* plr = getSelectedChar(m_session, true);
@@ -401,7 +401,7 @@ bool ChatHandler::HandleLearnCommand(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleReviveCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleReviveCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* SelectedPlayer = getSelectedChar(m_session, true);
     if(!SelectedPlayer)
@@ -793,7 +793,7 @@ static const PetFlagNames PetFlagToName[] =
 static const uint32 numpetflags = sizeof(PetFlagToName) / sizeof(PetFlagNames);
 
 
-bool ChatHandler::HandleNpcInfoCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcInfoCommand(const char* /*args*/, WorldSession* m_session)
 {
 
     uint32 guid = Arcemu::Util::GUID_LOPART(m_session->GetPlayer()->GetSelection());
@@ -1096,7 +1096,7 @@ bool ChatHandler::HandleIncreaseWeaponSkill(const char* args, WorldSession* m_se
 }
 
 
-bool ChatHandler::HandleResetTalentsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleResetTalentsCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = this->getSelectedChar(m_session);
     if(!plr) return true;
@@ -1109,7 +1109,7 @@ bool ChatHandler::HandleResetTalentsCommand(const char* args, WorldSession* m_se
     return true;
 }
 
-bool ChatHandler::HandleResetSpellsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleResetSpellsCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = this->getSelectedChar(m_session);
     if(!plr) return true;
@@ -1239,7 +1239,7 @@ bool ChatHandler::HandleAccountUnmuteCommand(const char* args, WorldSession* m_s
     return true;
 }
 
-bool ChatHandler::HandleGetTransporterTime(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGetTransporterTime(const char* /*args*/, WorldSession* m_session)
 {
     //Player *plyr = m_session->GetPlayer();
     Creature* crt = getSelectedCreature(m_session, false);
@@ -1266,7 +1266,7 @@ bool ChatHandler::HandleGetTransporterTime(const char* args, WorldSession* m_ses
     return true;
 }
 
-bool ChatHandler::HandleRemoveAurasCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleRemoveAurasCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session, true);
     if(!plr) return false;
@@ -1281,7 +1281,7 @@ bool ChatHandler::HandleRemoveAurasCommand(const char* args, WorldSession* m_ses
     return true;
 }
 
-bool ChatHandler::HandleRemoveRessurectionSickessAuraCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleRemoveRessurectionSickessAuraCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session, true);
     if(!plr) return false;
@@ -1293,7 +1293,7 @@ bool ChatHandler::HandleRemoveRessurectionSickessAuraCommand(const char* args, W
     return true;
 }
 
-bool ChatHandler::HandleParalyzeCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleParalyzeCommand(const char* /*args*/, WorldSession* m_session)
 {
     //Player *plr = getSelectedChar(m_session, true);
     //if(!plr) return false;
@@ -1316,7 +1316,7 @@ bool ChatHandler::HandleParalyzeCommand(const char* args, WorldSession* m_sessio
     return true;
 }
 
-bool ChatHandler::HandleUnParalyzeCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleUnParalyzeCommand(const char* /*args*/, WorldSession* m_session)
 {
     //Player *plr = getSelectedChar(m_session, true);
     //if(!plr) return false;
@@ -1549,7 +1549,7 @@ bool ChatHandler::HandlePowerCheatCommand(const char* args, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleShowCheatsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleShowCheatsCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plyr = getSelectedChar(m_session, true);
     if(!plyr) return true;
@@ -1625,7 +1625,7 @@ bool ChatHandler::HandleFlyCommand(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleDBReloadCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDBReloadCommand(const char* /*args*/, WorldSession* /*m_session*/)
 {
 
     sWorld.SendWorldText("Support for reloading tables on the fly was disabled in Arcemu revision 3621. You are seeing this message because apparently reading SVN changelog or using forums search is way over the head of some of our users.", 0);
@@ -1932,7 +1932,7 @@ bool ChatHandler::HandleRenamePetCommand(const char* args, WorldSession* m_sessi
     return true;
 }
 
-bool ChatHandler::HandleDismissPetCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDismissPetCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session, false);
     Pet* pPet = NULL;
@@ -2080,7 +2080,7 @@ bool ChatHandler::HandleShutdownRestartCommand(const char* args, WorldSession* m
     return true;
 }
 
-bool ChatHandler::HandleCancelShutdownCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleCancelShutdownCommand(const char* /*args*/, WorldSession* m_session)
 {
     if(sMaster.m_ShutdownEvent == false)
         return false;
@@ -2291,7 +2291,7 @@ bool ChatHandler::HandleCastAllCommand(const char* args, WorldSession* m_session
     return true;
 }
 
-bool ChatHandler::HandleNpcReturnCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcReturnCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* creature = getSelectedCreature(m_session);
     if(!creature || !creature->m_spawn) return true;
@@ -2334,7 +2334,7 @@ bool ChatHandler::HandleModPeriodCommand(const char* args, WorldSession* m_sessi
     return true;
 }
 
-bool ChatHandler::HandleFormationLink1Command(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleFormationLink1Command(const char* /*args*/, WorldSession* m_session)
 {
     // set formation "master"
     Creature* pCreature = getSelectedCreature(m_session, true);
@@ -2380,7 +2380,7 @@ bool ChatHandler::HandleFormationLink2Command(const char* args, WorldSession* m_
     return true;
 }
 
-bool ChatHandler::HandleNpcFollowCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcFollowCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* creature = getSelectedCreature(m_session, true);
     if(!creature) return true;
@@ -2391,7 +2391,7 @@ bool ChatHandler::HandleNpcFollowCommand(const char* args, WorldSession* m_sessi
     return true;
 }
 
-bool ChatHandler::HandleFormationClearCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleFormationClearCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* c = getSelectedCreature(m_session, true);
     if(!c) return true;
@@ -2406,7 +2406,7 @@ bool ChatHandler::HandleFormationClearCommand(const char* args, WorldSession* m_
     return true;
 }
 
-bool ChatHandler::HandleNullFollowCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNullFollowCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* c = getSelectedCreature(m_session, true);
     if(!c) return true;
@@ -2514,7 +2514,7 @@ bool ChatHandler::HandleTriggerpassCheatCommand(const char* args, WorldSession* 
     return true;
 }
 
-bool ChatHandler::HandleResetSkillsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleResetSkillsCommand(const char* /*args*/, WorldSession* m_session)
 {
     skilllineentry* se;
     Player* plr = getSelectedChar(m_session, true);
@@ -2826,7 +2826,7 @@ bool ChatHandler::HandleCreatureSpawnCommand(const char* args, WorldSession* m_s
     return true;
 }
 
-bool ChatHandler::HandleCreatureRespawnCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleCreatureRespawnCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* cCorpse = getSelectedCreature(m_session, false);
 
@@ -3396,7 +3396,7 @@ bool ChatHandler::HandleGORotate(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleGOMove(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGOMove(const char* /*args*/, WorldSession* m_session)
 {
     // move the go to player's coordinates
     GameObject* go = m_session->GetPlayer()->GetSelectedGo();
@@ -3426,7 +3426,7 @@ bool ChatHandler::HandleGOMove(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleNpcPossessCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcPossessCommand(const char* /*args*/, WorldSession* m_session)
 {
     Unit* pTarget = getSelectedChar(m_session, false);
     if(!pTarget)
@@ -3456,7 +3456,7 @@ bool ChatHandler::HandleNpcPossessCommand(const char* args, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleNpcUnPossessCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcUnPossessCommand(const char* /*args*/, WorldSession* m_session)
 {
     Creature* creature = getSelectedCreature(m_session);
     m_session->GetPlayer()->UnPossess();
@@ -3483,7 +3483,7 @@ bool ChatHandler::HandleNpcUnPossessCommand(const char* args, WorldSession* m_se
     return true;
 }
 
-bool ChatHandler::HandleRehashCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleRehashCommand(const char* /*args*/, WorldSession* m_session)
 {
     /*
     rehashes
@@ -3505,7 +3505,7 @@ struct spell_thingo
 list<SpellEntry*> aiagent_spells;
 map<uint32, spell_thingo> aiagent_extra;
 
-bool ChatHandler::HandleAIAgentDebugBegin(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleAIAgentDebugBegin(const char* /*args*/, WorldSession* m_session)
 {
     QueryResult* result = WorldDatabase.Query("SELECT DISTINCT spell FROM ai_agents");
     if(!result) return false;
@@ -3534,7 +3534,7 @@ bool ChatHandler::HandleAIAgentDebugBegin(const char* args, WorldSession* m_sess
     return true;
 }
 
-SpellCastTargets SetTargets(SpellEntry* sp, uint32 type, uint32 targettype, Unit* dst, Creature* src)
+SpellCastTargets SetTargets(SpellEntry* /*sp*/, uint32 /*type*/, uint32 targettype, Unit* dst, Creature* src)
 {
     SpellCastTargets targets;
     targets.m_unitTarget = 0;
@@ -3644,7 +3644,7 @@ bool ChatHandler::HandleRenameGuildCommand(const char* args, WorldSession* m_ses
 }
 
 //People seem to get stuck in guilds from time to time. This should be helpful. -DGM
-bool ChatHandler::HandleGuildRemovePlayerCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGuildRemovePlayerCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session);
     if(!plr || !plr->GetGuildId() || !plr->GetGuild() || plr->GetGuild()->GetGuildLeader() == plr->GetLowGUID())
@@ -3660,7 +3660,7 @@ bool ChatHandler::HandleGuildRemovePlayerCommand(const char* args, WorldSession*
 }
 
 //-DGM
-bool ChatHandler::HandleGuildDisbandCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGuildDisbandCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session);
     if(!plr || !plr->GetGuildId() || !plr->GetGuild())
@@ -3710,7 +3710,7 @@ bool ChatHandler::HandleGuildJoinCommand(const char* args, WorldSession* m_sessi
 }
 
 //-DGM
-bool ChatHandler::HandleGuildMembersCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGuildMembersCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session);
     if(!plr || !plr->GetGuildId() || !plr->GetGuild())
@@ -3822,13 +3822,13 @@ bool ChatHandler::HandleArenaSetTeamLeaderCommand(const char* args, WorldSession
     return true;
 }
 
-bool ChatHandler::HandleArenaResetAllRatingsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleArenaResetAllRatingsCommand(const char* /*args*/, WorldSession* /*m_session*/)
 {
     objmgr.ResetArenaTeamRatings();
     return true;
 }
 
-bool ChatHandler::HandleWhisperBlockCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleWhisperBlockCommand(const char* /*args*/, WorldSession* m_session)
 {
     if(m_session->GetPlayer()->HasFlag(PLAYER_FLAGS, PLAYER_FLAG_GM))
         return false;
@@ -3914,7 +3914,7 @@ bool ChatHandler::HandleDispelAllCommand(const char* args, WorldSession* m_sessi
     return true;
 }
 
-bool ChatHandler::HandleShowItems(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleShowItems(const char* /*args*/, WorldSession* m_session)
 {
     string q;
     Player* plr = getSelectedChar(m_session, true);
@@ -3938,7 +3938,7 @@ bool ChatHandler::HandleShowItems(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleShowSkills(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleShowSkills(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session, true);
     if(!plr)
@@ -3960,7 +3960,7 @@ bool ChatHandler::HandleShowSkills(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleCollisionTestIndoor(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleCollisionTestIndoor(const char* /*args*/, WorldSession* m_session)
 {
     if(sWorld.Collision)
     {
@@ -3977,7 +3977,7 @@ bool ChatHandler::HandleCollisionTestIndoor(const char* args, WorldSession* m_se
     }
 }
 
-bool ChatHandler::HandleCollisionTestLOS(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleCollisionTestLOS(const char* /*args*/, WorldSession* m_session)
 {
     if(sWorld.Collision)
     {
@@ -4010,7 +4010,7 @@ bool ChatHandler::HandleCollisionTestLOS(const char* args, WorldSession* m_sessi
     }
 }
 
-bool ChatHandler::HandleGetDeathState(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGetDeathState(const char* /*args*/, WorldSession* m_session)
 {
     Player* SelectedPlayer = getSelectedChar(m_session, true);
     if(!SelectedPlayer)
@@ -4021,7 +4021,7 @@ bool ChatHandler::HandleGetDeathState(const char* args, WorldSession* m_session)
 }
 
 
-bool ChatHandler::HandleCollisionGetHeight(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleCollisionGetHeight(const char* /*args*/, WorldSession* m_session)
 {
     if(sWorld.Collision)
     {

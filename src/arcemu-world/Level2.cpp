@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 
-bool ChatHandler::HandleResetReputationCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleResetReputationCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session);
     if(!plr)
@@ -39,7 +39,7 @@ bool ChatHandler::HandleResetReputationCommand(const char* args, WorldSession* m
     return true;
 }
 
-bool ChatHandler::HandleInvincibleCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleInvincibleCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* chr = getSelectedChar(m_session);
     char msg[100];
@@ -58,7 +58,7 @@ bool ChatHandler::HandleInvincibleCommand(const char* args, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleInvisibleCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleInvisibleCommand(const char* /*args*/, WorldSession* m_session)
 {
     char msg[256];
     Player* pChar = m_session->GetPlayer();
@@ -155,7 +155,7 @@ bool ChatHandler::CreateGuildCommand(const char* args, WorldSession* m_session)
 #define islower(c)  (c >=  'a' && c <= 'z')
 */
 
-bool ChatHandler::HandleDeleteCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDeleteCommand(const char* /*args*/, WorldSession* m_session)
 {
 
     uint64 guid = m_session->GetPlayer()->GetSelection();
@@ -219,7 +219,7 @@ bool ChatHandler::HandleDeleteCommand(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleDeMorphCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDeMorphCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* target    = getSelectedChar(m_session);
     if(!target)
@@ -386,7 +386,7 @@ bool ChatHandler::HandleNPCFlagCommand(const char* args, WorldSession* m_session
     return true;
 }
 
-bool ChatHandler::HandleSaveAllCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleSaveAllCommand(const char* /*args*/, WorldSession* m_session)
 {
     PlayerStorageMap::const_iterator itr;
     uint32 stime = now();
@@ -410,7 +410,7 @@ bool ChatHandler::HandleSaveAllCommand(const char* args, WorldSession* m_session
     return true;
 }
 
-bool ChatHandler::HandleKillCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleKillCommand(const char* /*args*/, WorldSession* m_session)
 {
     Unit* target = m_session->GetPlayer()->GetMapMgr()->GetUnit(m_session->GetPlayer()->GetSelection());
     if(target == 0)
@@ -759,7 +759,7 @@ bool ChatHandler::HandleGOSelect(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleGODelete(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGODelete(const char* /*args*/, WorldSession* m_session)
 {
     GameObject* GObj = m_session->GetPlayer()->GetSelectedGo();
     if(GObj == NULL)
@@ -936,7 +936,7 @@ bool ChatHandler::HandleGOPhaseCommand(const char* args, WorldSession* m_session
     return true;
 }
 
-bool ChatHandler::HandleGOInfo(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGOInfo(const char* /*args*/, WorldSession* m_session)
 {
     GameObjectInfo* GOInfo = NULL;
     GameObject* GObj = m_session->GetPlayer()->GetSelectedGo();
@@ -1072,7 +1072,7 @@ bool ChatHandler::HandleGOInfo(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleGOEnable(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGOEnable(const char* /*args*/, WorldSession* m_session)
 {
     GameObject* GObj = m_session->GetPlayer()->GetSelectedGo();
     if(!GObj)
@@ -1096,7 +1096,7 @@ bool ChatHandler::HandleGOEnable(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleGOActivate(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGOActivate(const char* /*args*/, WorldSession* m_session)
 {
     GameObject* GObj = m_session->GetPlayer()->GetSelectedGo();
     if(!GObj)
@@ -1295,7 +1295,7 @@ bool ChatHandler::HandleAddAIAgentCommand(const char* args, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleListAIAgentCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleListAIAgentCommand(const char* /*args*/, WorldSession* m_session)
 {
     Unit* target = m_session->GetPlayer()->GetMapMgr()->GetCreature(GET_LOWGUID_PART(m_session->GetPlayer()->GetSelection()));
     if(!target)
@@ -1408,7 +1408,7 @@ bool ChatHandler::HandleGODamageCommand( const char *args, WorldSession *session
     return true;
 }
 
-bool ChatHandler::HandleGORebuildCommand( const char *args, WorldSession *session ){
+bool ChatHandler::HandleGORebuildCommand( const char* /*args*/, WorldSession *session ){
     GameObject *go = session->GetPlayer()->GetSelectedGo();
     if( go == NULL ){
         RedSystemMessage( session, "You need to select a GO first!" );
@@ -1464,7 +1464,7 @@ bool ChatHandler::HandleGOExport(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleNpcComeCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleNpcComeCommand(const char* /*args*/, WorldSession* m_session)
 {
     // moves npc to players location
     Player* plr = m_session->GetPlayer();
@@ -1578,13 +1578,13 @@ bool ChatHandler::HandleNPCEquipThreeCommand(const char* args, WorldSession* m_s
     return true;
 }
 
-ARCEMU_INLINE void RepairItem2(Player* pPlayer, Item* pItem)
+ARCEMU_INLINE void RepairItem2(Player* /*pPlayer*/, Item* pItem)
 {
     pItem->SetDurabilityToMax();
     pItem->m_isDirty = true;
 }
 
-bool ChatHandler::HandleRepairItemsCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleRepairItemsCommand(const char* /*args*/, WorldSession* m_session)
 {
     Item* pItem;
     Container* pContainer;

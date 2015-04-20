@@ -44,7 +44,7 @@ LfgMgr::~LfgMgr()
 
 }
 
-bool LfgMgr::AttemptLfgJoin(Player* pl, uint32 LfgDungeonId)
+bool LfgMgr::AttemptLfgJoin(Player* pl, uint32 /*LfgDungeonId*/)
 {
     if(pl == NULL)
         return false;

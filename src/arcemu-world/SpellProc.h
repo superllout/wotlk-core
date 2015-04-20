@@ -58,7 +58,7 @@ class SpellProc
         }
 
         // Check if this object is identified by method arguments, so it can be deleted
-        virtual bool CanDelete(uint32 spellId, uint64 casterGuid = 0, uint64 /*misc = 0*/)
+        virtual bool CanDelete(uint32 spellId, uint64 casterGuid = 0, uint64 misc = 0)
         {
             if(mSpell->Id == spellId && (casterGuid == 0 || mCaster == casterGuid) && !mDeleted)
                 return true;

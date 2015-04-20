@@ -22,7 +22,7 @@
 #include <git_version.h>
 #include "ConsoleCommands.h"
 
-bool HandleTimeDateCommand( BaseConsole *console, int argc, const char *argv[] )
+bool HandleTimeDateCommand( BaseConsole *console, int /*argc*/, const char* /*argv*/[] )
 {
     time_t unixTime = UNIXTIME;
 
@@ -39,15 +39,14 @@ bool HandleTimeDateCommand( BaseConsole *console, int argc, const char *argv[] )
     return true;
 }
 
-bool HandleInfoCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleInfoCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
     uint32 clientsNum = (uint32)sWorld.GetSessionCount();
     int gm = 0;
     int count = 0;
     int avg = 0;
-    PlayerStorageMap::const_iterator itr;
     objmgr._playerslock.AcquireReadLock();
-    for(itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
+    for (PlayerStorageMap::const_iterator itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
     {
         if(itr->second->GetSession())
         {
@@ -76,30 +75,24 @@ bool HandleInfoCommand(BaseConsole* pConsole, int argc, const char* argv[])
     return true;
 }
 
-bool HandleNetworkStatusCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleNetworkStatusCommand(BaseConsole* /*pConsole*/, int /*argc*/, const char* /*argv*/[])
 {
     sSocketMgr.ShowStatus();
     return true;
 }
 
-bool HandleGMsCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleGMsCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
-    WorldPacket data;
-    //bool first = true;
-
     pConsole->Write("There are the following GM's online on this server: \r\n");
     pConsole->Write("======================================================\r\n");
     pConsole->Write("| %21s | %15s | % 03s  |\r\n" , "Name", "Permissions", "Latency");
     pConsole->Write("======================================================\r\n");
 
-    PlayerStorageMap::const_iterator itr;
     objmgr._playerslock.AcquireReadLock();
-    for(itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
+    for (PlayerStorageMap::const_iterator itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
     {
         if(itr->second->GetSession()->GetPermissionCount())
-        {
             pConsole->Write("| %21s | %15s | %03u ms |\r\n" , itr->second->GetName(), itr->second->GetSession()->GetPermissions(), itr->second->GetSession()->GetLatency());
-        }
     }
     objmgr._playerslock.ReleaseReadLock();
 
@@ -108,22 +101,17 @@ bool HandleGMsCommand(BaseConsole* pConsole, int argc, const char* argv[])
 }
 
 
-bool HandleOnlinePlayersCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleOnlinePlayersCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
-    WorldPacket data;
-    //bool first = true;
-
     pConsole->Write("There following players online on this server: \r\n");
     pConsole->Write("======================================================\r\n");
     pConsole->Write("| %21s | %15s | % 03s  |\r\n" , "Name", "Level", "Latency");
     pConsole->Write("======================================================\r\n");
 
-    PlayerStorageMap::const_iterator itr;
     objmgr._playerslock.AcquireReadLock();
-    for(itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
-    {
+    for (PlayerStorageMap::const_iterator itr = objmgr._players.begin(); itr != objmgr._players.end(); ++itr)
         pConsole->Write("| %21s | %15u | %03u ms |\r\n" , itr->second->GetName(), itr->second->GetSession()->GetPlayer()->getLevel(), itr->second->GetSession()->GetLatency());
-    }
+
     objmgr._playerslock.ReleaseReadLock();
 
     pConsole->Write("======================================================\r\n\r\n");
@@ -246,7 +234,7 @@ bool HandleShutDownCommand(BaseConsole* pConsole, int argc, const char* argv[])
     return true;
 }
 
-bool HandleCancelCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleCancelCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
     pConsole->Write("Shutdown has been canceled.\r\n");
     sMaster.m_ShutdownTimer = 5000;
@@ -362,7 +350,7 @@ bool HandleRevivePlayer(BaseConsole* pConsole, int argc, const char* argv[])
 }
 
 
-bool HandleRehashCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleRehashCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
     pConsole->Write("Config file re-parsed.");
     sWorld.Rehash(true);
@@ -380,14 +368,14 @@ bool HandleNameHashCommand(BaseConsole* pConsole, int argc, const char* argv[])
     return true;
 }
 
-bool HandleClearConsoleCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleClearConsoleCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
     system("cls");
     pConsole->Write("Out of the ashes, Chuck Norris appears! With a roundhouse kick, your console shall now be cleaned!");
     return true;
 }
 
-bool HandleReloadConsoleCommand(BaseConsole* pConsole, int argc, const char* argv[])
+bool HandleReloadConsoleCommand(BaseConsole* pConsole, int /*argc*/, const char* /*argv*/[])
 {
     sWorld.SendWorldText("Support for reloading tables on the fly was disabled in Arcemu revision 3621. You are seeing this message because apparently reading SVN changelog or using forums search is way over the head of some of our users.", 0);
     return true;

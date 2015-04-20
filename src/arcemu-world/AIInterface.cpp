@@ -4241,7 +4241,7 @@ void AIInterface::EventWander(Unit* pUnit, uint32 /*misc1*/)
     resetNextTarget();
 }
 
-void AIInterface::EventUnwander(Unit* pUnit, uint32 /*misc1*/)
+void AIInterface::EventUnwander(Unit* /*pUnit*/, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
@@ -4253,7 +4253,7 @@ void AIInterface::EventUnwander(Unit* pUnit, uint32 /*misc1*/)
     StopMovement(1);
 }
 
-void AIInterface::EventUnitDied(Unit* pUnit, uint32 misc1)
+void AIInterface::EventUnitDied(Unit* pUnit, uint32 /*misc1*/)
 {
     if(pUnit == NULL)
         return;
@@ -4370,14 +4370,14 @@ void AIInterface::EventUnitDied(Unit* pUnit, uint32 misc1)
     //    m_Unit->RemoveNegativeAuras();
 }
 
-void AIInterface::EventHostileAction(Unit* pUnit, uint32 misc1)
+void AIInterface::EventHostileAction(Unit* /*pUnit*/, uint32 /*misc1*/)
 {
     m_combatResetX = m_Unit->GetPositionX();
     m_combatResetY = m_Unit->GetPositionY();
     m_combatResetZ = m_Unit->GetPositionZ();
 }
 
-void AIInterface::MoveKnockback(float x, float y, float z, float horizontal, float vertical)
+void AIInterface::MoveKnockback(float x, float y, float z, float /*horizontal*/, float vertical)
 {
     HandleEvent(EVENT_FORCEREDIRECTED, NULL, 0);
     m_splinePriority = SPLINE_PRIORITY_REDIRECTION;

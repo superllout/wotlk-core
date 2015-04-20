@@ -135,7 +135,7 @@ bool ChatHandler::HandleWAnnounceCommand(const char* args, WorldSession* m_sessi
     return true;
 }
 
-bool ChatHandler::HandleGMOnCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGMOnCommand(const char* /*args*/, WorldSession* m_session)
 {
     GreenSystemMessage(m_session, "Setting GM Flag on yourself.");
 
@@ -158,7 +158,7 @@ bool ChatHandler::HandleGMOnCommand(const char* args, WorldSession* m_session)
 }
 
 
-bool ChatHandler::HandleGMOffCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGMOffCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* _player = m_session->GetPlayer();
     if(_player->HasFlag(PLAYER_FLAGS, PLAYER_FLAG_GM))
@@ -737,7 +737,7 @@ bool ChatHandler::HandleGetSkillLevelCommand(const char* args, WorldSession* m_s
     return true;
 }
 
-bool ChatHandler::HandleGetSkillsInfoCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGetSkillsInfoCommand(const char* /*args*/, WorldSession* m_session)
 {
     Player* plr = getSelectedChar(m_session, true);
     if(!plr) return false;
@@ -1391,7 +1391,7 @@ bool ChatHandler::HandleVehicleEjectPassengerCommand( const char *args, WorldSes
     return true;
 }
 
-bool ChatHandler::HandleVehicleEjectAllPassengersCommand( const char *args, WorldSession *session ){
+bool ChatHandler::HandleVehicleEjectAllPassengersCommand( const char* /*args*/, WorldSession *session ){
     Player *p = session->GetPlayer();
 
     if( p->GetTargetGUID() == 0 ){
@@ -1415,7 +1415,7 @@ bool ChatHandler::HandleVehicleEjectAllPassengersCommand( const char *args, Worl
     return true;
 }
 
-bool ChatHandler::HandleVehicleInstallAccessoriesCommand( const char *args, WorldSession *session ){
+bool ChatHandler::HandleVehicleInstallAccessoriesCommand( const char* /*args*/, WorldSession *session ){
     Player *p = session->GetPlayer();
 
     if( p->GetTargetGUID() == 0 ){
@@ -1439,7 +1439,7 @@ bool ChatHandler::HandleVehicleInstallAccessoriesCommand( const char *args, Worl
     return true;
 }
 
-bool ChatHandler::HandleVehicleRemoveAccessoriesCommand( const char *args, WorldSession *session ){
+bool ChatHandler::HandleVehicleRemoveAccessoriesCommand( const char* /*args*/, WorldSession *session ){
     Player *p = session->GetPlayer();
 
     if( p->GetTargetGUID() == 0 ){
