@@ -52,7 +52,7 @@ class PoisonSpellProc : public SpellProc
         }
 
         // Allow proc on ability cast (like eviscerate, envenom, fan of knives, rupture)
-        bool CanProcOnTriggered(Unit* victim, SpellEntry* CastingSpell)
+        bool CanProcOnTriggered(Unit* /*victim*/, SpellEntry* CastingSpell)
         {
             if(CastingSpell != NULL && (CastingSpell->SpellGroupType[0] & 0x120000 || CastingSpell->SpellGroupType[1] & 0x240008))
                 return true;
@@ -61,7 +61,7 @@ class PoisonSpellProc : public SpellProc
         }
 
         // Allow proc only if proccing hand is the one where poison was applied
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, uint32 /*flag*/, uint32 /*dmg*/, uint32 /*abs*/, int* /*dmg_overwrite*/, uint32 weapon_damage_type)
         {
             Item* item;
 
@@ -109,7 +109,7 @@ class CutToTheChaseSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(CutToTheChaseSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, uint32 /*flag*/, uint32 /*dmg*/, uint32 /*abs*/, int* /*dmg_overwrite*/, uint32 /*weapon_damage_type*/)
         {
             Aura* aura = mTarget->FindAuraByNameHash(SPELL_HASH_SLICE_AND_DICE);
             if(aura)
@@ -134,7 +134,7 @@ class DeadlyBrewSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(DeadlyBrewSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, uint32 /*flag*/, uint32 /*dmg*/, uint32 /*abs*/, int* /*dmg_overwrite*/, uint32 /*weapon_damage_type*/)
         {
             mTarget->CastSpell(static_cast< Unit* >(NULL), 3409, true);    //Spell Id 3409: Crippling Poison
 
@@ -146,7 +146,7 @@ class WaylaySpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(WaylaySpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             mProcFlags = PROC_ON_CAST_SPELL;
             mProcClassMask[0] = 0x204;

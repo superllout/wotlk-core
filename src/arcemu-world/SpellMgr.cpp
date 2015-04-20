@@ -371,7 +371,7 @@ bool SpellArea::IsFitToRequirements(Player* player, uint32 newZone, uint32 newAr
     return true;
 }
 
-bool SpellEntry::CheckLocation(uint32 map_id, uint32 zone_id, uint32 area_id, Player* player)
+bool SpellEntry::CheckLocation(uint32 /*map_id*/, uint32 zone_id, uint32 area_id, Player* player)
 {
     // normal case
     if (RequiresAreaId > 0)

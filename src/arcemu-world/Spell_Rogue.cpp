@@ -31,7 +31,7 @@ class CheatDeathAura : public AbsorbAura
             dSpell = dbcSpell.LookupEntry(31231);
         }
 
-        uint32 AbsorbDamage(uint32 School, uint32* dmg)
+        uint32 AbsorbDamage(uint32 /*School*/, uint32* dmg)
         {
             // Checking for 1 min cooldown
             if(dSpell == NULL || ! p_target->Cooldown_CanCast(dSpell))

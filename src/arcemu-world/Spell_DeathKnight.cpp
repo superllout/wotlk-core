@@ -24,7 +24,7 @@ class BloodPlagueSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(BloodPlagueSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 i, Unit* /*target*/, int32 value)
         {
             if(p_caster != NULL && i == 0)
                 value += (uint32)(p_caster->GetAP() * 0.055 * 1.15);
@@ -37,7 +37,7 @@ class IcyTouchSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(IcyTouchSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 i, Unit* /*target*/, int32 value)
         {
             if(p_caster != NULL && i == 0)
                 value += (uint32)(p_caster->GetAP() * 0.1);
@@ -50,7 +50,7 @@ class FrostFeverSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(FrostFeverSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 i, Unit* /*target*/, int32 value)
         {
             if(p_caster != NULL && i == 0)
                 value += (uint32)(p_caster->GetAP() * 0.055 * 1.15);
@@ -84,7 +84,7 @@ class BloodStrikeSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(BloodStrikeSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 /*i*/, Unit* target, int32 value)
         {
             if(target != NULL)
             {
@@ -204,7 +204,7 @@ class BloodwormSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(BloodwormSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 /*i*/, Unit* /*target*/, int32 /*value*/)
         {
             return 2 + RandomUInt(2);
         }
@@ -218,7 +218,7 @@ class WillOfTheNecropolisAura : public AbsorbAura
         WillOfTheNecropolisAura(SpellEntry* proto, int32 duration, Object* caster, Unit* target, bool temporary = false, Item* i_caster = NULL)
             : AbsorbAura(proto, duration, caster, target, temporary, i_caster) {}
 
-        uint32 AbsorbDamage(uint32 School, uint32* dmg)
+        uint32 AbsorbDamage(uint32 /*School*/, uint32* dmg)
         {
             Unit* caster = GetUnitCaster();
             if(caster == NULL)
@@ -246,7 +246,7 @@ class VampiricBloodSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(VampiricBloodSpell);
 
-        int32 DoCalculateEffect(uint32 i, Unit* target, int32 value)
+        int32 DoCalculateEffect(uint32 i, Unit* /*target*/, int32 value)
         {
             if(i == 1 && p_caster != NULL)
                 value = p_caster->GetMaxHealth() * (GetProto()->EffectBasePoints[i] + 1) / 100;

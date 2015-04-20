@@ -24,7 +24,7 @@ class DispersionSpell : public Spell
 {
         SPELL_FACTORY_FUNCTION(DispersionSpell);
 
-        void DoAfterHandleEffect(Unit* target, uint32 i)
+        void DoAfterHandleEffect(Unit* target, uint32 /*i*/)
         {
             if( p_caster != NULL )
             {

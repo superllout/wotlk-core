@@ -40,7 +40,7 @@ class EarthShieldSpellProc : public SpellProc
 {
     SPELL_PROC_FACTORY_FUNCTION(EarthShieldSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, uint32 /*flag*/, uint32 /*dmg*/, uint32 /*abs*/, int* dmg_overwrite, uint32 /*weapon_damage_type*/)
         {
             int32 value = mOrigSpell->EffectBasePoints[0];
             dmg_overwrite[0] = value;
@@ -48,7 +48,7 @@ class EarthShieldSpellProc : public SpellProc
             return false;
         }
 
-        void CastSpell(Unit* victim, SpellEntry* CastingSpell, int* dmg_overwrite)
+        void CastSpell(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, int* /*dmg_overwrite*/)
         {
             Unit* caster = mTarget->GetMapMgr()->GetUnit(mCaster);
             if(caster == NULL)
@@ -100,14 +100,14 @@ class FlametongueWeaponSpellProc : public SpellProc
             return false;
         }
 
-        bool CanProc(Unit* victim, SpellEntry* CastingSpell)
+        bool CanProc(Unit* /*victim*/, SpellEntry* /*CastingSpell*/)
         {
             if(mTarget->IsPlayer())
                 return true;
             return false;
         }
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* /*CastingSpell*/, uint32 /*flag*/, uint32 /*dmg*/, uint32 /*abs*/, int* dmg_overwrite, uint32 weapon_damage_type)
         {
             Item* item;
 

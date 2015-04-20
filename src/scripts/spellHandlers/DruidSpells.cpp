@@ -41,7 +41,7 @@ bool Starfall(uint32 i, Spell* pSpell)
     return true;
 }
 
-bool ImprovedLeaderOfThePack(uint32 i, Spell* s)
+bool ImprovedLeaderOfThePack(uint32 /*i*/, Spell* s)
 {
     if(s->p_caster == NULL)
         return false;
