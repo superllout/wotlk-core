@@ -79,8 +79,8 @@ if( WIN32 )
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
         add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
 
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669 /wd4127")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669 /wd4127")
 
         if(IS_64BIT)
             #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
