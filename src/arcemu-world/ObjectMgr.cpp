@@ -747,7 +747,6 @@ void ObjectMgr::LoadGMTickets()
         return;
     }
 
-    uint32 deleted = 0;
     do
     {
         Field* fields = result->Fetch();
@@ -1683,7 +1682,7 @@ void GossipMenu::AddItem(uint8 Icon, const char* Text, int32 Id /* = -1 */, int8
     Menu.push_back(Item);
 }
 
-void GossipMenu::AddMenuItem(uint8 Icon, const char* Message, uint32 dtSender, uint32 dtAction, const char* BoxMessage, uint32 BoxMoney, bool Coded)
+void GossipMenu::AddMenuItem(uint8 Icon, const char* Message, uint32 /*dtSender*/, uint32 dtAction, const char* BoxMessage, uint32 BoxMoney, bool Coded)
 {
     GossipMenuItem Item;
 
@@ -3133,7 +3132,7 @@ ArenaTeam* ObjectMgr::GetArenaTeamById(uint32 id)
     return (itr == m_arenaTeams.end()) ? NULL : itr->second;
 }
 
-ArenaTeam* ObjectMgr::GetArenaTeamByName(string & name, uint32 Type)
+ArenaTeam* ObjectMgr::GetArenaTeamByName(string & name, uint32 /*Type*/)
 {
     m_arenaTeamLock.Acquire();
     for(HM_NAMESPACE::hash_map<uint32, ArenaTeam*>::iterator itr = m_arenaTeams.begin(); itr != m_arenaTeams.end(); ++itr)
@@ -3699,7 +3698,6 @@ CreatureScriptTextStruct ObjectMgr::GetCreatureScriptText(uint32 entry, uint32 i
 void ObjectMgr::LoadCreatureDifficultyStats()
 {
     Log.Debug("ObjectMgr", "Loading creature difficulty stats");
-    uint32 count = 0;
     std::list<uint32> entryList;
     if (QueryResult *result = WorldDatabase.Query("SELECT `entry`,`difficulty`,`minLevel`,`maxLevel`,`minHealth`,`maxHealth`,`mana`,`minDamage`,`maxDamage`,`minRangedDamage`,`maxRangedDamage`, \
         `armor`,`holy_resistance`,`fire_resistance`,`nature_resistance`,`frost_resistance`,`shadow_resistance`,`arcane_resistance`,`immuneMask` FROM `creature_difficulty_stats`"))

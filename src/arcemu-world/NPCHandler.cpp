@@ -483,7 +483,7 @@ void WorldSession::HandleGossipSelectOptionOpcode(WorldPacket & recv_data)
 //////////////////////////////////////////////////////////////
 /// This function handles CMSG_SPIRIT_HEALER_ACTIVATE:
 //////////////////////////////////////////////////////////////
-void WorldSession::HandleSpiritHealerActivateOpcode(WorldPacket & recv_data)
+void WorldSession::HandleSpiritHealerActivateOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 

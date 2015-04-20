@@ -24,7 +24,7 @@ class SealOfCommandSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(SealOfCommandSpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             // default chance of proc
             mProcChance = 25;
@@ -49,7 +49,7 @@ class EyeForAnEyeSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(EyeForAnEyeSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* CastingSpell, uint32 /*flag*/, uint32 dmg, uint32 /*abs*/, int* dmg_overwrite, uint32 /*weapon_damage_type*/)
         {
             // If this player died by crit damage, don't do dmg back
             if(! mTarget->isAlive())
@@ -74,7 +74,7 @@ class GraceOfTheNaaruSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(GraceOfTheNaaruSpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             this->mProcClassMask[0] = 0x80000000;
         }
@@ -84,7 +84,7 @@ class SpiritualAttunementSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(SpiritualAttunementSpellProc);
 
-        bool CanProc(Unit* victim, SpellEntry* CastingSpell)
+        bool CanProc(Unit* /*victim*/, SpellEntry* CastingSpell)
         {
             if(CastingSpell == NULL || ! IsHealingSpell(CastingSpell))
                 return false;
@@ -97,7 +97,7 @@ class PaladinSealsSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(PaladinSealsSpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             this->mProcFlags = PROC_ON_MELEE_ATTACK;
         }
@@ -107,7 +107,7 @@ class SealOfCorruptionSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(SealOfCorruptionSpellProc);
 
-        bool CanProc(Unit* victim, SpellEntry* CastingSpell)
+        bool CanProc(Unit* victim, SpellEntry* /*CastingSpell*/)
         {
             if(victim == NULL || victim->FindAuraCountByHash(SPELL_HASH_BLOOD_CORRUPTION) < 5)
                 return false;
@@ -120,7 +120,7 @@ class SealOfVengeanceSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(SealOfVengeanceSpellProc);
 
-        bool CanProc(Unit* victim, SpellEntry* CastingSpell)
+        bool CanProc(Unit* victim, SpellEntry* /*CastingSpell*/)
         {
             if(victim == NULL || victim->FindAuraCountByHash(SPELL_HASH_HOLY_VENGEANCE) < 5)
                 return false;

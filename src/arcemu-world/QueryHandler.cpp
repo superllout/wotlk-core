@@ -51,7 +51,7 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket & recv_data)
 //////////////////////////////////////////////////////////////
 /// This function handles CMSG_QUERY_TIME:
 //////////////////////////////////////////////////////////////
-void WorldSession::HandleQueryTimeOpcode(WorldPacket & recv_data)
+void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recv_data*/)
 {
     WorldPacket data(SMSG_QUERY_TIME_RESPONSE, 4 + 4);
     data << (uint32)UNIXTIME;
@@ -216,7 +216,7 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket & recv_data)
 //////////////////////////////////////////////////////////////
 /// This function handles MSG_CORPSE_QUERY:
 //////////////////////////////////////////////////////////////
-void WorldSession::HandleCorpseQueryOpcode(WorldPacket & recv_data)
+void WorldSession::HandleCorpseQueryOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -331,7 +331,7 @@ void WorldSession::HandleItemNameQueryOpcode(WorldPacket & recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleInrangeQuestgiverQuery(WorldPacket & recv_data)
+void WorldSession::HandleInrangeQuestgiverQuery(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN;
 

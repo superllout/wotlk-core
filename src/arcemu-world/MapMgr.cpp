@@ -1836,7 +1836,7 @@ GameObject* MapMgr::CreateAndSpawnGameObject(uint32 entryID, float x, float y, f
     return go;
 }
 
-GameObject* MapMgr::CreateGameObject(uint32 entry)
+GameObject* MapMgr::CreateGameObject(uint32 /*entry*/)
 {
     if(_reusable_guids_gameobject.size() > GO_GUID_RECYCLE_INTERVAL)
     {

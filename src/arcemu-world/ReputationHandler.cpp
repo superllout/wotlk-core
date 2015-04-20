@@ -421,7 +421,7 @@ void Player::Reputation_OnTalk(FactionDBC* dbc)
     }
 }
 
-void Player::SetFactionInactive(uint32 faction, bool set)
+void Player::SetFactionInactive(uint32 faction, bool /*set*/)
 {
     FactionReputation* rep = reputationByListId[faction];
     if(rep == NULL)

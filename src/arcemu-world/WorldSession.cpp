@@ -1617,7 +1617,7 @@ void WorldSession::HandleLearnTalentOpcode(WorldPacket & recv_data)
 
 }
 
-void WorldSession::HandleUnlearnTalents(WorldPacket & recv_data)
+void WorldSession::HandleUnlearnTalents(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
     uint32 price =

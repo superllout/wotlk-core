@@ -1427,7 +1427,7 @@ bool ChatHandler::HandleGORebuildCommand( const char* /*args*/, WorldSession *se
     return true;
 }
 
-bool ChatHandler::HandleGOExport(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleGOExport(const char* /*args*/, WorldSession* m_session)
 {
     /*if(!m_session->GetPlayer()->m_GM_SelectedGO)
         return false;

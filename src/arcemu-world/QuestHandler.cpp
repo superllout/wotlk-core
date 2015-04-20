@@ -234,7 +234,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
 
 }
 
-void WorldSession::HandleQuestgiverCancelOpcode(WorldPacket & recvPacket)
+void WorldSession::HandleQuestgiverCancelOpcode(WorldPacket & /*recvPacket*/)
 {
     CHECK_INWORLD_RETURN
 

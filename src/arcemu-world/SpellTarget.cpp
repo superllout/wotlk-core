@@ -167,7 +167,7 @@ void Spell::FillTargetMap(uint32 i)
         AddScriptedOrSpellFocusTargets(i, TargetType, GetRadius(i), m_spellInfo->MaxTargets);
 }
 
-void Spell::AddScriptedOrSpellFocusTargets(uint32 i, uint32 TargetType, float r, uint32 maxtargets)
+void Spell::AddScriptedOrSpellFocusTargets(uint32 i, uint32 TargetType, float r, uint32 /*maxtargets*/)
 {
     for(std::set< Object* >::iterator itr = m_caster->GetInRangeSetBegin(); itr != m_caster->GetInRangeSetEnd(); ++itr)
     {
@@ -192,7 +192,7 @@ void Spell::AddScriptedOrSpellFocusTargets(uint32 i, uint32 TargetType, float r,
     }
 }
 
-void Spell::AddConeTargets(uint32 i, uint32 TargetType, float r, uint32 maxtargets)
+void Spell::AddConeTargets(uint32 i, uint32 TargetType, float /*r*/, uint32 maxtargets)
 {
     TargetsList* list = &m_targetUnits[i];
     ObjectSet::iterator itr;
@@ -213,7 +213,7 @@ void Spell::AddConeTargets(uint32 i, uint32 TargetType, float r, uint32 maxtarge
     }
 }
 
-void Spell::AddChainTargets(uint32 i, uint32 TargetType, float r, uint32 maxtargets)
+void Spell::AddChainTargets(uint32 i, uint32 TargetType, float /*r*/, uint32 /*maxtargets*/)
 {
     if(!m_caster->IsInWorld())
         return;
@@ -283,7 +283,7 @@ void Spell::AddChainTargets(uint32 i, uint32 TargetType, float r, uint32 maxtarg
     }
 }
 
-void Spell::AddPartyTargets(uint32 i, uint32 TargetType, float r, uint32 maxtargets)
+void Spell::AddPartyTargets(uint32 i, uint32 TargetType, float r, uint32 /*maxtargets*/)
 {
     Object* u = m_caster->GetMapMgr()->_GetObject(m_targets.m_unitTarget);
     if(u == NULL)
@@ -315,7 +315,7 @@ void Spell::AddPartyTargets(uint32 i, uint32 TargetType, float r, uint32 maxtarg
     }
 }
 
-void Spell::AddRaidTargets(uint32 i, uint32 TargetType, float r, uint32 maxtargets, bool partylimit)
+void Spell::AddRaidTargets(uint32 i, uint32 TargetType, float r, uint32 /*maxtargets*/, bool /*partylimit*/)
 {
     Object* u = m_caster->GetMapMgr()->_GetObject(m_targets.m_unitTarget);
     if(u == NULL)

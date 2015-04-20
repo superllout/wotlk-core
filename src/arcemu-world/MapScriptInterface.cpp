@@ -76,7 +76,7 @@ uint32 MapScriptInterface::GetPlayerCountInRadius(float x, float y, float z /* =
     return PlayerCount;
 }
 
-GameObject* MapScriptInterface::SpawnGameObject(uint32 Entry, float cX, float cY, float cZ, float cO, bool AddToWorld, uint32 Misc1, uint32 Misc2, uint32 phase)
+GameObject* MapScriptInterface::SpawnGameObject(uint32 Entry, float cX, float cY, float cZ, float cO, bool AddToWorld, uint32 /*Misc1*/, uint32 /*Misc2*/, uint32 phase)
 {
 
     GameObject* pGameObject = mapMgr.CreateGameObject(Entry);
@@ -112,7 +112,7 @@ GameObject* MapScriptInterface::SpawnGameObject(GOSpawn* gs, bool AddToWorld)
     return pGameObject;
 }
 
-Creature* MapScriptInterface::SpawnCreature(uint32 Entry, float cX, float cY, float cZ, float cO, bool AddToWorld, bool tmplate, uint32 Misc1, uint32 Misc2, uint32 phase)
+Creature* MapScriptInterface::SpawnCreature(uint32 Entry, float cX, float cY, float cZ, float cO, bool AddToWorld, bool /*tmplate*/, uint32 /*Misc1*/, uint32 /*Misc2*/, uint32 phase)
 {
     CreatureProto* proto = CreatureProtoStorage.LookupEntry(Entry);
     CreatureInfo* info = CreatureNameStorage.LookupEntry(Entry);

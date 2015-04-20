@@ -231,7 +231,7 @@ void WorldSession::HandlePetAction(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandlePetInfo(WorldPacket & recv_data)
+void WorldSession::HandlePetInfo(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -260,7 +260,7 @@ void WorldSession::HandlePetNameQuery(WorldPacket & recv_data)
     SendPacket(&data);
 }
 
-void WorldSession::HandleStablePet(WorldPacket & recv_data)
+void WorldSession::HandleStablePet(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -363,7 +363,7 @@ void WorldSession::HandleStabledPetList(WorldPacket & recv_data)
     SendStabledPetList(npcguid);
 }
 
-void WorldSession::HandleBuyStableSlot(WorldPacket & recv_data)
+void WorldSession::HandleBuyStableSlot(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -463,7 +463,7 @@ void WorldSession::HandlePetRename(WorldPacket & recv_data)
         pet->RemoveSanctuaryFlag();
 }
 
-void WorldSession::HandlePetAbandon(WorldPacket & recv_data)
+void WorldSession::HandlePetAbandon(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 

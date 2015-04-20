@@ -122,7 +122,7 @@ uint32 QuestMgr::PlayerMeetsReqs(Player* plr, Quest* qst, bool skiplevelcheck)
     return status;
 }
 
-uint32 QuestMgr::CalcQuestStatus(Object* quest_giver, Player* plr, Quest* qst, uint8 type, bool skiplevelcheck)
+uint32 QuestMgr::CalcQuestStatus(Object* /*quest_giver*/, Player* plr, Quest* qst, uint8 type, bool skiplevelcheck)
 {
     QuestLogEntry* qle;
 
@@ -299,7 +299,7 @@ uint32 QuestMgr::ActiveQuestsCount(Object* quest_giver, Player* plr)
     return questCount;
 }
 
-void QuestMgr::BuildOfferReward(WorldPacket* data, Quest* qst, Object* qst_giver, uint32 menutype, uint32 language, Player* plr)
+void QuestMgr::BuildOfferReward(WorldPacket* data, Quest* qst, Object* qst_giver, uint32 /*menutype*/, uint32 language, Player* plr)
 {
     LocalizedQuest* lq = (language > 0) ? sLocalizationMgr.GetLocalizedQuest(qst->id, language) : NULL;
     ItemPrototype* it;
@@ -387,7 +387,7 @@ void QuestMgr::BuildOfferReward(WorldPacket* data, Quest* qst, Object* qst_giver
         *data << uint32(0);
 }
 
-void QuestMgr::BuildQuestDetails(WorldPacket* data, Quest* qst, Object* qst_giver, uint32 menutype, uint32 language, Player* plr)
+void QuestMgr::BuildQuestDetails(WorldPacket* data, Quest* qst, Object* qst_giver, uint32 /*menutype*/, uint32 language, Player* plr)
 {
     LocalizedQuest* lq = (language > 0) ? sLocalizationMgr.GetLocalizedQuest(qst->id, language) : NULL;
     std::map<uint32, uint8>::const_iterator itr;
@@ -1047,7 +1047,7 @@ void QuestMgr::GiveQuestRewardReputation(Player* plr, Quest* qst, Object* qst_gi
     }
 }
 
-void QuestMgr::OnQuestAccepted(Player* plr, Quest* qst, Object* qst_giver)
+void QuestMgr::OnQuestAccepted(Player* /*plr*/, Quest* /*qst*/, Object* /*qst_giver*/)
 {
 
 }
@@ -1588,7 +1588,7 @@ uint32 QuestMgr::GenerateQuestXP(Player* plr, Quest* qst)
     }
 }
 
-uint32 QuestMgr::GenerateRewardMoney(Player* plr, Quest* qst)
+uint32 QuestMgr::GenerateRewardMoney(Player* /*plr*/, Quest* qst)
 {
 //    if ( plr == NULL || !plr->IsInWorld() || plr->getLevel() >= plr->GetUInt32Value(PLAYER_FIELD_MAX_LEVEL) || ( !plr->GetSession()->HasFlag( ACCOUNT_FLAG_XPACK_01 ) && plr->getLevel() != 60 ) || plr->getLevel() != 70 || qst->is_repeatable != 0 )
     {

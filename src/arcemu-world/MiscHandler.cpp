@@ -20,7 +20,7 @@
 
 #include "StdAfx.h"
 
-void WorldSession::HandleRepopRequestOpcode(WorldPacket & recv_data)
+void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -222,7 +222,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleLootMoneyOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLootMoneyOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -802,7 +802,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
         delete [] names;
 }
 
-void WorldSession::HandleLogoutRequestOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -863,7 +863,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & recv_data)
     */
 }
 
-void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & recv_data)
+void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -879,7 +879,7 @@ void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleLogoutCancelOpcode(WorldPacket & recv_data)
+void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
     LOG_DEBUG("WORLD: Recvd CMSG_LOGOUT_CANCEL Message");
@@ -1255,7 +1255,7 @@ void WorldSession::HandleSetWatchedFactionIndexOpcode(WorldPacket & recvPacket)
     GetPlayer()->SetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, factionid);
 }
 
-void WorldSession::HandleTogglePVPOpcode(WorldPacket & recv_data)
+void WorldSession::HandleTogglePVPOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -1732,7 +1732,7 @@ void WorldSession::HandleTutorialFlag(WorldPacket & recv_data)
     LOG_DEBUG("Received Tutorial Flag Set {%u}.", iFlag);
 }
 
-void WorldSession::HandleTutorialClear(WorldPacket & recv_data)
+void WorldSession::HandleTutorialClear(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -1740,7 +1740,7 @@ void WorldSession::HandleTutorialClear(WorldPacket & recv_data)
         GetPlayer()->SetTutorialInt(iI, 0xFFFFFFFF);
 }
 
-void WorldSession::HandleTutorialReset(WorldPacket & recv_data)
+void WorldSession::HandleTutorialReset(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -1987,7 +1987,7 @@ void WorldSession::HandleAcknowledgementOpcodes(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleSelfResurrectOpcode(WorldPacket & recv_data)
+void WorldSession::HandleSelfResurrectOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -2343,7 +2343,7 @@ void WorldSession::HandleOpenItemOpcode(WorldPacket & recv_data)
     _player->SendLoot(pItem->GetGUID(), LOOT_DISENCHANTING, _player->GetMapId());
 }
 
-void WorldSession::HandleCompleteCinematic(WorldPacket & recv_data)
+void WorldSession::HandleCompleteCinematic(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -2351,14 +2351,14 @@ void WorldSession::HandleCompleteCinematic(WorldPacket & recv_data)
     _player->SetStandState(STANDSTATE_STAND);
 };
 
-void WorldSession::HandleResetInstanceOpcode(WorldPacket & recv_data)
+void WorldSession::HandleResetInstanceOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
     sInstanceMgr.ResetSavedInstances(_player);
 }
 
-void WorldSession::HandleToggleCloakOpcode(WorldPacket & recv_data)
+void WorldSession::HandleToggleCloakOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -2375,7 +2375,7 @@ void WorldSession::HandleToggleCloakOpcode(WorldPacket & recv_data)
         _player->SetFlag(PLAYER_FLAGS, PLAYER_FLAG_NOCLOAK);
 }
 
-void WorldSession::HandleToggleHelmOpcode(WorldPacket & recv_data)
+void WorldSession::HandleToggleHelmOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -2453,7 +2453,7 @@ void WorldSession::HandleSummonResponseOpcode(WorldPacket & recv_data)
     _player->m_summoner = _player->m_summonInstanceId = _player->m_summonMapId = 0;
 }
 
-void WorldSession::HandleDismountOpcode(WorldPacket & recv_data)
+void WorldSession::HandleDismountOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
     LOG_DEBUG("WORLD: Received CMSG_DISMOUNT");
@@ -2511,7 +2511,7 @@ void WorldSession::HandleGameobjReportUseOpCode(WorldPacket & recv_data)    // C
     return;
 }
 
-void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket & recv_data)
+void WorldSession::HandleWorldStateUITimerUpdate(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 

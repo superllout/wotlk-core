@@ -496,7 +496,7 @@ void WorldSession::HandleCancelChannellingOpcode(WorldPacket & recvPacket)
     }
 }
 
-void WorldSession::HandleCancelAutoRepeatSpellOpcode(WorldPacket & recv_data)
+void WorldSession::HandleCancelAutoRepeatSpellOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -515,7 +515,7 @@ void WorldSession::HandlePetCastSpell(WorldPacket & recvPacket)
     uint8  castCount = 0;
     uint32 spellid = 0;
     uint8  castflags = 0;
-    uint32 targetmask = 0;
+    //uint32 targetmask = 0;
 
     recvPacket >> guid;
     recvPacket >> castCount;

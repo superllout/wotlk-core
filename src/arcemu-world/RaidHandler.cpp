@@ -20,7 +20,7 @@
 
 #include "StdAfx.h"
 
-void WorldSession::HandleConvertGroupToRaidOpcode(WorldPacket & recv_data)
+void WorldSession::HandleConvertGroupToRaidOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
@@ -129,7 +129,7 @@ void WorldSession::HandleGroupPromote(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleRequestRaidInfoOpcode(WorldPacket & recv_data)
+void WorldSession::HandleRequestRaidInfoOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 

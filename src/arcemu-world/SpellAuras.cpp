@@ -1596,7 +1596,7 @@ void Aura::SpellAuraModBaseResistancePerc(bool apply)
     }
 }
 
-void Aura::SpellAuraNULL(bool apply)
+void Aura::SpellAuraNULL(bool /*apply*/)
 {
     LOG_DEBUG("Unknown Aura id %d", (uint32)mod->m_type);
 }
@@ -3919,7 +3919,7 @@ void Aura::SpellAuraModEffectImmunity(bool apply)
     }
 }
 
-void Aura::SpellAuraModStateImmunity(bool apply)
+void Aura::SpellAuraModStateImmunity(bool /*apply*/)
 {
     //%50 chance to dispel 1 magic effect on target
     //23922
@@ -3984,7 +3984,7 @@ void Aura::SpellAuraModSchoolImmunity(bool apply)
     }
 }
 
-void Aura::SpellAuraModDmgImmunity(bool apply)
+void Aura::SpellAuraModDmgImmunity(bool /*apply*/)
 {
 
 }
@@ -5028,7 +5028,7 @@ void Aura::SpellAuraModStalked(bool apply)
     }
 }
 
-void Aura::SpellAuraSchoolAbsorb(bool apply)
+void Aura::SpellAuraSchoolAbsorb(bool /*apply*/)
 {
     // See AbsorbAura::SpellAuraSchoolAbsorb
 }
@@ -5504,7 +5504,7 @@ void Aura::SpellAuraPeriodicTriggerDummy(bool apply)
     }
 }
 
-void Aura::EventPeriodicTrigger(uint32 amount, uint32 type)
+void Aura::EventPeriodicTrigger(uint32 /*amount*/, uint32 /*type*/)
 {
 
 }
@@ -5745,12 +5745,12 @@ void Aura::SpellAuraModDetectRange(bool apply)
     }
 }
 
-void Aura::SpellAuraPreventsFleeing(bool apply)
+void Aura::SpellAuraPreventsFleeing(bool /*apply*/)
 {
     // Curse of Recklessness
 }
 
-void Aura::SpellAuraModUnattackable(bool apply)
+void Aura::SpellAuraModUnattackable(bool /*apply*/)
 {
     /*
             Also known as Apply Aura: Mod Unintractable
@@ -8326,7 +8326,7 @@ void Aura::SendChannelUpdate(uint32 time, Object* m_caster)
     m_caster->SendMessageToSet(&data, true);
 }
 
-void Aura::SpellAuraExpertise(bool apply)
+void Aura::SpellAuraExpertise(bool /*apply*/)
 {
     if(p_target == NULL)
         return;
@@ -8404,8 +8404,6 @@ void Aura::SpellAuraReduceEffectDuration(bool apply)
 // Target = vehicle
 void Aura::HandleAuraControlVehicle(bool apply)
 {
-    return;
-
     if( !GetCaster()->IsUnit() )
         return;
 
@@ -8697,7 +8695,7 @@ void Aura::SpellAuraModAttackPowerOfArmor(bool apply)
     m_target->CalcDamage();
 }
 
-void Aura::SpellAuraDeflectSpells(bool apply)
+void Aura::SpellAuraDeflectSpells(bool /*apply*/)
 {
     //Currently used only by Detterence and handled in Spell::DidHit
 }

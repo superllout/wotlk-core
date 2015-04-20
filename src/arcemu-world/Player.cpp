@@ -7705,7 +7705,7 @@ void Player::PrepareQuestMenu(uint64 guid)
     objmgr.CreateGossipMenuForPlayer(&PlayerTalkClass, guid, TextID, this);
 }
 
-void Player::SendGossipMenu(uint32 TitleTextId, uint64 npcGUID)
+void Player::SendGossipMenu(uint32 TitleTextId, uint64 /*npcGUID*/)
 {
     PlayerTalkClass->SetTextID(TitleTextId);
     PlayerTalkClass->SendTo(this);
@@ -11663,7 +11663,7 @@ void Player::SendAchievmentEarned( uint32 archiId, uint32 at_stamp )
 }*/
 
 
-void Player::SendAchievmentStatus(uint32 criteriaid, uint32 new_value, uint32 at_stamp)
+void Player::SendAchievmentStatus(uint32 /*criteriaid*/, uint32 /*new_value*/, uint32 /*at_stamp*/)
 {
     /*
     noob warlock
@@ -12562,7 +12562,7 @@ uint32 Player::CheckDamageLimits(uint32 dmg, uint32 spellid)
     return dmg;
 }
 
-void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 unitEvent, uint32 spellId, bool no_remove_auras)
+void Player::DealDamage(Unit* pVictim, uint32 damage, uint32 /*targetEvent*/, uint32 /*unitEvent*/, uint32 spellId, bool no_remove_auras)
 {
     if(!pVictim || !pVictim->isAlive() || !pVictim->IsInWorld() || !IsInWorld())
         return;
@@ -12904,7 +12904,7 @@ void Player::TakeDamage(Unit* pAttacker, uint32 damage, uint32 spellid, bool no_
     ModHealth(-1 * static_cast< int32 >(damage));
 }
 
-void Player::Die(Unit* pAttacker, uint32 damage, uint32 spellid)
+void Player::Die(Unit* pAttacker, uint32 /*damage*/, uint32 spellid)
 {
     if( GetVehicleComponent() != NULL ){
         GetVehicleComponent()->RemoveAccessories();
@@ -13347,25 +13347,17 @@ bool Player::LoadReputations( QueryResult *result ){
     if( result == NULL )
         return false;
 
-    FactionDBC *faction = NULL;
     FactionReputation *reputation = NULL;
-
-    uint32 id = 0;
-    uint32 flag = 0;
-    int32 basestanding = 0;
-    int32 standing = 0;
-
-    Field *field = NULL;
 
     do{
         Field *field = result->Fetch();
 
-        id = field[ 0 ].GetUInt32();
-        flag = field[ 1 ].GetUInt32();
-        basestanding = field[ 2 ].GetInt32();
-        standing = field[ 3 ].GetInt32();
+        uint32 id = field[ 0 ].GetUInt32();
+        uint32 flag = field[ 1 ].GetUInt32();
+        int32 basestanding = field[ 2 ].GetInt32();
+        int32 standing = field[ 3 ].GetInt32();
 
-        faction = dbcFaction.LookupEntryForced( id );
+        FactionDBC* faction = dbcFaction.LookupEntryForced( id );
         if( ( faction == NULL ) || ( faction->RepListId < 0 ) )
             continue;
 
@@ -13373,7 +13365,7 @@ bool Player::LoadReputations( QueryResult *result ){
         if( itr != m_reputation.end() )
             delete itr->second;
 
-        reputation = new FactionReputation;
+        FactionReputation* reputation = new FactionReputation;
         reputation->baseStanding = basestanding;
         reputation->standing = standing;
         reputation->flag = static_cast< uint8 >( flag );
@@ -13382,7 +13374,7 @@ bool Player::LoadReputations( QueryResult *result ){
 
     }while( result->NextRow() );
 
-    if( m_reputation.size() == 0 )
+    if (m_reputation.empty())
         _InitialReputation();
 
     return true;

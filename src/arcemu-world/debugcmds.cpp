@@ -538,7 +538,7 @@ bool ChatHandler::HandleDebugLandWalk(const char* /*args*/, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleDebugWaterWalk(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugWaterWalk(const char* /*args*/, WorldSession* m_session)
 {
     Player* chr = getSelectedChar(m_session);
     char buf[256];
@@ -1133,7 +1133,7 @@ bool ChatHandler::HandleInitWorldStatesCommand(const char* /*args*/, WorldSessio
 }
 
 
-bool ChatHandler::HandleClearWorldStatesCommand( const char *args, WorldSession *session ){
+bool ChatHandler::HandleClearWorldStatesCommand(const char* /*args*/, WorldSession *session ){
     Player *p = session->GetPlayer();
 
     uint32 zone = p->GetZoneId();

@@ -66,7 +66,7 @@ uint32 mTimeStamp()
 
 #endif
 
-void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & recv_data)
+void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recv_data*/)
 {
     GetPlayer()->SetPlayerStatus(NONE);
     if(_player->IsInWorld())
@@ -743,7 +743,7 @@ void WorldSession::HandleMovementOpcodes(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & recv_data)
+void WorldSession::HandleMoveTimeSkippedOpcode(WorldPacket & /*recv_data*/)
 {
 
 }
@@ -801,12 +801,12 @@ void WorldSession::HandleSetActiveMoverOpcode(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleMoveSplineCompleteOpcode(WorldPacket & recvPacket)
+void WorldSession::HandleMoveSplineCompleteOpcode(WorldPacket & /*recvPacket*/)
 {
 
 }
 
-void WorldSession::HandleMountSpecialAnimOpcode(WorldPacket & recvdata)
+void WorldSession::HandleMountSpecialAnimOpcode(WorldPacket & /*recvdata*/)
 {
     CHECK_INWORLD_RETURN
 

@@ -373,7 +373,7 @@ void Spell::FillSpecifiedTargetsInArea(float srcx, float srcy, float srcz, uint3
 }
 
 // for the moment we do invisible targets
-void Spell::FillSpecifiedTargetsInArea(uint32 i, float srcx, float srcy, float srcz, float range, uint32 specification)
+void Spell::FillSpecifiedTargetsInArea(uint32 i, float srcx, float srcy, float srcz, float range, uint32 /*specification*/)
 {
     TargetsList* tmpMap = &m_targetUnits[i];
     //IsStealth()
@@ -5706,7 +5706,7 @@ uint32 GetSpellDuration(SpellEntry* sp, Unit* caster /*= NULL*/)
     return ret;
 }
 
-void Spell::SendCastSuccess(Object* target)
+void Spell::SendCastSuccess(Object* /*target*/)
 {
     Player* plr = p_caster;
     if(!plr && u_caster)
@@ -5960,7 +5960,7 @@ void Spell::HandleModeratedEffects(uint64 guid)
     DecRef();
 }
 
-void Spell::SpellEffectJumpBehindTarget(uint32 i)
+void Spell::SpellEffectJumpBehindTarget(uint32 /*i*/)
 {
     if(u_caster == NULL)
         return;
@@ -5983,7 +5983,7 @@ void Spell::SpellEffectJumpBehindTarget(uint32 i)
     }
     else if(m_targets.m_targetMask & (TARGET_FLAG_SOURCE_LOCATION | TARGET_FLAG_DEST_LOCATION))
     {
-        float x, y, z;
+        float x = 0, y = 0, z = 0;
 
         //this can also jump to a point
         if(m_targets.m_targetMask & TARGET_FLAG_SOURCE_LOCATION)

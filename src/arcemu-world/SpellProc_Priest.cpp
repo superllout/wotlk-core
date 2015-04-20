@@ -24,12 +24,12 @@ class ImprovedSpiritTapSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(ImprovedSpiritTapSpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             mProcFlags = PROC_ON_SPELL_CRIT_HIT;
         }
 
-        uint32 CalcProcChance(Unit* victim, SpellEntry* CastingSpell)
+        uint32 CalcProcChance(Unit* /*victim*/, SpellEntry* CastingSpell)
         {
             if(CastingSpell == NULL)
                 return 0;
@@ -48,7 +48,7 @@ class HolyConcentrationSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(HolyConcentrationSpellProc);
 
-        void Init(Object* obj)
+        void Init(Object* /*obj*/)
         {
             mProcFlags = PROC_ON_SPELL_CRIT_HIT;
             mProcClassMask[0] = 0x1800;
@@ -61,7 +61,7 @@ class DivineAegisSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(DivineAegisSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* /*victim*/, SpellEntry* CastingSpell, uint32 /*flag*/, uint32 dmg, uint32 /*abs*/, int* dmg_overwrite, uint32 /*weapon_damage_type*/)
         {
             if(CastingSpell == NULL)
                 return true;
@@ -79,7 +79,7 @@ class ImprovedDevouringPlagueSpellProc : public SpellProc
 {
         SPELL_PROC_FACTORY_FUNCTION(ImprovedDevouringPlagueSpellProc);
 
-        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 weapon_damage_type)
+        bool DoEffect(Unit* victim, SpellEntry* CastingSpell, uint32 flag, uint32 dmg, uint32 abs, int* dmg_overwrite, uint32 /*weapon_damage_type*/)
         {
             // Get dmg amt for 1 tick
             dmg = CastingSpell->EffectBasePoints[0] + 1;
