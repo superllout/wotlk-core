@@ -502,11 +502,9 @@ void WorldSession::HandleArenaTeamRemoveMemberOpcode(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleArenaTeamInviteAcceptOpcode(WorldPacket & recv_data)
+void WorldSession::HandleArenaTeamInviteAcceptOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
-
-    ArenaTeam* team;
 
     if(_player->m_arenateaminviteguid == 0)
     {
@@ -514,7 +512,7 @@ void WorldSession::HandleArenaTeamInviteAcceptOpcode(WorldPacket & recv_data)
         return;
     }
 
-    team = objmgr.GetArenaTeamById(_player->m_arenateaminviteguid);
+    ArenaTeam* team = objmgr.GetArenaTeamById(_player->m_arenateaminviteguid);
     _player->m_arenateaminviteguid = 0;
     if(team == 0)
     {
@@ -549,7 +547,7 @@ void WorldSession::HandleArenaTeamInviteAcceptOpcode(WorldPacket & recv_data)
     }
 }
 
-void WorldSession::HandleArenaTeamInviteDenyOpcode(WorldPacket & recv_data)
+void WorldSession::HandleArenaTeamInviteDenyOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 

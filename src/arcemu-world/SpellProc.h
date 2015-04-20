@@ -42,7 +42,7 @@ class SpellProc
         }
 
         // Returns true if this spell can proc, false otherwise
-        virtual bool CanProc(Unit* victim, SpellEntry* CastingSpell)
+        virtual bool CanProc(Unit* /*victim*/, SpellEntry* /*CastingSpell*/)
         {
             return true;
         }
@@ -58,7 +58,7 @@ class SpellProc
         }
 
         // Check if this object is identified by method arguments, so it can be deleted
-        virtual bool CanDelete(uint32 spellId, uint64 casterGuid = 0, uint64 misc = 0)
+        virtual bool CanDelete(uint32 spellId, uint64 casterGuid = 0, uint64 /*misc = 0*/)
         {
             if(mSpell->Id == spellId && (casterGuid == 0 || mCaster == casterGuid) && !mDeleted)
                 return true;

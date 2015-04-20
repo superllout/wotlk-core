@@ -492,7 +492,7 @@ void AIInterface::_UpdateTargets()
 ///====================================================================
 ///  Desc: Updates Combat Status of m_Unit
 ///====================================================================
-void AIInterface::_UpdateCombat(uint32 p_time)
+void AIInterface::_UpdateCombat(uint32 /*p_time*/)
 {
     if(m_AIType != AITYPE_PET && disable_combat)
         return;
@@ -2645,7 +2645,7 @@ SpellEntry* AIInterface::getSpellEntry(uint32 spellId)
     return spellInfo;
 }
 
-SpellCastTargets AIInterface::setSpellTargets(SpellEntry* spellInfo, Unit* target)
+SpellCastTargets AIInterface::setSpellTargets(SpellEntry* /*spellInfo*/, Unit* target)
 {
     SpellCastTargets targets;
     targets.m_unitTarget = target ? target->GetGUID() : 0;
@@ -3986,7 +3986,7 @@ void AIInterface::EventEnterCombat(Unit* pUnit, uint32 misc1)
     m_Unit->smsg_AttackStart(pUnit);
 }
 
-void AIInterface::EventLeaveCombat(Unit* pUnit, uint32 misc1)
+void AIInterface::EventLeaveCombat(Unit* pUnit, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
@@ -4144,7 +4144,7 @@ void AIInterface::EventDamageTaken(Unit* pUnit, uint32 misc1)
     pUnit->CombatStatus.OnDamageDealt(m_Unit);
 }
 
-void AIInterface::EventFollowOwner(Unit* pUnit, uint32 misc1)
+void AIInterface::EventFollowOwner(Unit* /*pUnit*/, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
@@ -4166,9 +4166,10 @@ void AIInterface::EventFollowOwner(Unit* pUnit, uint32 misc1)
     SetRun();
 }
 
-void AIInterface::EventFear(Unit* pUnit, uint32 misc1)
+void AIInterface::EventFear(Unit* pUnit, uint32 /*misc1*/)
 {
-    if(pUnit == NULL) return;
+    if(pUnit == NULL)
+        return;
 
     m_FearTimer = 0;
     SetUnitToFear(pUnit);
@@ -4196,7 +4197,7 @@ void AIInterface::EventFear(Unit* pUnit, uint32 misc1)
     resetNextTarget();
 }
 
-void AIInterface::EventUnfear(Unit* pUnit, uint32 misc1)
+void AIInterface::EventUnfear(Unit* /*pUnit*/, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
@@ -4208,7 +4209,7 @@ void AIInterface::EventUnfear(Unit* pUnit, uint32 misc1)
     StopMovement(1);
 }
 
-void AIInterface::EventWander(Unit* pUnit, uint32 misc1)
+void AIInterface::EventWander(Unit* pUnit, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
@@ -4240,10 +4241,11 @@ void AIInterface::EventWander(Unit* pUnit, uint32 misc1)
     resetNextTarget();
 }
 
-void AIInterface::EventUnwander(Unit* pUnit, uint32 misc1)
+void AIInterface::EventUnwander(Unit* pUnit, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_EVADE)
         return;
+
     m_UnitToFollow = m_UnitToFollow_backup;
     FollowDistance = FollowDistance_backup;
     m_AIState = STATE_IDLE; // we need this to prevent permanent fear, wander, and other problems
@@ -4253,7 +4255,8 @@ void AIInterface::EventUnwander(Unit* pUnit, uint32 misc1)
 
 void AIInterface::EventUnitDied(Unit* pUnit, uint32 misc1)
 {
-    if(pUnit == NULL) return;
+    if(pUnit == NULL)
+        return;
 
     if(m_Unit->IsCreature())
         TO< Creature* >(m_Unit)->HandleMonsterSayEvent(MONSTER_SAY_EVENT_ON_DIED);
@@ -4436,7 +4439,7 @@ void AIInterface::MoveEvadeReturn()
     }
 }
 
-void AIInterface::EventForceRedirected(Unit* pUnit, uint32 misc1)
+void AIInterface::EventForceRedirected(Unit* /*pUnit*/, uint32 /*misc1*/)
 {
     if(m_AIState == STATE_IDLE)
         SetReturnPosition();

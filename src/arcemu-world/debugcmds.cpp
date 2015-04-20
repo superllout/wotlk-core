@@ -24,7 +24,7 @@
 
 #include "StdAfx.h"
 
-bool ChatHandler::HandleDebugInFrontCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugInFrontCommand(const char* /*args*/, WorldSession* m_session)
 {
     Object* obj;
 
@@ -41,7 +41,7 @@ bool ChatHandler::HandleDebugInFrontCommand(const char* args, WorldSession* m_se
         obj = m_session->GetPlayer();
 
     char buf[256];
-    snprintf((char*)buf, 256, "%d", m_session->GetPlayer()->isInFront((Unit*)obj));
+    snprintf((char*)buf, 256, "%d", m_session->GetPlayer()->isInFront(obj));
 
     SystemMessage(m_session, buf);
 
@@ -80,7 +80,7 @@ bool ChatHandler::HandleShowReactionCommand(const char* args, WorldSession* m_se
     return true;
 }
 
-bool ChatHandler::HandleDistanceCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDistanceCommand(const char* /*args*/, WorldSession* m_session)
 {
     Object* obj;
 
@@ -104,7 +104,7 @@ bool ChatHandler::HandleDistanceCommand(const char* args, WorldSession* m_sessio
     return true;
 }
 
-bool ChatHandler::HandleMoveInfoCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleMoveInfoCommand(const char* /*args*/, WorldSession* m_session)
 {
     Object* obj;
 
@@ -522,7 +522,7 @@ bool ChatHandler::HandleGetBytesCommand(const char* args, WorldSession* m_sessio
     SystemMessage(m_session, sstext.str().c_str());
     return true;
 }
-bool ChatHandler::HandleDebugLandWalk(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugLandWalk(const char* /*args*/, WorldSession* m_session)
 {
     Player* chr = getSelectedChar(m_session);
     char buf[256];
@@ -554,7 +554,7 @@ bool ChatHandler::HandleDebugWaterWalk(const char* args, WorldSession* m_session
     return true;
 }
 
-bool ChatHandler::HandleDebugUnroot(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugUnroot(const char* /*args*/, WorldSession* m_session)
 {
     if( m_session->GetPlayer()->GetTargetGUID() == 0 ){
         RedSystemMessage( m_session, "You need to select a unit!" );
@@ -574,7 +574,7 @@ bool ChatHandler::HandleDebugUnroot(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleDebugRoot(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugRoot(const char* /*args*/, WorldSession* m_session)
 {
     if( m_session->GetPlayer()->GetTargetGUID() == 0 ){
         RedSystemMessage( m_session, "You need to select a unit!" );
@@ -594,7 +594,7 @@ bool ChatHandler::HandleDebugRoot(const char* args, WorldSession* m_session)
     return true;
 }
 
-bool ChatHandler::HandleAggroRangeCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleAggroRangeCommand(const char* /*args*/, WorldSession* m_session)
 {
     Unit* obj = NULL;
 
@@ -704,7 +704,7 @@ bool ChatHandler::HandleCalcThreatCommand(const char* args, WorldSession* m_sess
     return true;
 }
 
-bool ChatHandler::HandleThreatListCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleThreatListCommand(const char* /*args*/, WorldSession* m_session)
 {
     Unit* target = NULL;
     target = m_session->GetPlayer()->GetMapMgr()->GetUnit(m_session->GetPlayer()->GetSelection());
@@ -882,7 +882,7 @@ bool ChatHandler::HandleModifyValueCommand(const char* args,  WorldSession* m_se
     return true;
 }
 
-bool ChatHandler::HandleDebugDumpCoordsCommmand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleDebugDumpCoordsCommmand(const char* /*args*/, WorldSession* m_session)
 {
     Player* p = m_session->GetPlayer();
     //char buffer[200] = {0};
@@ -900,7 +900,7 @@ bool ChatHandler::HandleDebugDumpCoordsCommmand(const char* args, WorldSession* 
 
 //#define _ONLY_FOOLS_TRY_THIS_
 
-bool ChatHandler::HandleSQLQueryCommand(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleSQLQueryCommand(const char* /*args*/, WorldSession* /*m_session*/)
 {
 #ifdef _ONLY_FOOLS_TRY_THIS_
     if(!*args)
@@ -964,7 +964,7 @@ bool ChatHandler::HandleSQLQueryCommand(const char* args, WorldSession* m_sessio
     return true;
 }
 
-bool ChatHandler::HandleSendpacket(const char* args, WorldSession* m_session)
+bool ChatHandler::HandleSendpacket(const char* /*args*/, WorldSession* /*m_session*/)
 {
 #ifdef _ONLY_FOOLS_TRY_THIS_
 
@@ -1118,7 +1118,7 @@ bool ChatHandler::HandleUpdateWorldStateCommand( const char *args, WorldSession 
     return true;
 }
 
-bool ChatHandler::HandleInitWorldStatesCommand(const char *args, WorldSession *session){
+bool ChatHandler::HandleInitWorldStatesCommand(const char* /*args*/, WorldSession *session){
     Player *p = session->GetPlayer();
 
     uint32 zone = p->GetZoneId();

@@ -300,12 +300,12 @@ void Creature::OnRespawn(MapMgr* m)
         pScript->OnRespawn();
 }
 
-void Creature::Create(const char* name, uint32 mapid, float x, float y, float z, float ang)
+void Creature::Create(const char* /*name*/, uint32 mapid, float x, float y, float z, float ang)
 {
     Object::_Create(mapid, x, y, z, ang);
 }
 
-void Creature::CreateWayPoint(uint32 WayPointID, uint32 mapid, float x, float y, float z, float ang)
+void Creature::CreateWayPoint(uint32 /*WayPointID*/, uint32 mapid, float x, float y, float z, float ang)
 {
     Object::_Create(mapid, x, y, z, ang);
 }
@@ -653,7 +653,7 @@ bool Creature::CanAddToWorld()
     return true;
 }
 
-void Creature::RemoveFromWorld(bool addrespawnevent, bool free_guid)
+void Creature::RemoveFromWorld(bool addrespawnevent, bool /*free_guid*/)
 {
     uint32 delay = 0;
     if(addrespawnevent && (m_respawnTimeOverride > 0 || proto->RespawnTime > 0))
@@ -1074,7 +1074,7 @@ uint8 get_byte(uint32 buffer, uint32 index)
     return (uint8)buffer;
 }
 
-bool Creature::Load(CreatureSpawn* spawn, uint8 mode, MapInfo* info)
+bool Creature::Load(CreatureSpawn* spawn, uint8 mode, MapInfo* /*info*/)
 {
     m_spawn = spawn;
     proto = CreatureProtoStorage.LookupEntry(spawn->entry);
@@ -1710,7 +1710,7 @@ void Creature::DestroyCustomWaypointMap()
     }
 }
 
-void Creature::RemoveLimboState(Unit* healer)
+void Creature::RemoveLimboState(Unit* /*healer*/)
 {
     if(!m_limbostate != true)
         return;
@@ -1949,7 +1949,7 @@ bool Creature::isCritter()
         return false;
 }
 
-void Creature::DealDamage(Unit* pVictim, uint32 damage, uint32 targetEvent, uint32 unitEvent, uint32 spellId, bool no_remove_auras)
+void Creature::DealDamage(Unit* pVictim, uint32 damage, uint32 /*targetEvent*/, uint32 /*unitEvent*/, uint32 spellId, bool no_remove_auras)
 {
     if(!pVictim || !pVictim->isAlive() || !pVictim->IsInWorld() || !IsInWorld())
         return;
@@ -2032,7 +2032,7 @@ void Creature::TakeDamage(Unit* pAttacker, uint32 damage, uint32 spellid, bool n
     ModHealth(-1 * static_cast< int32 >(damage));
 }
 
-void Creature::Die(Unit* pAttacker, uint32 damage, uint32 spellid)
+void Creature::Die(Unit* pAttacker, uint32 /*damage*/, uint32 spellid)
 {
     if( GetVehicleComponent() != NULL ){
         GetVehicleComponent()->RemoveAccessories();
