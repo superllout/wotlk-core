@@ -238,7 +238,7 @@ class SQLClassCallbackP0 : public SQLCallbackBase
     public:
         SQLClassCallbackP0(T* instance, SCMethod imethod) : SQLCallbackBase(), base(instance), method(imethod) {}
         ~SQLClassCallbackP0() {}
-        virtual void run(QueryResultVector & data) override { (base->*method)(data); }
+        void run(QueryResultVector & data) { (base->*method)(data); }
 };
 
 template<class T, typename P1>
@@ -251,7 +251,7 @@ class SQLClassCallbackP1 : public SQLCallbackBase
     public:
         SQLClassCallbackP1(T* instance, SCMethod imethod, P1 p1) : SQLCallbackBase(), base(instance), method(imethod), par1(p1) {}
         ~SQLClassCallbackP1() {}
-        virtual void run(QueryResultVector & data) override { (base->*method)(data, par1); }
+        void run(QueryResultVector & data) { (base->*method)(data, par1); }
 };
 
 template<class T, typename P1, typename P2>
@@ -265,7 +265,7 @@ class SQLClassCallbackP2 : public SQLCallbackBase
     public:
         SQLClassCallbackP2(T* instance, SCMethod imethod, P1 p1, P2 p2) : SQLCallbackBase(), base(instance), method(imethod), par1(p1), par2(p2) {}
         ~SQLClassCallbackP2() {}
-        virtual void run(QueryResultVector & data) override { (base->*method)(data, par1, par2); }
+        void run(QueryResultVector & data) { (base->*method)(data, par1, par2); }
 };
 
 template<class T, typename P1, typename P2, typename P3>
@@ -280,7 +280,7 @@ class SQLClassCallbackP3 : public SQLCallbackBase
     public:
         SQLClassCallbackP3(T* instance, SCMethod imethod, P1 p1, P2 p2, P3 p3) : SQLCallbackBase(), base(instance), method(imethod), par1(p1), par2(p2), par3(p3) {}
         ~SQLClassCallbackP3();
-        virtual void run(QueryResultVector & data) override { (base->*method)(data, par1, par2, par3); }
+        void run(QueryResultVector & data) { (base->*method)(data, par1, par2, par3); }
 };
 
 template<class T, typename P1, typename P2, typename P3, typename P4>
@@ -296,7 +296,7 @@ class SQLClassCallbackP4 : public SQLCallbackBase
     public:
         SQLClassCallbackP4(T* instance, SCMethod imethod, P1 p1, P2 p2, P3 p3, P4 p4) : SQLCallbackBase(), base(instance), method(imethod), par1(p1), par2(p2), par3(p3), par4(p4) {}
         ~SQLClassCallbackP4() {}
-        virtual void run(QueryResultVector & data) override { (base->*method)(data, par1, par2, par3, par4); }
+        void run(QueryResultVector & data) { (base->*method)(data, par1, par2, par3, par4); }
 };
 
 class SQLFunctionCallbackP0 : public SQLCallbackBase
@@ -306,7 +306,7 @@ class SQLFunctionCallbackP0 : public SQLCallbackBase
     public:
         SQLFunctionCallbackP0(SCMethod m) : SQLCallbackBase(), method(m) {}
         ~SQLFunctionCallbackP0();
-        virtual void run(QueryResult & data) { method(&data); }
+        void run(QueryResult* data) { method(data); }
 };
 
 template<typename T1>
@@ -318,7 +318,7 @@ class SQLFunctionCallbackP1 : public SQLCallbackBase
     public:
         SQLFunctionCallbackP1(SCMethod m, T1 par1) : SQLCallbackBase(), method(m), p1(par1) {}
         ~SQLFunctionCallbackP1();
-        virtual void run(QueryResult* data) override { method(data, p1); }
+        void run(QueryResult* data) { method(data, p1); }
 };
 
 #endif
