@@ -1,6 +1,6 @@
 project(EasyWoW C CXX)
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 #Do system checking.
 
 MACRO( IS_ARCH_64BIT )
@@ -195,6 +195,7 @@ elseif(UNIX)
         set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DHAVE_DARWIN")
         set( IS_MAC TRUE)
         set( EXTRA_LIBS ${EXTRA_LIBS} "-framework Carbon" )
+        set( CMAKE_MACOSX_RPATH 1)
         if( NOT IS_64BIT )
             set( EMPTY "" )
             STRING( REGEX REPLACE ".*-m64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
