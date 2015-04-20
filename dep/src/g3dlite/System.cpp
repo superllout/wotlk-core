@@ -469,7 +469,7 @@ void System::setAppDataDir(const std::string& path) {
 }
 
 
-std::string demoFindData(bool errorIfNotFound) {
+std::string demoFindData(bool /*errorIfNotFound*/) {
     static const char* g3dPath = getenv("G3DDATA");
     if (g3dPath) {
         return g3dPath;
