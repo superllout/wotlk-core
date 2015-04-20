@@ -18,6 +18,14 @@
 
 language: cpp
 
+os:
+  - linux
+  - osx
+
+matrix:
+  allow_failures:
+    - os: osx
+
 compiler:
  - gcc
  - clang
