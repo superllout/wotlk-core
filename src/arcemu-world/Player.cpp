@@ -13347,8 +13347,6 @@ bool Player::LoadReputations( QueryResult *result ){
     if( result == NULL )
         return false;
 
-    FactionReputation *reputation = NULL;
-
     do{
         Field *field = result->Fetch();
 
