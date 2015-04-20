@@ -4,191 +4,228 @@ cmake_minimum_required(VERSION 2.8)
 #Do system checking.
 
 MACRO( IS_ARCH_64BIT )
-	IF( NOT WIN32 )
-		
-		IF( CMAKE_SYSTEM_PROCESSOR MATCHES "[xX]64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "[xX]86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "[aA][mM][dD]64" )
-			SET( IS_64BIT TRUE )
-		ELSE()
-			SET( IS_64BIT FALSE )
-		ENDIF()
-		
-	ELSE( NOT WIN32 )
-
-		IF( CMAKE_GENERATOR MATCHES Win64* )
-			SET( IS_64BIT TRUE )
-		ELSE( CMAKE_GENERATOR MATCHES Win64* )
-			SET( IS_64BIT FALSE )
-		ENDIF( CMAKE_GENERATOR MATCHES Win64* )
-		
-	ENDIF( NOT WIN32 )
-	
+    if( NOT WIN32 )
+        
+        if( CMAKE_SYSTEM_PROCESSOR MATCHES "[xX]64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "[xX]86_64" OR CMAKE_SYSTEM_PROCESSOR MATCHES "[aA][mM][dD]64" )
+            set( IS_64BIT TRUE )
+        else()
+            set( IS_64BIT FALSE )
+        endif()    
+    else()
+        if( CMAKE_GENERATOR MATCHES Win64* )
+            set( IS_64BIT TRUE )
+        else()
+            set( IS_64BIT FALSE )
+        endif()
+        
+    endif()
+    
 ENDMACRO( IS_ARCH_64BIT )
 
-IF( WIN32 )
-	IF( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
-		SET( CMAKE_INSTALL_PREFIX "C:/EasyWoW" CACHE PATH "Install path prefix" FORCE )
-	ENDIF( CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT )
-ENDIF( WIN32 )
-
-SET( GLOBAL_DEFINES "${GLOBAL_DEFINES} -DHAVE_CONFIG_H")
+set( GLOBAL_DEFINES "${GLOBAL_DEFINES} -DHAVE_CONFIG_H")
 
 IS_ARCH_64BIT()
 
 #check platform version.
-IF( IS_64BIT )
-	SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} -"DX64")
-	IF(CMAKE_GENERATOR MATCHES NMake*)
-		SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-bigobj")
-	ENDIF()
-ENDIF()
+if( IS_64BIT )
+    set( GLOBAL_DEFINES ${GLOBAL_DEFINES} -"DX64")
+endif()
 
-#mac osx
-IF( APPLE )
-	SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DHAVE_DARWIN")
-	SET( IS_MAC TRUE)
-ELSEIF(UNIX)
-	#mac has unix defined too but if 'if(APPLE)' fails, then it's not apple.
-	
-	#check for freebsd
-	IF( ( CMAKE_SYSTEM_NAME  STREQUAL "FreeBSD" ) OR ( CMAKE_SYSTEM_NAME STREQUAL kFreeBSD ) )
-		SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_KQUEUE")
-		SET( IS_FREEBSD TRUE)
-	ELSE()
-		SET( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_EPOLL")
-		SET( IS_LINUX TRUE)
-	ENDIF()
-ENDIF()
-
-SET( ROOT_PATH  ${CMAKE_SOURCE_DIR}/..)
+set( ROOT_PATH  ${CMAKE_SOURCE_DIR}/..)
 
 #We have our own custom modules that we use. This tells cmakes where to find them.
-SET( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ROOT_PATH}/cmake_modules )
-SET( DEPENDENCY_ROOT ${ROOT_PATH}/dep )
-SET( DEPENDENCY_SOURCES ${DEPENDENCY_ROOT}/src)
-SET( DEPENDENCY_LIBS ${DEPENDENCY_ROOT}/lib)
-SET( DEPENDENCY_INCLUDE_ROOT ${DEPENDENCY_ROOT}/include)
-SET( DEPENDENCY_DLLS64 ${DEPENDENCY_ROOT}/dll64)
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ROOT_PATH}/cmake_modules )
+set( DEPENDENCY_ROOT ${ROOT_PATH}/dep )
+set( DEPENDENCY_SOURCES ${DEPENDENCY_ROOT}/src)
+set( DEPENDENCY_LIBS ${DEPENDENCY_ROOT}/lib)
+set( DEPENDENCY_INCLUDE_ROOT ${DEPENDENCY_ROOT}/include)
+set( DEPENDENCY_DLLS64 ${DEPENDENCY_ROOT}/dll64)
 
-IF(IS_64BIT)
-	SET(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll64)
-ELSE()
-	SET(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll)
-ENDIF()
+set(ARCEMU_SCRIPTLIB_PATH "script_libs" CACHE PATH "The directory which contains the 'lib' directory that has the script libraries." )
 
-#Install libmysql.dll required for our core to run.
-IF( WIN32)
-	SET( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll)
-ENDIF(WIN32)
+#Options
+OPTION(BUILD_ARCEMUSCRIPTS "set to false to NOT build script libraries." ON)
+OPTION(BUILD_TOOLS "Build Arcemu tools" ON)
+set(OPTIMIZED_BUILD FALSE CACHE BOOL "set to true for optimized compilation - will take more time" )
 
-#Our configurable variables.
-IF( WIN32 )
-	SET(ARCEMU_CONFIGSFILE_PATH configs CACHE PATH "Path where the arcemu config files are.")
-ELSE()
-	SET(ARCEMU_CONFIGSFILE_PATH etc CACHE PATH "Path where the arcemu config files are.")
-ENDIF()
-
-SET(ARCEMU_SCRIPTLIB_PATH "modules" CACHE PATH "The directory which contains the 'lib' directory that has the script libraries." )
-SET(BUILD_ARCEMUSCRIPTS TRUE CACHE BOOL "Set to false to NOT build script libraries." )
-SET(BUILD_TOOLS TRUE CACHE BOOL "Build Arcemu tools" )
-SET(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
-SET(OPTIMIZED_BUILD FALSE CACHE BOOL "Set to true for optimized compilation - will take more time" )
-
-IF (WIN32)
-    SET(SHOW_ALL_WARNINGS FALSE CACHE BOOL "Set to true to get all compiler warnings in debug build" )
-ENDIF()
+#Windows specific options
+if (WIN32)
+    OPTION(SHOW_ALL_WARNINGS "set to true to get all compiler warnings in debug build" FALSE)
+    set(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
+endif()
 
 include(CompilerVersion)
-if( CMAKE_GENERATOR MATCHES Unix* )
-	add_definitions(-Wno-deprecated)
-	#Extract Revision
-	execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
-	
-	#Check support for unordered_map/set
-	GetCompilerVersion(compiler_version)
-    #SET(CMAKE_C_FLAGS "${CMAKE_C_GLAGS} -lpthread")
-    #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_GLAGS} -lpthread")
-	IF( DEFINED compiler_version AND NOT APPLE )
-	    add_definitions(-DHAS_CXX0X)
-	    # Enabling c++0x
-	    IF(CMAKE_C_COMPILER MATCHES "gcc" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-	        IF (${compiler_version} GREATER "4.2" AND ${compiler_version} LESS "4.7") 
-                SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  
-            # Enabling c++11
-            ELSEIF(${compiler_version} GREATER "4.6")
-		        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-                IF(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
-                    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
-                    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
-                ENDIF()
-            ENDIF()
-        ELSEIF(CMAKE_C_COMPILER MATCHES "clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-	        add_definitions(-DHAS_CXX0X)
-	        IF(${compiler_version} GREATER "3.1" AND ${compiler_version} LESS "3.5")
-		        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
-            ELSEIF(${compiler_version} GREATER "3.4")
-		        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-	        ENDIF()
-			SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
-			SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
-        ENDIF()
-    ENDIF()
+if( WIN32 )
+    set(ARCEMU_CONFIGSFILE_PATH config CACHE PATH "Path where the arcemu config files are.")
 
-	SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -Wno-ignored-qualifiers ")
-	SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -Wno-implicit -Wno-ignored-qualifiers")
+    # setting default install path
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        set(CMAKE_INSTALL_PREFIX "C:/EasyWoW" CACHE PATH "Install path prefix" FORCE)
+    endif()
 
-	IF (${OPTIMIZED_BUILD})
-	    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-	    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
-	ENDIF()
-ELSEIF( CMAKE_GENERATOR MATCHES Visual* )
-	#Extract revision
-	execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
-	add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
+    # Install libmysql.dll required for our core to run.
+    set( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll)
 
-	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /bigobj /wd4669")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj /wd4669")
+    if(IS_64BIT)
+        set(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll64)
+    else()
+        set(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll)
+    endif()
+    
 
-	#Check support for unordered_map/set
-	GetCompilerVersion( msvc_version)
-	IF(DEFINED ${msvc_version} AND ${msvc_version} GREATER "1599" )
-		add_definitions(-DHAS_CXX0X)
-	ENDIF()
-	
-	#This fixes PCH issues 'Inconsistent values for /Zm'
-	IF( ${CMAKE_CXX_FLAGS} MATCHES "(/Zm)([0-9]+)" )
-		STRING( REGEX REPLACE "(/Zm)([0-9]+)" "\\1${VISUALSTUDIO_COMPILERHEAPLIMIT}" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-	ELSE()
-		SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
-	ENDIF()
-		
-	IF( ${CMAKE_C_FLAGS} MATCHES "(/Zm)([0-9]+)" )
-		STRING( REGEX REPLACE "(/Zm)([0-9]+)" "\\1${VISUALSTUDIO_COMPILERHEAPLIMIT}" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
-	ELSE()
-		SET( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
-	ENDIF()
+    # settings for visual studio
+    if( CMAKE_GENERATOR MATCHES Visual* )
+        #Extract revision
+        execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
 
-    IF (NOT ${SHOW_ALL_WARNINGS})
-        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-        SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-    ELSE()
-        SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
-        SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
-    ENDIF()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669")
 
-	IF (${OPTIMIZED_BUILD})
-	    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
-	    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2")
-	ENDIF()
-ENDIF()
+        if(IS_64BIT)
+            #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+            set( EXTRA_LIBS libeay32_win64.lib )
+            if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+                set(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_x64.lib )
+            else()
+                set( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_x64.lib )
+            endif()
+        else()
+            #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /LARGEADDRESSAWARE")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /LARGEADDRESSAWARE")
+            set( EXTRA_LIBS libeay32_win32.lib )
+            if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+                set(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_win32.lib )
+            else()
+                set( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_win32.lib )
+            endif()
+        endif()
+    
+        #Check support for unordered_map/set
+        GetCompilerVersion( msvc_version)
+        if(DEFINED ${msvc_version} AND ${msvc_version} GREATER "1599" )
+            add_definitions(-DHAS_CXX0X)
+        endif()
+        
+        #This fixes PCH issues 'Inconsistent values for /Zm'
+        if( ${CMAKE_CXX_FLAGS} MATCHES "(/Zm)([0-9]+)" )
+            STRING( REGEX REPLACE "(/Zm)([0-9]+)" "\\1${VISUALSTUDIO_COMPILERHEAPLIMIT}" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+        else()
+            set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
+        endif()
+            
+        if( ${CMAKE_C_FLAGS} MATCHES "(/Zm)([0-9]+)" )
+            STRING( REGEX REPLACE "(/Zm)([0-9]+)" "\\1${VISUALSTUDIO_COMPILERHEAPLIMIT}" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
+        else()
+            set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
+        endif()
+
+        if (NOT ${SHOW_ALL_WARNINGS})
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W4")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W4")
+        else()
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+        endif()
+
+        if (${OPTIMIZED_BUILD})
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2")
+        endif()
+    endif()
+    #Needed for socket stuff and crash handler
+    set(EXTRA_LIBS ${EXTRA_LIBS} ws2_32.lib dbghelp.lib )
+    set( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} 
+        ${DEPENDENCY_INCLUDE_ROOT}/openssl
+        ${DEPENDENCY_INCLUDE_ROOT}/mysql 
+    )
+# UNIX platforms
+elseif(UNIX)
+    set(ARCEMU_CONFIGSFILE_PATH etc CACHE PATH "Path where the arcemu config files are.")
+    set( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} ${MYSQL_INCLUDE_DIR} )
+
+    if( CMAKE_GENERATOR MATCHES Unix* )
+        add_definitions(-Wno-deprecated)
+        #Extract Revision
+        execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
+        
+        #Check support for unordered_map/set
+        GetCompilerVersion(compiler_version)
+        if( DEFINED compiler_version)
+            add_definitions(-DHAS_CXX0X)
+            # Enabling c++0x
+            if(CMAKE_C_COMPILER MATCHES "gcc" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
+                if (${compiler_version} GREATER "4.2" AND ${compiler_version} LESS "4.7") 
+                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  
+                # Enabling c++11
+                elseif(${compiler_version} GREATER "4.6")
+                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+                    if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
+                        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
+                        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
+                    endif()
+                endif()
+            elseif(CMAKE_C_COMPILER MATCHES "clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+                add_definitions(-DHAS_CXX0X)
+                if(${compiler_version} GREATER "3.1" AND ${compiler_version} LESS "3.5")
+                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+                elseif(${compiler_version} GREATER "3.4")
+                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+                endif()
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
+                set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
+            endif()
+        endif()
+
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -Wno-ignored-qualifiers ")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wpedantic -Wextra -Wno-implicit -Wno-ignored-qualifiers")
+
+        if (${OPTIMIZED_BUILD})
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+        endif()
+    endif()
+
+    if(APPLE)
+        set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DHAVE_DARWIN")
+        set( IS_MAC TRUE)
+        set( EXTRA_LIBS ${EXTRA_LIBS} "-framework Carbon" )
+        if( NOT IS_64BIT )
+            set( EMPTY "" )
+            STRING( REGEX REPLACE ".*-m64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )        
+            STRING( REGEX REPLACE ".*-m64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
+            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
+            ADD_DEFINITIONS( -m32 )
+            set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32" )
+            set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -undefined dynamic_lookup" )
+            set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32" )
+        endif()
+    elseif( ( CMAKE_SYSTEM_NAME  STREQUAL "FreeBSD" ) OR ( CMAKE_SYSTEM_NAME STREQUAL kFreeBSD ) )
+        set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_KQUEUE")
+        set( IS_FREEBSD TRUE)
+    elseif(IS_LINUX)
+        set( EXTRA_LIBS ${EXTRA_LIBS} dl )
+    else()
+        set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_EPOLL")
+        set( IS_LINUX TRUE)
+    endif()
+endif()
 
 #Pass our configurable variables to the C++ preprocessor.
 add_definitions( ${GLOBAL_DEFINES} -DCONFDIR=\"${ARCEMU_CONFIGSFILE_PATH}\" -DPREFIX=\"${ARCEMU_SCRIPTLIB_PATH}\")
 
-#These are set by find_package or the zlib and pcre subprojects.
 set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries.")
 set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries.")
 set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs.")
@@ -220,62 +257,6 @@ ELSE()
 	SET(MYSQL_LIBRARY "")
 ENDIF()
 
-IF(WIN32)	#On windows, we have to specify the includes for libeay and mysql libs.
-	SET( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} 
-	${DEPENDENCY_INCLUDE_ROOT}/openssl
-	${DEPENDENCY_INCLUDE_ROOT}/mysql )
-ELSE()	#On apple n linux, mysql.h should have been found.
-	SET( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} ${MYSQL_INCLUDE_DIR} )
-ENDIF()
-
-#For windows, link to libeay and libmysql
-SET( EXTRA_LIBS)
-SET( EXTRA_LIBS_PATH)
-if(WIN32)
-	if( IS_64BIT )
-		SET( EXTRA_LIBS libeay32_win64.lib )
-		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-			SET(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_x64.lib )
-		else()
-			SET( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_x64.lib )
-		endif()
-	else()
-		SET( EXTRA_LIBS libeay32_win32.lib )
-		if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-			SET(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_win32.lib )
-		else()
-			SET( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_win32.lib )
-		endif()
-	endif()
-	#Needed for socket stuff and crash handler
-	SET(EXTRA_LIBS ${EXTRA_LIBS} ws2_32.lib dbghelp.lib )
-elseif(APPLE)
-	SET( EXTRA_LIBS ${EXTRA_LIBS} "-framework Carbon" )
-elseif(IS_LINUX)
-	SET( EXTRA_LIBS ${EXTRA_LIBS} dl )
-else()
-endif()
-
-IF( APPLE )
-	IF( NOT IS_64BIT )
-		SET( EMPTY "" )
-		STRING( REGEX REPLACE ".*-m64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m 64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m 64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m 64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m 64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )		
-		STRING( REGEX REPLACE ".*-m64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-		STRING( REGEX REPLACE ".*-m 64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-		ADD_DEFINITIONS( -m32 )
-		SET( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32" )
-		SET( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -undefined dynamic_lookup" )
-		SET( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32" )
-	ENDIF()
-ENDIF()
-
 add_subdirectory(g3dlite)
 add_subdirectory(vmaplib)
 add_subdirectory(recast)
@@ -286,14 +267,14 @@ add_subdirectory(world)
 add_subdirectory(spellhandlers)
 add_subdirectory(battlegrounds)
 
-IF(NOT WIN32)
-	add_subdirectory(crashreport)
-ENDIF()
+if(NOT WIN32)
+    add_subdirectory(crashreport)
+endif()
 add_subdirectory(scripts)
 
-IF( BUILD_TOOLS )
-	add_subdirectory(tools)
-ENDIF( BUILD_TOOLS )
+if(BUILD_TOOLS)
+    add_subdirectory(tools)
+endif()
 
 # install dependencies
 INSTALL(FILES ${INSTALLED_DEPENDENCIES} DESTINATION .)
