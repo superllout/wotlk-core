@@ -261,13 +261,13 @@ class SCRIPT_DECL EasyFunctions
                     {
                         NewItem = NULL;
                         return false;
-                    };
+                    }
 
                     pPlayer->SendItemPushResult(false, true, true, true,
                                                 pPlayer->GetItemInterface()->LastSearchItemBagSlot(), pPlayer->GetItemInterface()->LastSearchItemSlot(), pCount,
                                                 NewItem->GetEntry(), NewItem->GetItemRandomSuffixFactor(), NewItem->GetItemRandomPropertyId(), NewItem->GetStackCount());
                     return true;
-                };
+                }
             }
             else
             {
@@ -275,10 +275,8 @@ class SCRIPT_DECL EasyFunctions
                 ItemStack->m_isDirty = true;
                 pPlayer->SendItemPushResult(false, true, true, false, static_cast<uint8>(pPlayer->GetItemInterface()->GetBagSlotByGuid(ItemStack->GetGUID())), 0xFFFFFFFF,  pCount , ItemStack->GetEntry(), ItemStack->GetItemRandomSuffixFactor(), ItemStack->GetItemRandomPropertyId(), ItemStack->GetStackCount());
                 return true;
-            };
-
-            return false;
-        };
+            }
+        }
 
         void EventCreatureDelete(Creature* creat, uint32 time)  // Creature and time in ms
         {

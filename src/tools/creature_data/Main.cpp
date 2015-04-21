@@ -229,7 +229,7 @@ int main()
                 printf("Attachment %u requests bone %u (too large, bone table is only %u entries)\n", i, boneindex, header->nBones);
                 continue;
             }
-            M2Bone & bone = bones[boneindex];
+            //M2Bone & bone = bones[boneindex];
             //printf("Attachment %u (bone pivot %f %f %f offset %f %f %f)\n", attachments[i].id, bone.pivotpoint[0], bone.pivotpoint[1], bone.pivotpoint[2], attachments[i].pos[0],  attachments[i].pos[1],  attachments[i].pos[2]);
 
             float realpos[3];

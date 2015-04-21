@@ -142,7 +142,7 @@ bool CloakOfShadows(uint32 /*i*/, Spell* s)
     return true;
 }
 
-bool CheatDeath(uint32 i, Aura* a, bool apply)
+bool CheatDeath(uint32 /*i*/, Aura* a, bool apply)
 {
     Unit* u_target = a->GetTarget();
     Player* p_target = NULL;
@@ -202,7 +202,7 @@ bool MasterOfSubtlety(uint32 i, Aura* a, bool apply)
     return true;
 }
 
-bool PreyOnTheWeakPeriodicDummy(uint32 i, Aura* a, bool apply)
+bool PreyOnTheWeakPeriodicDummy(uint32 /*i*/, Aura* a, bool apply)
 {
     Unit* m_target = a->GetTarget();
     Player* p_target = NULL;
@@ -230,7 +230,7 @@ bool PreyOnTheWeakPeriodicDummy(uint32 i, Aura* a, bool apply)
     return true;
 }
 
-bool KillingSpreePeriodicDummy(uint32 i, Aura* a, bool apply)
+bool KillingSpreePeriodicDummy(uint32 /*i*/, Aura* a, bool /*apply*/)
 {
     Unit* m_target = a->GetTarget();
     if(!m_target->IsPlayer())
@@ -270,7 +270,7 @@ bool KillingSpreePeriodicDummy(uint32 i, Aura* a, bool apply)
 
 }
 
-bool KillingSpreeEffectDummy(uint32 i, Spell* s)
+bool KillingSpreeEffectDummy(uint32 /*i*/, Spell* s)
 {
     Player* p_caster = s->p_caster;
 
