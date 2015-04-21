@@ -262,7 +262,7 @@ namespace luaGlobalFunctions
         return 0;
     }
 
-    static int ReloadLuaEngine(lua_State* L)
+    static int ReloadLuaEngine(lua_State* /*L*/)
     {
         /*g_luaMgr.Restart();
         MapMgr * mgr;
@@ -307,7 +307,7 @@ namespace luaGlobalFunctions
         return 1;
     }
 
-    static int Rehash(lua_State* L)
+    static int Rehash(lua_State* /*L*/)
     {
         sWorld.Rehash(true);
         return 0;
@@ -557,7 +557,7 @@ namespace luaGlobalFunctions
         uint8 count = luaL_checkinteger(L, 2) & 0x7F;
         RET_NUMBER(left >> count)
     }
-    int RemoveTimedEvents(lua_State* L)
+    int RemoveTimedEvents(lua_State* /*L*/)
     {
         sLuaEventMgr.RemoveEvents();
         return 0;

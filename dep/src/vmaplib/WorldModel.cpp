@@ -255,7 +255,7 @@ namespace VMAP
 	bool GroupModel::writeToFile(FILE* wf)
 	{
 		bool result = true;
-		G3D::uint32 chunkSize, count;
+		size_t chunkSize, count;
 
 		if(result && fwrite(&iBound, sizeof(G3D::AABox), 1, wf) != 1) result = false;
 		if(result && fwrite(&iMogpFlags, sizeof(G3D::uint32), 1, wf) != 1) result = false;
@@ -512,7 +512,7 @@ namespace VMAP
 		if(result && fwrite(&RootWMOID, sizeof(G3D::uint32), 1, wf) != 1) result = false;
 
 		// write group models
-		count = groupModels.size();
+		count = static_cast<G3D::uint32>(groupModels.size());
 		if(count)
 		{
 			if(result && fwrite("GMOD", 1, 4, wf) != 4) result = false;

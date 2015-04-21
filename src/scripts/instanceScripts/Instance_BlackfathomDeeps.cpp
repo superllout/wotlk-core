@@ -117,11 +117,10 @@ public:
         menu.Send(plr);
     }
 
-    void OnSelectOption(Object* pObject, Player* plr, uint32 Id, const char* Code)
+    void OnSelectOption(Object* pObject, Player* plr, uint32 Id, const char* /*Code*/)
     {
         switch(Id)
         {
-            case 0: OnHello(pObject, plr);    break;
                 // port to Darnassus
             case 1:    plr->SafeTeleport(1, 0, 9951.52f, 2280.32f, 1341.39f, 0); break;
                 // Port to entrance

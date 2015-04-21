@@ -108,7 +108,7 @@ namespace LuaAura
         RET_BOOL(true);
     }
 
-    int Remove(lua_State* L, Aura* aura)
+    int Remove(lua_State* /*L*/, Aura* aura)
     {
         if(!aura) return 0;
         aura->Remove();

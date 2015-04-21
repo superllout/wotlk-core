@@ -1074,14 +1074,14 @@ bool MoonScriptCreatureAI::HasWaypoints()
     return _unit->GetAIInterface()->hasWaypoints();
 }
 
-void MoonScriptCreatureAI::OnCombatStart(Unit* pTarget)
+void MoonScriptCreatureAI::OnCombatStart(Unit* /*pTarget*/)
 {
     RandomEmote(mOnCombatStartEmotes);
     SetBehavior(Behavior_Melee);
     RegisterAIUpdateEvent(mAIUpdateFrequency);
 }
 
-void MoonScriptCreatureAI::OnCombatStop(Unit* pTarget)
+void MoonScriptCreatureAI::OnCombatStop(Unit* /*pTarget*/)
 {
     CancelAllSpells();
     CancelAllTimers();
@@ -1094,7 +1094,7 @@ void MoonScriptCreatureAI::OnCombatStop(Unit* pTarget)
     if(mDespawnWhenInactive) Despawn(DEFAULT_DESPAWN_TIMER);
 }
 
-void MoonScriptCreatureAI::OnTargetDied(Unit* pTarget)
+void MoonScriptCreatureAI::OnTargetDied(Unit* /*pTarget*/)
 {
     if(GetHealthPercent() > 0)    //Prevent double yelling (OnDied and OnTargetDied)
     {
@@ -1102,7 +1102,7 @@ void MoonScriptCreatureAI::OnTargetDied(Unit* pTarget)
     }
 }
 
-void MoonScriptCreatureAI::OnDied(Unit* pKiller)
+void MoonScriptCreatureAI::OnDied(Unit* /*pKiller*/)
 {
     RandomEmote(mOnDiedEmotes);
     CancelAllSpells();
@@ -1110,7 +1110,8 @@ void MoonScriptCreatureAI::OnDied(Unit* pKiller)
     RemoveAllEvents();
     RemoveAllAuras();
     RemoveAIUpdateEvent();
-    if(mDespawnWhenInactive) Despawn(DEFAULT_DESPAWN_TIMER);
+    if(mDespawnWhenInactive)
+        Despawn(DEFAULT_DESPAWN_TIMER);
 }
 
 void MoonScriptCreatureAI::AIUpdate()
@@ -1671,12 +1672,12 @@ void MoonScriptBossAI::AIUpdate()
 //Premade Spell Functions
 #define SPELLFUNC_VANISH 24699
 
-void SpellFunc_ClearHateList(SpellDesc* pThis, MoonScriptCreatureAI* pCreatureAI, Unit* pTarget, TargetType pType)
+void SpellFunc_ClearHateList(SpellDesc* /*pThis*/, MoonScriptCreatureAI* pCreatureAI, Unit* /*pTarget*/, TargetType /*pType*/)
 {
     pCreatureAI->ClearHateList();
 }
 
-void SpellFunc_Disappear(SpellDesc* pThis, MoonScriptCreatureAI* pCreatureAI, Unit* pTarget, TargetType pType)
+void SpellFunc_Disappear(SpellDesc* /*pThis*/, MoonScriptCreatureAI* pCreatureAI, Unit* /*pTarget*/, TargetType /*pType*/)
 {
     pCreatureAI->ClearHateList();
     pCreatureAI->SetCanMove(false);
@@ -1684,7 +1685,7 @@ void SpellFunc_Disappear(SpellDesc* pThis, MoonScriptCreatureAI* pCreatureAI, Un
     pCreatureAI->ApplyAura(SPELLFUNC_VANISH);
 }
 
-void SpellFunc_Reappear(SpellDesc* pThis, MoonScriptCreatureAI* pCreatureAI, Unit* pTarget, TargetType pType)
+void SpellFunc_Reappear(SpellDesc* /*pThis*/, MoonScriptCreatureAI* pCreatureAI, Unit* /*pTarget*/, TargetType /*pType*/)
 {
     pCreatureAI->SetCanMove(true);
     pCreatureAI->SetCanEnterCombat(true);

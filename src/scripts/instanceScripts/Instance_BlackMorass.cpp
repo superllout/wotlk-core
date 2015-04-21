@@ -67,7 +67,7 @@ class CHRONOLORDDEJAAI : public CreatureAIScript
             spells[2].attackstoptimer = 1000;*/
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "If you will not cease this foolish quest, then you will die!");
@@ -81,7 +81,7 @@ class CHRONOLORDDEJAAI : public CreatureAIScript
                 spells[i].casttime = spells[i].cooldown;
         }
 
-        void OnTargetDied(Unit* mTarget)
+        void OnTargetDied(Unit* /*mTarget*/)
         {
             if(_unit->GetHealthPct() > 0)
             {
@@ -103,7 +103,7 @@ class CHRONOLORDDEJAAI : public CreatureAIScript
             }
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
@@ -111,7 +111,7 @@ class CHRONOLORDDEJAAI : public CreatureAIScript
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Time ... is on our side.");
@@ -220,7 +220,7 @@ class TEMPORUSAI : public CreatureAIScript
             spells[2].attackstoptimer = 1000;*/
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "So be it ... you have been warned.");
@@ -234,7 +234,7 @@ class TEMPORUSAI : public CreatureAIScript
                 spells[i].casttime = spells[i].cooldown;
         }
 
-        void OnTargetDied(Unit* mTarget)
+        void OnTargetDied(Unit* /*mTarget*/)
         {
             if(_unit->GetHealthPct() > 0)
             {
@@ -256,7 +256,7 @@ class TEMPORUSAI : public CreatureAIScript
             }
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
@@ -264,7 +264,7 @@ class TEMPORUSAI : public CreatureAIScript
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "My death means ... little.");
@@ -373,7 +373,7 @@ class AEONUSAI : public CreatureAIScript
             spells[2].attackstoptimer = 1000;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "Let us see what fate lays in store...");
@@ -387,7 +387,7 @@ class AEONUSAI : public CreatureAIScript
                 spells[i].casttime = spells[i].cooldown;
         }
 
-        void OnTargetDied(Unit* mTarget)
+        void OnTargetDied(Unit* /*mTarget*/)
         {
             if(_unit->GetHealthPct() > 0)
             {
@@ -409,7 +409,7 @@ class AEONUSAI : public CreatureAIScript
             }
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             CastTime();
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
@@ -417,7 +417,7 @@ class AEONUSAI : public CreatureAIScript
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             CastTime();
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "It is only a matter...of time.");

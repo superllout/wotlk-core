@@ -78,7 +78,7 @@ namespace VMAP
 			ModelInstance* prims;
 			LocationInfo & locInfo;
 			bool result;
-	};
+    };
 
 
 	//=========================================================

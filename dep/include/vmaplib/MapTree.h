@@ -78,7 +78,7 @@ namespace VMAP
 			bool LoadMapTile(G3D::uint32 tileX, G3D::uint32 tileY, VMapManager2* vm);
 			void UnloadMapTile(G3D::uint32 tileX, G3D::uint32 tileY, VMapManager2* vm);
 			bool isTiled() const { return iIsTiled; }
-			G3D::uint32 numLoadedTiles() const { return iLoadedTiles.size(); }
+            G3D::uint32 numLoadedTiles() const { return static_cast<G3D::uint32>(iLoadedTiles.size()); }
 
 #ifdef MMAP_GENERATOR
 		public:

@@ -63,7 +63,7 @@ class LuaUnit
             return 0;
         }
 
-        static int GossipMenuAddItem(lua_State * L, Unit * ptr)
+        static int GossipMenuAddItem(lua_State * L, Unit * /*ptr*/)
         {
             int icon = luaL_checkint(L, 1);
             const char * menu_text = luaL_checkstring(L, 2);
@@ -82,7 +82,7 @@ class LuaUnit
             return 0;
         }
 
-        static int GossipSendMenu(lua_State * L, Unit * ptr)
+        static int GossipSendMenu(lua_State * L, Unit * /*ptr*/)
         {
             Player* plr = CHECK_PLAYER(L,1);
 
@@ -149,7 +149,7 @@ class LuaUnit
         }
 
 
-        static int GossipComplete(lua_State * L, Unit * ptr)
+        static int GossipComplete(lua_State * /*L*/, Unit * ptr)
         {
             TEST_PLAYER()
             Player * plr = TO_PLAYER(ptr);
@@ -397,7 +397,7 @@ class LuaUnit
             return 0;
         }
 
-        static int AggroWithInRangeFriends(lua_State* L, Unit* ptr)
+        static int AggroWithInRangeFriends(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             // If Pointer isn't in combat skip everything
@@ -795,14 +795,14 @@ class LuaUnit
             return 0;
         }
 
-        static int DestroyCustomWaypointMap(lua_State* L, Unit* ptr)
+        static int DestroyCustomWaypointMap(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             TO_CREATURE(ptr)->DestroyCustomWaypointMap();
             return 0;
         }
 
-        static int CreateCustomWaypointMap(lua_State* L, Unit* ptr)
+        static int CreateCustomWaypointMap(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             Creature* pCreature = TO_CREATURE(ptr);
@@ -887,7 +887,7 @@ class LuaUnit
             }
             return 0;
         }
-        static int DeleteAllWaypoints(lua_State* L, Unit* ptr)
+        static int DeleteAllWaypoints(lua_State* /*L*/, Unit* ptr)
         {
             if(ptr != NULL && ptr->IsCreature())
                 ptr->GetAIInterface()->deleteWaypoints();
@@ -1242,7 +1242,7 @@ class LuaUnit
             return 1;
         }
 
-        static int SetZoneWeather(lua_State* L, Unit* ptr)
+        static int SetZoneWeather(lua_State* /*L*/, Unit* ptr)
         {
             /*
             WEATHER_TYPE_NORMAL            = 0, // NORMAL (SUNNY)
@@ -1501,7 +1501,7 @@ class LuaUnit
             return 1;
         }
 
-        static int ClearThreatList(lua_State* L, Unit* ptr)
+        static int ClearThreatList(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->ClearHateList();
@@ -1706,9 +1706,6 @@ class LuaUnit
             {
                 return 0;
             }
-
-            lua_pushnumber(L, 999);
-            return 1;
         } //StartQuest
 
         static int UnlearnSpell(lua_State* L, Unit* ptr)
@@ -1856,7 +1853,7 @@ class LuaUnit
             return 0;
         }
 
-        static int WipeHateList(lua_State* L, Unit* ptr)
+        static int WipeHateList(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->WipeHateList();
@@ -1864,14 +1861,14 @@ class LuaUnit
             return 0;
         }
 
-        static int WipeTargetList(lua_State* L, Unit* ptr)
+        static int WipeTargetList(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->GetAIInterface()->WipeTargetList();
             return 0;
         }
 
-        static int WipeCurrentTarget(lua_State* L, Unit* ptr)
+        static int WipeCurrentTarget(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->GetAIInterface()->WipeCurrentTarget();
@@ -1929,7 +1926,7 @@ class LuaUnit
         }
 
 
-        static int ClearHateList(lua_State* L, Unit* ptr)
+        static int ClearHateList(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->ClearHateList();
@@ -1963,7 +1960,7 @@ class LuaUnit
             return 1;
         }
 
-        static int SetFlying(lua_State* L, Unit* ptr)
+        static int SetFlying(lua_State* /*L*/, Unit* ptr)
         {
             WorldPacket data(SMSG_MOVE_SET_HOVER, 13);
             data << ptr->GetNewGUID();
@@ -1975,7 +1972,7 @@ class LuaUnit
             return 0;
         }
 
-        static int Land(lua_State* L, Unit* ptr)
+        static int Land(lua_State* /*L*/, Unit* ptr)
         {
             WorldPacket data(SMSG_MOVE_UNSET_HOVER, 13);
             data << ptr->GetNewGUID();
@@ -2002,7 +1999,7 @@ class LuaUnit
             return 1;
         }
 
-        static int ReturnToSpawnPoint(lua_State* L, Unit* ptr)
+        static int ReturnToSpawnPoint(lua_State* /*L*/, Unit* ptr)
         {
             float x = ptr->GetSpawnX();
             float y = ptr->GetSpawnY();
@@ -2250,7 +2247,7 @@ class LuaUnit
             return 0;
         }
 
-        static int RemoveAllAuras(lua_State* L, Unit* ptr)
+        static int RemoveAllAuras(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr)
                 return 0;
@@ -2258,7 +2255,7 @@ class LuaUnit
             return 0;
         }
 
-        static int CancelSpell(lua_State* L, Unit* ptr)
+        static int CancelSpell(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr)
                 return 0;
@@ -2310,14 +2307,14 @@ class LuaUnit
             return 1;
         }
 
-        static int Root(lua_State* L, Unit* ptr)
+        static int Root(lua_State* /*L*/, Unit* ptr)
         {
             if(ptr)
                 ptr->Root();
             return 0;
         }
 
-        static int Unroot(lua_State* L, Unit* ptr)
+        static int Unroot(lua_State* /*L*/, Unit* ptr)
         {
             if(ptr)
                 ptr->Unroot();
@@ -2379,7 +2376,7 @@ class LuaUnit
             return 1;
         }
 
-        static int SendAIReaction(lua_State* L, Unit* ptr)
+        static int SendAIReaction(lua_State* /*L*/, Unit* ptr)
         {
             ptr->SendAIReaction();
             return 0;
@@ -2868,7 +2865,7 @@ class LuaUnit
             return 0;
         }
 
-        static int DismissPet(lua_State* L, Unit* ptr)
+        static int DismissPet(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             ptr->GetAIInterface()->DismissPet();
@@ -3255,7 +3252,7 @@ class LuaUnit
             return 0;
         }
 
-        static int ExpandToRaid(lua_State* L, Unit* ptr)
+        static int ExpandToRaid(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -3378,7 +3375,7 @@ class LuaUnit
             return 0;
         }
 
-        static int ResurrectPlayer(lua_State* L, Unit* ptr)
+        static int ResurrectPlayer(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->RemoteRevive();
@@ -3433,7 +3430,7 @@ class LuaUnit
             return 0;
         }
 
-        static int SetCreatureName(lua_State* L, Unit* ptr)
+        static int SetCreatureName(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             //Paroxysm : This method makes alot of sense...
@@ -3461,7 +3458,7 @@ class LuaUnit
             return 0;
         }
 
-        static int SoftDisconnect(lua_State* L, Unit* ptr)
+        static int SoftDisconnect(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->SoftDisconnect();
@@ -3477,14 +3474,14 @@ class LuaUnit
             return 0;
         }
 
-        static int Unpossess(lua_State* L, Unit* ptr)
+        static int Unpossess(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->UnPossess();
             return 0;
         }
 
-        static int RemoveFromWorld(lua_State* L, Unit* ptr)
+        static int RemoveFromWorld(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             Creature* unit = TO_CREATURE(ptr);
@@ -3838,7 +3835,7 @@ class LuaUnit
             uint32 mechanic = luaL_checkint(L, 1);
             bool hostileonly = CHECK_BOOL(L, 2);
             if(ptr && mechanic)
-                ptr->RemoveAllAurasByMechanic(mechanic, -1, hostileonly);
+                ptr->RemoveAllAurasByMechanic(mechanic, 0, hostileonly);
             return 0;
         }
 
@@ -3942,14 +3939,14 @@ class LuaUnit
             return 1;
         }
 
-        static int RemoveStealth(lua_State* L, Unit* ptr)
+        static int RemoveStealth(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr) return 0;
             ptr->RemoveStealth();
             return 0;
         }
 
-        static int InterruptSpell(lua_State* L, Unit* ptr)
+        static int InterruptSpell(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr) return 0;
             ptr->InterruptSpell();
@@ -3982,14 +3979,14 @@ class LuaUnit
             return 0;
         }
 
-        static int RemoveAIUpdateEvent(lua_State* L, Unit* ptr)
+        static int RemoveAIUpdateEvent(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             sEventMgr.RemoveEvents(ptr, EVENT_SCRIPT_UPDATE_EVENT);
             return 0;
         }
 
-        static int deleteWaypoint(lua_State* L, Unit* ptr)
+        static int deleteWaypoint(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             uint32 wp = luaL_checkint(L, 1);
@@ -4022,7 +4019,7 @@ class LuaUnit
             return 0;
         }
 
-        static int DeMorph(lua_State* L, Unit* ptr)
+        static int DeMorph(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr) return 0;
             ptr->DeMorph();
@@ -4261,14 +4258,14 @@ class LuaUnit
             return 1;
         }
 
-        static int ClearAllCooldowns(lua_State* L, Unit* ptr)
+        static int ClearAllCooldowns(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->ResetAllCooldowns();
             return 0;
         }
 
-        static int ResetAllTalents(lua_State* L, Unit* ptr)
+        static int ResetAllTalents(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->Reset_Talents();
@@ -4304,7 +4301,7 @@ class LuaUnit
             return 1;
         }
 
-        static int SavePlayer(lua_State* L, Unit* ptr)
+        static int SavePlayer(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             TO_PLAYER(ptr)->SaveToDB(false);
@@ -4335,7 +4332,7 @@ class LuaUnit
             return 1;
         }
 
-        static int RemovePvPFlag(lua_State* L, Unit* ptr)
+        static int RemovePvPFlag(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -4344,7 +4341,7 @@ class LuaUnit
             return 0;
         }
 
-        static int RemoveNegativeAuras(lua_State* L, Unit* ptr)
+        static int RemoveNegativeAuras(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr) return 0;
             ptr->RemoveNegativeAuras();
@@ -4540,7 +4537,7 @@ class LuaUnit
             return 0;
         }
 
-        static int VendorRemoveAllItems(lua_State* L, Unit* ptr)
+        static int VendorRemoveAllItems(lua_State* /*L*/, Unit* ptr)
         {
             TEST_UNIT()
             Creature* ctr = TO_CREATURE(ptr);
@@ -4574,7 +4571,7 @@ class LuaUnit
             return 0;
         }
 
-        static int Dismount(lua_State* L, Unit* ptr)
+        static int Dismount(lua_State* /*L*/, Unit* ptr)
         {
             if(!ptr) return 0;
             if(ptr->IsPlayer())
@@ -4714,7 +4711,7 @@ class LuaUnit
             return 0;
         }
 
-        static int StopChannel(lua_State* L, Unit* ptr)
+        static int StopChannel(lua_State* /*L*/, Unit* ptr)
         {
             if(ptr == NULL)
                 return 0;
@@ -4773,7 +4770,7 @@ class LuaUnit
             return 1;
         }
 
-        static int FlagPvP(lua_State* L, Unit* ptr)
+        static int FlagPvP(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -5139,7 +5136,7 @@ class LuaUnit
             return 0;
         }
 
-        static int SendGuildLog(lua_State* L, Unit* ptr)
+        static int SendGuildLog(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -5394,7 +5391,7 @@ class LuaUnit
                 return 1;
         }
 
-        static int Repop(lua_State* L, Unit* ptr)
+        static int Repop(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -5430,7 +5427,7 @@ class LuaUnit
             return 1;
         }
 
-        static int ResetTalents(lua_State* L, Unit* ptr)
+        static int ResetTalents(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Player* plr = TO_PLAYER(ptr);
@@ -5552,7 +5549,7 @@ class LuaUnit
             RET_NUMBER(ptr->GetMapMgr()->GetAreaID(ptr->GetPositionX(), ptr->GetPositionY()));
         }
 
-        static int ResetPetTalents(lua_State* L, Unit* ptr)
+        static int ResetPetTalents(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER()
             Pet* pet = TO_PLAYER(ptr)->GetSummon();
@@ -5812,7 +5809,7 @@ class LuaUnit
             PUSH_UNIT(L, ptr->GetAIInterface()->GetSecondHated());
             return 1;
         }
-        static int SaveToInstance(lua_State* L, Unit* ptr)
+        static int SaveToInstance(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER();
             Instance* dungeon = sInstanceMgr.GetInstanceByIds(ptr->GetMapId(), ptr->GetInstanceID());
@@ -5890,13 +5887,13 @@ class LuaUnit
         {
             TEST_UNIT();
             RET_NUMBER(ptr->GetAIInterface()->GetWayPointsCount());
-            return 1;
+            //return 1;
         }
         static int GetMovementType(lua_State* L, Unit* ptr)
         {
             TEST_UNIT();
             RET_NUMBER(ptr->GetAIInterface()->getMoveType());
-            return 1;
+            //return 1;
         }
         static int GetQuestLogSlot(lua_State* L, Unit* ptr)
         {
@@ -5933,7 +5930,7 @@ class LuaUnit
             return 1;
         }
 
-        static int StopPlayerAttack(lua_State* L, Unit* ptr)
+        static int StopPlayerAttack(lua_State* /*L*/, Unit* ptr)
         {
             TEST_PLAYER();
             TO_PLAYER(ptr)->smsg_AttackStop(TO_PLAYER(ptr)->GetSelection());
@@ -6015,7 +6012,7 @@ class LuaUnit
             return 0;
         }
 
-        static int DismissVehicle( lua_State *L, Unit *ptr ){
+        static int DismissVehicle( lua_State* /*L*/, Unit *ptr ){
             TEST_UNITPLAYER()
 
             Vehicle *v = NULL;
@@ -6116,7 +6113,7 @@ class LuaUnit
             return 0;
         }
 
-        static int ExitVehicle( lua_State *L, Unit *ptr ){
+        static int ExitVehicle( lua_State* /*L*/, Unit *ptr ){
             TEST_UNITPLAYER()
 
             if( ptr->GetCurrentVehicle() != NULL )
@@ -6141,7 +6138,7 @@ class LuaUnit
             return 1;
         }
 
-        static int EjectAllVehiclePassengers( lua_State *L, Unit *ptr ){
+        static int EjectAllVehiclePassengers( lua_State* /*L*/, Unit *ptr ){
             TEST_UNITPLAYER();
 
             Unit *u = ptr->GetVehicleBase();

@@ -16,37 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
- #include "Setup.h"
- 
- class DedicationOfHonorAI : public GameObjectAIScript
+#include "Setup.h"
+
+class DedicationOfHonorGossip : public Arcemu::Gossip::Script
 {
     public:
-        ADD_GAMEOBJECT_FACTORY_FUNCTION(DedicationOfHonorAI)
-        DedicationOfHonorAI(GameObject* go) : GameObjectAIScript(go){}
-        ~DedicationOfHonorAI() {}
-
-        void OnActivate(Player* player)
+        void OnHello(Object* pObj, Player* plr)
         {
-            Arcemu::Gossip::Menu::SendQuickMenu(_gameobject->GetGUID(), 15921, player, 1, Arcemu::Gossip::ICON_CHAT, "See the fall of the Lich King.");
+            Arcemu::Gossip::Menu::SendQuickMenu(pObj->GetGUID(), 15921, plr, 0, Arcemu::Gossip::ICON_CHAT, "See the fall of the Lich King.");
         }
-};
-
-class DedicationOfHonorGossip : public GossipScript
-{
-    public:
-        DedicationOfHonorGossip() : GossipScript(){}
 
         void OnSelectOption(Object* object, Player* player, uint32 Id, const char* enteredcode)
         {
-            uint32 id = 16;    //video id
-            player->GetSession()->OutPacket(SMSG_TRIGGER_MOVIE, sizeof(uint32), &id);
-
+            player->SendTriggerMovie(16);
             Arcemu::Gossip::Menu::Complete(player);
         }
 };
 
 void SetupDalaranGossip(ScriptMgr* mgr)
 {
-    mgr->register_gameobject_script(202443, &DedicationOfHonorAI::Create);
-    mgr->register_go_gossip_script(202443, new DedicationOfHonorGossip);
+    mgr->register_go_gossip(202443, new DedicationOfHonorGossip);
 }

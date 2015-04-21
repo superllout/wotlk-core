@@ -44,7 +44,7 @@ class LuaGameObject
             return 0;
         }
         
-        static int GossipMenuAddItem(lua_State * L, GameObject * ptr){
+        static int GossipMenuAddItem(lua_State * L, GameObject * /*ptr*/){
             int icon = luaL_checkint(L, 1);
             const char * menu_text = luaL_checkstring(L, 2);
             int IntId = luaL_checkint(L, 3);
@@ -61,7 +61,7 @@ class LuaGameObject
             return 0;
         }
 
-        static int GossipSendMenu(lua_State* L, GameObject* ptr)
+        static int GossipSendMenu(lua_State* L, GameObject* /*ptr*/)
         {
             Player* target = CHECK_PLAYER(L, 1);
             if(!target)
@@ -77,7 +77,7 @@ class LuaGameObject
             return 0;
         }
 
-        static int GossipComplete(lua_State* L, GameObject* ptr)
+        static int GossipComplete(lua_State* L, GameObject* /*ptr*/)
         {
             Player* target = CHECK_PLAYER(L, 1);
             if(!target)
@@ -93,7 +93,7 @@ class LuaGameObject
             return 0;
         }
 
-        static int GossipSendPOI(lua_State* L, GameObject* ptr)
+        static int GossipSendPOI(lua_State* L, GameObject* /*ptr*/)
         {
             Player* plr = CHECK_PLAYER(L, 1);
             float x = CHECK_FLOAT(L, 2);
@@ -145,7 +145,7 @@ class LuaGameObject
             return 0;
         }
 
-        static int RemoveAIUpdate(lua_State* L, GameObject* ptr)
+        static int RemoveAIUpdate(lua_State* /*L*/, GameObject* ptr)
         {
             TEST_GO()
             sEventMgr.RemoveEvents(ptr, EVENT_SCRIPT_UPDATE_EVENT);
@@ -171,7 +171,7 @@ class LuaGameObject
             return 1;
         }
 
-        static int RemoveFromWorld(lua_State* L, GameObject* ptr)
+        static int RemoveFromWorld(lua_State* /*L*/, GameObject* ptr)
         {
             if(ptr)
                 ptr->RemoveFromWorld(true);
@@ -612,7 +612,7 @@ class LuaGameObject
         }
 
 
-        static int Update(lua_State* L, GameObject* ptr)
+        static int Update(lua_State* /*L*/, GameObject* ptr)
         {
             //just despawns/respawns to update GO visuals
             //credits: Sadikum
@@ -685,7 +685,7 @@ class LuaGameObject
             return 1;
         }
 
-        static int SetZoneWeather(lua_State* L, GameObject* ptr)
+        static int SetZoneWeather(lua_State* L, GameObject* /*ptr*/)
         {
             /*
             WEATHER_TYPE_NORMAL            = 0, // NORMAL (SUNNY)
@@ -1212,7 +1212,7 @@ class LuaGameObject
             return 0;
         }
 
-        static int Rebuild( lua_State *L, GameObject *ptr ){
+        static int Rebuild( lua_State* /*L*/, GameObject *ptr ){
             TEST_GO();
 
             if( ptr->GetInfo()->Type != GAMEOBJECT_TYPE_DESTRUCTIBLE_BUILDING )

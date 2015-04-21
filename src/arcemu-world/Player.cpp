@@ -10826,7 +10826,7 @@ bool Player::HasSpellWithAuraNameAndBasePoints( uint32 auraname, uint32 basepoin
 
         for( uint32 i = 0; i < 3; i++ ){
             if( sp->Effect[ i ] == SPELL_EFFECT_APPLY_AURA ){
-                if( ( sp->EffectApplyAuraName[ i ] == auraname ) && ( sp->EffectBasePoints[ i ] == ( basepoints - 1 ) ) )
+                if( ( sp->EffectApplyAuraName[ i ] == auraname ) && ( sp->EffectBasePoints[ i ] == int32( basepoints - 1 ) ) )
                     return true;
             }
         }

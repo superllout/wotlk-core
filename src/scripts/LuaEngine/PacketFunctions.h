@@ -28,7 +28,7 @@ namespace luPacket
         NORMAL OPERATIONS
         */
 
-    int CreatePacket(lua_State* L, WorldPacket* packet)
+    int CreatePacket(lua_State* L, WorldPacket* /*packet*/)
     {
         int opcode = luaL_checkint(L, 1);
         int size = luaL_checkint(L, 2);

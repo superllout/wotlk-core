@@ -43,7 +43,7 @@ namespace luaItem
         return 1;
     }
 
-    int GossipMenuAddItem(lua_State* L, Item* ptr)
+    int GossipMenuAddItem(lua_State* L, Item* /*ptr*/)
     {
         int icon = luaL_checkint(L, 1);
         const char* menu_text = luaL_checkstring(L, 2);
@@ -62,7 +62,7 @@ namespace luaItem
         return 0;
     }
 
-    int GossipSendMenu(lua_State* L, Item* ptr)
+    int GossipSendMenu(lua_State* L, Item* /*ptr*/)
     {
         Player* plr = CHECK_PLAYER(L, 1);
         
@@ -76,7 +76,7 @@ namespace luaItem
         return 1;
     }
 
-    int GossipComplete(lua_State* L, Item* ptr)
+    int GossipComplete(lua_State* L, Item* /*ptr*/)
     {
         Player* plr = CHECK_PLAYER(L, 1);
         
@@ -90,7 +90,7 @@ namespace luaItem
         return 1;
     }
 
-    int GossipSendPOI(lua_State* L, Item* ptr)
+    int GossipSendPOI(lua_State* L, Item* /*ptr*/)
     {
         Player* plr = CHECK_PLAYER(L, 1);
         float x = CHECK_FLOAT(L, 2);
@@ -282,7 +282,7 @@ namespace luaItem
         return 1;
     }
 
-    int RepairItem(lua_State* L, Item* ptr)
+    int RepairItem(lua_State* /*L*/, Item* ptr)
     {
         if(!ptr)
             return 0;
@@ -398,7 +398,7 @@ namespace luaItem
         return 1;
     }
 
-    int Remove(lua_State* L, Item* ptr)
+    int Remove(lua_State* L, Item* /*ptr*/)
     {
         if(ptr == NULL || !ptr->IsInWorld() || !ptr->IsItem())
         {
@@ -408,7 +408,7 @@ namespace luaItem
         return 0;
     }
 
-    int Create(lua_State* L, Item* ptr)
+    int Create(lua_State* L, Item* /*ptr*/)
     {
         uint32 id = CHECK_ULONG(L, 1);
         uint32 stackcount = CHECK_ULONG(L, 2);

@@ -85,36 +85,37 @@ class BIH
 		template< class T, class BoundsFunc >
 		void build(const std::vector<T> &primitives, BoundsFunc & getBounds, G3D::uint32 leafSize = 3, bool printStats = false)
 		{
-			if(primitives.size() == 0)
+			if(primitives.empty())
 				return;
-			buildData dat;
-			dat.maxPrims = leafSize;
-			dat.numPrims = primitives.size();
-			dat.indices = new G3D::uint32[dat.numPrims];
-			dat.primBound = new G3D::AABox[dat.numPrims];
+
+			buildData data;
+			data.maxPrims = leafSize;
+			data.numPrims = (G3D::uint32)primitives.size();
+			data.indices = new G3D::uint32[data.numPrims];
+			data.primBound = new G3D::AABox[data.numPrims];
 			getBounds(primitives[0], bounds);
-			for(G3D::uint32 i = 0; i < dat.numPrims; ++i)
+			for(G3D::uint32 i = 0; i < data.numPrims; ++i)
 			{
-				dat.indices[i] = i;
+				data.indices[i] = i;
 				G3D::AABox tb;
-				getBounds(primitives[i], dat.primBound[i]);
-				bounds.merge(dat.primBound[i]);
+				getBounds(primitives[i], data.primBound[i]);
+				bounds.merge(data.primBound[i]);
 			}
 			std::vector<G3D::uint32> tempTree;
 			BuildStats stats;
-			buildHierarchy(tempTree, dat, stats);
+			buildHierarchy(tempTree, data, stats);
 			if(printStats)
 				stats.printStats();
 
-			objects.resize(dat.numPrims);
-			for(G3D::uint32 i = 0; i < dat.numPrims; ++i)
-				objects[i] = dat.indices[i];
+			objects.resize(data.numPrims);
+			for(G3D::uint32 i = 0; i < data.numPrims; ++i)
+				objects[i] = data.indices[i];
 			//nObjects = dat.numPrims;
 			tree = tempTree;
-			delete[] dat.primBound;
-			delete[] dat.indices;
+			delete[] data.primBound;
+			delete[] data.indices;
 		}
-		G3D::uint32 primCount() { return objects.size(); }
+        G3D::uint32 primCount() { return static_cast<G3D::uint32>(objects.size()); }
 
 		template<typename RayCallback>
 		void intersectRay(const G3D::Ray & r, RayCallback & intersectCallback, float & maxDist, bool stopAtFirst = false) const

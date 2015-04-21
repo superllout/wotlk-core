@@ -149,8 +149,8 @@ namespace VMAP
 
 	bool ModelSpawn::readFromFile(FILE* rf, ModelSpawn & spawn)
 	{
-		G3D::uint32 check = 0, nameLen;
-		check += fread(&spawn.flags, sizeof(G3D::uint32), 1, rf);
+		size_t check = 0, nameLen;
+        check += static_cast<G3D::uint32>(fread(&spawn.flags, sizeof(G3D::uint32), 1, rf));
 		// EoF?
 		if(!check)
 		{
@@ -158,11 +158,11 @@ namespace VMAP
 				printf("Error reading ModelSpawn!");
 			return false;
 		}
-		check += fread(&spawn.adtId, sizeof(G3D::uint16), 1, rf);
-		check += fread(&spawn.ID, sizeof(G3D::uint32), 1, rf);
-		check += fread(&spawn.iPos, sizeof(float), 3, rf);
-		check += fread(&spawn.iRot, sizeof(float), 3, rf);
-		check += fread(&spawn.iScale, sizeof(float), 1, rf);
+        check += static_cast<G3D::uint32>(fread(&spawn.adtId, sizeof(G3D::uint16), 1, rf));
+        check += static_cast<G3D::uint32>(fread(&spawn.ID, sizeof(G3D::uint32), 1, rf));
+        check += static_cast<G3D::uint32>(fread(&spawn.iPos, sizeof(float), 3, rf));
+        check += static_cast<G3D::uint32>(fread(&spawn.iRot, sizeof(float), 3, rf));
+        check += static_cast<G3D::uint32>(fread(&spawn.iScale, sizeof(float), 1, rf));
 		bool has_bound = ((spawn.flags & MOD_HAS_BOUND) != 0);
 		if(has_bound)  // only WMOs have bound in MPQ, only available after computation
 		{
@@ -195,7 +195,7 @@ namespace VMAP
 
 	bool ModelSpawn::writeToFile(FILE* wf, const ModelSpawn & spawn)
 	{
-		G3D::uint32 check = 0;
+		size_t check = 0;
 		check += fwrite(&spawn.flags, sizeof(G3D::uint32), 1, wf);
 		check += fwrite(&spawn.adtId, sizeof(G3D::uint16), 1, wf);
 		check += fwrite(&spawn.ID, sizeof(G3D::uint32), 1, wf);
@@ -208,11 +208,13 @@ namespace VMAP
 			check += fwrite(&spawn.iBound.low(), sizeof(float), 3, wf);
 			check += fwrite(&spawn.iBound.high(), sizeof(float), 3, wf);
 		}
-		G3D::uint32 nameLen = spawn.name.length();
+		size_t nameLen = spawn.name.length();
 		check += fwrite(&nameLen, sizeof(G3D::uint32), 1, wf);
-		if(check != (has_bound ? 17U : 11U)) return false;
+		if(check != (has_bound ? 17U : 11U))
+            return false;
 		check = fwrite(spawn.name.c_str(), sizeof(char), nameLen, wf);
-		if(check != nameLen) return false;
+		if(check != nameLen)
+            return false;
 		return true;
 	}
 

@@ -50,7 +50,7 @@ OPTION(OPTIMIZED_BUILD "set to true for optimized compilation - will take more t
 
 #Windows specific options
 if (WIN32)
-    OPTION(SHOW_ALL_WARNINGS "set to true to get all compiler warnings in debug build" FALSE)
+    OPTION(SHOW_ALL_WARNINGS "set to true to get all compiler warnings in debug build." FALSE)
     set(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
 endif()
 

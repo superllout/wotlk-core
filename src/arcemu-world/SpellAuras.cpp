@@ -2689,7 +2689,7 @@ void Aura::SpellAuraModStealth(bool apply)
             Aura *buff = m_target->FindAura(58427);
             if(buff)
             {
-                m_target->SetAurDuration(58427, -1);
+                m_target->SetAurDuration(58427, 0);
                 m_target->ModVisualAuraStackCount(buff, 0);
             }
             else

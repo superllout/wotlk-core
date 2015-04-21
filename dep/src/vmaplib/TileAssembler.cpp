@@ -145,7 +145,7 @@ namespace VMAP
 				const ModelSpawn & spawn = map_iter->second->UniqueEntries[tile->second];
 				if(spawn.flags & MOD_WORLDSPAWN)  // WDT spawn, saved as tile 65/65 currently...
 					continue;
-				G3D::uint32 nSpawns = tileEntries.count(tile->first);
+				size_t nSpawns = tileEntries.count(tile->first);
 				std::stringstream tilefilename;
 				tilefilename.fill('0');
 				tilefilename << iDestDir << "/" << std::setw(3) << map_iter->first << "_";
@@ -158,7 +158,7 @@ namespace VMAP
 				// write number of tile spawns
 				if(success && fwrite(&nSpawns, sizeof(G3D::uint32), 1, tilefile) != 1) success = false;
 				// write tile spawns
-				for(G3D::uint32 s = 0; s < nSpawns; ++s)
+				for(size_t s = 0; s < nSpawns; ++s)
 				{
 					if(s)
 						++tile;
@@ -203,30 +203,33 @@ namespace VMAP
 			printf("Could not read dir_bin file!\n");
 			return false;
 		}
+
 		printf("Read coordinate mapping...\n");
-		G3D::uint32 mapID, tileX, tileY, check = 0;
-		G3D::Vector3 v1, v2;
-		ModelSpawn spawn;
 		while(!feof(dirf))
 		{
-			check = 0;
+			size_t check = 0;
+            G3D::uint32 mapID;
+            float tileX, tileY;
+
 			// read mapID, tileX, tileY, Flags, adtID, ID, Pos, Rot, Scale, Bound_lo, Bound_hi, name
 			check += fread(&mapID, sizeof(G3D::uint32), 1, dirf);
 			if(check == 0)  // EoF...
 				break;
-			check += fread(&tileX, sizeof(G3D::uint32), 1, dirf);
-			check += fread(&tileY, sizeof(G3D::uint32), 1, dirf);
+			check += fread(&tileX, sizeof(float), 1, dirf);
+			check += fread(&tileY, sizeof(float), 1, dirf);
+            ModelSpawn spawn;
 			if(!ModelSpawn::readFromFile(dirf, spawn))
 				break;
 
-			MapSpawns* current;
+			MapSpawns* current = NULL;
 			MapData::iterator map_iter = mapData.find(mapID);
 			if(map_iter == mapData.end())
 			{
 				printf("spawning Map %d\n", mapID);
 				mapData[mapID] = current = new MapSpawns();
 			}
-			else current = (*map_iter).second;
+			else
+                current = (*map_iter).second;
 			current->UniqueEntries.insert(std::pair<G3D::uint32, ModelSpawn>(spawn.ID, spawn));
 			current->TileEntries.insert(std::pair<G3D::uint32, G3D::uint32>(StaticMapTree::packTileID(tileX, tileY), spawn.ID));
 		}

@@ -391,40 +391,40 @@ void MoonInstanceScript::SetCellForcedStates(float pMinX, float pMaxX, float pMi
     }
 }
 
-void MoonInstanceScript::OnPlayerDeath(Player* pVictim, Unit* pKiller)
+void MoonInstanceScript::OnPlayerDeath(Player* /*pVictim*/, Unit* /*pKiller*/)
 {
 }
 
-void MoonInstanceScript::OnPlayerEnter(Player* pPlayer)
+void MoonInstanceScript::OnPlayerEnter(Player* /*pPlayer*/)
 {
 }
 
-void MoonInstanceScript::OnAreaTrigger(Player* pPlayer, uint32 pAreaId)
+void MoonInstanceScript::OnAreaTrigger(Player* /*pPlayer*/, uint32 /*pAreaId*/)
 {
 }
 
-void MoonInstanceScript::OnZoneChange(Player* pPlayer, uint32 pNewZone, uint32 pOldZone)
+void MoonInstanceScript::OnZoneChange(Player* /*pPlayer*/, uint32 /*pNewZone*/, uint32 /*pOldZone*/)
 {
 }
 
-void MoonInstanceScript::SetInstanceData(uint32 pType, uint32 pIndex, uint32 pData)
+void MoonInstanceScript::SetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/, uint32 /*pData*/)
 {
 }
 
-uint32 MoonInstanceScript::GetInstanceData(uint32 pType, uint32 pIndex)
+uint32 MoonInstanceScript::GetInstanceData(uint32 /*pType*/, uint32 /*pIndex*/)
 {
     return 0;
 }
 
-void MoonInstanceScript::OnCreatureDeath(Creature* pVictim, Unit* pKiller)
+void MoonInstanceScript::OnCreatureDeath(Creature* /*pVictim*/, Unit* /*pKiller*/)
 {
 }
 
-void MoonInstanceScript::OnCreaturePushToWorld(Creature* pCreature)
+void MoonInstanceScript::OnCreaturePushToWorld(Creature* /*pCreature*/)
 {
 }
 
-void MoonInstanceScript::OnGameObjectActivate(GameObject* pGameObject, Player* pPlayer)
+void MoonInstanceScript::OnGameObjectActivate(GameObject* /*pGameObject*/, Player* /*pPlayer*/)
 {
 }
 
@@ -439,16 +439,16 @@ void MoonInstanceScript::OnGameObjectPushToWorld(GameObject* pGameObject)
         pGameObject->SetState((*Iter).second);
 }
 
-GameObject* MoonInstanceScript::GetObjectForOpenLock(Player* pCaster, Spell* pSpell, SpellEntry* pSpellEntry)
+GameObject* MoonInstanceScript::GetObjectForOpenLock(Player* /*pCaster*/, Spell* /*pSpell*/, SpellEntry* /*pSpellEntry*/)
 {
     return NULL;
 }
 
-void MoonInstanceScript::SetLockOptions(uint32 pEntryId, GameObject* pGameObject)
+void MoonInstanceScript::SetLockOptions(uint32 /*pEntryId*/, GameObject* /*pGameObject*/)
 {
 }
 
-uint32 MoonInstanceScript::GetRespawnTimeForCreature(uint32 pEntryId, Creature* pCreature)
+uint32 MoonInstanceScript::GetRespawnTimeForCreature(uint32 /*pEntryId*/, Creature* /*pCreature*/)
 {
     return 240000;
 }

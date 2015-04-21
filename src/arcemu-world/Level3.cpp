@@ -662,7 +662,7 @@ bool ChatHandler::HandleAddSkillCommand(const char* args, WorldSession* m_sessio
 
 struct UnitFlagNames
 {
-    uint32 Flag;
+    UnitFieldFlags Flag;
     const char* Name;
 };
 

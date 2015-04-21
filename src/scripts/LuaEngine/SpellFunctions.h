@@ -240,7 +240,7 @@ namespace LuaSpell
         return 1;
     }
 
-    int Cancel(lua_State* L, Spell* sp)
+    int Cancel(lua_State* /*L*/, Spell* sp)
     {
         if(!sp) return 0;
         sp->cancel();
@@ -262,7 +262,7 @@ namespace LuaSpell
         return 1;
     }
 
-    int Finish(lua_State* L, Spell* sp)
+    int Finish(lua_State* /*L*/, Spell* sp)
     {
         if(!sp) return 0;
         sp->finish();
@@ -459,7 +459,7 @@ namespace LuaSpell
         return 1;
     }
 
-    int ResetAllVars(lua_State* L, Spell* sp)
+    int ResetAllVars(lua_State* /*L*/, Spell* sp)
     {
         if(!sp) return 0;
         sp->m_spellInfo_override = NULL;

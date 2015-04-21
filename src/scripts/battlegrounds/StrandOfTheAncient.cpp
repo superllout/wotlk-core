@@ -224,12 +224,12 @@ StrandOfTheAncient::~StrandOfTheAncient(){
 }
 
 
-void StrandOfTheAncient::HookOnAreaTrigger(Player* plr, uint32 id)
+void StrandOfTheAncient::HookOnAreaTrigger(Player* /*plr*/, uint32 /*id*/)
 {
 
 }
 
-void StrandOfTheAncient::HookOnPlayerKill(Player* plr, Player* pVictim)
+void StrandOfTheAncient::HookOnPlayerKill(Player* plr, Player* /*pVictim*/)
 {
     plr->m_bgScore.KillingBlows++;
     UpdatePvPData();
@@ -241,7 +241,7 @@ void StrandOfTheAncient::HookOnHK(Player* plr)
     UpdatePvPData();
 }
 
-void StrandOfTheAncient::OnPlatformTeleport(Player* plr)
+void StrandOfTheAncient::OnPlatformTeleport(Player* /*plr*/)
 {
 }
 
@@ -270,9 +270,9 @@ void StrandOfTheAncient::HookOnPlayerDeath(Player* plr)
     UpdatePvPData();
 }
 
-void StrandOfTheAncient::HookOnMount(Player* plr)
+void StrandOfTheAncient::HookOnMount(Player* /*plr*/)
 {
-    /* Allowed */
+
 }
 
 bool StrandOfTheAncient::HookHandleRepop( Player *plr ){
@@ -364,12 +364,13 @@ void StrandOfTheAncient::OnStart(){
     StartRound();
 }
 
-void StrandOfTheAncient::HookGenerateLoot(Player* plr, Object* pOCorpse)
+void StrandOfTheAncient::HookGenerateLoot(Player* /*plr*/, Object* /*pOCorpse*/)
 {
-    LOG_DEBUG("*** StrandOfTheAncient::HookGenerateLoot");
+
 }
 
-void StrandOfTheAncient::HookOnUnitKill( Player* plr, Unit* pVictim ){
+void StrandOfTheAncient::HookOnUnitKill( Player* plr, Unit* /*pVictim*/ )
+{
 }
 
 void StrandOfTheAncient::HookOnUnitDied( Unit *victim ){
@@ -407,10 +408,10 @@ void StrandOfTheAncient::SetIsWeekend(bool isweekend)
     m_isWeekend = isweekend;
 }
 
-bool StrandOfTheAncient::HookSlowLockOpen( GameObject *go, Player *player, Spell *spell ){
-    uint32 goentry = go->GetEntry();
-
-    switch( goentry ){
+bool StrandOfTheAncient::HookSlowLockOpen( GameObject* go, Player* /*player*/, Spell* /*spell*/ )
+{
+    switch (go->GetEntry())
+    {
         case 191305:
         case 191306:
             CaptureControlPoint( SOTA_CONTROL_POINT_EAST_GY );
@@ -433,17 +434,16 @@ bool StrandOfTheAncient::HookSlowLockOpen( GameObject *go, Player *player, Spell
     return true;
 }
 
-bool StrandOfTheAncient::HookQuickLockOpen( GameObject *go, Player *player, Spell *spell ){
-    uint32 entry = go->GetEntry();
-
-    if( entry == GO_RELIC )
+bool StrandOfTheAncient::HookQuickLockOpen( GameObject* go, Player* /*player*/, Spell* /*spell*/ )
+{
+    if (go->GetEntry() == GO_RELIC)
         FinishRound();
 
     return true;
 }
 
 // For banners
-void StrandOfTheAncient::HookFlagStand(Player* plr, GameObject* obj)
+void StrandOfTheAncient::HookFlagStand(Player* /*plr*/, GameObject* /*obj*/)
 {
 }
 
@@ -635,12 +635,14 @@ void StrandOfTheAncient::TimeTick(){
 };
 
 // Not used?
-void StrandOfTheAncient::HookOnFlagDrop(Player* plr)
+void StrandOfTheAncient::HookOnFlagDrop(Player* /*plr*/)
 {
 }
-void StrandOfTheAncient::HookFlagDrop(Player* plr, GameObject* obj)
+
+void StrandOfTheAncient::HookFlagDrop(Player* /*plr*/, GameObject* /*obj*/)
 {
 }
+
 void StrandOfTheAncient::HookOnShadowSight()
 {
 }

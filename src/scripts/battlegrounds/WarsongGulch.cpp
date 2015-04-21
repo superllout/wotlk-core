@@ -340,7 +340,7 @@ void WarsongGulch::HookFlagStand(Player* plr, GameObject* obj)
     }
 }
 
-void WarsongGulch::HookOnPlayerKill(Player* plr, Player* pVictim)
+void WarsongGulch::HookOnPlayerKill(Player* plr, Player* /*pVictim*/)
 {
     plr->m_bgScore.KillingBlows++;
     UpdatePvPData();
@@ -459,11 +459,11 @@ void WarsongGulch::HookOnShadowSight()
 {
 }
 
-void WarsongGulch::HookGenerateLoot(Player* plr, Object* pOCorpse)
+void WarsongGulch::HookGenerateLoot(Player* /*plr*/, Object* /*pOCorpse*/)
 {
 }
 
-void WarsongGulch::HookOnUnitKill(Player* plr, Unit* pVictim)
+void WarsongGulch::HookOnUnitKill(Player* /*plr*/, Unit* /*pVictim*/)
 {
 }
 

@@ -857,7 +857,7 @@ static int RegisterTimedEvent(lua_State* L)  //in this case, L == lu
 }
 
 
-static int RemoveTimedEvents(lua_State* L)  //in this case, L == lu
+static int RemoveTimedEvents(lua_State* /*L*/)  //in this case, L == lu
 {
     sLuaEventMgr.RemoveEvents();
     return 0;
@@ -865,7 +865,7 @@ static int RemoveTimedEvents(lua_State* L)  //in this case, L == lu
 
 
 //all of these run similarly, they execute OnServerHook for all the functions in their respective event's list.
-bool LuaHookOnNewCharacter(uint32 Race, uint32 Class, WorldSession* Session, const char* Name)
+bool LuaHookOnNewCharacter(uint32 Race, uint32 Class, WorldSession* /*Session*/, const char* Name)
 {
     GET_LOCK
     bool result = true;

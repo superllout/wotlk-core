@@ -87,7 +87,7 @@ class SHIRRAKTHEDEADWATCHERAI : public CreatureAIScript
             spells[3].cooldown = 15;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             for(int i = 0; i < nrspells; i++)
                 spells[i].casttime = 0;
@@ -95,14 +95,14 @@ class SHIRRAKTHEDEADWATCHERAI : public CreatureAIScript
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -263,7 +263,7 @@ class AvatarOfTheMartyredAI : public CreatureAIScript
             spells[2].instant = true;
             spells[2].perctrigger = 0.0f;
             spells[2].attackstoptimer = 1000;
-            spells[2].cooldown = -1;
+            spells[2].cooldown = 0;
 
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
 
@@ -273,19 +273,19 @@ class AvatarOfTheMartyredAI : public CreatureAIScript
             Appear = true;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             //RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -413,12 +413,12 @@ class EXARCHMALADAARAI : public CreatureAIScript
             spells[3].instant = false;
             spells[3].perctrigger = 0.0f;
             spells[3].attackstoptimer = 1000;
-            spells[3].cooldown = -1;
+            spells[3].cooldown = 0;
 
             Avatar = false;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             for(int i = 0; i < 4; i++)
                 spells[i].casttime = 0;
@@ -445,7 +445,7 @@ class EXARCHMALADAARAI : public CreatureAIScript
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnTargetDied(Unit* mTarget)
+        void OnTargetDied(Unit* /*mTarget*/)
         {
             if(_unit->GetHealthPct() > 0)    // Hack to prevent double yelling (OnDied and OnTargetDied when creature is dying)
             {
@@ -465,7 +465,7 @@ class EXARCHMALADAARAI : public CreatureAIScript
 
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
@@ -475,7 +475,7 @@ class EXARCHMALADAARAI : public CreatureAIScript
             Avatar = false;
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             _unit->SendChatMessage(CHAT_MSG_MONSTER_YELL, LANG_UNIVERSAL, "This is... Where... I belong...");
             _unit->PlaySoundToSet(10518);
