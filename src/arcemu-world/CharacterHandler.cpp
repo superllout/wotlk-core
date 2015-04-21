@@ -156,7 +156,7 @@ void WorldSession::CharacterEnumProc(QueryResult* result)
             if(_side < 0)
             {
                 // work out the side
-                static uint8 sides[RACE_DRAENEI + 1] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0};
+                static int8 sides[RACE_DRAENEI + 1] = {0, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0};
                 _side = sides[race];
             }
 
@@ -507,9 +507,9 @@ uint8 WorldSession::DeleteCharacter(uint32 guid)
         }
 
 
-        for(int i = 0; i < NUM_ARENA_TEAM_TYPES; ++i)
+        for(uint8 i = 0; i < NUM_ARENA_TEAM_TYPES; ++i)
         {
-            ArenaTeam* t = objmgr.GetArenaTeamByGuid((uint32)guid, i);
+            ArenaTeam* t = objmgr.GetArenaTeamByGuid((uint32)guid, (uint32)i);
             if(t != NULL && t->m_leader == guid)
                 return E_CHAR_DELETE_FAILED_ARENA_CAPTAIN;
             if(t != NULL)

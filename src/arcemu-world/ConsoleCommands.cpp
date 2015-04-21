@@ -224,7 +224,7 @@ bool HandleShutDownCommand(BaseConsole* pConsole, int argc, const char* argv[])
         }
         else
         {
-            delay = atoi(argv[1]);
+            delay = static_cast<uint32>(atoi(argv[1]));
         }
     }
 

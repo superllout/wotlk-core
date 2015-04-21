@@ -2978,7 +2978,7 @@ class LuaUnit
         static int CreateGuardian(lua_State* L, Unit*  ptr)
         {
             uint32 entry = CHECK_ULONG(L, 1);
-            uint32 duration = CHECK_ULONG(L, 2);
+            //uint32 duration = CHECK_ULONG(L, 2);
             float angle = CHECK_FLOAT(L, 3);
             uint32 lvl  = CHECK_ULONG(L, 4);
 

@@ -50,17 +50,18 @@ enum BattlegroundDbcIndex
 
 enum BattleGroundTypes
 {
-    BATTLEGROUND_ALTERAC_VALLEY        = 1,
-    BATTLEGROUND_WARSONG_GULCH        = 2,
-    BATTLEGROUND_ARATHI_BASIN        = 3,
-    BATTLEGROUND_ARENA_2V2            = 4,
-    BATTLEGROUND_ARENA_3V3            = 5,
-    BATTLEGROUND_ARENA_5V5            = 6,
-    BATTLEGROUND_EYE_OF_THE_STORM        = 7,
-    BATTLEGROUND_STRAND_OF_THE_ANCIENT    = 9,
-    BATTLEGROUND_ISLE_OF_CONQUEST           = 30,
-    BATTLEGROUND_RANDOM                     = 32,
-    BATTLEGROUND_NUM_TYPES            = 33, //Based on BattlemasterList.dbc, make the storage arrays big enough! On 3.1.3 the last one was 11 The Ring of Valor, so 12 was enough here, but on 3.2.0 there is 32 All Battlegrounds!
+    BATTLEGROUND_UNKNOWN                = 0,
+    BATTLEGROUND_ALTERAC_VALLEY         = 1,
+    BATTLEGROUND_WARSONG_GULCH          = 2,
+    BATTLEGROUND_ARATHI_BASIN           = 3,
+    BATTLEGROUND_ARENA_2V2              = 4,
+    BATTLEGROUND_ARENA_3V3              = 5,
+    BATTLEGROUND_ARENA_5V5              = 6,
+    BATTLEGROUND_EYE_OF_THE_STORM       = 7,
+    BATTLEGROUND_STRAND_OF_THE_ANCIENT  = 9,
+    BATTLEGROUND_ISLE_OF_CONQUEST       = 30,
+    BATTLEGROUND_RANDOM                 = 32,
+    BATTLEGROUND_NUM_TYPES              = 33, //Based on BattlemasterList.dbc, make the storage arrays big enough! On 3.1.3 the last one was 11 The Ring of Valor, so 12 was enough here, but on 3.2.0 there is 32 All Battlegrounds!
 };
 
 #define IS_ARENA(x) ( (x) >= BATTLEGROUND_ARENA_2V2 && (x) <= BATTLEGROUND_ARENA_5V5 )

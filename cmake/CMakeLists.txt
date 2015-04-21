@@ -46,7 +46,7 @@ set(ARCEMU_SCRIPTLIB_PATH "script_libs" CACHE PATH "The directory which contains
 #Options
 OPTION(BUILD_ARCEMUSCRIPTS "set to false to NOT build script libraries." ON)
 OPTION(BUILD_TOOLS "Build Arcemu tools" ON)
-set(OPTIMIZED_BUILD FALSE CACHE BOOL "set to true for optimized compilation - will take more time" )
+OPTION(OPTIMIZED_BUILD "set to true for optimized compilation - will take more time" OFF)
 
 #Windows specific options
 if (WIN32)
