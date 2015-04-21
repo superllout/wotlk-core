@@ -61,7 +61,7 @@ namespace luaGlobalFunctions
                 MapMgr* mapMgr = sInstanceMgr.GetMapMgr(map);
                 if(!mapMgr)
                     return 0;
-                int32 instanceid = luaL_optint(L, 13, mapMgr->GetInstanceID());
+                //int32 instanceid = luaL_optint(L, 13, mapMgr->GetInstanceID());
                 Creature* pCreature = mapMgr->CreateCreature(entry);
                 pCreature->Load(p, x, y, z, o);
                 pCreature->SetFaction(faction);
@@ -150,8 +150,8 @@ namespace luaGlobalFunctions
     static int WorldDBQuery(lua_State* L)
     {
         const char* qStr = luaL_checkstring(L, 1);
-        uint32 fID = luaL_optint(L, 2, 0); //column
-        uint32 rID = luaL_optint(L, 3, 0); //row
+        //uint32 fID = luaL_optint(L, 2, 0); //column
+        //uint32 rID = luaL_optint(L, 3, 0); //row
         if(!qStr) return 0;
         QueryResult* result = WorldDatabase.Query(qStr);
         lua_settop(L, 0);
@@ -162,8 +162,8 @@ namespace luaGlobalFunctions
     static int CharDBQuery(lua_State* L)
     {
         const char* qStr = luaL_checkstring(L, 1);
-        uint32 fID = luaL_optint(L, 2, 0); //column
-        uint32 rID = luaL_optint(L, 3, 0); //row
+        //uint32 fID = luaL_optint(L, 2, 0); //column
+        //uint32 rID = luaL_optint(L, 3, 0); //row
         if(!qStr) return 0;
         QueryResult* result = CharacterDatabase.Query(qStr);
         lua_settop(L, 0);

@@ -5457,7 +5457,7 @@ class LuaUnit
             TEST_PLAYER()
             uint32 spec = luaL_checkint(L, 1); //0 or 1
             PlayerSpec plrSpec = TO_PLAYER(ptr)->m_specs[spec];
-            uint32 Lvl = TO_PLAYER(ptr)->getLevel();
+            //uint32 Lvl = TO_PLAYER(ptr)->getLevel();
             uint32 FreePoints = plrSpec.GetTP();
 
             lua_pushnumber(L, FreePoints);
