@@ -46,7 +46,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure: "HbWVk4LKz9r3jnmGlAf2RvEE1s2pg/1zLY+MjVVIKKsKa98sVOjEXCPrRsWoZD53oi97eUtPaXW70HAccGBHzPQ9DB2VMt+jmeBlAS+95+OKKxIwPv7BaPQ+hMHuxj1WYWKzrHen63LxNfXxnIFROoGK+wcDhSy9oz8t2AhlQGs="
+   - secure: "94hswkB1R68s-ZzUCxTiWA"
 
 before_install:
  - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -63,12 +63,13 @@ addons:
     build_command:   "make -j4"
     branch_pattern: coverity_scan
 
-script:
+build_command_prepend:
  - mkdir build
  - cd build
  - cmake -version
  - gcc -v
  - clang --version
  - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -w" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w"
- - make -j4
+
+build_command: make -j4
 
