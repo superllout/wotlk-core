@@ -13,15 +13,15 @@ matrix:
 #    - x86
 #    - x64
 
-#configuration:
+configuration:
 #    - Debug
-#    - Release
+    - Release
 
 before_build:
     - mkdir build
     - cd build
     - cmake --version
-    - cmake ../cmake -DBUILD_LUAENGINE=1 -DCMAKE_BUILD_TYPE=Release
+    - cmake ../cmake -DBUILD_LUAENGINE=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} /W" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} /W"
 
 build:
     parallel: true
