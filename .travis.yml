@@ -29,6 +29,8 @@ before_install:
 - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl
   libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev
   libpcre3-dev libmysqlclient-dev
+- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
 
 addons:
   coverity_scan:
