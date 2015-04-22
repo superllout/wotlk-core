@@ -117,7 +117,7 @@ public:
         menu.Send(plr);
     }
 
-    void OnSelectOption(Object* pObject, Player* plr, uint32 Id, const char* /*Code*/)
+    void OnSelectOption(Object* /*pObject*/, Player* plr, uint32 Id, const char* /*Code*/)
     {
         switch(Id)
         {

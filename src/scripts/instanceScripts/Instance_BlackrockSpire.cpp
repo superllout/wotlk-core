@@ -720,19 +720,19 @@ class HighlordOmokkAI : public CreatureAIScript
             spells[6].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -838,19 +838,19 @@ class ShadowHunterVoshAI : public CreatureAIScript
             spells[2].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -977,19 +977,19 @@ class WarMasterVooneAI : public CreatureAIScript
             spells[5].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -1102,19 +1102,19 @@ class MotherSmolderwebAI : public CreatureAIScript
             spells[3].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -1248,19 +1248,19 @@ class UrokDoomhowlAI : public CreatureAIScript
             spells[6].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -1366,19 +1366,19 @@ class QuartermasterZigrisAI : public CreatureAIScript
             spells[2].attackstoptimer = 1000; // 1sec
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -1479,21 +1479,21 @@ class HalyconAI : public CreatureAIScript
             HasSummoned = false;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
 
             HasSummoned = false;
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }
@@ -1625,21 +1625,21 @@ class OverlordWyrmthalakAI : public CreatureAIScript
             HasSummoned = false;
         }
 
-        void OnCombatStart(Unit* mTarget)
+        void OnCombatStart(Unit* /*mTarget*/)
         {
             RegisterAIUpdateEvent(_unit->GetBaseAttackTime(MELEE));
 
             HasSummoned = false;
         }
 
-        void OnCombatStop(Unit* mTarget)
+        void OnCombatStop(Unit* /*mTarget*/)
         {
             _unit->GetAIInterface()->setCurrentAgent(AGENT_NULL);
             _unit->GetAIInterface()->SetAIState(STATE_IDLE);
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             RemoveAIUpdateEvent();
         }

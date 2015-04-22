@@ -22,7 +22,11 @@ MACRO( IS_ARCH_64BIT )
     
 ENDMACRO( IS_ARCH_64BIT )
 
-set( GLOBAL_DEFINES "${GLOBAL_DEFINES} -DHAVE_CONFIG_H")
+set(GLOBAL_DEFINES "${GLOBAL_DEFINES} -DHAVE_CONFIG_H")
+
+if(CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_CONFIGURATION_TYPES Release Debug)
+endif()
 
 IS_ARCH_64BIT()
 
@@ -64,13 +68,12 @@ if( WIN32 )
     endif()
 
     # Install libmysql.dll required for our core to run.
-    set( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll)
-
     if(IS_64BIT)
         set(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll64)
     else()
         set(DEPENDENCY_DLLS ${DEPENDENCY_ROOT}/dll)
     endif()
+    set( INSTALLED_DEPENDENCIES ${DEPENDENCY_DLLS}/libmysql.dll ${DEPENDENCY_DLLS}/libeay32.dll)
     
 
     # settings for visual studio

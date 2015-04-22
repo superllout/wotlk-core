@@ -2034,7 +2034,7 @@ class Magmus : public CreatureAIScript
             RemoveAIUpdateEvent();
         }
 
-        void OnDied(Unit* mKiller)
+        void OnDied(Unit* /*mKiller*/)
         {
             CastTime();
             RemoveAIUpdateEvent();

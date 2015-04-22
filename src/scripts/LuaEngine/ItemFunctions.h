@@ -398,7 +398,7 @@ namespace luaItem
         return 1;
     }
 
-    int Remove(lua_State* L, Item* /*ptr*/)
+    int Remove(lua_State* /*L*/, Item* ptr)
     {
         if(ptr == NULL || !ptr->IsInWorld() || !ptr->IsItem())
         {

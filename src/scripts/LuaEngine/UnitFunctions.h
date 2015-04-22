@@ -1242,7 +1242,7 @@ class LuaUnit
             return 1;
         }
 
-        static int SetZoneWeather(lua_State* /*L*/, Unit* ptr)
+        static int SetZoneWeather(lua_State* L, Unit* /*ptr*/)
         {
             /*
             WEATHER_TYPE_NORMAL            = 0, // NORMAL (SUNNY)
@@ -3986,7 +3986,7 @@ class LuaUnit
             return 0;
         }
 
-        static int deleteWaypoint(lua_State* /*L*/, Unit* ptr)
+        static int deleteWaypoint(lua_State* L, Unit* ptr)
         {
             TEST_UNIT()
             uint32 wp = luaL_checkint(L, 1);
