@@ -1,56 +1,45 @@
 language: cpp
-
 os:
-  - linux
-  - osx
-
+- linux
+- osx
 matrix:
   allow_failures:
-    - os: osx
-
+  - os: osx
 compiler:
-# - gcc
- - gcc-4.8
-# - clang
- - clang-3.4
- 
-# reduce clone time by only getting the latest commit and not the whole history (default for travis is 100)
-
+- gcc-4.8
+- clang-3.4
 git:
- depth: 1
-
+  depth: 1
 branches:
- only:
- - master
- - coverity_scan
-
+  only:
+  - master
+  - coverity_scan
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-   - secure: "94hswkB1R68s-ZzUCxTiWA"
+  - secure: gtGwzLD2zHA5opGDjO6YBrbx47A394MxfSPb8H3boa3m1sRf3HtocO69t9cehnEQUdg0mXbbmVn/8LB/2noKltsQ28MMSPNKj2AgQEzUKxJpAUAMPF1Ei/8rUi3VIqL2c91O4L9zYYDmhPdR4zMet8W8F4m/xeBRAMpJmbYaY/Q=
 
 before_install:
- - echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
- - sudo apt-get -qq update
- - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev libpcre3-dev libmysqlclient-dev
-
+- echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+- sudo apt-get -qq update
+- sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl
+  libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev
+  libpcre3-dev libmysqlclient-dev
 addons:
   coverity_scan:
     project:
-      name: "EasyWoW/wotlk-core"
-      description: "Build submitted via Travis CI"
+      name: EasyWoW/wotlk-core
+      description: Build submitted via Travis CI
     notification_email: andriuspel@gmail.com
-    build_command_prepend: "cmake ../cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_LUAENGINE=1 && make clean"
-    build_command:   "make -j4"
+    build_command_prepend: cmake ../cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_LUAENGINE=1
+      && make clean
+    build_command: make -j4
     branch_pattern: coverity_scan
-
 script:
- - mkdir build
- - cd build
- - cmake -version
- - gcc -v
- - clang --version
- - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -w" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w"
- - make -j4
-
+- mkdir build
+- cd build
+- cmake -version
+- gcc -v
+- clang --version
+- cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS}
+  -w" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w"
+- make -j4
