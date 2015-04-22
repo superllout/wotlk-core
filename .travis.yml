@@ -32,13 +32,7 @@ before_install:
 - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
 
 script:
-- mkdir build
-- cd build
-- cmake -version
-- gcc -v
-- clang --version
-- cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1
-- make -j4
+- echo "Static analysis build is complete. Build will not run again for normal status because travis will run out of time. For build status look to master or develop branches"
 
 addons:
   coverity_scan:
