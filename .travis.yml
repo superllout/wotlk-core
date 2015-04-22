@@ -31,16 +31,6 @@ before_install:
 - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
 - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
 
-addons:
-  coverity_scan:
-    project:
-      name: EasyWoW/wotlk-core
-      description: Build submitted via Travis CI
-    notification_email: andriuspel@gmail.com
-    build_command_prepend: make clean
-    build_command: make -j4
-    branch_pattern: coverity_scan
-
 script:
 - mkdir build
 - cd build
@@ -49,3 +39,13 @@ script:
 - clang --version
 - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1
 - make -j4
+
+addons:
+  coverity_scan:
+    project:
+      name: EasyWoW/wotlk-core
+      description: Build submitted via Travis CI
+    notification_email: andriuspel@gmail.com
+    build_command_prepend: mkdir build2 && cd build2 && cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1
+    build_command: make -j4
+    branch_pattern: coverity_scan
