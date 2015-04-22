@@ -8,7 +8,7 @@ matrix:
   - os: osx
 
 compiler:
-- clang-3.4
+- gcc
 
 git:
   depth: 1
@@ -47,5 +47,5 @@ script:
 - cmake -version
 - gcc -v
 - clang --version
-- cmake ../cmake -DCMAKE_BUILD_TYPE=Debug -DBUILD_LUAENGINE=1
+- cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1
 - make -j4
