@@ -1752,9 +1752,12 @@ GossipMenuItem GossipMenu::GetItem(uint32 Id)
     if(Id >= Menu.size())
     {
         GossipMenuItem k;
+        k.Id = 0;
         k.IntId = 1;
         k.Extra = 0;
-
+        k.m_gSender = 0;
+        k.m_gAction = 0;
+        k.m_gBoxMoney = 0;
         return k;
     }
     else

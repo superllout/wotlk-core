@@ -68,7 +68,7 @@ class SERVER_DECL StorageContainerIterator
          */
         T* Pointer;
     public:
-        StorageContainerIterator() {}
+        StorageContainerIterator() { Pointer = NULL; }
         virtual ~StorageContainerIterator() {}
 
         /** Returns the currently stored object
