@@ -21,7 +21,7 @@ before_build:
     - mkdir build
     - cd build
     - cmake --version
-    - cmake ../cmake -DBUILD_LUAENGINE=1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} /W" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} /W"
+    - cmake ../cmake -DBUILD_LUAENGINE=1
 
 build:
     parallel: true
