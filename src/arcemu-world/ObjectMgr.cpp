@@ -2409,7 +2409,7 @@ void ObjectMgr::LoadCreatureWaypoints()
     do
     {
         Field* fields = result->Fetch();
-        WayPoint* wp = new WayPoint;
+        WayPoint* wp = NULL;
         wp->id = fields[1].GetUInt32();
         wp->x = fields[2].GetFloat();
         wp->y = fields[3].GetFloat();
@@ -2824,24 +2824,20 @@ void ObjectMgr::RemoveCharter(Charter* c)
 
 void ObjectMgr::LoadReputationModifierTable(const char* tablename, ReputationModMap* dmap)
 {
-    QueryResult* result = WorldDatabase.Query("SELECT * FROM %s", tablename);
-    ReputationModMap::iterator itr;
-    ReputationModifier* modifier;
-    ReputationMod mod;
-
-    if(result)
+    if(QueryResult* result = WorldDatabase.Query("SELECT * FROM %s", tablename))
     {
         do
         {
+            ReputationMod mod;
             mod.faction[0] = result->Fetch()[1].GetUInt32();
             mod.faction[1] = result->Fetch()[2].GetUInt32();
             mod.value = result->Fetch()[3].GetInt32();
             mod.replimit = result->Fetch()[4].GetUInt32();
 
-            itr = dmap->find(result->Fetch()[0].GetUInt32());
+            ReputationModMap::iterator itr = dmap->find(result->Fetch()[0].GetUInt32());
             if(itr == dmap->end())
             {
-                modifier = new ReputationModifier;
+                ReputationModifier* modifier = new ReputationModifier;
                 modifier->entry = result->Fetch()[0].GetUInt32();
                 modifier->mods.push_back(mod);
                 dmap->insert(ReputationModMap::value_type(result->Fetch()[0].GetUInt32(), modifier));
@@ -2901,7 +2897,7 @@ void ObjectMgr::LoadMonsterSay()
             continue;
         }
 
-        NpcMonsterSay* ms = new NpcMonsterSay;
+        NpcMonsterSay* ms = NULL;
         ms->Chance = fields[2].GetFloat();
         ms->Language = fields[3].GetUInt32();
         ms->Type = fields[4].GetUInt32();
@@ -3292,7 +3288,7 @@ void ObjectMgr::LoadSpellTargetConstraints()
                 sLog.Error("LoadSpellTargetConstraints", "Spell id %u does not exists!", spellId);
                 continue;
             }
-            SpellTargetConstraint* stc = new SpellTargetConstraint;
+            SpellTargetConstraint* stc = NULL;
 
 
             uint32 type = fields[ 1 ].GetUInt32();
@@ -3456,7 +3452,7 @@ void ObjectMgr::LoadVehicleAccessories()
 
         do{
             Field *row = result->Fetch();
-            VehicleAccessoryEntry *entry = new VehicleAccessoryEntry();
+            VehicleAccessoryEntry *entry = NULL;
             uint32 creature_entry = row[0].GetUInt32();
             if (!CreatureNameStorage.LookupEntry(creature_entry))
             {
@@ -3569,7 +3565,7 @@ void ObjectMgr::LoadAchievementRewards()
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) does not exists!", id);
                 continue;
             }
-            AchievementReward* reward = new AchievementReward;
+            AchievementReward* reward = NULL;
             reward->title[TEAM_ALLIANCE] = fields[1].GetUInt16();
             if (reward->title[TEAM_ALLIANCE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
             {
