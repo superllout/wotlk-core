@@ -1,21 +1,3 @@
-# Copyright 2013-2015 EasyWoW community <http://github.com/EasyWoW>
-# This file is part of the CMaNGOS Project.
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-#
-
 language: cpp
 
 os:
@@ -63,21 +45,12 @@ addons:
     build_command:   "make -j4"
     branch_pattern: coverity_scan
 
-build_command_prepend:
+script:
  - mkdir build
  - cd build
  - cmake -version
  - gcc -v
  - clang --version
  - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS} -w" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w"
-
-script: 
- - echo "---------------"
- - echo "Starting build"
- - echo "-----------------------"
- - echo ""
-
-build_command:
- - cd build
  - make -j4
 
