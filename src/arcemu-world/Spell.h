@@ -1221,18 +1221,18 @@ class SpellCastTargets
         void read(WorldPacket & data, uint64 caster);
         void write(WorldPacket & data);
 
-        SpellCastTargets() : m_targetMask(0), m_targetMaskExtended(0), m_unitTarget(0), m_itemTarget(0), m_srcX(0), m_srcY(0), m_srcZ(0),
-            m_destX(0), m_destY(0), m_destZ(0), unkuint64_1(0), unkuint64_2(0){}
+        SpellCastTargets() : m_targetMask(0), m_targetMaskExtended(0), m_unitTarget(0), m_itemTarget(0),
+            unkuint64_1(0), m_srcX(0), m_srcY(0), m_srcZ(0), unkuint64_2(0), m_destX(0), m_destY(0), m_destZ(0){}
 
         SpellCastTargets(uint16 TargetMask, uint64 unitTarget, uint64 itemTarget, float srcX, float srcY,
                          float srcZ, float destX, float destY, float destZ) : m_targetMask(TargetMask), m_targetMaskExtended(0), m_unitTarget(unitTarget),
-            m_itemTarget(itemTarget), m_srcX(srcX), m_srcY(srcY), m_srcZ(srcZ), m_destX(destX), m_destY(destY), m_destZ(destZ), unkuint64_1(0), unkuint64_2(0){}
+            m_itemTarget(itemTarget), unkuint64_1(0), m_srcX(srcX), m_srcY(srcY), m_srcZ(srcZ), unkuint64_2(0), m_destX(destX), m_destY(destY), m_destZ(destZ){}
 
         SpellCastTargets(uint64 unitTarget) : m_targetMask(0x2), m_targetMaskExtended(0), m_unitTarget(unitTarget), m_itemTarget(0),
-            m_srcX(0), m_srcY(0), m_srcZ(0), m_destX(0), m_destY(0), m_destZ(0), unkuint64_1(0), unkuint64_2(0) {}
+            unkuint64_1(0), m_srcX(0), m_srcY(0), m_srcZ(0), unkuint64_2(0), m_destX(0), m_destY(0), m_destZ(0) {}
 
-        SpellCastTargets(WorldPacket & data, uint64 caster) : m_targetMask(0), m_targetMaskExtended(0), m_unitTarget(0), m_itemTarget(0), m_srcX(0), m_srcY(0), m_srcZ(0),
-            m_destX(0), m_destY(0), m_destZ(0), unkuint64_1(0), unkuint64_2(0)
+        SpellCastTargets(WorldPacket & data, uint64 caster) : m_targetMask(0), m_targetMaskExtended(0), m_unitTarget(0), m_itemTarget(0),
+            unkuint64_1(0), m_srcX(0), m_srcY(0), m_srcZ(0), unkuint64_2(0), m_destX(0), m_destY(0), m_destZ(0)
         {
             read(data, caster);
         }

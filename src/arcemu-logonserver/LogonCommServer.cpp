@@ -48,7 +48,7 @@ LogonCommServerSocket::~LogonCommServerSocket()
 
 void LogonCommServerSocket::OnDisconnect()
 {
-    LOG_DETAIL("LogonCommServerSocket::Ondisconnect event.");
+    LOG_DETAIL("LogonCommServerSocket::Ondisconnect event.", NULL);
 
     // if we're registered -> Set offline
     if(!removed)
@@ -257,7 +257,7 @@ void LogonCommServerSocket::HandleSessionRequest(WorldPacket & recvData)
     SendPacket(&data);
 }
 
-void LogonCommServerSocket::HandlePing(WorldPacket & recvData)
+void LogonCommServerSocket::HandlePing(WorldPacket & /*recvData*/)
 {
     WorldPacket data(RSMSG_PONG, 4);
     SendPacket(&data);
@@ -292,7 +292,7 @@ void LogonCommServerSocket::SendPacket(WorldPacket* data)
     BurstEnd();
 }
 
-void LogonCommServerSocket::HandleSQLExecute(WorldPacket & recvData)
+void LogonCommServerSocket::HandleSQLExecute(WorldPacket & /*recvData*/)
 {
     /*string Query;
     recvData >> Query;
@@ -300,7 +300,7 @@ void LogonCommServerSocket::HandleSQLExecute(WorldPacket & recvData)
     LOG_ERROR("!! WORLD SERVER IS REQUESTING US TO EXECUTE SQL. THIS IS DEPRECATED AND IS BEING IGNORED. THE SERVER WAS: %s, PLEASE UPDATE IT.", GetRemoteIP().c_str());
 }
 
-void LogonCommServerSocket::HandleReloadAccounts(WorldPacket & recvData)
+void LogonCommServerSocket::HandleReloadAccounts(WorldPacket & /*recvData*/)
 {
     LOG_ERROR("!! WORLD SERVER IS REQUESTING US TO RELOAD ACCOUNTS. THIS IS DEPRECATED AND IS BEING IGNORED. THE SERVER WAS: %s, PLEASE UPDATE IT.", GetRemoteIP().c_str());
     //sAccountMgr.ReloadAccounts(true);
@@ -326,7 +326,7 @@ void LogonCommServerSocket::HandleAuthChallenge(WorldPacket & recvData)
         snprintf(buf, 3, "%.2X", key[i]);
         sstext << buf;
     }
-    LOG_DETAIL(sstext.str().c_str());
+    LOG_DETAIL(sstext.str().c_str(), NULL);
 
     recvCrypto.Setup(key, 20);
     sendCrypto.Setup(key, 20);
@@ -356,7 +356,7 @@ void LogonCommServerSocket::HandleMappingReply(WorldPacket & recvData)
 
     if(uncompress((uint8*)buf.contents(), &rsize, recvData.contents() + 4, (u_long)recvData.size() - 4) != Z_OK)
     {
-        LOG_ERROR("Uncompress of mapping failed.");
+        LOG_ERROR("Uncompress of mapping failed.", NULL);
         return;
     }
 
