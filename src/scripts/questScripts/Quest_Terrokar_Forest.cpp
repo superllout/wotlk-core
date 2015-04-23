@@ -65,7 +65,7 @@ class TheInfestedProtectorsQAI : public CreatureAIScript
                 {
                     if(Rand(90))
                     {
-                        uint32 min,max,finall;
+                        uint32 min = 0, max = 0;
                         switch(_unit->GetEntry())
                         {
                             case 22307:
@@ -76,7 +76,7 @@ class TheInfestedProtectorsQAI : public CreatureAIScript
                                 break;
                         }
 
-                        finall = min + RandomUInt(max - min);
+                        uint32 finall = min + RandomUInt(max - min);
 
                         float SSX = _unit->GetPositionX();
                         float SSY = _unit->GetPositionY();
@@ -85,8 +85,7 @@ class TheInfestedProtectorsQAI : public CreatureAIScript
 
                         for(uint8 i = 0; i < finall; i++)
                         {
-                            Creature * NewCreature = _unit->GetMapMgr()->GetInterface()->SpawnCreature(22419, SSX + RandomFloat(3.0f), SSY + RandomFloat(3.0f), SSZ, SSO + RandomFloat(1.0f), true, false, 0, 0);
-                            if ( NewCreature != NULL )
+                            if (Creature* NewCreature = _unit->GetMapMgr()->GetInterface()->SpawnCreature(22419, SSX + RandomFloat(3.0f), SSY + RandomFloat(3.0f), SSZ, SSO + RandomFloat(1.0f), true, false, 0, 0))
                                 NewCreature->Despawn(120000, 0);
                         }
                     }

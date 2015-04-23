@@ -68,7 +68,7 @@ class SERVER_DECL StorageContainerIterator
          */
         T* Pointer;
     public:
-        StorageContainerIterator() {}
+        StorageContainerIterator() { Pointer = NULL; }
         virtual ~StorageContainerIterator() {}
 
         /** Returns the currently stored object
@@ -491,8 +491,8 @@ class SERVER_DECL Storage
 
         /** False constructor to fool compiler
          */
-        Storage() {}
-        virtual ~Storage() {}
+        Storage() { _indexName = _formatString = new char(); }
+        virtual ~Storage() { delete _indexName; delete _formatString; }
 
         /** Makes an iterator, w00t!
          */

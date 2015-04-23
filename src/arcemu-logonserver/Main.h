@@ -18,7 +18,7 @@
  */
 
 #include "../arcemu-shared/Singleton.h"
-
+#define REQ_GAME_BUILD 12340
 enum RealmFlags
 {
     REALM_FLAG_NONE         = 0x00,
@@ -53,6 +53,8 @@ class LogonServer : public Singleton< LogonServer >
         LogonServer()
         {
             m_stopEvent = false;
+            min_build = REQ_GAME_BUILD;
+            max_build = REQ_GAME_BUILD;
         }
         ~LogonServer() {}
 

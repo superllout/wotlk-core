@@ -84,7 +84,7 @@ void ObjectMgr::LoadProfessionDiscoveries()
         do
         {
             Field* f = result->Fetch();
-            ProfessionDiscovery* pf = new ProfessionDiscovery;
+            ProfessionDiscovery* pf = NULL;
             pf->SpellId = f[0].GetUInt32();
             if (!dbcSpell.LookupEntryForced(pf->SpellId))
             {
