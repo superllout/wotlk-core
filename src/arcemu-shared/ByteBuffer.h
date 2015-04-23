@@ -304,7 +304,8 @@ class SERVER_DECL ByteBuffer
             T r = read<T>(_rpos);
             _rpos += sizeof(T);
             return r;
-        };
+        }
+
         template <typename T> T read(size_t pos) const
         {
             //ASSERT(pos + sizeof(T) <= size());

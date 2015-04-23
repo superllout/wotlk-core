@@ -41,7 +41,7 @@ namespace SocketOps
 
     // Sets SO_REUSEADDR
     void ReuseAddr(SOCKET fd);
-};
+}
 
 #endif
 

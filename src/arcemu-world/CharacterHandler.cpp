@@ -626,7 +626,7 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket & recv_data)
     CHECK_PACKET_SIZE(recv_data, 8);
     uint64 playerGuid = 0;
 
-    LOG_DEBUG("WORLD: Recvd Player Logon Message");
+    LOG_DEBUG("WORLD: Recvd Player Logon Message", NULL);
 
     recv_data >> playerGuid; // this is the GUID selected by the player
     if(objmgr.GetPlayer((uint32)playerGuid) != NULL || m_loggingInPlayer || _player)
