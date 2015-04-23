@@ -183,7 +183,7 @@ void ScriptMgr::LoadScripts()
         if(!dl->Load())
         {
             loadmessage << "ERROR: Cannot open library.";
-            LOG_ERROR(loadmessage.str().c_str());
+            LOG_ERROR(loadmessage.str().c_str(), NULL);
             delete dl;
             continue;
 
@@ -197,7 +197,7 @@ void ScriptMgr::LoadScripts()
             if((vcall == NULL) || (rcall == NULL) || (scall == NULL))
             {
                 loadmessage << "ERROR: Cannot find version functions.";
-                LOG_ERROR(loadmessage.str().c_str());
+                LOG_ERROR(loadmessage.str().c_str(), NULL);
                 delete dl;
                 continue;
             }
@@ -209,7 +209,7 @@ void ScriptMgr::LoadScripts()
                 if( strcmp( version, BUILD_HASH_STR ) != 0 )
                 {
                     loadmessage << "ERROR: Version mismatch.";
-                    LOG_ERROR(loadmessage.str().c_str());
+                    LOG_ERROR(loadmessage.str().c_str(), NULL);
                     delete dl;
                     continue;
 
@@ -441,7 +441,7 @@ void ScriptMgr::register_instance_script(uint32 pMapId, exp_create_instance_ai p
         LOG_ERROR("ScriptMgr is trying to register a script for Instance ID: %u even if there's already one for that Instance. Remove one of those scripts.", pMapId);
 
     mInstances.insert(InstanceCreateMap::value_type(pMapId, pCallback));
-};
+}
 
 void ScriptMgr::register_creature_script(uint32* entries, exp_create_creature_ai callback)
 {
@@ -449,7 +449,7 @@ void ScriptMgr::register_creature_script(uint32* entries, exp_create_creature_ai
     {
         register_creature_script(entries[y], callback);
     }
-};
+}
 
 void ScriptMgr::register_gameobject_script(uint32* entries, exp_create_gameobject_ai callback)
 {
@@ -457,7 +457,7 @@ void ScriptMgr::register_gameobject_script(uint32* entries, exp_create_gameobjec
     {
         register_gameobject_script(entries[y], callback);
     }
-};
+}
 
 void ScriptMgr::register_dummy_aura(uint32* entries, exp_handle_dummy_aura callback)
 {
@@ -465,7 +465,7 @@ void ScriptMgr::register_dummy_aura(uint32* entries, exp_handle_dummy_aura callb
     {
         register_dummy_aura(entries[y], callback);
     }
-};
+}
 
 void ScriptMgr::register_dummy_spell(uint32* entries, exp_handle_dummy_spell callback)
 {
@@ -473,7 +473,7 @@ void ScriptMgr::register_dummy_spell(uint32* entries, exp_handle_dummy_spell cal
     {
         register_dummy_spell(entries[y], callback);
     }
-};
+}
 
 void ScriptMgr::register_script_effect(uint32* entries, exp_handle_script_effect callback)
 {
@@ -481,7 +481,7 @@ void ScriptMgr::register_script_effect(uint32* entries, exp_handle_script_effect
     {
         register_script_effect(entries[y], callback);
     }
-};
+}
 
 void ScriptMgr::register_script_effect(uint32 entry, exp_handle_script_effect callback)
 {

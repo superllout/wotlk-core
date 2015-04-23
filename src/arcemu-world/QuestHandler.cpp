@@ -25,7 +25,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_STATUS_QUERY.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_STATUS_QUERY.", NULL);
 
     if(_player->IsInBg())
         return; //Added in 3.0.2, quests can be shared anywhere besides a BG
@@ -46,7 +46,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recv_data)
 
         if(!quest_giver->isQuestGiver())
         {
-            LOG_DEBUG("WORLD: Creature is not a questgiver.");
+            LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL;
             return;
         }
     }
@@ -81,7 +81,7 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_HELLO.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_HELLO.", NULL);
 
     uint64 guid;
 
@@ -91,13 +91,13 @@ void WorldSession::HandleQuestgiverHelloOpcode(WorldPacket & recv_data)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!qst_giver->isQuestGiver())
     {
-        LOG_DEBUG("WORLD: Creature is not a questgiver.");
+        LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
         return;
     }
 
@@ -112,7 +112,7 @@ void WorldSession::HandleQuestGiverQueryQuestOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_QUERY_QUEST.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_QUERY_QUEST.", NULL);
 
     WorldPacket data;
     uint64 guid;
@@ -131,7 +131,7 @@ void WorldSession::HandleQuestGiverQueryQuestOpcode(WorldPacket & recv_data)
 
     if(!qst)
     {
-        LOG_DEBUG("WORLD: Invalid quest ID.");
+        LOG_DEBUG("WORLD: Invalid quest ID.", NULL);
         return;
     }
 
@@ -189,13 +189,13 @@ void WorldSession::HandleQuestGiverQueryQuestOpcode(WorldPacket & recv_data)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!bValid)
     {
-        LOG_DEBUG("WORLD: object is not a questgiver.");
+        LOG_DEBUG("WORLD: object is not a questgiver.", NULL);
         return;
     }
 
@@ -204,7 +204,7 @@ void WorldSession::HandleQuestGiverQueryQuestOpcode(WorldPacket & recv_data)
     {
         sQuestMgr.BuildQuestDetails(&data, qst, qst_giver, 1, language, _player);     // 0 because we want goodbye to function
         SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS.", NULL);
 
         if(qst->HasFlag(QUEST_FLAGS_AUTO_ACCEPT))
             _player->AcceptQuest(qst_giver->GetGUID(), qst->id);
@@ -214,7 +214,7 @@ void WorldSession::HandleQuestGiverQueryQuestOpcode(WorldPacket & recv_data)
     {
         sQuestMgr.BuildRequestItems(&data, qst, qst_giver, status, language);
         SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.", NULL);
     }
 }
 
@@ -222,7 +222,7 @@ void WorldSession::HandleQuestgiverAcceptQuestOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_ACCEPT_QUEST");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_ACCEPT_QUEST", NULL);
 
     uint64 guid;
     uint32 quest_id;
@@ -240,14 +240,14 @@ void WorldSession::HandleQuestgiverCancelOpcode(WorldPacket & /*recvPacket*/)
 
     OutPacket(SMSG_GOSSIP_COMPLETE, 0, NULL);
 
-    LOG_DEBUG("WORLD: Sent SMSG_GOSSIP_COMPLETE");
+    LOG_DEBUG("WORLD: Sent SMSG_GOSSIP_COMPLETE", NULL);
 }
 
 void WorldSession::HandleQuestlogRemoveQuestOpcode(WorldPacket & recvPacket)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTLOG_REMOVE_QUEST");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTLOG_REMOVE_QUEST", NULL);
 
     uint8 quest_slot;
     recvPacket >> quest_slot;
@@ -299,7 +299,7 @@ void WorldSession::HandleQuestQueryOpcode(WorldPacket & recv_data)
 
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUEST_QUERY");
+    LOG_DEBUG("WORLD: Received CMSG_QUEST_QUERY", NULL);
 
     uint32 quest_id;
 
@@ -309,7 +309,7 @@ void WorldSession::HandleQuestQueryOpcode(WorldPacket & recv_data)
 
     if(!qst)
     {
-        LOG_DEBUG("WORLD: Invalid quest ID.");
+        LOG_DEBUG("WORLD: Invalid quest ID.", NULL);
         return;
     }
 
@@ -317,14 +317,14 @@ void WorldSession::HandleQuestQueryOpcode(WorldPacket & recv_data)
     SendPacket(pkt);
     delete pkt;
 
-    LOG_DEBUG("WORLD: Sent SMSG_QUEST_QUERY_RESPONSE.");
+    LOG_DEBUG("WORLD: Sent SMSG_QUEST_QUERY_RESPONSE.", NULL);
 }
 
 void WorldSession::HandleQuestgiverRequestRewardOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_REQUESTREWARD_QUEST.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_REQUESTREWARD_QUEST.", NULL);
 
     uint64 guid;
     uint32 quest_id;
@@ -385,13 +385,13 @@ void WorldSession::HandleQuestgiverRequestRewardOpcode(WorldPacket & recv_data)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!bValid || qst == NULL)
     {
-        LOG_DEBUG("WORLD: Creature is not a questgiver.");
+        LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
         return;
     }
 
@@ -400,7 +400,7 @@ void WorldSession::HandleQuestgiverRequestRewardOpcode(WorldPacket & recv_data)
         WorldPacket data;
         sQuestMgr.BuildOfferReward(&data, qst, qst_giver, 1, language, _player);
         SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.", NULL);
     }
 
     // if we got here it means we're cheating
@@ -410,7 +410,7 @@ void WorldSession::HandleQuestgiverCompleteQuestOpcode(WorldPacket & recvPacket)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_COMPLETE_QUEST.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_COMPLETE_QUEST.", NULL);
 
     uint64 guid;
     uint32 quest_id;
@@ -468,13 +468,13 @@ void WorldSession::HandleQuestgiverCompleteQuestOpcode(WorldPacket & recvPacket)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!bValid || qst == NULL)
     {
-        LOG_DEBUG("WORLD: Creature is not a questgiver.");
+        LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
         return;
     }
 
@@ -483,7 +483,7 @@ void WorldSession::HandleQuestgiverCompleteQuestOpcode(WorldPacket & recvPacket)
         WorldPacket data;
         sQuestMgr.BuildRequestItems(&data, qst, qst_giver, status, language);
         SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.", NULL);
     }
 
     if(status == QMGR_QUEST_FINISHED)
@@ -491,7 +491,7 @@ void WorldSession::HandleQuestgiverCompleteQuestOpcode(WorldPacket & recvPacket)
         WorldPacket data;
         sQuestMgr.BuildOfferReward(&data, qst, qst_giver, 1, language, _player);
         SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.", NULL);
     }
 
     sHookInterface.OnQuestFinished(_player, qst, qst_giver);
@@ -501,7 +501,7 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recvPacket)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_CHOOSE_REWARD.");
+    LOG_DEBUG("WORLD: Received CMSG_QUESTGIVER_CHOOSE_REWARD.", NULL);
 
     uint64 guid;
     uint32 quest_id;
@@ -547,13 +547,13 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recvPacket)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!bValid || qst == NULL)
     {
-        LOG_DEBUG("WORLD: Creature is not a questgiver.");
+        LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
         return;
     }
 
@@ -563,13 +563,13 @@ void WorldSession::HandleQuestgiverChooseRewardOpcode(WorldPacket & recvPacket)
 
     if(!qle && !qst->is_repeatable)
     {
-        LOG_DEBUG("WORLD: QuestLogEntry not found.");
+        LOG_DEBUG("WORLD: QuestLogEntry not found.", NULL);
         return;
     }
 
     if(qle && !qle->CanBeFinished())
     {
-        LOG_DEBUG("WORLD: Quest not finished.");
+        LOG_DEBUG("WORLD: Quest not finished.", NULL);
         return;
     }
 
@@ -702,7 +702,7 @@ void WorldSession::HandleQuestPushResult(WorldPacket & recvPacket)
         recvPacket >> questid;
     recvPacket >> msg;
 
-    LOG_DETAIL("WORLD: Received MSG_QUEST_PUSH_RESULT");
+    LOG_DETAIL("WORLD: Received MSG_QUEST_PUSH_RESULT", NULL);
 
     if(GetPlayer()->GetQuestSharer())
     {

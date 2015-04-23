@@ -377,7 +377,7 @@ void LogonCommHandler::LoadRealmConfiguration()
     uint32 realmcount = Config.RealmConfig.GetIntDefault("LogonServer", "RealmCount", 1);
     if(realmcount == 0)
     {
-        LOG_ERROR("   >> no realms found. this server will not be online anywhere!");
+        LOG_ERROR("   >> no realms found. this server will not be online anywhere!", NULL);
     }
     else
     {

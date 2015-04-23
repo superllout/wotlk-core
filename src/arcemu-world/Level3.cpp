@@ -2990,7 +2990,7 @@ bool ChatHandler::HandleSetStandingCommand(const char* args, WorldSession* m_ses
 {
     uint32 faction;
     int32 standing;
-    if(sscanf(args, "%u %d", (unsigned int*)&faction, (unsigned int*)&standing) != 2)
+    if(sscanf(args, "%u %u", (unsigned int*)&faction, (unsigned int*)&standing) != 2)
         return false;
     Player* plr = getSelectedChar(m_session, true);
     if(!plr) return true;

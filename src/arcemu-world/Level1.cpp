@@ -93,7 +93,7 @@ bool ChatHandler::HandleGMAnnounceCommand(const char* args, WorldSession* m_sess
 {
     if(!*args)
     {
-        LOG_ERROR("HandleGMAnnounceCommand !args = failed");
+        LOG_ERROR("HandleGMAnnounceCommand !args = failed", NULL);
         return false;
     }
 
@@ -659,8 +659,8 @@ bool ChatHandler::HandleLearnSkillCommand(const char* args, WorldSession* m_sess
 
 bool ChatHandler::HandleModifySkillCommand(const char* args, WorldSession* m_session)
 {
-    uint32 skill, min, max;
-    min = max = 1;
+    uint32 skill, /*min,*/ max;
+    /*min =*/ max = 1;
     char* pSkill = strtok((char*)args, " ");
     if(!pSkill)
         return false;

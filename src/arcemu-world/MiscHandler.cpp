@@ -24,7 +24,7 @@ void WorldSession::HandleRepopRequestOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Recvd CMSG_REPOP_REQUEST Message");
+    LOG_DEBUG("WORLD: Recvd CMSG_REPOP_REQUEST Message", NULL);
     if(_player->getDeathState() != JUST_DIED)
         return;
     if(_player->m_CurrentTransporter)
@@ -146,7 +146,7 @@ void WorldSession::HandleAutostoreLootItemOpcode(WorldPacket & recv_data)
             return;
         }
 
-        LOG_DEBUG("AutoLootItem MISC");
+        LOG_DEBUG("AutoLootItem MISC", NULL);
         Item* item = objmgr.CreateItem(itemid, GetPlayer());
         if(item == NULL)
             return;
@@ -612,7 +612,7 @@ void WorldSession::HandleLootReleaseOpcode(WorldPacket & recv_data)
             _player->GetItemInterface()->RemoveItemAmtByGuid( guid, 1 );
     }
     else
-        LOG_DEBUG("Unhandled loot source object type in HandleLootReleaseOpcode");
+        LOG_DEBUG("Unhandled loot source object type in HandleLootReleaseOpcode", NULL);
 }
 
 void WorldSession::HandleWhoOpcode(WorldPacket & recv_data)
@@ -809,7 +809,7 @@ void WorldSession::HandleLogoutRequestOpcode(WorldPacket & /*recv_data*/)
     Player* pPlayer = GetPlayer();
     WorldPacket data(SMSG_LOGOUT_RESPONSE, 5);
 
-    LOG_DEBUG("WORLD: Recvd CMSG_LOGOUT_REQUEST Message");
+    LOG_DEBUG("WORLD: Recvd CMSG_LOGOUT_REQUEST Message", NULL);
 
     if(pPlayer)
     {
@@ -867,7 +867,7 @@ void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Recvd CMSG_PLAYER_LOGOUT Message");
+    LOG_DEBUG("WORLD: Recvd CMSG_PLAYER_LOGOUT Message", NULL);
     if(!HasGMPermissions())
     {
         // send "You do not have permission to use this"
@@ -882,7 +882,7 @@ void WorldSession::HandlePlayerLogoutOpcode(WorldPacket & /*recv_data*/)
 void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Recvd CMSG_LOGOUT_CANCEL Message");
+    LOG_DEBUG("WORLD: Recvd CMSG_LOGOUT_CANCEL Message", NULL);
 
     Player* pPlayer = GetPlayer();
     if(!pPlayer)
@@ -906,7 +906,7 @@ void WorldSession::HandleLogoutCancelOpcode(WorldPacket & /*recv_data*/)
     //make player stand
     pPlayer->SetStandState(STANDSTATE_STAND);
 
-    LOG_DEBUG("WORLD: sent SMSG_LOGOUT_CANCEL_ACK Message");
+    LOG_DEBUG("WORLD: sent SMSG_LOGOUT_CANCEL_ACK Message", NULL);
 }
 
 void WorldSession::HandleZoneUpdateOpcode(WorldPacket & recv_data)
@@ -968,9 +968,9 @@ void WorldSession::HandleBugOpcode(WorldPacket & recv_data)
     recv_data >> suggestion >> contentlen >> content >> typelen >> type;
 
     if(suggestion == 0)
-        LOG_DEBUG("WORLD: Received CMSG_BUG [Bug Report]");
+        LOG_DEBUG("WORLD: Received CMSG_BUG [Bug Report]", NULL);
     else
-        LOG_DEBUG("WORLD: Received CMSG_BUG [Suggestion]");
+        LOG_DEBUG("WORLD: Received CMSG_BUG [Suggestion]", NULL);
 
     uint64 AccountId = GetAccountId();
     uint32 TimeStamp = uint32(UNIXTIME);
@@ -992,7 +992,7 @@ void WorldSession::HandleBugOpcode(WorldPacket & recv_data)
 void WorldSession::HandleCorpseReclaimOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
-    LOG_DETAIL("WORLD: Received CMSG_RECLAIM_CORPSE");
+    LOG_DETAIL("WORLD: Received CMSG_RECLAIM_CORPSE", NULL);
 
     uint64 guid;
     recv_data >> guid;
@@ -1039,7 +1039,7 @@ void WorldSession::HandleResurrectResponseOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DETAIL("WORLD: Received CMSG_RESURRECT_RESPONSE");
+    LOG_DETAIL("WORLD: Received CMSG_RESURRECT_RESPONSE", NULL);
 
     if(_player->isAlive())
         return;
@@ -1069,7 +1069,7 @@ void WorldSession::HandleResurrectResponseOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleUpdateAccountData(WorldPacket & recv_data)
 {
-    LOG_DETAIL("WORLD: Received CMSG_UPDATE_ACCOUNT_DATA");
+    LOG_DETAIL("WORLD: Received CMSG_UPDATE_ACCOUNT_DATA", NULL);
 
     uint32 uiID;
     if(!sWorld.m_useAccountData)
@@ -1161,7 +1161,7 @@ void WorldSession::HandleUpdateAccountData(WorldPacket & recv_data)
 
 void WorldSession::HandleRequestAccountData(WorldPacket & recv_data)
 {
-    LOG_DETAIL("WORLD: Received CMSG_REQUEST_ACCOUNT_DATA");
+    LOG_DETAIL("WORLD: Received CMSG_REQUEST_ACCOUNT_DATA", NULL);
 
     uint32 id;
     if(!sWorld.m_useAccountData)
@@ -1194,7 +1194,7 @@ void WorldSession::HandleRequestAccountData(WorldPacket & recv_data)
 
             if((compress(const_cast<uint8*>(data.contents()) + (sizeof(uint32) * 2), &destsize, (const uint8*)res->data, res->sz)) != Z_OK)
             {
-                LOG_ERROR("Error while compressing ACCOUNT_DATA");
+                LOG_ERROR("Error while compressing ACCOUNT_DATA", NULL);
                 return;
             }
 
@@ -1211,7 +1211,7 @@ void WorldSession::HandleSetActionButtonOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: Received CMSG_SET_ACTION_BUTTON");
+    LOG_DEBUG("WORLD: Received CMSG_SET_ACTION_BUTTON", NULL);
     uint8 button, misc, type;
     uint16 action;
     recv_data >> button >> action >> misc >> type;
@@ -1340,7 +1340,7 @@ void WorldSession::HandleBarberShopResult(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("WORLD: CMSG_ALTER_APPEARANCE ");
+    LOG_DEBUG("WORLD: CMSG_ALTER_APPEARANCE ", NULL);
 
     uint32 hair, haircolor, facialhairorpiercing;
     recv_data >> hair >> haircolor >> facialhairorpiercing;
@@ -1777,7 +1777,7 @@ void WorldSession::HandlePlayedTimeOpcode(WorldPacket & recv_data)
 
     recv_data >> displayinui;
 
-    LOG_DEBUG("Recieved CMSG_PLAYED_TIME.");
+    LOG_DEBUG("Recieved CMSG_PLAYED_TIME.", NULL);
     LOG_DEBUG("displayinui: %lu", displayinui);
 
     if(playedt)
@@ -1809,7 +1809,7 @@ void WorldSession::HandlePlayedTimeOpcode(WorldPacket & recv_data)
     data << uint8(displayinui);
     SendPacket(&data);
 
-    LOG_DEBUG("Sent SMSG_PLAYED_TIME.");
+    LOG_DEBUG("Sent SMSG_PLAYED_TIME.", NULL);
     LOG_DEBUG(" total: %lu level: %lu", _player->m_playedtime[1], _player->m_playedtime[0]);
 }
 
@@ -1827,7 +1827,7 @@ void WorldSession::HandleInspectOpcode(WorldPacket & recv_data)
 
     if(player == NULL)
     {
-        LOG_ERROR("HandleInspectOpcode: guid was null");
+        LOG_ERROR("HandleInspectOpcode: guid was null", NULL);
         return;
     }
 
@@ -2456,7 +2456,7 @@ void WorldSession::HandleSummonResponseOpcode(WorldPacket & recv_data)
 void WorldSession::HandleDismountOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Received CMSG_DISMOUNT");
+    LOG_DEBUG("WORLD: Received CMSG_DISMOUNT", NULL);
 
     if(_player->GetTaxiState())
         return;
@@ -2535,7 +2535,7 @@ void WorldSession::HandleRealmSplitOpcode(WorldPacket & recv_data)
 {
     CHECK_PACKET_SIZE(recv_data, 4);
 
-    LOG_DEBUG("WORLD: Received CMSG_REALM_SPLIT");
+    LOG_DEBUG("WORLD: Received CMSG_REALM_SPLIT", NULL);
 
     uint32 unk;
     std::string split_date = "01/01/01";

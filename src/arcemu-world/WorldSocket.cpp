@@ -257,7 +257,7 @@ void WorldSocket::_HandleAuthSession(WorldPacket* recvPacket)
     }
     catch(ByteBuffer::error &)
     {
-        LOG_DETAIL("Incomplete copy of AUTH_SESSION Received.");
+        LOG_DETAIL("Incomplete copy of AUTH_SESSION Received.", NULL);
         return;
     }
 
@@ -495,7 +495,7 @@ void WorldSocket::_HandlePing(WorldPacket* recvPacket)
     uint32 ping;
     if(recvPacket->size() < 4)
     {
-        LOG_ERROR("Socket closed due to incomplete ping packet.");
+        LOG_ERROR("Socket closed due to incomplete ping packet.", NULL);
         Disconnect();
         return;
     }

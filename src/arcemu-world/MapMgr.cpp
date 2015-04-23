@@ -1787,7 +1787,7 @@ GameObject* MapMgr::CreateAndSpawnGameObject(uint32 entryID, float x, float y, f
     GameObjectInfo* goi = GameObjectNameStorage.LookupEntry(entryID);
     if(!goi)
     {
-        LOG_DEBUG("Error looking up entry in CreateAndSpawnGameObject");
+        LOG_DEBUG("Error looking up entry in CreateAndSpawnGameObject", NULL);
         return NULL;
     }
 

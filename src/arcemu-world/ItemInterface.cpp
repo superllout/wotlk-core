@@ -4311,7 +4311,7 @@ bool ItemInterface::SwapItems(int8 DstInvSlot, int8 DstSlot, int8 SrcInvSlot, in
             AddItemResult result = SafeAddItem(SrcItem, DstInvSlot, DstSlot);
             if(!result)
             {
-                LOG_ERROR("HandleSwapItem: Error while adding item to dstslot");
+                LOG_ERROR("HandleSwapItem: Error while adding item to dstslot", NULL);
                 SrcItem->DeleteFromDB();
                 SrcItem->DeleteMe();
                 SrcItem = NULL;
@@ -4324,7 +4324,7 @@ bool ItemInterface::SwapItems(int8 DstInvSlot, int8 DstSlot, int8 SrcInvSlot, in
             AddItemResult result = SafeAddItem(DstItem, SrcInvSlot, SrcSlot);
             if(!result)
             {
-                LOG_ERROR("HandleSwapItem: Error while adding item to srcslot");
+                LOG_ERROR("HandleSwapItem: Error while adding item to srcslot", NULL);
                 DstItem->DeleteFromDB();
                 DstItem->DeleteMe();
                 DstItem = NULL;

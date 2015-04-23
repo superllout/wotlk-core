@@ -4217,7 +4217,7 @@ void Unit::smsg_AttackStart(Unit* pVictim)
     data << GetGUID();
     data << pVictim->GetGUID();
     SendMessageToSet(&data, false);
-    LOG_DEBUG("WORLD: Sent SMSG_ATTACKSTART");
+    LOG_DEBUG("WORLD: Sent SMSG_ATTACKSTART", NULL);
 
     // FLAGS changed so other players see attack animation
     //    addUnitFlag(UNIT_FLAG_COMBAT);
@@ -4573,7 +4573,7 @@ void Unit::AddAura(Aura* aur)
     //check if we can store this aura in some empty slot
     if(AuraSlot == 0xFFFF)
     {
-        LOG_ERROR("Aura error in active aura. ");
+        LOG_ERROR("Aura error in active aura. ", NULL);
         sEventMgr.RemoveEvents(aur);
         delete aur;
         /*
@@ -4999,7 +4999,7 @@ void Unit::RemoveAllAurasByRequiredShapeShift(uint32 mask)
 
 bool Unit::SetAurDuration(uint32 spellId, Unit* caster, uint32 duration)
 {
-    LOG_DEBUG("setAurDuration2");
+    LOG_DEBUG("setAurDuration2", NULL);
     Aura* aur = FindAura(spellId, caster->GetGUID());
     if(!aur)
         return false;
@@ -5017,7 +5017,7 @@ bool Unit::SetAurDuration(uint32 spellId, uint32 duration)
         return false;
 
 
-    LOG_DEBUG("setAurDuration2");
+    LOG_DEBUG("setAurDuration2", NULL);
     aur->SetDuration(duration);
     sEventMgr.ModifyEventTimeLeft(aur, EVENT_AURA_REMOVE, duration);
 
@@ -5354,7 +5354,7 @@ void Unit::MoveToWaypoint(uint32 wp_id)
         WayPoint* wp = ai->getWayPoint(wp_id);
         if(!wp)
         {
-            LOG_ERROR("WARNING: Invalid WP specified in MoveToWaypoint.");
+            LOG_ERROR("WARNING: Invalid WP specified in MoveToWaypoint.", NULL);
             return;
         }
 

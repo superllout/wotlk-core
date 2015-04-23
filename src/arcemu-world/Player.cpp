@@ -28,7 +28,7 @@ UpdateMask Player::m_visibleUpdateMask;
 #define MACHINEGUN 25026
 #define DROPMINE 25024
 #define SHIELD 27759
-static uint32 TonkSpecials[4] = {FLAMETHROWER, MACHINEGUN, DROPMINE, SHIELD};
+//static uint32 TonkSpecials[4] = {FLAMETHROWER, MACHINEGUN, DROPMINE, SHIELD};
 
 //     0x3F = 0x01 | 0x02 | 0x04 | 0x08 | 0x10 | 0x20 for 80 level
 //            minor|Major |minor |Major |minor |Major
@@ -492,7 +492,7 @@ Player::~Player()
 
     if(!ok_to_remove)
     {
-        LOG_ERROR("Player deleted from non-logoutplayer!");
+        LOG_ERROR("Player deleted from non-logoutplayer!", NULL);
         printStackTrace(); // Win32 Debug
 
         objmgr.RemovePlayer(this);
@@ -1130,7 +1130,7 @@ void Player::_EventAttack(bool offhand)
     //Can't find victim, stop attacking
     if(!pVictim)
     {
-        LOG_DETAIL("Player::Update:  No valid current selection to attack, stopping attack");
+        LOG_DETAIL("Player::Update:  No valid current selection to attack, stopping attack", NULL);
         setHRegenTimer(5000); //prevent clicking off creature for a quick heal
         EventAttackStop();
         return;
@@ -1218,7 +1218,7 @@ void Player::_EventCharmAttack()
     if(!pVictim)
     {
         LOG_ERROR("WORLD: " I64FMT " doesn't exist.", m_curSelection);
-        LOG_DETAIL("Player::Update:  No valid current selection to attack, stopping attack");
+        LOG_DETAIL("Player::Update:  No valid current selection to attack, stopping attack", NULL);
         this->setHRegenTimer(5000); //prevent clicking off creature for a quick heal
         clearStateFlag(UF_ATTACKING);
         EventAttackStop();
@@ -2715,9 +2715,6 @@ bool Player::LoadFromDB(uint32 guid)
 
 void Player::LoadFromDBProc(QueryResultVector & results)
 {
-    uint32 field_index = 2;
-#define get_next_field fields[field_index++]
-
     if(GetSession() == NULL || results.size() < 8)        // should have 8 queryresults for aplayer load.
     {
         RemovePendingPlayer();
@@ -7540,7 +7537,7 @@ bool Player::CompressAndSendUpdateBuffer(uint32 size, const uint8* update_buffer
 
     if(deflateInit(&stream, rate) != Z_OK)
     {
-        LOG_ERROR("deflateInit failed.");
+        LOG_ERROR("deflateInit failed.", NULL);
         return false;
     }
 
@@ -7557,7 +7554,7 @@ bool Player::CompressAndSendUpdateBuffer(uint32 size, const uint8* update_buffer
     if(deflate(&stream, Z_NO_FLUSH) != Z_OK ||
             stream.avail_in != 0)
     {
-        LOG_ERROR("deflate failed.");
+        LOG_ERROR("deflate failed.", NULL);
         delete [] buffer;
         return false;
     }
@@ -7565,7 +7562,7 @@ bool Player::CompressAndSendUpdateBuffer(uint32 size, const uint8* update_buffer
     // finish the deflate
     if(deflate(&stream, Z_FINISH) != Z_STREAM_END)
     {
-        LOG_ERROR("deflate failed: did not end stream");
+        LOG_ERROR("deflate failed: did not end stream", NULL);
         delete [] buffer;
         return false;
     }
@@ -7573,7 +7570,7 @@ bool Player::CompressAndSendUpdateBuffer(uint32 size, const uint8* update_buffer
     // finish up
     if(deflateEnd(&stream) != Z_OK)
     {
-        LOG_ERROR("deflateEnd failed.");
+        LOG_ERROR("deflateEnd failed.", NULL);
         delete [] buffer;
         return false;
     }
@@ -13227,13 +13224,13 @@ void Player::AcceptQuest(uint64 guid, uint32 quest_id)
 
     if(!qst_giver)
     {
-        LOG_DEBUG("WORLD: Invalid questgiver GUID.");
+        LOG_DEBUG("WORLD: Invalid questgiver GUID.", NULL);
         return;
     }
 
     if(!bValid || qst == NULL)
     {
-        LOG_DEBUG("WORLD: Creature is not a questgiver.");
+        LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
         return;
     }
 
@@ -13339,7 +13336,7 @@ void Player::AcceptQuest(uint64 guid, uint32 quest_id)
 
     sQuestMgr.OnQuestAccepted(this, qst, qst_giver);
 
-    LOG_DEBUG("WORLD: Added new QLE.");
+    LOG_DEBUG("WORLD: Added new QLE.", NULL);
     sHookInterface.OnQuestAccept(this, qst, qst_giver);
 }
 

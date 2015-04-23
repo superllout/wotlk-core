@@ -220,7 +220,7 @@ void WorldSession::HandleCorpseQueryOpcode(WorldPacket & /*recv_data*/)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DETAIL("WORLD: Received MSG_CORPSE_QUERY");
+    LOG_DETAIL("WORLD: Received MSG_CORPSE_QUERY", NULL);
 
     WorldPacket data(MSG_CORPSE_QUERY, 25);
 

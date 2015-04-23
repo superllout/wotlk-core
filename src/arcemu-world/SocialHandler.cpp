@@ -32,7 +32,7 @@ void WorldSession::HandleFriendListOpcode(WorldPacket & recv_data)
 void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Received CMSG_ADD_FRIEND");
+    LOG_DEBUG("WORLD: Received CMSG_ADD_FRIEND", NULL);
 
     string name, note;
     recv_data >> name;
@@ -44,7 +44,7 @@ void WorldSession::HandleAddFriendOpcode(WorldPacket & recv_data)
 void WorldSession::HandleDelFriendOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Received CMSG_DEL_FRIEND");
+    LOG_DEBUG("WORLD: Received CMSG_DEL_FRIEND", NULL);
 
     uint64 FriendGuid;
     recv_data >> FriendGuid;
@@ -55,7 +55,7 @@ void WorldSession::HandleDelFriendOpcode(WorldPacket & recv_data)
 void WorldSession::HandleAddIgnoreOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Received CMSG_ADD_IGNORE");
+    LOG_DEBUG("WORLD: Received CMSG_ADD_IGNORE", NULL);
 
     std::string ignoreName = "UNKNOWN";
     recv_data >> ignoreName;
@@ -66,7 +66,7 @@ void WorldSession::HandleAddIgnoreOpcode(WorldPacket & recv_data)
 void WorldSession::HandleDelIgnoreOpcode(WorldPacket & recv_data)
 {
     CHECK_INWORLD_RETURN
-    LOG_DEBUG("WORLD: Received CMSG_DEL_IGNORE");
+    LOG_DEBUG("WORLD: Received CMSG_DEL_IGNORE", NULL);
 
     uint64 IgnoreGuid;
     recv_data >> IgnoreGuid;

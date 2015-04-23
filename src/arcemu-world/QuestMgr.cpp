@@ -1639,7 +1639,7 @@ void QuestMgr::SendQuestInvalid(INVALID_REASON reason, Player* plyr)
         return;
     plyr->GetSession()->OutPacket(SMSG_QUESTGIVER_QUEST_INVALID, 4, &reason);
 
-    LOG_DEBUG("WORLD:Sent SMSG_QUESTGIVER_QUEST_INVALID");
+    LOG_DEBUG("WORLD:Sent SMSG_QUESTGIVER_QUEST_INVALID", NULL);
 }
 
 void QuestMgr::SendQuestFailed(FAILED_REASON failed, Quest* qst, Player* plyr)
@@ -1652,7 +1652,7 @@ void QuestMgr::SendQuestFailed(FAILED_REASON failed, Quest* qst, Player* plyr)
     data << uint32(qst->id);
     data << failed;
     plyr->GetSession()->SendPacket(&data);
-    LOG_DEBUG("WORLD:Sent SMSG_QUESTGIVER_QUEST_FAILED");
+    LOG_DEBUG("WORLD:Sent SMSG_QUESTGIVER_QUEST_FAILED", NULL);
 }
 
 void QuestMgr::SendQuestUpdateFailedTimer(Quest* pQuest, Player* plyr)
@@ -1661,7 +1661,7 @@ void QuestMgr::SendQuestUpdateFailedTimer(Quest* pQuest, Player* plyr)
         return;
 
     plyr->GetSession()->OutPacket(SMSG_QUESTUPDATE_FAILEDTIMER, 4, &pQuest->id);
-    LOG_DEBUG("WORLD:Sent SMSG_QUESTUPDATE_FAILEDTIMER");
+    LOG_DEBUG("WORLD:Sent SMSG_QUESTUPDATE_FAILEDTIMER", NULL);
 }
 
 void QuestMgr::SendQuestUpdateFailed(Quest* pQuest, Player* plyr)
@@ -1670,7 +1670,7 @@ void QuestMgr::SendQuestUpdateFailed(Quest* pQuest, Player* plyr)
         return;
 
     plyr->GetSession()->OutPacket(SMSG_QUESTUPDATE_FAILED, 4, &pQuest->id);
-    LOG_DEBUG("WORLD:Sent SMSG_QUESTUPDATE_FAILED");
+    LOG_DEBUG("WORLD:Sent SMSG_QUESTUPDATE_FAILED", NULL);
 }
 
 void QuestMgr::SendQuestLogFull(Player* plyr)
@@ -1679,7 +1679,7 @@ void QuestMgr::SendQuestLogFull(Player* plyr)
         return;
 
     plyr->GetSession()->OutPacket(SMSG_QUESTLOG_FULL);
-    LOG_DEBUG("WORLD:Sent QUEST_LOG_FULL_MESSAGE");
+    LOG_DEBUG("WORLD:Sent QUEST_LOG_FULL_MESSAGE", NULL);
 }
 
 uint32 QuestMgr::GetGameObjectLootQuest(uint32 GO_Entry)
@@ -1735,7 +1735,7 @@ bool QuestMgr::OnActivateQuestGiver(Object* qst_giver, Player* plr)
 
     if(questCount == 0)
     {
-        LOG_DEBUG("WORLD: Invalid NPC for CMSG_QUESTGIVER_HELLO.");
+        LOG_DEBUG("WORLD: Invalid NPC for CMSG_QUESTGIVER_HELLO.", NULL);
         return false;
     }
     else if(questCount == 1)
@@ -1786,7 +1786,7 @@ bool QuestMgr::OnActivateQuestGiver(Object* qst_giver, Player* plr)
         {
             sQuestMgr.BuildQuestDetails(&data, (*itr)->qst, qst_giver, 1, plr->GetSession()->language, plr);        // 1 because we have 1 quest, and we want goodbye to function
             plr->GetSession()->SendPacket(&data);
-            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS.");
+            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_DETAILS.", NULL);
 
             if((*itr)->qst->HasFlag(QUEST_FLAGS_AUTO_ACCEPT))
                 plr->AcceptQuest(qst_giver->GetGUID(), (*itr)->qst->id);
@@ -1796,20 +1796,20 @@ bool QuestMgr::OnActivateQuestGiver(Object* qst_giver, Player* plr)
             sQuestMgr.BuildOfferReward(&data, (*itr)->qst, qst_giver, 1, plr->GetSession()->language, plr);
             plr->GetSession()->SendPacket(&data);
             //ss
-            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_OFFER_REWARD.");
+            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_OFFER_REWARD.", NULL);
         }
         else if(status == QMGR_QUEST_NOT_FINISHED)
         {
             sQuestMgr.BuildRequestItems(&data, (*itr)->qst, qst_giver, status, plr->GetSession()->language);
             plr->GetSession()->SendPacket(&data);
-            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.");
+            LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_REQUEST_ITEMS.", NULL);
         }
     }
     else
     {
         sQuestMgr.BuildQuestList(&data, qst_giver , plr, plr->GetSession()->language);
         plr->GetSession()->SendPacket(&data);
-        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_LIST.");
+        LOG_DEBUG("WORLD: Sent SMSG_QUESTGIVER_QUEST_LIST.", NULL);
     }
     return true;
 }
