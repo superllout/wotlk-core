@@ -24,6 +24,7 @@
     sanctum32: this header is just for basic implementation, that will replaced by database data in future for faster modifications
 */
 
+/*
 #define MAX_TBC_NORMAL_DAILIES 8
 static uint32 TBC_normal_daily_quests[MAX_TBC_NORMAL_DAILIES]=
 {
@@ -75,3 +76,4 @@ static uint32 TBC_fishing_daily_quests[]=
     11669,  // Felblood Fillet
     11665   // Crocolisks in the City
 };
+*/

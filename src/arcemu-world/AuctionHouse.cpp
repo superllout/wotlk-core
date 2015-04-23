@@ -783,7 +783,7 @@ void WorldSession::HandleAuctionListPendingSales(WorldPacket & recv_data)
     if(!pCreature || !pCreature->auctionHouse)
         return;
 
-    LOG_DEBUG("WORLD: Received CMSG_AUCTION_LIST_PENDING_SALES");
+    LOG_DEBUG("WORLD: Received CMSG_AUCTION_LIST_PENDING_SALES", NULL);
 
     uint32 count = 0;
 
@@ -807,13 +807,10 @@ void AuctionHouse::LoadAuctions()
     if(!result)
         return;
 
-    Auction* auct;
-    Field* fields;
-
     do
     {
-        fields = result->Fetch();
-        auct = new Auction;
+        Field* fields = result->Fetch();
+        Auction* auct = NULL;
         auct->Id = fields[0].GetUInt32();
 
         Item* pItem = objmgr.LoadItem(fields[2].GetUInt32());

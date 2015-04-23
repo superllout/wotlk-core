@@ -76,7 +76,7 @@ void AuthSocket::HandleChallenge()
     // No header
     if(readBuffer.GetContiguiousBytes() < 4)
     {
-        LOG_ERROR("[AuthChallenge] Packet has no header. Refusing to handle.");
+        LOG_ERROR("[AuthChallenge] Packet has no header. Refusing to handle.", NULL);
         return;
     }
 
@@ -90,19 +90,19 @@ void AuthSocket::HandleChallenge()
 
     if(readBuffer.GetSize() < uint32(full_size + 4))
     {
-        LOG_ERROR("[AuthChallenge] Packet is smaller than expected, refusing to handle");
+        LOG_ERROR("[AuthChallenge] Packet is smaller than expected, refusing to handle", NULL);
         return;
     }
 
     // Copy the data into our cached challenge structure
     if(full_size > sizeof(sAuthLogonChallenge_C))
     {
-        LOG_ERROR("[AuthChallenge] Packet is larger than expected, refusing to handle!");
+        LOG_ERROR("[AuthChallenge] Packet is larger than expected, refusing to handle!", NULL);
         Disconnect();
         return;
     }
 
-    LOG_DEBUG("[AuthChallenge] got a complete packet.");
+    LOG_DEBUG("[AuthChallenge] got a complete packet.", NULL);
 
     //memcpy(&m_challenge, ReceiveBuffer, full_size + 4);
     //RemoveReadBufferBytes(full_size + 4, true);
@@ -186,7 +186,7 @@ void AuthSocket::HandleChallenge()
     string::size_type i = AccountName.rfind("#");
     if(i != string::npos)
     {
-        LOG_ERROR("# ACCOUNTNAME!");
+        LOG_ERROR("# ACCOUNTNAME!", NULL);
         return;
         //AccountName.erase( i );
     }
@@ -197,7 +197,7 @@ void AuthSocket::HandleChallenge()
     m_account = AccountMgr::getSingleton().GetAccount(AccountName);
     if(m_account == 0)
     {
-        LOG_DEBUG("[AuthChallenge] Invalid account.");
+        LOG_DEBUG("[AuthChallenge] Invalid account.", NULL);
 
         // Non-existant account
         SendChallengeError(CE_NO_ACCOUNT);
@@ -293,7 +293,7 @@ void AuthSocket::HandleProof()
 {
     if(readBuffer.GetSize() < sizeof(sAuthLogonProof_C))
     {
-        LOG_ERROR("[AuthLogonProof] The packet received is larger than expected, refusing to handle it!");
+        LOG_ERROR("[AuthLogonProof] The packet received is larger than expected, refusing to handle it!", NULL);
         return ;
     }
 
@@ -302,7 +302,7 @@ void AuthSocket::HandleProof()
     {
         //RemoveReadBufferBytes(75,false);
         readBuffer.Remove(75);
-        LOG_DEBUG("[AuthLogonProof] Intitiating PatchJob");
+        LOG_DEBUG("[AuthLogonProof] Intitiating PatchJob", NULL);
         uint8 bytes[2] = {0x01, 0x0a};
         Send(bytes, 2);
         PatchMgr::getSingleton().InitiatePatch(m_patch, this);
@@ -312,7 +312,7 @@ void AuthSocket::HandleProof()
     if(!m_account)
         return;
 
-    LOG_DEBUG("[AuthLogonProof] Interleaving and checking proof...");
+    LOG_DEBUG("[AuthLogonProof] Interleaving and checking proof...", NULL);
 
     sAuthLogonProof_C lp;
     //Read(sizeof(sAuthLogonProof_C), (uint8*)&lp);
@@ -409,7 +409,7 @@ void AuthSocket::HandleProof()
         // Authentication failed.
         //SendProofError(4, 0);
         SendChallengeError(CE_NO_ACCOUNT);
-        LOG_DEBUG("[AuthLogonProof] M values don't match. ( Either invalid password or the logon server is bugged. )");
+        LOG_DEBUG("[AuthLogonProof] M values don't match. ( Either invalid password or the logon server is bugged. )", NULL);
         return;
     }
 
@@ -422,7 +422,7 @@ void AuthSocket::HandleProof()
     sha.Finalize();
 
     SendProofError(0, sha.GetDigest());
-    LOG_DEBUG("[AuthLogonProof] Authentication Success.");
+    LOG_DEBUG("[AuthLogonProof] Authentication Success.", NULL);
 
     // we're authenticated now :)
     m_authenticated = true;
@@ -571,7 +571,7 @@ void AuthSocket::HandleReconnectChallenge()
         return;
     }
 
-    LOG_DEBUG("[AuthChallenge] got full packet.");
+    LOG_DEBUG("[AuthChallenge] got full packet.", NULL);
 
     memcpy(&m_challenge, ReceiveBuffer, full_size + 4);
     //RemoveReadBufferBytes(full_size + 4, false);
@@ -630,7 +630,7 @@ void AuthSocket::HandleReconnectChallenge()
     m_account = AccountMgr::getSingleton().GetAccount(AccountName);
     if(m_account == 0)
     {
-        LOG_DEBUG("[AuthChallenge] Invalid account.");
+        LOG_DEBUG("[AuthChallenge] Invalid account.", NULL);
 
         // Non-existant account
         SendChallengeError(CE_NO_ACCOUNT);
@@ -709,7 +709,7 @@ void AuthSocket::HandleReconnectProof()
 
 void AuthSocket::HandleTransferAccept()
 {
-    LOG_DEBUG("Accepted transfer");
+    LOG_DEBUG("Accepted transfer", NULL);
     if(!m_patch)
         return;
 
@@ -720,7 +720,7 @@ void AuthSocket::HandleTransferAccept()
 
 void AuthSocket::HandleTransferResume()
 {
-    LOG_DEBUG("Resuming transfer");
+    LOG_DEBUG("Resuming transfer", NULL);
     if(!m_patch)
         return;
 

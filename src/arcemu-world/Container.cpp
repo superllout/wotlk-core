@@ -112,7 +112,7 @@ int8 Container::FindFreeSlot()
             return i;
         }
     }
-    LOG_DEBUG("Container::FindFreeSlot: no slot available");
+    LOG_DEBUG("Container::FindFreeSlot: no slot available", NULL);
     return ITEM_NO_SLOT_AVAILABLE;
 }
 

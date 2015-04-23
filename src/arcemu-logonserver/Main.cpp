@@ -46,7 +46,7 @@ void _OnSignal(int s)
 #ifndef WIN32
         case SIGHUP:
             {
-                LOG_DETAIL("Received SIGHUP signal, reloading accounts.");
+                LOG_DETAIL("Received SIGHUP signal, reloading accounts.", NULL);
                 AccountMgr::getSingleton().ReloadAccounts(true);
             }
             break;
@@ -143,7 +143,7 @@ bool startdb()
             if(!existsPort) { errorMessage += "    Port\r\n"; }
         }
 
-        LOG_ERROR(errorMessage.c_str());
+        LOG_ERROR(errorMessage.c_str(), NULL);
         return false;
     }
 
@@ -154,7 +154,7 @@ bool startdb()
                               lpassword.c_str(), ldatabase.c_str(), Config.MainConfig.GetIntDefault("LogonDatabase", "ConnectionCount", 5),
                               16384))
     {
-        LOG_ERROR("sql: Logon database initialization failed. Exiting.");
+        LOG_ERROR("sql: Logon database initialization failed. Exiting.", NULL);
         return false;
     }
 
@@ -203,7 +203,7 @@ bool Rehash()
     char* config_file = (char*)CONFDIR "/logon.conf";
     if(!Config.MainConfig.SetSource(config_file))
     {
-        LOG_ERROR("Config file could not be rehashed.");
+        LOG_ERROR("Config file could not be rehashed.", NULL);
         return false;
     }
 
@@ -484,7 +484,7 @@ void LogonServer::Run(int argc, char** argv)
     }
     else
     {
-        LOG_ERROR("Error creating sockets. Shutting down...");
+        LOG_ERROR("Error creating sockets. Shutting down...", NULL);
     }
 
     pfc->kill();
