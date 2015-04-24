@@ -155,12 +155,14 @@ elseif(UNIX)
     set( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} ${MYSQL_INCLUDE_DIR} )
 
     if( CMAKE_GENERATOR MATCHES Unix* )
-        add_definitions(-Wno-deprecated)
         #Extract Revision
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+        # Set global definitions here
+        add_definitions(-DHAS_CXX0X)
+
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wno-deprecated")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra")
@@ -195,7 +197,7 @@ elseif(UNIX)
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
         endif()
 
-        add_definitions(-DHAS_CXX0X)
+        # Setting specific options for GNU/LLVM compilers
         if(CMAKE_COMPILER_IS_GNUCXX)
             if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
                 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
