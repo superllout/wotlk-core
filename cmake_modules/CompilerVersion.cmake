@@ -1,7 +1,7 @@
 
 set(REQUIRED_MIN_GCC_VERSION "4.7.2")
 set(REQUIRED_MIN_CLANG_VERSION "3.4")
-set(REQUIRED_MIN_MSVC_VERSION "Visual studio 2013") # MSVC12 definition is defined in cmake 3.x and newer versions
+set(REQUIRED_MIN_MSVC_VERSION "18") # MSVC12 definition is defined in cmake 3.x and newer versions
 
 macro( GetCompilerVersion out_version)
 
@@ -28,7 +28,7 @@ macro( GetCompilerVersion out_version)
         endif()
     elseif(WIN32)
 	    IF( MSVC )
-	        if (MSVC12)
+	        if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "REQUIRED_MIN_MSVC_VERSION")
               message(FATAL_ERROR "Visual Studio: EasyWoW requires version ${REQUIRED_MIN_MSVC_VERSION} to build but found ${CMAKE_CXX_COMPILER_VERSION}")
             endif()
 		    SET(${out_version} ${MSVC_VERSION} )
