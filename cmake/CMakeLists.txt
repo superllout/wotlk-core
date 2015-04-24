@@ -1,10 +1,6 @@
 project(EasyWoW)
 
-if(UNIX)
-    cmake_minimum_required(VERSION 2.8.11)
-else()
-    cmake_minimum_required(VERSION 3.0)
-endif()
+cmake_minimum_required(VERSION 2.8.11)
 
 MACRO( IS_ARCH_64BIT )
     if( NOT WIN32 )
