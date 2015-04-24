@@ -186,7 +186,7 @@ elseif(UNIX)
         endif()
 
         # placeholder for future additions
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter")
