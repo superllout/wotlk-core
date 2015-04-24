@@ -211,7 +211,7 @@ void LootMgr::LoadLootProp()
 
 LootMgr::~LootMgr()
 {
-    LOG_DETAIL("  Deleting Loot Tables...");
+    LOG_DETAIL("  Deleting Loot Tables...", NULL);
     for(LootStore::iterator iter = CreatureLoot.begin(); iter != CreatureLoot.end(); ++iter)
         delete [] iter->second.items;
 
@@ -243,9 +243,7 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
     }
     uint32 last_entry = 0;
 
-    uint32 total = (uint32) result->GetRowCount();
     vector< tempy > ttab;
-
     do
     {
         Field* fields = result->Fetch();
@@ -284,8 +282,6 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
         db_cache.push_back(make_pair(last_entry, ttab));
 
     ttab.clear();
-
-    total = (uint32)db_cache.size();
 
     for (vector< pair< uint32, vector< tempy > > >::iterator itr = db_cache.begin(); itr != db_cache.end(); ++itr)
     {
@@ -835,7 +831,7 @@ void LootRoll::Finalize()
             return;
         }
 
-        LOG_DEBUG("AutoLootItem MISC");
+        LOG_DEBUG("AutoLootItem MISC", NULL);
         Item* item = objmgr.CreateItem(itemid, _player);
         if(item == NULL)
             return;

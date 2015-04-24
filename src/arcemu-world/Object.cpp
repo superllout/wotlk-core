@@ -791,7 +791,7 @@ bool Object::SetPosition(const LocationVector & v, bool allowPorting /* = false 
     if(!allowPorting && v.z < -500)
     {
         m_position.z = 500;
-        LOG_ERROR("setPosition: fell through map; height ported");
+        LOG_ERROR("setPosition: fell through map; height ported", NULL);
 
         result = false;
     }
@@ -824,7 +824,7 @@ bool Object::SetPosition(float newX, float newY, float newZ, float newOrientatio
     if(!allowPorting && newZ < -500)
     {
         m_position.z = 500;
-        LOG_ERROR("setPosition: fell through map; height ported");
+        LOG_ERROR("setPosition: fell through map; height ported", NULL);
 
         result = false;
     }
@@ -2250,7 +2250,7 @@ void Object::AddInRangeObject(Object* pObj)
     ARCEMU_ASSERT(pObj != NULL);
 
     if(pObj == this)
-        LOG_ERROR("We are in range of ourselves!");
+        LOG_ERROR("We are in range of ourselves!", NULL);
 
     if(pObj->IsPlayer())
         m_inRangePlayers.insert(pObj);

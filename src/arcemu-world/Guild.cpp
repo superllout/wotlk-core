@@ -575,7 +575,7 @@ bool Guild::LoadFromDB(Field* f)
         {
             if((sid++) != result->Fetch()[1].GetUInt32())
             {
-                LOG_ERROR("Guild bank tabs are out of order!");
+                LOG_ERROR("Guild bank tabs are out of order!", NULL);
 #ifdef WIN32
                 TerminateProcess(GetCurrentProcess(), 0);
                 return false;

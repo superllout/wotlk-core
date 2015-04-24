@@ -74,7 +74,7 @@ void WorldSession::HandleMoveWorldportAckOpcode(WorldPacket & /*recv_data*/)
         // get outta here
         return;
     }
-    LOG_DEBUG("WORLD: got MSG_MOVE_WORLDPORT_ACK.");
+    LOG_DEBUG("WORLD: got MSG_MOVE_WORLDPORT_ACK.", NULL);
 
     if(_player->m_CurrentTransporter && _player->GetMapId() != _player->m_CurrentTransporter->GetMapId())
     {
@@ -128,7 +128,7 @@ void WorldSession::HandleMoveTeleportAckOpcode(WorldPacket & recv_data)
             return;
         }
 
-        LOG_DEBUG("WORLD: got MSG_MOVE_TELEPORT_ACK.");
+        LOG_DEBUG("WORLD: got MSG_MOVE_TELEPORT_ACK.", NULL);
         GetPlayer()->SetPlayerStatus(NONE);
         if(GetPlayer()->m_rooted <= 0)
             GetPlayer()->SetMovement(MOVE_UNROOT, 5);
@@ -931,7 +931,7 @@ void MovementInfo::init(WorldPacket & data)
         if(data.rpos() + 4 == data.wpos())
             data >> unk13;
         else
-            LOG_DEBUG("Extra bits of movement packet left");
+            LOG_DEBUG("Extra bits of movement packet left", NULL);
     }
 }
 

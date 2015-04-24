@@ -495,7 +495,7 @@ bool ChatHandler::HandleAuraUpdateAdd(const char* args, WorldSession* m_session)
     uint32 SpellID = 0;
     int Flags = 0;
     int StackCount = 0;
-    if(sscanf(args, "%u 0x%X %i", &SpellID, &Flags, &StackCount) != 3 && sscanf(args, "%u %u %i", &SpellID, &Flags, &StackCount) != 3)
+    if(sscanf(args, "%u %i %i", &SpellID, &Flags, &StackCount) != 3 && sscanf(args, "%u %i %i", &SpellID, &Flags, &StackCount) != 3)
         return false;
 
     Player* Pl = m_session->GetPlayer();

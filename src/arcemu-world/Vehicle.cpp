@@ -38,13 +38,13 @@ Vehicle::~Vehicle(){
 
 void Vehicle::Load( Unit *owner, uint32 creature_entry, uint32 vehicleid ){
     if( owner == NULL ){
-        LOG_ERROR( "Can't load vehicle without an owner." );
+        LOG_ERROR( "Can't load vehicle without an owner.", NULL);
         ARCEMU_ASSERT( false );
     }
 
     vehicle_info = dbcVehicle.LookupEntry( vehicleid );
     if( vehicle_info == NULL ){
-        LOG_ERROR( "Can't load a vehicle without vehicle id or data belonging to it." );
+        LOG_ERROR( "Can't load a vehicle without vehicle id or data belonging to it.", NULL );
         ARCEMU_ASSERT( false );
     }
 

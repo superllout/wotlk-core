@@ -236,7 +236,7 @@ void WorldSession::HandlePetInfo(WorldPacket & /*recv_data*/)
     CHECK_INWORLD_RETURN
 
     //nothing
-    LOG_DEBUG("HandlePetInfo is called");
+    LOG_DEBUG("HandlePetInfo is called", NULL);
 }
 
 void WorldSession::HandlePetNameQuery(WorldPacket & recv_data)

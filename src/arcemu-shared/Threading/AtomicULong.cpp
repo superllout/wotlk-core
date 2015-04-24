@@ -27,15 +27,15 @@ namespace Arcemu
         unsigned long AtomicULong::SetVal(unsigned long NewValue)
         {
             unsigned long ret = 0;
-#ifdef WIN32
+    #ifdef WIN32
             ret = InterlockedExchange(reinterpret_cast< volatile LONG* >(&Value), LONG(NewValue));
-#else
-#if defined(__GNUC__) || defined(__GNUC__)
+    #else
+        #if defined(__GNUC__) || defined(__clang__)
             ret = __sync_val_compare_and_swap(&Value, Value, NewValue);
-#else
-#error Your platform (architecture and compiler) is NOT supported. Arcemu requires little endian architecture, and at least GCC 4.1
-#endif
-#endif
+        #else
+            #error Your platform (architecture and compiler) is NOT supported. Arcemu requires little endian architecture, and at least GCC 4.1
+        #endif
+    #endif
             return ret;
 
         }

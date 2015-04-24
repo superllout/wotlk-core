@@ -164,7 +164,7 @@ void TaxiPath::SendMoveForTime(Player* riding, Player* to, uint32 time)
 
     float traveled_len = (time / (length * TAXI_TRAVEL_SPEED)) * length;
     uint32 len = 0;
-    float x = 0, y = 0, z = 0;
+    //float x = 0, y = 0, z = 0;
 
     if(!m_pathNodes.size())
         return;
@@ -201,9 +201,11 @@ void TaxiPath::SendMoveForTime(Player* riding, Player* to, uint32 time)
 
         if(len >= traveled_len)
         {
+         /*
             x = (itr->second->x - nx) * (traveled_len / len) + nx;
             y = (itr->second->y - ny) * (traveled_len / len) + ny;
             z = (itr->second->z - nz) * (traveled_len / len) + nz;
+         */
             break;
         }
         else

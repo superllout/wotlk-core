@@ -217,7 +217,7 @@ void LogonCommClientSocket::OnDisconnect()
 {
     if(_id != 0)
     {
-        LOG_DETAIL("Calling ConnectionDropped() due to OnDisconnect().");
+        LOG_DETAIL("Calling ConnectionDropped() due to OnDisconnect().", NULL);
         sLogonCommHandler.ConnectionDropped(_id);
     }
 }
@@ -350,7 +350,7 @@ void LogonCommClientSocket::CompressAndSend(ByteBuffer & uncompressed)
 
     if(deflateInit(&stream, 1) != Z_OK)
     {
-        LOG_ERROR("deflateInit failed.");
+        LOG_ERROR("deflateInit failed.", NULL);
         return;
     }
 
@@ -364,21 +364,21 @@ void LogonCommClientSocket::CompressAndSend(ByteBuffer & uncompressed)
     if(deflate(&stream, Z_NO_FLUSH) != Z_OK ||
             stream.avail_in != 0)
     {
-        LOG_ERROR("deflate failed.");
+        LOG_ERROR("deflate failed.", NULL);
         return;
     }
 
     // finish the deflate
     if(deflate(&stream, Z_FINISH) != Z_STREAM_END)
     {
-        LOG_ERROR("deflate failed: did not end stream");
+        LOG_ERROR("deflate failed: did not end stream", NULL);
         return;
     }
 
     // finish up
     if(deflateEnd(&stream) != Z_OK)
     {
-        LOG_ERROR("deflateEnd failed.");
+        LOG_ERROR("deflateEnd failed.", NULL);
         return;
     }
 

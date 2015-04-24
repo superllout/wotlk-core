@@ -1710,7 +1710,7 @@ AI_Spell* Pet::HandleAutoCastEvent()
         else
         {
             // bad pointers somehow end up here :S
-            LOG_ERROR("Bad AI_Spell detected in AutoCastEvent!");
+            LOG_ERROR("Bad AI_Spell detected in AutoCastEvent!", NULL);
             m_autoCastSpells[AUTOCAST_EVENT_ATTACK].erase(itr);
         }
     }
@@ -1767,7 +1767,7 @@ void Pet::HandleAutoCastEvent(AutoCastEvents Type)
 
         if(sp->spell == NULL)
         {
-            LOG_ERROR("Found corrupted spell at m_autoCastSpells, skipping");
+            LOG_ERROR("Found corrupted spell at m_autoCastSpells, skipping", NULL);
             continue;
         }
         else if(sp->autocast_type != static_cast<uint32>(Type))

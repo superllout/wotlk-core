@@ -39,7 +39,7 @@ void Arcemu::Util::ArcemuAssert(bool condition)
 {
     if(!condition)
     {
-        LOG_ERROR("Assertion failed. Please submit the callstack on ArcEmu IssueTracker (unless you are using a repack).");
+        LOG_ERROR("Assertion failed. Please submit the callstack on ArcEmu IssueTracker (unless you are using a repack).", NULL);
 
         // bogus null function call to make sure we stop and make a core dump / crash dump
         ((void(*)())0)();

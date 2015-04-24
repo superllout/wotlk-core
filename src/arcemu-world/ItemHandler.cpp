@@ -151,7 +151,7 @@ void WorldSession::HandleSplitOpcode(WorldPacket & recv_data)
             result = _player->GetItemInterface()->SafeAddItem(i2, DstInvSlot, DstSlot);
             if(!result)
             {
-                LOG_ERROR("HandleSplit: Error while adding item to dstslot");
+                LOG_ERROR("HandleSplit: Error while adding item to dstslot", NULL);
                 i2->DeleteFromDB();
                 i2->DeleteMe();
                 i2 = NULL;
@@ -576,7 +576,7 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
             result = _player->GetItemInterface()->SafeAddItem(oitem, SrcInvSlot, SrcSlot);
             if(!result)
             {
-                LOG_ERROR("HandleAutoEquip: Error while adding item to SrcSlot");
+                LOG_ERROR("HandleAutoEquip: Error while adding item to SrcSlot", NULL);
                 oitem->DeleteMe();
                 oitem = NULL;
             }
@@ -586,7 +586,7 @@ void WorldSession::HandleAutoEquipItemOpcode(WorldPacket & recv_data)
             result = _player->GetItemInterface()->SafeAddItem(eitem, INVENTORY_SLOT_NOT_SET, Slot);
             if(!result)
             {
-                LOG_ERROR("HandleAutoEquip: Error while adding item to Slot");
+                LOG_ERROR("HandleAutoEquip: Error while adding item to Slot", NULL);
                 eitem->DeleteMe();
                 eitem = NULL;
                 return;
@@ -617,7 +617,7 @@ void WorldSession::HandleAutoEquipItemSlotOpcode(WorldPacket & recvData)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DETAIL("WORLD: Received CMSG_AUTOEQUIP_ITEM_SLOT");
+    LOG_DETAIL("WORLD: Received CMSG_AUTOEQUIP_ITEM_SLOT", NULL);
     CHECK_PACKET_SIZE(recvData, 8 + 1);
     uint64 itemguid;
     int8 destSlot;
@@ -843,7 +843,7 @@ void WorldSession::HandleBuyBackOpcode(WorldPacket & recv_data)
     AddItemResult result;
     uint8 error;
 
-    LOG_DETAIL("WORLD: Received CMSG_BUYBACK_ITEM");
+    LOG_DETAIL("WORLD: Received CMSG_BUYBACK_ITEM", NULL);
 
     recv_data >> guid >> stuff;
     stuff -= 74;
@@ -890,7 +890,7 @@ void WorldSession::HandleBuyBackOpcode(WorldPacket & recv_data)
             result = _player->GetItemInterface()->AddItemToFreeSlot(it);
             if(!result)
             {
-                LOG_ERROR("HandleBuyBack: Error while adding item to free slot");
+                LOG_ERROR("HandleBuyBack: Error while adding item to free slot", NULL);
                 it->DeleteMe();
             }
         }
@@ -918,7 +918,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recv_data, 17);
-    LOG_DETAIL("WORLD: Received CMSG_SELL_ITEM");
+    LOG_DETAIL("WORLD: Received CMSG_SELL_ITEM", NULL);
 
     uint64 vendorguid = 0, itemguid = 0;
     int8 amount = 0;
@@ -1018,7 +1018,7 @@ void WorldSession::HandleSellItemOpcode(WorldPacket & recv_data)
     data << vendorguid << itemguid << uint8(0);
     SendPacket(&data);
 
-    LOG_DETAIL("WORLD: Sent SMSG_SELL_ITEM");
+    LOG_DETAIL("WORLD: Sent SMSG_SELL_ITEM", NULL);
 }
 
 void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)   // drag & drop
@@ -1207,7 +1207,7 @@ void WorldSession::HandleBuyItemInSlotOpcode(WorldPacket & recv_data)   // drag 
 
     SendPacket(&data);
 
-    LOG_DETAIL("WORLD: Sent SMSG_BUY_ITEM");
+    LOG_DETAIL("WORLD: Sent SMSG_BUY_ITEM", NULL);
 
     _player->GetItemInterface()->BuyItem(it, amount, unit);
     if(ci.max_amount)
@@ -1223,7 +1223,7 @@ void WorldSession::HandleBuyItemOpcode(WorldPacket & recv_data)   // right-click
 {
     CHECK_INWORLD_RETURN;
     CHECK_PACKET_SIZE(recv_data, 14);
-    LOG_DETAIL("WORLD: Received CMSG_BUY_ITEM");
+    LOG_DETAIL("WORLD: Received CMSG_BUY_ITEM", NULL);
 
     WorldPacket data(45);
     uint64 srcguid = 0;
@@ -1384,7 +1384,7 @@ void WorldSession::HandleListInventoryOpcode(WorldPacket & recv_data)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recv_data, 8);
-    LOG_DETAIL("WORLD: Recvd CMSG_LIST_INVENTORY");
+    LOG_DETAIL("WORLD: Recvd CMSG_LIST_INVENTORY", NULL);
     uint64 guid;
 
     recv_data >> guid;
@@ -1479,7 +1479,7 @@ void WorldSession::SendInventoryList(Creature* unit)
     const_cast<uint8*>(data.contents())[8] = (uint8)counter;    // set count
 
     SendPacket(&data);
-    LOG_DETAIL("WORLD: Sent SMSG_LIST_INVENTORY");
+    LOG_DETAIL("WORLD: Sent SMSG_LIST_INVENTORY", NULL);
 }
 
 void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data)
@@ -1487,7 +1487,7 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recv_data, 3);
-    LOG_DETAIL("WORLD: Recvd CMSG_AUTO_STORE_BAG_ITEM");
+    LOG_DETAIL("WORLD: Recvd CMSG_AUTO_STORE_BAG_ITEM", NULL);
 
     //WorldPacket data;
     WorldPacket packet;
@@ -1532,7 +1532,7 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data)
                     result = _player->GetItemInterface()->SafeAddItem(srcitem, INVENTORY_SLOT_NOT_SET, NewSlot);
                     if(!result)
                     {
-                        LOG_ERROR("HandleAutoStoreBagItem: Error while adding item to newslot");
+                        LOG_ERROR("HandleAutoStoreBagItem: Error while adding item to newslot", NULL);
                         srcitem->DeleteMe();
                         return;
                     }
@@ -1571,7 +1571,7 @@ void WorldSession::HandleAutoStoreBagItemOpcode(WorldPacket & recv_data)
                             result = _player->GetItemInterface()->SafeAddItem(srcitem, DstInv, NewSlot);
                             if(!result)
                             {
-                                LOG_ERROR("HandleBuyItemInSlot: Error while adding item to newslot");
+                                LOG_ERROR("HandleBuyItemInSlot: Error while adding item to newslot", NULL);
                                 srcitem->DeleteMe();
                                 return;
                             }
@@ -1744,7 +1744,7 @@ void WorldSession::HandleBuyBankSlotOpcode(WorldPacket & recvPacket)
     uint32 bytes, slots;
     int32 price;
 
-    LOG_DEBUG("WORLD: CMSG_BUY_bytes_SLOT");
+    LOG_DEBUG("WORLD: CMSG_BUY_bytes_SLOT", NULL);
 
     bytes = GetPlayer()->GetUInt32Value(PLAYER_BYTES_2);
     slots = (uint8)(bytes >> 16);
@@ -1780,7 +1780,7 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPacket & recvPacket)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recvPacket, 2);
-    LOG_DEBUG("WORLD: CMSG_AUTO_BANK_ITEM");
+    LOG_DEBUG("WORLD: CMSG_AUTO_BANK_ITEM", NULL);
 
     //WorldPacket data;
 
@@ -1814,7 +1814,7 @@ void WorldSession::HandleAutoBankItemOpcode(WorldPacket & recvPacket)
 
         if(!_player->GetItemInterface()->SafeAddItem(eitem, slotresult.ContainerSlot, slotresult.Slot))
         {
-            LOG_DEBUG("[ERROR]AutoBankItem: Error while adding item to bank bag!");
+            LOG_DEBUG("[ERROR]AutoBankItem: Error while adding item to bank bag!", NULL);
             if(!_player->GetItemInterface()->SafeAddItem(eitem, SrcInvSlot, SrcSlot))
                 eitem->DeleteMe();
         }
@@ -1826,7 +1826,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket & recvPacket)
     CHECK_INWORLD_RETURN
 
     CHECK_PACKET_SIZE(recvPacket, 2);
-    LOG_DEBUG("WORLD: CMSG_AUTOSTORE_BANK_ITEM");
+    LOG_DEBUG("WORLD: CMSG_AUTOSTORE_BANK_ITEM", NULL);
 
     //WorldPacket data;
 
@@ -1858,7 +1858,7 @@ void WorldSession::HandleAutoStoreBankItemOpcode(WorldPacket & recvPacket)
             return;
         if(!_player->GetItemInterface()->AddItemToFreeSlot(eitem))
         {
-            LOG_DEBUG("[ERROR]AutoStoreBankItem: Error while adding item from one of the bank bags to the player bag!");
+            LOG_DEBUG("[ERROR]AutoStoreBankItem: Error while adding item from one of the bank bags to the player bag!", NULL);
             if(!_player->GetItemInterface()->SafeAddItem(eitem, SrcInvSlot, SrcSlot))
                 eitem->DeleteMe();
         }
@@ -2171,7 +2171,7 @@ void WorldSession::HandleItemRefundInfoOpcode(WorldPacket & recvPacket)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("Recieved CMSG_ITEMREFUNDINFO.");
+    LOG_DEBUG("Recieved CMSG_ITEMREFUNDINFO.", NULL);
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //  As of 3.2.0a the client sends this packet to request refund info on an item
@@ -2196,7 +2196,7 @@ void WorldSession::HandleItemRefundRequestOpcode(WorldPacket & recvPacket)
 {
     CHECK_INWORLD_RETURN
 
-    LOG_DEBUG("Recieved CMSG_ITEMREFUNDREQUEST.");
+    LOG_DEBUG("Recieved CMSG_ITEMREFUNDREQUEST.", NULL);
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //  As of 3.2.0a the client sends this packet to initiate refund of an item
@@ -2318,5 +2318,5 @@ void WorldSession::HandleItemRefundRequestOpcode(WorldPacket & recvPacket)
 
     SendPacket(&packet);
 
-    LOG_DEBUG("Sent SMSG_ITEMREFUNDREQUEST.");
+    LOG_DEBUG("Sent SMSG_ITEMREFUNDREQUEST.", NULL);
 }

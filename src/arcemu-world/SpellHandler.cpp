@@ -396,7 +396,7 @@ void WorldSession::HandleCastSpellOpcode(WorldPacket & recvPacket)
                 SpellCastTargets targets(recvPacket, GetPlayer()->GetGUID());
                 if(!targets.m_unitTarget)
                 {
-                    LOG_DEBUG("Cancelling auto-shot cast because targets.m_unitTarget is null!");
+                    LOG_DEBUG("Cancelling auto-shot cast because targets.m_unitTarget is null!", NULL);
                     return;
                 }
                 SpellEntry* sp = dbcSpell.LookupEntry(spellid);

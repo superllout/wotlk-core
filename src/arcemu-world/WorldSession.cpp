@@ -65,7 +65,7 @@ WorldSession::~WorldSession()
 
     if(_player)
     {
-        LOG_ERROR("warning: logged out player in worldsession destructor");
+        LOG_ERROR("warning: logged out player in worldsession destructor", NULL);
         LogoutPlayer(true);
     }
 
@@ -417,7 +417,7 @@ void WorldSession::LogoutPlayer(bool Save)
         _player = NULL;
 
         OutPacket(SMSG_LOGOUT_COMPLETE, 0, NULL);
-        LOG_DEBUG("SESSION: Sent SMSG_LOGOUT_COMPLETE Message");
+        LOG_DEBUG("SESSION: Sent SMSG_LOGOUT_COMPLETE Message", NULL);
     }
     _loggingOut = false;
 
@@ -1585,7 +1585,7 @@ void WorldSession::SendRefundInfo(uint64 GUID)
 
         this->SendPacket(&packet);
 
-        LOG_DEBUG("Sent SMSG_ITEMREFUNDINFO.");
+        LOG_DEBUG("Sent SMSG_ITEMREFUNDINFO.", NULL);
     }
 }
 
@@ -1664,7 +1664,7 @@ void WorldSession::HandleLearnMultipleTalentsOpcode(WorldPacket & recvPacket)
     uint32 talentid;
     uint32 rank;
 
-    LOG_DEBUG("Recieved packet CMSG_LEARN_TALENTS_MULTIPLE.");
+    LOG_DEBUG("Recieved packet CMSG_LEARN_TALENTS_MULTIPLE.", NULL);
 
     // //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // 0x04C1 CMSG_LEARN_TALENTS_MULTIPLE
@@ -1710,7 +1710,7 @@ void WorldSession::SendMOTD()
 
 void WorldSession::HandleEquipmentSetUse(WorldPacket & data)
 {
-    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_USE");
+    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_USE", NULL);
 
     WoWGuid GUID;
     int8 SrcBagID;
@@ -1802,7 +1802,7 @@ void WorldSession::HandleEquipmentSetUse(WorldPacket & data)
 
 void WorldSession::HandleEquipmentSetSave(WorldPacket & data)
 {
-    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_SAVE");
+    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_SAVE", NULL);
 
     WoWGuid GUID;
     uint32 setGUID;
@@ -1852,7 +1852,7 @@ void WorldSession::HandleEquipmentSetSave(WorldPacket & data)
 
 void WorldSession::HandleEquipmentSetDelete(WorldPacket & data)
 {
-    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_DELETE");
+    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_EQUIPMENT_SET_DELETE", NULL);
 
     WoWGuid setGUID;
     bool success;
@@ -1877,7 +1877,7 @@ void WorldSession::HandleEquipmentSetDelete(WorldPacket & data)
 
 void WorldSession::HandleQuestPOIQueryOpcode(WorldPacket & recv_data)
 {
-    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_QUEST_POI_QUERY");
+    CHECK_INWORLD_RETURN LOG_DEBUG("Received CMSG_QUEST_POI_QUERY", NULL);
 
     uint32 count = 0;
     recv_data >> count;
@@ -1885,7 +1885,7 @@ void WorldSession::HandleQuestPOIQueryOpcode(WorldPacket & recv_data)
     if(count > MAX_QUEST_LOG_SIZE)
     {
         LOG_DEBUG
-        ("Client sent Quest POI query for more than MAX_QUEST_LOG_SIZE quests.");
+        ("Client sent Quest POI query for more than MAX_QUEST_LOG_SIZE quests.", NULL);
 
         count = MAX_QUEST_LOG_SIZE;
     }
@@ -1905,7 +1905,7 @@ void WorldSession::HandleQuestPOIQueryOpcode(WorldPacket & recv_data)
 
     SendPacket(&data);
 
-    LOG_DEBUG("Sent SMSG_QUEST_POI_QUERY_RESPONSE");
+    LOG_DEBUG("Sent SMSG_QUEST_POI_QUERY_RESPONSE", NULL);
 }
 
 void WorldSession::HandleMirrorImageOpcode(WorldPacket & recv_data)
@@ -1913,7 +1913,7 @@ void WorldSession::HandleMirrorImageOpcode(WorldPacket & recv_data)
     if(!_player->IsInWorld())
         return;
 
-    LOG_DEBUG("Received CMG_GET_MIRRORIMAGE_DATA");
+    LOG_DEBUG("Received CMG_GET_MIRRORIMAGE_DATA", NULL);
 
     uint64 GUID;
 
@@ -1991,7 +1991,7 @@ void WorldSession::HandleMirrorImageOpcode(WorldPacket & recv_data)
 
     SendPacket(&data);
 
-    LOG_DEBUG("Sent: SMSG_MIRRORIMAGE_DATA");
+    LOG_DEBUG("Sent: SMSG_MIRRORIMAGE_DATA", NULL);
 }
 
 void WorldSession::HandleDismissCritter(WorldPacket & recv_data)

@@ -309,7 +309,7 @@ bool ChatHandler::HandleFaceCommand(const char* args, WorldSession* m_session)
     //GetSession()->SendPacket( &packet );
     //obj->BuildMovementUpdateBlock(data,0)
     //obj->SendMessageToSet(&data,false);
-    LOG_DEBUG("facing sent");
+    LOG_DEBUG("facing sent", NULL);
     return true;
     //((Creature *)obj)->AI_MoveTo(obj->GetPositionX()+0.1,obj->GetPositionY()+0.1,obj->GetPositionZ()+0.1,theOrientation);
 }

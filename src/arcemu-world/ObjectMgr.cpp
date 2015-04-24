@@ -1913,6 +1913,9 @@ void ObjectMgr::LoadTrainers()
                 {
                     uint32 skill = ts.pCastRealSpell->EffectMiscValue[1];
                     skilllineentry* sk = dbcSkillLine.LookupEntryForced(skill);
+                    if (sk == NULL)
+                        continue;
+
                     ts.IsProfession = sk->type == SKILL_TYPE_PROFESSION ? true : false;
                 }
                 else
@@ -2409,7 +2412,7 @@ void ObjectMgr::LoadCreatureWaypoints()
     do
     {
         Field* fields = result->Fetch();
-        WayPoint* wp = NULL;
+        WayPoint* wp = new WayPoint;
         wp->id = fields[1].GetUInt32();
         wp->x = fields[2].GetFloat();
         wp->y = fields[3].GetFloat();
@@ -2897,7 +2900,7 @@ void ObjectMgr::LoadMonsterSay()
             continue;
         }
 
-        NpcMonsterSay* ms = NULL;
+        NpcMonsterSay* ms = new NpcMonsterSay;
         ms->Chance = fields[2].GetFloat();
         ms->Language = fields[3].GetUInt32();
         ms->Type = fields[4].GetUInt32();
@@ -3452,7 +3455,7 @@ void ObjectMgr::LoadVehicleAccessories()
 
         do{
             Field *row = result->Fetch();
-            VehicleAccessoryEntry *entry = NULL;
+            VehicleAccessoryEntry *entry = new VehicleAccessoryEntry;
             uint32 creature_entry = row[0].GetUInt32();
             if (!CreatureNameStorage.LookupEntry(creature_entry))
             {
@@ -3565,7 +3568,7 @@ void ObjectMgr::LoadAchievementRewards()
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) does not exists!", id);
                 continue;
             }
-            AchievementReward* reward = NULL;
+            AchievementReward* reward = new AchievementReward;
             reward->title[TEAM_ALLIANCE] = fields[1].GetUInt16();
             if (reward->title[TEAM_ALLIANCE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
             {

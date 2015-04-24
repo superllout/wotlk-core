@@ -763,7 +763,7 @@ void Player::SendEquipmentSetList()
 
     m_session->SendPacket(&data);
 
-    LOG_DEBUG("Sent SMSG_EQUIPMENT_SET_LIST.");
+    LOG_DEBUG("Sent SMSG_EQUIPMENT_SET_LIST.", NULL);
 }
 
 void Player::SendEquipmentSetSaved(uint32 setID, uint32 setGUID)
@@ -775,7 +775,7 @@ void Player::SendEquipmentSetSaved(uint32 setID, uint32 setGUID)
 
     m_session->SendPacket(&data);
 
-    LOG_DEBUG("Sent SMSG_EQUIPMENT_SET_SAVED.");
+    LOG_DEBUG("Sent SMSG_EQUIPMENT_SET_SAVED.", NULL);
 }
 
 void Player::SendEquipmentSetUseResult(uint8 result)
@@ -786,7 +786,7 @@ void Player::SendEquipmentSetUseResult(uint8 result)
 
     m_session->SendPacket(&data);
 
-    LOG_DEBUG("SMSG_EQUIPMENT_SET_USE_RESULT sent.");
+    LOG_DEBUG("SMSG_EQUIPMENT_SET_USE_RESULT sent.", NULL);
 }
 
 void Player::SendTotemCreated(uint8 slot, uint64 GUID, uint32 duration, uint32 spellid)

@@ -119,7 +119,7 @@ void AddonMgr::SendAddonInfoPacket(WorldPacket* source, uint32 /*pos*/, WorldSes
     }
     catch(ByteBuffer::error &)
     {
-        LOG_DEBUG("Warning: Incomplete auth session sent.");
+        LOG_DEBUG("Warning: Incomplete auth session sent.", NULL);
         return;
     }
 
@@ -132,7 +132,7 @@ void AddonMgr::SendAddonInfoPacket(WorldPacket* source, uint32 /*pos*/, WorldSes
     if((source->size() - position) < 4 || realsize == 0)
     {
         // we shouldn't get here.. but just in case this will stop any crash here.
-        LOG_DEBUG("Warning: Incomplete auth session sent.");
+        LOG_DEBUG("Warning: Incomplete auth session sent.", NULL);
         return;
     }
 
@@ -140,11 +140,11 @@ void AddonMgr::SendAddonInfoPacket(WorldPacket* source, uint32 /*pos*/, WorldSes
 
     if(result != Z_OK)
     {
-        LOG_ERROR("Decompression of addon section of CMSG_AUTH_SESSION failed.");
+        LOG_ERROR("Decompression of addon section of CMSG_AUTH_SESSION failed.", NULL);
         return;
     }
 
-    LOG_DETAIL("Decompression of addon section of CMSG_AUTH_SESSION succeeded.");
+    LOG_DETAIL("Decompression of addon section of CMSG_AUTH_SESSION succeeded.", NULL);
 
     uint8 Enable; // based on the parsed files from retool
     uint32 crc;
@@ -253,7 +253,7 @@ void AddonMgr::LoadFromDB()
     QueryResult* result = WorldDatabase.Query("SELECT * FROM clientaddons");
     if(!result)
     {
-        LOG_ERROR("Query failed: SELECT * FROM clientaddons");
+        LOG_ERROR("Query failed: SELECT * FROM clientaddons", NULL);
         return;
     }
 
@@ -284,7 +284,7 @@ void AddonMgr::LoadFromDB()
 
 void AddonMgr::SaveToDB()
 {
-    LOG_DETAIL("AddonMgr: Saving any new addons discovered in this session to database.");
+    LOG_DETAIL("AddonMgr: Saving any new addons discovered in this session to database.", NULL);
 
     KnownAddonsItr itr;
 
