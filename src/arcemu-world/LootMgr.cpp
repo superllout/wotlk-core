@@ -283,8 +283,6 @@ void LootMgr::LoadLootTables(const char* szTableName, LootStore* LootTable)
 
     ttab.clear();
 
-    total = (uint32)db_cache.size();
-
     for (vector< pair< uint32, vector< tempy > > >::iterator itr = db_cache.begin(); itr != db_cache.end(); ++itr)
     {
         uint32 entry_id = (*itr).first;

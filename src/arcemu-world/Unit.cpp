@@ -2035,10 +2035,14 @@ uint32 Unit::HandleProc(uint32 flag, Unit* victim, SpellEntry* CastingSpell, boo
                         if(CastingSpell->NameHash != SPELL_HASH_FLASH_OF_LIGHT &&
                                 CastingSpell->NameHash != SPELL_HASH_HOLY_LIGHT)
                             continue;
-                        SpellEntry* spellInfo = dbcSpell.LookupEntry(54203);
-                        SpellDuration* sd = dbcSpellDuration.LookupEntryForced(spellInfo->DurationIndex);
-                        uint32 tickcount = GetDuration(sd) / spellInfo->EffectAmplitude[0] ;
-                        dmg_overwrite[0] = ospinfo->EffectBasePoints[0] * dmg / (100  * tickcount);
+                        if (SpellEntry* spellInfo = dbcSpell.LookupEntry(54203))
+                        {
+                            if (SpellDuration* sd = dbcSpellDuration.LookupEntryForced(spellInfo->DurationIndex))
+                            {
+                                uint32 tickcount = GetDuration(sd) / spellInfo->EffectAmplitude[0] ;
+                                dmg_overwrite[0] = ospinfo->EffectBasePoints[0] * dmg / (100  * tickcount);
+                            }
+                        }
                     }
                     break;
                 case 59578: //Paladin - Art of War

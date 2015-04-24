@@ -534,7 +534,7 @@ InstanceScript* ScriptMgr::CreateScriptClassForInstance(uint32 /*pMapId*/, MapMg
         return NULL;
     exp_create_instance_ai function_ptr = Iter->second;
     return (function_ptr)(pMapMgr);
-};
+}
 
 bool ScriptMgr::CallScriptedDummySpell(uint32 uSpellId, uint32 i, Spell* pSpell)
 {
@@ -657,20 +657,22 @@ void GameObjectAIScript::RegisterAIUpdateEvent(uint32 frequency)
 
 InstanceScript::InstanceScript(MapMgr* pMapMgr) : mInstance(pMapMgr)
 {
-};
+}
 
 void InstanceScript::RegisterUpdateEvent(uint32 pFrequency)
 {
     sEventMgr.AddEvent(mInstance, &MapMgr::CallScriptUpdate, EVENT_SCRIPT_UPDATE_EVENT, pFrequency, 0, EVENT_FLAG_DO_NOT_EXECUTE_IN_WORLD_CONTEXT);
-};
+}
+
 void InstanceScript::ModifyUpdateEvent(uint32 pNewFrequency)
 {
     sEventMgr.ModifyEventTimeAndTimeLeft(mInstance, EVENT_SCRIPT_UPDATE_EVENT, pNewFrequency);
-};
+}
+
 void InstanceScript::RemoveUpdateEvent()
 {
     sEventMgr.RemoveEvents(mInstance, EVENT_SCRIPT_UPDATE_EVENT);
-};
+}
 
 /* Hook Stuff */
 void ScriptMgr::register_hook(ServerHookEvents event, void* function_pointer)

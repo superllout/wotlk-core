@@ -2423,6 +2423,14 @@ class TaintedElementalAI : public CreatureAIScript
 
             _unit->GetAIInterface()->m_canMove = false;
         }
+        ~TaintedElementalAI()
+        {
+            if (spell_poison_spit)
+            {
+                free(spell_poison_spit);
+                delete spell_poison_spit;
+            }
+        }
 
         void OnCombatStart(Unit* mTarget)
         {

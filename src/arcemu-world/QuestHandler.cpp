@@ -46,7 +46,7 @@ void WorldSession::HandleQuestgiverStatusQueryOpcode(WorldPacket & recv_data)
 
         if(!quest_giver->isQuestGiver())
         {
-            LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL;
+            LOG_DEBUG("WORLD: Creature is not a questgiver.", NULL);
             return;
         }
     }
