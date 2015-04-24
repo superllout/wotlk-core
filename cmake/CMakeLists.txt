@@ -1,6 +1,6 @@
 project(EasyWoW C CXX)
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.11)
 #Do system checking.
 
 MACRO( IS_ARCH_64BIT )
