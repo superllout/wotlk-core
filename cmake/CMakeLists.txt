@@ -28,6 +28,10 @@ if(CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_CONFIGURATION_TYPES Release Debug)
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+set(CMAKE_BUILD_TYPE Release)
+endif()
+
 IS_ARCH_64BIT()
 
 #check platform version.
@@ -156,10 +160,10 @@ elseif(UNIX)
         #Check support for unordered_map/set
         # placeholder for future additions
         # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter -Winit-self -Wconversion")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter -Winit-self -Wconversion")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra")
 
         if (ENABLE_DEBUG_SUGGESTIONS)
             set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} 
@@ -168,7 +172,8 @@ elseif(UNIX)
             -Wsuggest-override 
             -Wsuggest-attribute=format 
             -Wmissing-format-attribute 
-            -Wshadow")
+            -Wshadow
+            -Wno-unused-parameter -Winit-self -Wconversion")
 
             set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} 
             -Wsuggest-attribute=const 
@@ -176,11 +181,12 @@ elseif(UNIX)
             -Wsuggest-override 
             -Wsuggest-attribute=format 
             -Wmissing-format-attribute
-            -Wshadow")
+            -Wshadow
+            -Wno-unused-parameter -Winit-self -Wconversion")
         endif()
 
         if (SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
             set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
         endif()
 
@@ -224,23 +230,6 @@ elseif(UNIX)
         set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DHAVE_DARWIN")
         set( EXTRA_LIBS ${EXTRA_LIBS} "-framework Carbon" )
         set( CMAKE_MACOSX_RPATH 1)
-        if( NOT IS_64BIT )
-            set( EMPTY "" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )        
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-            ADD_DEFINITIONS( -m32 )
-            set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32" )
-            set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -undefined dynamic_lookup" )
-            set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32" )
-        endif()
     elseif( ( CMAKE_SYSTEM_NAME  STREQUAL "FreeBSD" ) OR ( CMAKE_SYSTEM_NAME STREQUAL kFreeBSD ) )
         set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_KQUEUE")
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -252,12 +241,20 @@ endif()
 #Pass our configurable variables to the C++ preprocessor.
 add_definitions( ${GLOBAL_DEFINES} -DCONFDIR=\"${ARCEMU_CONFIGSFILE_PATH}\" -DPREFIX=\"${ARCEMU_SCRIPTLIB_PATH}\")
 
-set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries.")
-set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries.")
-set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs.")
-set(BZIP2_INCLUDE_DIRS "" CACHE INTERNAL "BZIP2 include dirs.")
+set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries")
+set(ZLIB_INCLUDE_DIRS "" CACHE INTERNAL "Zlib include dirs")
+set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries")
+set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs")
+set(BZIP2_LIBRARIES "" CACHE INTERNAL "BZIP2 libraries")
+set(BZIP2_INCLUDE_DIR "" CACHE INTERNAL "BZIP2 include dirs")
+
 #mark them as advanced so they don't show up on the gui.
-mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS BZIP2_LIBRARIES)
+mark_as_advanced(
+    ZLIB_LIBRARIES
+    ZLIB_INCLUDE_DIRS
+    PCRE_LIBRARIES
+    PCRE_INCLUDE_DIRS
+    BZIP2_LIBRARIES)
 
 set(GLOBAL_INCLUDE_DIRS 
 ${ROOT_PATH}/src/arcemu-shared
@@ -273,8 +270,8 @@ ${DEPENDENCY_INCLUDE_ROOT}/detour )
 
 #Find our needed libs
 IF( NOT WIN32 )
-	find_package(ZLIB REQUIRED)
-	find_package(BZip2 REQUIRED)
+	find_package(ZLIB)
+	find_package(BZip2)
 	find_package(PCRE REQUIRED)
 	find_package(OpenSSL REQUIRED)
 	find_package(Threads REQUIRED)

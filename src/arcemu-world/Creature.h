@@ -344,7 +344,7 @@ class SERVER_DECL Creature : public Unit
 
         Creature(uint64 guid);
         virtual ~Creature();
-        
+
         // For derived subclasses of Creature
         bool IsVehicle(){
             if( proto->vehicleid != 0 )
@@ -352,7 +352,7 @@ class SERVER_DECL Creature : public Unit
             else
                 return false;
         }
-        
+
         void AddVehicleComponent( uint32 creature_entry, uint32 vehicleid );
         void RemoveVehicleComponent();
 
@@ -547,14 +547,17 @@ class SERVER_DECL Creature : public Unit
                 if(isInFront(obj)) // stealthed player is in front of creature
                 {
                     // Detection Range = 5yds + (Detection Skill - Stealth Skill)/5
-                        detectRange = 5.0f + getLevel() + 0.2f * (float)(GetStealthDetectBonus() - obj->GetStealthLevel());
+                        detectRange = 5.0f + (float)getLevel() + 0.2f * (float)(GetStealthDetectBonus() - obj->GetStealthLevel());
 
-                    if(detectRange < 1.0f) detectRange = 1.0f; // Minimum Detection Range = 1yd
+                    if(detectRange < 1.0f)
+                        detectRange = 1.0f; // Minimum Detection Range = 1yd
                 }
                 else // stealthed player is behind creature
                 {
-                    if(GetStealthDetectBonus() > 1000) return true; // immune to stealth
-                    else detectRange = 0.0f;
+                    if(GetStealthDetectBonus() > 1000)
+                        return true; // immune to stealth
+                    else
+                        detectRange = 0.0f;
                 }
 
                 detectRange += GetBoundingRadius(); // adjust range for size of creature

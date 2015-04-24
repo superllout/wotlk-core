@@ -263,7 +263,7 @@ class SERVER_DECL ByteBuffer
         ByteBuffer & operator>>(WoWGuid & value)
         {
             uint8 mask = read<uint8>();
-            value.Init((uint8)mask);
+            value.Init(mask);
             for(int i = 0; i < BitCount8(mask); i++)
             {
                 uint8 field = read<uint8>();
