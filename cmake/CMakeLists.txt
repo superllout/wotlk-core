@@ -257,7 +257,7 @@ set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries.")
 set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs.")
 set(BZIP2_INCLUDE_DIRS "" CACHE INTERNAL "BZIP2 include dirs.")
 #mark them as advanced so they don't show up on the gui.
-mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS BZIP2_INCLUDE_DIR)
+mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS BZIP2_LIBRARIES)
 
 set(GLOBAL_INCLUDE_DIRS 
 ${ROOT_PATH}/src/arcemu-shared
