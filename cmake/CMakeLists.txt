@@ -59,6 +59,7 @@ OPTION(SHOW_ADDITIONAL_WARNINGS "set to true to get all compiler warnings in deb
 # platforms specific options
 if (WIN32)
     set(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
+    OPTION(DETECT_64BIT_ISSUES "set to true to detect 64-bit portability problems.", OFF)
 elseif(UNIX)
     OPTION(ENABLE_CODE_SUGGESTIONS "set to true to get compiler suggestions for code" OFF)
 endif()
@@ -92,12 +93,23 @@ if( WIN32 )
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -DHAS_CXX0X /EHa )
 
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /bigobj /wd4669 /wd4127 /wd4996 /we4189 ")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj /wd4669 /wd4127 /wd4996 /we4189")
 
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+        if (NOT SHOW_ADDITIONAL_WARNINGS)
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 ")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
+        else()
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+        endif()
+
         if(IS_64BIT)
+            if (DETECT_64BIT_ISSUES)
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wp64")
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wp64")
+            endif()
+
             set( EXTRA_LIBS libeay32_win64.lib )
             if(CMAKE_BUILD_TYPE STREQUAL "Debug")
                 set(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_x64.lib )
@@ -126,14 +138,6 @@ if( WIN32 )
             set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
         endif()
 
-        if (NOT SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-        else()
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
-        endif()
-
         if (OPTIMIZED_BUILD)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2")
@@ -157,8 +161,8 @@ elseif(UNIX)
         # Set global definitions here
         add_definitions(-DHAS_CXX0X)
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wno-deprecated")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wno-deprecated -Wno-unused-result")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated -Wno-unused-result")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra")
@@ -171,7 +175,7 @@ elseif(UNIX)
             -Wsuggest-attribute=format 
             -Wmissing-format-attribute 
             -Wshadow
-            -Wno-unused-parameter -Winit-self -Wconversion")
+            -Winit-self")
 
             set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} 
             -Wsuggest-attribute=const 
@@ -180,7 +184,7 @@ elseif(UNIX)
             -Wsuggest-attribute=format 
             -Wmissing-format-attribute
             -Wshadow
-            -Wno-unused-parameter -Winit-self -Wconversion")
+            -Winit-self")
         endif()
 
         if (SHOW_ADDITIONAL_WARNINGS)

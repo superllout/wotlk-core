@@ -12,6 +12,14 @@ This changelog keeps information about most major changes in core, scripts and i
 * Added new option OPTIMIZED_BUILD to optimize builds for speed
 * Added Clang support
 * Added SHOW_ALL_WARNINGS for windows build (option will show entirelly all possible code warnings)
+* Added Coverity Scan, AppVeyor cloud services
+* Added many useful debugging options
+* Detect Bzip2 on unix systems (will reduce compile time)
+* Fixed many code warnings
+* Centralized dependency libraries in cmake
+* Main cmake was fully rewritten and splitted up to blocks instead of using serveral paragraphs
+* Silenced some unneeded warnings in UNIX/Windows builds
+* Updated Lua to 5.3.0
 
 4.0.2 changes
 * All items in vendors are now only shown if the Game Master has his GM flag enabled.
