@@ -50,5 +50,5 @@ script:
 - gcc -v
 - clang --version
 - cmake ../cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_LUAENGINE=1 -DCMAKE_C_FLAGS="${CMAKE_C_FLAGS}
-  -w" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w"
+  -w -0" -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -w -0"
 - make -j4

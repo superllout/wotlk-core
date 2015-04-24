@@ -1,7 +1,10 @@
-project(EasyWoW C CXX)
+project(EasyWoW CXX)
 
-cmake_minimum_required(VERSION 2.8.11)
-#Do system checking.
+if(UNIX)
+    cmake_minimum_required(VERSION 2.8.11)
+else()
+    cmake_minimum_required(VERSION 3.0)
+endif()
 
 MACRO( IS_ARCH_64BIT )
     if( NOT WIN32 )
@@ -65,6 +68,11 @@ elseif(UNIX)
 endif()
 
 include(CompilerVersion)
+GetCompilerVersion(compiler_version)
+if (compiler_version STREQUAL "")
+    message(FATAL_ERROR "Failed to determine C/C++ compiler")
+endif()
+
 if( WIN32 )
     set(ARCEMU_CONFIGSFILE_PATH config CACHE PATH "Path where the arcemu config files are.")
 
@@ -86,7 +94,7 @@ if( WIN32 )
     if( CMAKE_GENERATOR MATCHES Visual* )
         #Extract revision
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
-        add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DHAS_CXX0X /EHa )
 
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
@@ -107,12 +115,6 @@ if( WIN32 )
             else()
                 set( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_win32.lib )
             endif()
-        endif()
-    
-        #Check support for unordered_map/set
-        GetCompilerVersion( msvc_version)
-        if(DEFINED ${msvc_version} AND ${msvc_version} GREATER "1599" )
-            add_definitions(-DHAS_CXX0X)
         endif()
         
         #This fixes PCH issues 'Inconsistent values for /Zm'
@@ -156,11 +158,9 @@ elseif(UNIX)
         add_definitions(-Wno-deprecated)
         #Extract Revision
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
-        
-        #Check support for unordered_map/set
-        # placeholder for future additions
-        # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
+
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
         set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra")
@@ -194,35 +194,23 @@ elseif(UNIX)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
         endif()
-        GetCompilerVersion(compiler_version)
-        if( DEFINED compiler_version)
-            add_definitions(-DHAS_CXX0X)
-            # Enabling c++0x
-            if(CMAKE_C_COMPILER MATCHES "gcc" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-                if (${compiler_version} GREATER "4.2" AND ${compiler_version} LESS "4.7") 
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  
-                # Enabling c++11
-                elseif(${compiler_version} GREATER "4.6")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-                    if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
-                        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
-                        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
-                    endif()
-                endif()
-            elseif(CMAKE_C_COMPILER MATCHES "clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-                add_definitions(-DHAS_CXX0X)
-                if(${compiler_version} GREATER "3.1" AND ${compiler_version} LESS "3.5")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
-                elseif(${compiler_version} GREATER "3.4")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-                endif()
-                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
-                set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
+
+        add_definitions(-DHAS_CXX0X)
+        if(CMAKE_COMPILER_IS_GNUCXX)
+            if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
+                set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
             endif()
+        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            if(compiler_version} VERSION_EQUAL "3.4")
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+                set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+            elseif(compiler_version GREATER "3.4")
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+                set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
+            endif()
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
         endif()
     endif()
 
