@@ -154,6 +154,40 @@ elseif(UNIX)
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
         
         #Check support for unordered_map/set
+        # placeholder for future additions
+        # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
+
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter -Winit-self -Wconversion")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter -Winit-self -Wconversion")
+
+        if (ENABLE_DEBUG_SUGGESTIONS)
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} 
+            -Wsuggest-attribute=const 
+            -Wsuggest-final-methods 
+            -Wsuggest-override 
+            -Wsuggest-attribute=format 
+            -Wmissing-format-attribute 
+            -Wshadow")
+
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} 
+            -Wsuggest-attribute=const 
+            -Wsuggest-final-methods 
+            -Wsuggest-override 
+            -Wsuggest-attribute=format 
+            -Wmissing-format-attribute
+            -Wshadow")
+        endif()
+
+        if (SHOW_ADDITIONAL_WARNINGS)
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
+        endif()
+
+        if (OPTIMIZED_BUILD)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+        endif()
         GetCompilerVersion(compiler_version)
         if( DEFINED compiler_version)
             add_definitions(-DHAS_CXX0X)
@@ -180,31 +214,9 @@ elseif(UNIX)
                     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
                     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
                 endif()
-                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
-                set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
+                set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
             endif()
-        endif()
-
-        # placeholder for future additions
-        # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
-
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wno-unused-parameter")
-
-        if (ENABLE_DEBUG_SUGGESTIONS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wsuggest-attribute=const -Wsuggest-final-methods -Wsuggest-override -Wsuggest-attribute=format -Wmissing-format-attribute")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wsuggest-attribute=const -Wsuggest-final-methods -Wsuggest-override -Wsuggest-attribute=format -Wmissing-format-attribute")
-        endif()
-
-        if (SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
-        endif()
-
-        if (OPTIMIZED_BUILD)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
         endif()
     endif()
 
