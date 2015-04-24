@@ -189,8 +189,8 @@ elseif(UNIX)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wuseless-cast")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
 
-        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wunsafe-loop-optimizations")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Wunsafe-loop-optimizations")
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
 
         if (ENABLE_DEBUG_SUGGESTIONS)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -Wsuggest-attribute=const -Wsuggest-final-methods -Wsuggest-override -Wsuggest-attribute=format -Wmissing-format-attribute")
@@ -198,8 +198,8 @@ elseif(UNIX)
         endif()
 
         if (SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wextra -Wno-implicit -Wno-ignored-qualifiers")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wextra -Wno-implicit -Wno-ignored-qualifiers")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
         endif()
 
         if (OPTIMIZED_BUILD)
