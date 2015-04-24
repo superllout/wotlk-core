@@ -254,19 +254,8 @@ mark_as_advanced(
     ZLIB_INCLUDE_DIRS
     PCRE_LIBRARIES
     PCRE_INCLUDE_DIRS
-    BZIP2_LIBRARIES)
-
-set(GLOBAL_INCLUDE_DIRS 
-${ROOT_PATH}/src/arcemu-shared
-${ROOT_PATH}/src/arcemu-world
-${ROOT_PATH}/src/arcemu-logonserver
-${DEPENDENCY_INCLUDE_ROOT}
-${DEPENDENCY_INCLUDE_ROOT}/g3dlite
-${DEPENDENCY_INCLUDE_ROOT}/vmaplib
-${DEPENDENCY_INCLUDE_ROOT}/pcre
-${DEPENDENCY_INCLUDE_ROOT}/zlib
-${DEPENDENCY_INCLUDE_ROOT}/recast
-${DEPENDENCY_INCLUDE_ROOT}/detour )
+    BZIP2_LIBRARIES
+    BZIP2_INCLUDE_DIR)
 
 #Find our needed libs
 IF( NOT WIN32 )
@@ -281,6 +270,18 @@ ELSE()
 	add_subdirectory(pcre)
 	SET(MYSQL_LIBRARY "")
 ENDIF()
+
+set(GLOBAL_INCLUDE_DIRS 
+${ROOT_PATH}/src/arcemu-shared
+${ROOT_PATH}/src/arcemu-world
+${ROOT_PATH}/src/arcemu-logonserver
+${DEPENDENCY_INCLUDE_ROOT}
+${DEPENDENCY_INCLUDE_ROOT}/g3dlite
+${DEPENDENCY_INCLUDE_ROOT}/vmaplib
+${DEPENDENCY_INCLUDE_ROOT}/pcre
+${ZLIB_INCLUDE_DIRS}
+${DEPENDENCY_INCLUDE_ROOT}/recast
+${DEPENDENCY_INCLUDE_ROOT}/detour )
 
 add_subdirectory(g3dlite)
 add_subdirectory(vmaplib)
