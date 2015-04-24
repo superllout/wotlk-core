@@ -255,8 +255,9 @@ add_definitions( ${GLOBAL_DEFINES} -DCONFDIR=\"${ARCEMU_CONFIGSFILE_PATH}\" -DPR
 set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries.")
 set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries.")
 set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs.")
+set(BZIP2_INCLUDE_DIRS "" CACHE INTERNAL "BZIP2 include dirs.")
 #mark them as advanced so they don't show up on the gui.
-mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS)
+mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS BZIP2_INCLUDE_DIR)
 
 set(GLOBAL_INCLUDE_DIRS 
 ${ROOT_PATH}/src/arcemu-shared
@@ -273,6 +274,7 @@ ${DEPENDENCY_INCLUDE_ROOT}/detour )
 #Find our needed libs
 IF( NOT WIN32 )
 	find_package(ZLIB REQUIRED)
+	find_package(BZip2 REQUIRED)
 	find_package(PCRE REQUIRED)
 	find_package(OpenSSL REQUIRED)
 	find_package(Threads REQUIRED)
