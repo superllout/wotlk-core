@@ -1263,7 +1263,7 @@ class SERVER_DECL Player : public Unit
 
         bool HasTitleIndex(uint32 titleIndex)
         {
-            uint32 fieldIndexOffset = uint32(titleIndex / 32);
+            uint32 fieldIndexOffset = titleIndex / 32;
             uint32 flag = uint32(1 << (titleIndex % 32));
             if (HasFlag(PLAYER__FIELD_KNOWN_TITLES + fieldIndexOffset, flag))
                 return true;
@@ -1790,14 +1790,14 @@ class SERVER_DECL Player : public Unit
         void SendMountResult(uint32 result)
         {
             WorldPacket data(SMSG_MOUNTRESULT, 4);
-            data << (uint32)result;
+            data << result;
             GetSession()->SendPacket(&data);
         }
 
         void SendDismountResult(uint32 result)
         {
             WorldPacket data(SMSG_DISMOUNTRESULT, 4);
-            data << (uint32)result;
+            data << result;
             GetSession()->SendPacket(&data);
         }
 
@@ -2164,7 +2164,7 @@ class SERVER_DECL Player : public Unit
         Player* GetTradeTarget()
         {
             if(!IsInWorld()) return 0;
-            return m_mapMgr->GetPlayer((uint32)mTradeTarget);
+            return m_mapMgr->GetPlayer(mTradeTarget);
         }
 
         Item* getTradeItem(uint32 slot) {return mTradeItems[slot];};

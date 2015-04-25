@@ -1,7 +1,6 @@
-project(EasyWoW C CXX)
+project(EasyWoW)
 
-cmake_minimum_required(VERSION 2.8)
-#Do system checking.
+cmake_minimum_required(VERSION 2.8.11)
 
 MACRO( IS_ARCH_64BIT )
     if( NOT WIN32 )
@@ -28,6 +27,10 @@ if(CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_CONFIGURATION_TYPES Release Debug)
 endif()
 
+if(NOT CMAKE_BUILD_TYPE)
+set(CMAKE_BUILD_TYPE Release)
+endif()
+
 IS_ARCH_64BIT()
 
 #check platform version.
@@ -52,15 +55,22 @@ OPTION(BUILD_ARCEMUSCRIPTS "set to false to NOT build script libraries." ON)
 OPTION(BUILD_TOOLS "Build Arcemu tools" ON)
 OPTION(OPTIMIZED_BUILD "set to true for optimized compilation - will take more time" OFF)
 OPTION(SHOW_ADDITIONAL_WARNINGS "set to true to get all compiler warnings in debug build." FALSE)
+OPTION(USE_EXTERNAL_LUA "set to true to use external LUA library" OFF)
 
 # platforms specific options
 if (WIN32)
     set(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
+    OPTION(DETECT_64BIT_ISSUES "set to true to detect 64-bit portability problems." OFF)
 elseif(UNIX)
     OPTION(ENABLE_CODE_SUGGESTIONS "set to true to get compiler suggestions for code" OFF)
 endif()
 
 include(CompilerVersion)
+GetCompilerVersion(compiler_version)
+if (compiler_version STREQUAL "")
+    message(FATAL_ERROR "Failed to determine C/C++ compiler")
+endif()
+
 if( WIN32 )
     set(ARCEMU_CONFIGSFILE_PATH config CACHE PATH "Path where the arcemu config files are.")
 
@@ -82,14 +92,25 @@ if( WIN32 )
     if( CMAKE_GENERATOR MATCHES Visual* )
         #Extract revision
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND git_version.bat )
-        add_definitions(-D_CRT_SECURE_NO_WARNINGS /EHa )
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -DHAS_CXX0X /EHa )
 
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /wd4669 /wd4127 /wd4996 /we4189")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP /bigobj /wd4669 /wd4127 /wd4996 /we4189 ")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP /bigobj /wd4669 /wd4127 /wd4996 /we4189")
 
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /bigobj")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+        if (NOT SHOW_ADDITIONAL_WARNINGS)
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3 ")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
+        else()
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
+        endif()
+
         if(IS_64BIT)
+            if (DETECT_64BIT_ISSUES)
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wp64")
+                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wp64")
+            endif()
+
             set( EXTRA_LIBS libeay32_win64.lib )
             if(CMAKE_BUILD_TYPE STREQUAL "Debug")
                 set(EXTRA_LIBS ${EXTRA_LIBS} libmysql_debug_x64.lib )
@@ -104,12 +125,6 @@ if( WIN32 )
                 set( EXTRA_LIBS ${EXTRA_LIBS} libmysql_release_win32.lib )
             endif()
         endif()
-    
-        #Check support for unordered_map/set
-        GetCompilerVersion( msvc_version)
-        if(DEFINED ${msvc_version} AND ${msvc_version} GREATER "1599" )
-            add_definitions(-DHAS_CXX0X)
-        endif()
         
         #This fixes PCH issues 'Inconsistent values for /Zm'
         if( ${CMAKE_CXX_FLAGS} MATCHES "(/Zm)([0-9]+)" )
@@ -122,14 +137,6 @@ if( WIN32 )
             STRING( REGEX REPLACE "(/Zm)([0-9]+)" "\\1${VISUALSTUDIO_COMPILERHEAPLIMIT}" CMAKE_C_FLAGS ${CMAKE_C_FLAGS} )
         else()
             set( CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zm${VISUALSTUDIO_COMPILERHEAPLIMIT}"  )
-        endif()
-
-        if (NOT SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W3")
-        else()
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
-            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Wall")
         endif()
 
         if (OPTIMIZED_BUILD)
@@ -149,56 +156,40 @@ elseif(UNIX)
     set( GLOBAL_INCLUDE_DIRS ${GLOBAL_INCLUDE_DIRS} ${MYSQL_INCLUDE_DIR} )
 
     if( CMAKE_GENERATOR MATCHES Unix* )
-        add_definitions(-Wno-deprecated)
         #Extract Revision
         execute_process(WORKING_DIRECTORY ${ROOT_PATH} COMMAND sh git_version.sh )
-        
-        #Check support for unordered_map/set
-        GetCompilerVersion(compiler_version)
-        if( DEFINED compiler_version)
-            add_definitions(-DHAS_CXX0X)
-            # Enabling c++0x
-            if(CMAKE_C_COMPILER MATCHES "gcc" OR CMAKE_C_COMPILER_ID STREQUAL "GNU")
-                if (${compiler_version} GREATER "4.2" AND ${compiler_version} LESS "4.7") 
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")  
-                # Enabling c++11
-                elseif(${compiler_version} GREATER "4.6")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-                    if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
-                        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
-                        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
-                    endif()
-                endif()
-            elseif(CMAKE_C_COMPILER MATCHES "clang" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
-                add_definitions(-DHAS_CXX0X)
-                if(${compiler_version} GREATER "3.1" AND ${compiler_version} LESS "3.5")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
-                elseif(${compiler_version} GREATER "3.4")
-                    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-                    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11")
-                endif()
-                set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
-                set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types")
-            endif()
-        endif()
 
-        # placeholder for future additions
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wuseless-cast")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wuseless-cast")
+        # Set global definitions here
+        add_definitions(-DHAS_CXX0X)
+
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c11 -Wno-deprecated -Wno-unused-result")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-deprecated -Wno-unused-result")
 
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
-        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra")
+        set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -Wextra")
 
         if (ENABLE_DEBUG_SUGGESTIONS)
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -Wsuggest-attribute=const -Wsuggest-final-methods -Wsuggest-override -Wsuggest-attribute=format -Wmissing-format-attribute")
-            set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS_DEBUG} -Wsuggest-attribute=const -Wsuggest-final-methods -Wsuggest-override -Wsuggest-attribute=format -Wmissing-format-attribute")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} 
+            -Wsuggest-attribute=const 
+            -Wsuggest-final-methods 
+            -Wsuggest-override 
+            -Wsuggest-attribute=format 
+            -Wmissing-format-attribute 
+            -Wshadow
+            -Winit-self")
+
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} 
+            -Wsuggest-attribute=const 
+            -Wsuggest-final-methods 
+            -Wsuggest-override 
+            -Wsuggest-attribute=format 
+            -Wmissing-format-attribute
+            -Wshadow
+            -Winit-self")
         endif()
 
         if (SHOW_ADDITIONAL_WARNINGS)
-            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
             set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wpedantic -Wno-implicit -Wno-ignored-qualifiers -Wunsafe-loop-optimizations")
         endif()
 
@@ -206,29 +197,23 @@ elseif(UNIX)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
             set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
         endif()
+
+        # Setting specific options for GNU/LLVM compilers
+        if(CMAKE_COMPILER_IS_GNUCXX)
+            if(compiler_version GREATER "4.8")   # colorful output was implemented in gcc 4.9
+                set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto ")
+                set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=auto ")
+            endif()
+        elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
+            set(CMAKE_C_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-nested-anon-types -Wshorten-64-to-32")
+        endif()
     endif()
 
     if(APPLE)
         set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DHAVE_DARWIN")
         set( EXTRA_LIBS ${EXTRA_LIBS} "-framework Carbon" )
         set( CMAKE_MACOSX_RPATH 1)
-        if( NOT IS_64BIT )
-            set( EMPTY "" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_C_FLAGS  "${CMAKE_C_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_SHARED_LINKER_FLAGS  "${CMAKE_SHARED_LINKER_FLAGS}" )        
-            STRING( REGEX REPLACE ".*-m64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-            STRING( REGEX REPLACE ".*-m 64" "" CMAKE_MODULE_LINKER_FLAGS  "${CMAKE_MODULE_LINKER_FLAGS}" )
-            ADD_DEFINITIONS( -m32 )
-            set( CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -m32" )
-            set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -m32 -undefined dynamic_lookup" )
-            set( CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -m32" )
-        endif()
     elseif( ( CMAKE_SYSTEM_NAME  STREQUAL "FreeBSD" ) OR ( CMAKE_SYSTEM_NAME STREQUAL kFreeBSD ) )
         set( GLOBAL_DEFINES ${GLOBAL_DEFINES} "-DUSE_KQUEUE")
     elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -240,27 +225,33 @@ endif()
 #Pass our configurable variables to the C++ preprocessor.
 add_definitions( ${GLOBAL_DEFINES} -DCONFDIR=\"${ARCEMU_CONFIGSFILE_PATH}\" -DPREFIX=\"${ARCEMU_SCRIPTLIB_PATH}\")
 
-set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries.")
-set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries.")
-set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs.")
-#mark them as advanced so they don't show up on the gui.
-mark_as_advanced(ZLIB_LIBRARIES PCRE_LIBRARIES PCRE_INCLUDE_DIRS)
+set(ZLIB_LIBRARIES "" CACHE INTERNAL "Zlib libraries")
+set(ZLIB_INCLUDE_DIRS "" CACHE INTERNAL "Zlib include dirs")
+set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries")
+set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs")
+set(BZIP2_LIBRARIES "" CACHE INTERNAL "BZIP2 libraries")
+set(BZIP2_INCLUDE_DIR "" CACHE INTERNAL "BZIP2 include dirs")
+set(LUA_LIBRARIES "" CACHE INTERNAL "Lua libraries")
+set(LUA_INCLUDE_DIR "" CACHE INTERNAL "Lua include dirs")
 
-set(GLOBAL_INCLUDE_DIRS 
-${ROOT_PATH}/src/arcemu-shared
-${ROOT_PATH}/src/arcemu-world
-${ROOT_PATH}/src/arcemu-logonserver
-${DEPENDENCY_INCLUDE_ROOT}
-${DEPENDENCY_INCLUDE_ROOT}/g3dlite
-${DEPENDENCY_INCLUDE_ROOT}/vmaplib
-${DEPENDENCY_INCLUDE_ROOT}/pcre
-${DEPENDENCY_INCLUDE_ROOT}/zlib
-${DEPENDENCY_INCLUDE_ROOT}/recast
-${DEPENDENCY_INCLUDE_ROOT}/detour )
+#mark them as advanced so they don't show up on the gui.
+mark_as_advanced(
+    ZLIB_LIBRARIES
+    ZLIB_INCLUDE_DIRS
+    PCRE_LIBRARIES
+    PCRE_INCLUDE_DIRS
+    BZIP2_LIBRARIES
+    BZIP2_INCLUDE_DIR
+    LUA_LIBRARIES
+    LUA_INCLUDE_DIR)
 
 #Find our needed libs
 IF( NOT WIN32 )
-	find_package(ZLIB REQUIRED)
+	find_package(ZLIB)
+	find_package(BZip2)
+	if (USE_EXTERNAL_LUA)
+	    find_package(Lua51)
+	endif()
 	find_package(PCRE REQUIRED)
 	find_package(OpenSSL REQUIRED)
 	find_package(Threads REQUIRED)
@@ -270,6 +261,18 @@ ELSE()
 	add_subdirectory(pcre)
 	SET(MYSQL_LIBRARY "")
 ENDIF()
+
+set(GLOBAL_INCLUDE_DIRS 
+${ROOT_PATH}/src/arcemu-shared
+${ROOT_PATH}/src/arcemu-world
+${ROOT_PATH}/src/arcemu-logonserver
+${DEPENDENCY_INCLUDE_ROOT}
+${DEPENDENCY_INCLUDE_ROOT}/g3dlite
+${DEPENDENCY_INCLUDE_ROOT}/vmaplib
+${DEPENDENCY_INCLUDE_ROOT}/pcre
+${ZLIB_INCLUDE_DIRS}
+${DEPENDENCY_INCLUDE_ROOT}/recast
+${DEPENDENCY_INCLUDE_ROOT}/detour )
 
 add_subdirectory(g3dlite)
 add_subdirectory(vmaplib)

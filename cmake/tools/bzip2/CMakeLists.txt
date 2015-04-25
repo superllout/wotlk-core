@@ -20,6 +20,9 @@ include_directories( ${DEPENDENCY_INCLUDE_ROOT}/${PROJECT_NAME} )
 add_library(${PROJECT_NAME} STATIC ${SRCS} )
 target_link_libraries( ${PROJECT_NAME} )
 
+set(BZIP2_LIBRARIES ${PROJECT_NAME} CACHE INTERNAL "bzip2 Libraries")
+set(BZIP2_INCLUDE_DIR ${DEPENDENCY_INCLUDE_ROOT}/${PROJECT_NAME} CACHE INTERNAL "bzip2 include directories")
+
 unset(sources)
 unset(SRCS)
 unset(prefix)

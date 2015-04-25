@@ -23,7 +23,8 @@ env:
   - secure: gtGwzLD2zHA5opGDjO6YBrbx47A394MxfSPb8H3boa3m1sRf3HtocO69t9cehnEQUdg0mXbbmVn/8LB/2noKltsQ28MMSPNKj2AgQEzUKxJpAUAMPF1Ei/8rUi3VIqL2c91O4L9zYYDmhPdR4zMet8W8F4m/xeBRAMpJmbYaY/Q=
 
 before_install:
-- echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+- echo "yes" | sudo add-apt-repository ppa:kalakris/cmake   # cmake
+- echo "yes" | sudo add-apt-repository ppa:ubuntu-toolchain-r/test # gcc, clang, deps
 - sudo apt-get -qq update
 - sudo apt-get -qq install build-essential libtool gcc-4.8 g++-4.8 make cmake openssl
   libssl-dev libmysqlclient15-dev libmysql++-dev zlib1g-dev libbz2-dev libncurses5-dev

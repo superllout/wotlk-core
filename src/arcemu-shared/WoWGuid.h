@@ -39,13 +39,13 @@ class SERVER_DECL WoWGuid
         WoWGuid(uint64 guid)
         {
             Clear();
-            Init((uint64)guid);
+            Init(guid);
         }
 
         WoWGuid(uint8 mask)
         {
             Clear();
-            Init((uint8)mask);
+            Init(mask);
         }
 
         WoWGuid(uint8 mask, uint8* fields)
@@ -117,7 +117,7 @@ class SERVER_DECL WoWGuid
         const uint64 operator &(unsigned int someval) const { return (oldguid & someval); }
         operator bool() { return (oldguid > 0); }
         operator uint64() { return oldguid; }
-        void operator =(uint64 someval) { Clear(); Init((uint64)someval); }
+        void operator =(uint64 someval) { Clear(); Init(someval); }
 
         void AppendField(uint8 field)
         {

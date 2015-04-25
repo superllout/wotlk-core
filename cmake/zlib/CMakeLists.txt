@@ -25,3 +25,4 @@ include_directories( ${DEPENDENCY_INCLUDE_ROOT}/zlib)
 add_library(${PROJECT_NAME} STATIC ${SRCS} )
 #Set it to the project name.
 set(ZLIB_LIBRARIES ${PROJECT_NAME} CACHE INTERNAL "Zlib Libraries")
+set(ZLIB_INCLUDE_DIRS ${DEPENDENCY_INCLUDE_ROOT}/zlib CACHE INTERNAL "Zlib Libraries")

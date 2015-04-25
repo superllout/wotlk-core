@@ -160,7 +160,7 @@ static void SM_FFValue(int32* m, float* v, uint32* group)
             intbit = 0;
         }
         if((1 << intbit) & group[groupnum])
-            (*v) += m[bit];
+            (*v) += (float)m[bit];
     }
 }
 
@@ -214,7 +214,7 @@ static void SM_PFValue(int32* m, float* v, uint32* group)
             intbit = 0;
         }
         if((1 << intbit) & group[groupnum])
-            (*v) += ((*v) * m[bit]) / 100.0f;
+            (*v) += ((*v) * (float)m[bit]) / 100.0f;
     }
 }
 
@@ -2015,7 +2015,7 @@ class SERVER_DECL Spell : public EventableObject
                     //duration affected by level
                     if((int32)sd->Duration1 < 0 && sd->Duration2 && u_caster)
                     {
-                        this->Dur = uint32(((int32)sd->Duration1 + (sd->Duration2 * u_caster->getLevel())));
+                        this->Dur = ((int32)sd->Duration1 + (sd->Duration2 * u_caster->getLevel()));
                         if((int32)this->Dur > 0 && sd->Duration3 > 0 && (int32)this->Dur > (int32)sd->Duration3)
                         {
                             this->Dur = sd->Duration3;
