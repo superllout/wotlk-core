@@ -22,7 +22,7 @@ SET( BUILD_QUESTSCRIPTS TRUE CACHE BOOL "Build arcQuestScripts.")
 SET( BUILD_MISCSCRIPTS TRUE CACHE BOOL "Build arcMiscScripts." )
 SET( BUILD_SERVERSTATUSPLUGIN FALSE CACHE BOOL "Build ServerStatusPlugin.")
 SET( BUILD_LUAENGINE FALSE CACHE BOOL "Build Arcemu Lua Engine ( ALE ).")
-SET( BUILD_LUABRIDGE FALSE CACHE BOOL "Build luabridge.")
+# SET( BUILD_LUABRIDGE FALSE CACHE BOOL "Build luabridge.")
 
 
 add_subdirectory( eventscripts)
@@ -32,8 +32,20 @@ add_subdirectory( gossipscripts )
 add_subdirectory( questscripts )
 add_subdirectory( miscscripts )
 add_subdirectory( serverstatusplugin )
-add_subdirectory( lualib ) #Used by luabridge and luaengine modules.
-add_subdirectory( luabridge ) 
+
+#Used by luabridge and luaengine modules.
+if (UNIX)
+    if ((NOT USE_EXTERNAL_LUA AND BUILD_LUAENGINE) OR (USE_EXTERNAL_LUA AND NOT LUA_FOUND))
+        if(NOT LUA_FOUND)
+            message(WARNING "Lua was not found, using core preadded dependency")
+        endif()
+        add_subdirectory( lualib )
+    endif()
+elseif(WIN32)
+    add_subdirectory( lualib )
+endif()
+
+# add_subdirectory( luabridge ) 
 add_subdirectory( luaengine )
 
 unset(SCRIPTS_PATH)

@@ -55,11 +55,12 @@ OPTION(BUILD_ARCEMUSCRIPTS "set to false to NOT build script libraries." ON)
 OPTION(BUILD_TOOLS "Build Arcemu tools" ON)
 OPTION(OPTIMIZED_BUILD "set to true for optimized compilation - will take more time" OFF)
 OPTION(SHOW_ADDITIONAL_WARNINGS "set to true to get all compiler warnings in debug build." FALSE)
+OPTION(USE_EXTERNAL_LUA "set to true to use external LUA library" OFF)
 
 # platforms specific options
 if (WIN32)
     set(VISUALSTUDIO_COMPILERHEAPLIMIT 400 CACHE STRING "Visual Studio compiler heap limit. Ignore on darwin and unix platforms.")
-    OPTION(DETECT_64BIT_ISSUES "set to true to detect 64-bit portability problems.", OFF)
+    OPTION(DETECT_64BIT_ISSUES "set to true to detect 64-bit portability problems." OFF)
 elseif(UNIX)
     OPTION(ENABLE_CODE_SUGGESTIONS "set to true to get compiler suggestions for code" OFF)
 endif()
@@ -230,6 +231,8 @@ set(PCRE_LIBRARIES "" CACHE INTERNAL "PCRE libraries")
 set(PCRE_INCLUDE_DIRS "" CACHE INTERNAL "PCRE include dirs")
 set(BZIP2_LIBRARIES "" CACHE INTERNAL "BZIP2 libraries")
 set(BZIP2_INCLUDE_DIR "" CACHE INTERNAL "BZIP2 include dirs")
+set(LUA_LIBRARIES "" CACHE INTERNAL "Lua libraries")
+set(LUA_INCLUDE_DIR "" CACHE INTERNAL "Lua include dirs")
 
 #mark them as advanced so they don't show up on the gui.
 mark_as_advanced(
@@ -238,12 +241,17 @@ mark_as_advanced(
     PCRE_LIBRARIES
     PCRE_INCLUDE_DIRS
     BZIP2_LIBRARIES
-    BZIP2_INCLUDE_DIR)
+    BZIP2_INCLUDE_DIR
+    LUA_LIBRARIES
+    LUA_INCLUDE_DIR)
 
 #Find our needed libs
 IF( NOT WIN32 )
 	find_package(ZLIB)
 	find_package(BZip2)
+	if (USE_EXTERNAL_LUA)
+	    find_package(Lua51)
+	endif()
 	find_package(PCRE REQUIRED)
 	find_package(OpenSSL REQUIRED)
 	find_package(Threads REQUIRED)

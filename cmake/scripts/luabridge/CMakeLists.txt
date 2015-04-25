@@ -45,11 +45,11 @@ SET( SRCS
   ${prefix}/object_functions/lua_gameobject.h
   )
 
-include_directories( ${include_dirs} ${prefix}/interpreter )
+include_directories( ${include_dirs} ${prefix}/interpreter ${LUA_INCLUDE_DIR})
 include(PCHSupport)
 add_library(${PROJECT_NAME} SHARED ${SRCS} ${HEADERS} )
-add_dependencies( ${PROJECT_NAME} ${dependancies} lualib )
-target_link_libraries( ${PROJECT_NAME} ${linkages} lualib )
+add_dependencies( ${PROJECT_NAME} ${dependancies} ${LUA_LIBRARIES} )
+target_link_libraries( ${PROJECT_NAME} ${linkages} ${LUA_LIBRARIES} )
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${ARCEMU_SCRIPTLIB_PATH} LIBRARY DESTINATION ${ARCEMU_SCRIPTLIB_PATH})
 
 if( CMAKE_GENERATOR MATCHES Visual*)
