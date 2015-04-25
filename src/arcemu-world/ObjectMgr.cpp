@@ -1758,6 +1758,7 @@ GossipMenuItem GossipMenu::GetItem(uint32 Id)
         k.m_gSender = 0;
         k.m_gAction = 0;
         k.m_gBoxMoney = 0;
+        k.Icon = 0;
         return k;
     }
     else
@@ -3460,6 +3461,7 @@ void ObjectMgr::LoadVehicleAccessories()
             if (!CreatureNameStorage.LookupEntry(creature_entry))
             {
                 Log.Error("ObjectMgr", "Tried to load vehicle acessory data for non existing creature entry %u", creature_entry);
+                delete entry;
                 continue;
             }
             entry->accessory_entry = row[1].GetUInt32();
@@ -3573,6 +3575,7 @@ void ObjectMgr::LoadAchievementRewards()
             if (reward->title[TEAM_ALLIANCE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_ALLIANCE]))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_A %u", id, reward->title[TEAM_ALLIANCE]);
+                delete reward;
                 continue;
             }
 
@@ -3580,6 +3583,7 @@ void ObjectMgr::LoadAchievementRewards()
             if (reward->title[TEAM_HORDE] != 0 && !dbcCharTitlesEntry.LookupEntryForced(reward->title[TEAM_HORDE]))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing title_H %u", id, reward->title[TEAM_HORDE]);
+                delete reward;                
                 continue;
             }
 
@@ -3587,12 +3591,14 @@ void ObjectMgr::LoadAchievementRewards()
             if (reward->itemId != 0 && !ItemPrototypeStorage.LookupEntry(reward->itemId))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) contains non existing item (entry %u)!", id, reward->itemId);
+                delete reward;
                 continue;
             }
             reward->senderEntry = fields[4].GetUInt32();
             if (reward->senderEntry != 0 && !CreatureNameStorage.LookupEntry(reward->senderEntry))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong npc sender (entry %u)!", id, reward->senderEntry);
+                delete reward;
                 continue;
             }
             reward->subject = fields[5].GetString() ? fields[5].GetString() : "";
@@ -3602,6 +3608,7 @@ void ObjectMgr::LoadAchievementRewards()
             if (reward->mailTemplate != 0 && dbcMailTemplateEntry.LookupEntryForced(reward->mailTemplate))
             {
                 Log.Error("LoadAchievementRewards", "Achievement (id %u) has wrong mail template (entry %u)!", id, reward->mailTemplate);
+                delete reward;
                 continue;
             }
 

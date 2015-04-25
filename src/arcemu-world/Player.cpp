@@ -3992,6 +3992,9 @@ void Player::_ApplyItemMods(Item* item, int16 slot, bool apply, bool justdrokedo
                         m_itemsets.erase(i);
                 }
             }
+
+            if (Set)
+                delete Set;
         }
     }
 
