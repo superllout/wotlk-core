@@ -810,7 +810,7 @@ void AuctionHouse::LoadAuctions()
     do
     {
         Field* fields = result->Fetch();
-        Auction* auct = NULL;
+        Auction* auct = new Auction;
         auct->Id = fields[0].GetUInt32();
 
         Item* pItem = objmgr.LoadItem(fields[2].GetUInt32());

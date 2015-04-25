@@ -89,6 +89,7 @@ void ObjectMgr::LoadProfessionDiscoveries()
             if (!dbcSpell.LookupEntryForced(pf->SpellId))
             {
                 Log.Error("LoadProfessionDiscoveries", "Tried to load data for non existing spell entry %u", pf->SpellId);
+                delete pf;
                 continue;
             }
 
@@ -96,6 +97,7 @@ void ObjectMgr::LoadProfessionDiscoveries()
             if (!dbcSpell.LookupEntryForced(pf->SpellToDiscover))
             {
                 Log.Error("LoadProfessionDiscoveries", "Tried to load data for spell entry %u with non existing discover spell %u", pf->SpellId, pf->SpellToDiscover);
+                delete pf;
                 continue;
             }
             pf->SkillValue = f[2].GetUInt32();
