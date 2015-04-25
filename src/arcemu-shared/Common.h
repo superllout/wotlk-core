@@ -378,9 +378,6 @@ Scripting system exports/imports
 
 #define STRINGIZE(a) #a
 
-// fix buggy MSVC's for variable scoping to be reliable =S
-#define for if(true) for
-
 #if COMPILER == COMPILER_MICROSOFT && _MSC_VER >= 1400
 #pragma float_control(push)
 #pragma float_control(precise, on)
